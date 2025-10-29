@@ -74,7 +74,6 @@ public class Chat extends PlayerElement implements Listener {
 		
 		if (prefix == null) return;
 		
-		event.setCancelled(true);
-	    Bukkit.broadcastMessage(prefix + event.getMessage());
+		event.setFormat(prefix + "%2$s");
 	}
 }
