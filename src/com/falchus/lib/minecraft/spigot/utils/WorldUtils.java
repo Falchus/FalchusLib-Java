@@ -161,4 +161,25 @@ public class WorldUtils {
 			default: return BiomeBase.PLAINS;
 		}
 	}
+	
+	/**
+	 * Returns id from a Biome.
+	 */
+	public static int getBiomeId(Biome biome) {
+		BiomeBase nmsBiome = getNmsBiome(biome);
+		try {
+			Field biomesField = BiomeBase.class.getDeclaredField("biomes");
+			biomesField.setAccessible(true);
+			BiomeBase[] biomes = (BiomeBase[]) biomesField.get(null);
+			
+	        for (int i = 0; i < biomes.length; i++) {
+	            if (biomes[i] == nmsBiome) {
+	                return i;
+	            }
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 1;
+	}
 }
