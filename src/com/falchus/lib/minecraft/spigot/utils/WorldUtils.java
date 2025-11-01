@@ -49,6 +49,8 @@ public class WorldUtils {
 	 * Returns BiomeBase from a Biome
 	 */
 	public static BiomeBase getNmsBiome(Biome biome) {
+		if (biome == null) return BiomeBase.PLAINS;
+		
 		switch (biome) {
 			case BEACH: return BiomeBase.BEACH;
 			
