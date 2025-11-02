@@ -5,15 +5,21 @@ import com.falchus.lib.minecraft.spigot.enums.Property;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.DedicatedServer;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.PropertyManager;
 
 @UtilityClass
 public class PropertyUtils {
+	
+	public static PropertyManager getPropertyManager() {
+		return ((DedicatedServer) MinecraftServer.getServer()).propertyManager;
+	}
 
 	public static void saveProperties() {
-		((DedicatedServer) MinecraftServer.getServer()).propertyManager.savePropertiesFile();
+		getPropertyManager().savePropertiesFile();
 	}
 	
 	public static void setProperty(Property property, Object value) {
-		((DedicatedServer) MinecraftServer.getServer()).propertyManager.setProperty(property.getKey(), value);
+		getPropertyManager().setProperty(property.getKey(), value);
+		saveProperties();
 	}
 }
