@@ -107,7 +107,7 @@ public class Nametag extends PlayerElement {
 	/**
 	 * Updates prefix and suffiy periodically.
 	 */
-	public void sendUpdating(@NonNull Long intervalTicks, @NonNull Supplier<String> prefixSupplier, @NonNull Supplier<String> suffixSupplier) {
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefixSupplier, @NonNull Supplier<String> suffixSupplier) {
 		super.sendUpdating(intervalTicks, () -> {
 			String prefix = prefixSupplier.get();
 			String suffix = suffixSupplier.get();

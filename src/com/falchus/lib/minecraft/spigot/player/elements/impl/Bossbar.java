@@ -83,7 +83,7 @@ public class Bossbar extends PlayerElement {
 	/**
 	 * Sends a Bossbar message repeatedly at a fixed interval.
 	 */
-	public void sendUpdating(@NonNull Long intervalTicks, @NonNull Supplier<String> messageSupplier) {
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> messageSupplier) {
 		super.sendUpdating(intervalTicks, () -> {
 			String message = messageSupplier.get();
 			send(message);

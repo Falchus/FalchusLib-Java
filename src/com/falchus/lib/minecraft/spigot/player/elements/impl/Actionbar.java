@@ -36,7 +36,7 @@ public class Actionbar extends PlayerElement {
 	/**
 	 * Sends an action bar message repeatedly at a fixed interval.
 	 */
-	public void sendUpdating(@NonNull Long intervalTicks, @NonNull Supplier<String> messageSupplier) {
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> messageSupplier) {
 		super.sendUpdating(intervalTicks, () -> {
 			String message = messageSupplier.get();
 			send(message);

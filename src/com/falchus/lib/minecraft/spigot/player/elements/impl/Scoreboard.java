@@ -48,13 +48,7 @@ public class Scoreboard extends PlayerElement {
 	/**
 	 * Updates the scoreboard periodically with dynamic content.
 	 */
-	public void sendUpdating(
-			@NonNull Long intervalTicks, 
-			@NonNull Supplier<String> titleSupplier, 
-			@NonNull Supplier<String> titleColorSupplier, 
-			Supplier<String> titleSecondColorSupplier, 
-			@NonNull Supplier<List<String>> linesSupplier
-	) {
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> titleSupplier, @NonNull Supplier<String> titleColorSupplier, Supplier<String> titleSecondColorSupplier, @NonNull Supplier<List<String>> linesSupplier) {
 		super.sendUpdating(intervalTicks, () -> {
 			String title = titleSupplier.get();
 			String titleColor = titleColorSupplier.get();
