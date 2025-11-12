@@ -83,9 +83,7 @@ public class FreezeListener implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {		
-		if (event.getWhoClicked() instanceof Player) {
-			Player player = (Player) event.getWhoClicked();
-			
+		if (event.getWhoClicked() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
@@ -94,9 +92,7 @@ public class FreezeListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.getEntity() instanceof Player) {
-			Player player = (Player) event.getEntity();
-			
+		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
@@ -105,16 +101,12 @@ public class FreezeListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if (event.getEntity() instanceof Player) {
-			Player player = (Player) event.getEntity();
-			
+		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 			
-			if (event.getDamager() instanceof Player) {
-				Player damager = (Player) event.getDamager();
-				
+			if (event.getDamager() instanceof Player damager) {
 				if (players.contains(damager.getUniqueId())) {
 					event.setCancelled(true);
 				}
@@ -160,9 +152,7 @@ public class FreezeListener implements Listener {
 	
 	@EventHandler
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {		
-		if (event.getEntity() instanceof Player) {
-			Player player = (Player) event.getEntity();
-			
+		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
 				event.setCancelled(true);
 			}	
@@ -171,9 +161,7 @@ public class FreezeListener implements Listener {
 	
 	@EventHandler
 	public void onHangingBreak(HangingBreakEvent event) {
-		if (event.getEntity() instanceof Player) {
-			Player player = (Player) event.getEntity();
-			
+		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
 				event.setCancelled(true);
 			}	

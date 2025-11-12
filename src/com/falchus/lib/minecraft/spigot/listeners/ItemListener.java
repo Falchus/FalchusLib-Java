@@ -40,7 +40,7 @@ public class ItemListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
 
         ItemStack item = event.getCurrentItem();
         if (item == null) return;
@@ -50,7 +50,7 @@ public class ItemListener implements Listener {
             TriConsumer<Player, ItemStack, InventoryClickEvent> action = ItemUtils.itemActionsInventory.get(uuid);
             if (action != null) {
                 event.setCancelled(true);
-                action.accept((Player) event.getWhoClicked(), item, event);
+                action.accept(player, item, event);
                 return;
             }
         }
@@ -58,7 +58,7 @@ public class ItemListener implements Listener {
         TriConsumer<Player, ItemStack, InventoryClickEvent> invCallback = ItemUtils.inventoryCallbacks.get(event.getInventory());
         if (invCallback != null) {
             event.setCancelled(true);
-            invCallback.accept((Player) event.getWhoClicked(), item, event);
+            invCallback.accept(player, item, event);
         }
     }
 }

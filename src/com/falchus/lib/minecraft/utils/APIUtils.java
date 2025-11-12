@@ -49,13 +49,11 @@ public class APIUtils {
                 if (end == -1) return null;
 
                 String rawId = json.substring(start, end);
-                if (rawId.length() == 32) {
-                    String formatted = rawId.replaceFirst(
-                            "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
-                            "$1-$2-$3-$4-$5"
-                    );
-                    return UUID.fromString(formatted);
-                }
+                String formatted = rawId.replaceFirst(
+                        "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w+)",
+                        "$1-$2-$3-$4-$5"
+                );
+                return UUID.fromString(formatted);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,8 +73,8 @@ public class APIUtils {
     public static String getName(@NonNull String uuid) {
         HttpURLConnection connection = null;
         try {
-        	uuid = uuid.replace("-", "");
-        	
+            uuid = uuid.replace("-", "");
+
             URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

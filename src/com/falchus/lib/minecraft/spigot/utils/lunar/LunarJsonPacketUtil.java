@@ -53,15 +53,15 @@ public class LunarJsonPacketUtil {
 	private static JsonElement convertToJsonElement(Object value) {
 	    if (value == null) {
 	        return JsonNull.INSTANCE;
-	    } else if (value instanceof String) {
-	        return new JsonPrimitive((String) value);
-	    } else if (value instanceof Number) {
-	        return new JsonPrimitive((Number) value);
-	    } else if (value instanceof Boolean) {
-	        return new JsonPrimitive((Boolean) value);
-	    } else if (value instanceof List) {
+	    } else if (value instanceof String valueString) {
+	        return new JsonPrimitive(valueString);
+	    } else if (value instanceof Number valueNumber) {
+	        return new JsonPrimitive(valueNumber);
+	    } else if (value instanceof Boolean valueBoolean) {
+	        return new JsonPrimitive(valueBoolean);
+	    } else if (value instanceof List valueList) {
 	        JsonArray jsonArray = new JsonArray();
-	        for (Object item : (List<?>) value) {
+	        for (Object item : valueList) {
 	            jsonArray.add(convertToJsonElement(item));
 	        }
 	        return jsonArray;

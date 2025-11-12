@@ -57,12 +57,12 @@ public interface IBaseCommand {
         String permission = getPermission();
         if (permission != null && !permission.isEmpty()) {
             if (FalchusLibMinecraft.getSoftware() == Software.SPIGOT) {
-                if (sender instanceof org.bukkit.entity.Player) {
-                    return ((org.bukkit.entity.Player) sender).hasPermission(permission);
+                if (sender instanceof org.bukkit.entity.Player player) {
+                    return player.hasPermission(permission);
                 }
             } else if (FalchusLibMinecraft.getSoftware() == Software.BUNGEECORD) {
-                if (sender instanceof net.md_5.bungee.api.connection.ProxiedPlayer) {
-                    return ((net.md_5.bungee.api.connection.ProxiedPlayer) sender).hasPermission(permission);
+                if (sender instanceof net.md_5.bungee.api.connection.ProxiedPlayer player) {
+                    return player.hasPermission(permission);
                 }
             }
         }
@@ -74,12 +74,12 @@ public interface IBaseCommand {
      */
     default void sendMessage(@NonNull Object sender, @NonNull String message) {
         if (FalchusLibMinecraft.getSoftware() == Software.SPIGOT) {
-            if (sender instanceof org.bukkit.command.CommandSender) {
-                ((org.bukkit.command.CommandSender) sender).sendMessage(message);
+            if (sender instanceof org.bukkit.command.CommandSender commandSender) {
+            	commandSender.sendMessage(message);
             }
         } else if (FalchusLibMinecraft.getSoftware() == Software.BUNGEECORD) {
-            if (sender instanceof net.md_5.bungee.api.CommandSender) {
-                ((net.md_5.bungee.api.CommandSender) sender).sendMessage(new net.md_5.bungee.api.chat.TextComponent(message));
+            if (sender instanceof net.md_5.bungee.api.CommandSender commandSender) {
+            	commandSender.sendMessage(new net.md_5.bungee.api.chat.TextComponent(message));
             }
         }
     }

@@ -27,10 +27,9 @@ public class EntityPlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-		if (!(event.getRightClicked() instanceof EntityPlayer)) return;
+		if (!(event.getRightClicked() instanceof EntityPlayer player)) return;
 		
-		EntityPlayer clicked = (EntityPlayer) event.getRightClicked();
-		UUID uuid = clicked.getUniqueID();
+		UUID uuid = player.getUniqueID();
 		
 		if (players.containsKey(uuid)) {
 			Consumer<Player> action = actions.get(uuid);

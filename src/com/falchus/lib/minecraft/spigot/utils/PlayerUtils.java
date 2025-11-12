@@ -20,7 +20,9 @@ import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_8_R3.PacketPlayOutGameStateChange;
+import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
@@ -249,5 +251,20 @@ public class PlayerUtils {
 			entityPlayer
 		);
 		sendPacket(player, packet);
+	}
+	
+	/**
+	 * Spawns a EntityPlayer.
+	 */
+	public static void spawnEntityPlayer(@NonNull Player player, @NonNull EntityPlayer entityPlayer) {
+		addEntityPlayer(player, entityPlayer);
+		
+		PacketPlayOutNamedEntitySpawn spawn = new PacketPlayOutNamedEntitySpawn(entityPlayer);
+		sendPacket(player, spawn);
+		
+	    PacketPlayOutEntityTeleport teleport = new PacketPlayOutEntityTeleport(entityPlayer);
+	    sendPacket(player, teleport);
+	    
+	    Bukkit.getScheduler().runTask(plugin, () -> removeEntityPlayer(player, entityPlayer));
 	}
 }
