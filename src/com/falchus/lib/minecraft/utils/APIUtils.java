@@ -1,11 +1,8 @@
 package com.falchus.lib.minecraft.utils;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.UUID;
 
+import com.falchus.lib.utils.HTTPRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -17,56 +14,36 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class APIUtils {
-	
-	private static final HttpClient client = HttpClient.newHttpClient();
 
 	/**
-	 * Retrieves the UUID of a Minecraft player.
+	 * Gets the UUID of a player.
+	 * 
+	 * @return the player's {@link UUID}
 	 */
     public static UUID getUUID(@NonNull String username) {
-        try {
-        	HttpRequest request = HttpRequest.newBuilder()
-        			.uri(URI.create("https://api.mojang.com/users/profiles/minecraft/" + username))
-        			.build();
+    	String body = HTTPRequest.get("https://api.mojang.com/users/profiles/minecraft/" + username);
+        if (body == null) return null;
 
-        	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-            	JsonObject json = new JsonParser().parse(response.body()).getAsJsonObject();
-            	String id = json.get("id").getAsString();
-            	
-                String uuid = id.replaceFirst(
-                    "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w+)",
-                    "$1-$2-$3-$4-$5"
-                );
-                return UUID.fromString(uuid);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    	JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+    	String id = json.get("id").getAsString();
+    	
+        String uuid = id.replaceFirst(
+            "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w+)",
+            "$1-$2-$3-$4-$5"
+        );
+        return UUID.fromString(uuid);
     }
     
     /**
-     * Retrieves the name of a Minecraft player by UUID.
+     * Gets the name of a player by UUID.
+     * 
+     * @return the player's username {@link String}
 	 */
     public static String getName(@NonNull String uuid) {
-        try {
-        	HttpRequest request = HttpRequest.newBuilder()
-        			.uri(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", "")))
-        			.build();
-        	
-        	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        String body = HTTPRequest.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", ""));
+        if (body == null) return null;
 
-            if (response.statusCode() == 200) {
-            	JsonObject json = new JsonParser().parse(response.body()).getAsJsonObject();
-            	String name = json.get("name").getAsString();
-            	
-            	return name;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    	JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+    	return json.get("name").getAsString();
     }
 }

@@ -1,6 +1,7 @@
 // From https://github.com/MaxWgamer/AW-Spigot/blob/71d7e988e006b527af2604062122169f475007cb/PaperSpigot-Server/src/main/java/fr/MaxWgamer/custom/utils/FastRandom.java
 package com.falchus.lib.utils;
 
+import java.io.Serial;
 import java.util.Random;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -13,7 +14,8 @@ import javax.annotation.concurrent.ThreadSafe;
 @ThreadSafe // The fast random can be used with multiple threads
 public strictfp class FastRandom extends Random implements Cloneable {
 	
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 
 	protected long seed;
 
