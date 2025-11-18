@@ -8,7 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
@@ -55,10 +57,26 @@ public class ItemListener implements Listener {
             }
         }
 
-        TriConsumer<Player, ItemStack, InventoryClickEvent> invCallback = ItemUtils.inventoryCallbacks.get(event.getInventory());
-        if (invCallback != null) {
+        TriConsumer<Player, ItemStack, InventoryClickEvent> callback = ItemUtils.inventoryCallbacks.get(event.getInventory());
+        if (callback != null) {
             event.setCancelled(true);
-            invCallback.accept(player, item, event);
+            callback.accept(player, item, event);
         }
+    }
+    
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+    	Inventory inventory = event.getInventory();
+    	
+    	for (ItemStack item : inventory.getContents()) {
+    		if (item == null) continue;
+    		
+    		UUID uuid = ItemUtils.getUUID(item);
+    		if (uuid == null) continue;
+    		
+    		ItemUtils.itemActionsInventory.remove(uuid);
+    	}
+    	
+    	ItemUtils.inventoryCallbacks.remove(inventory);
     }
 }
