@@ -66,7 +66,7 @@ public class ItemUtils {
     /**
      * Gets an array of ItemStacks from a Base64 String.
      */
-    public static ItemStack[] itemStackArrayFromBase64(String base64) {
+    public static ItemStack[] itemStackArrayFromBase64(@NonNull String base64) {
     	try {
         	ByteArrayInputStream stream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
         	BukkitObjectInputStream input = new BukkitObjectInputStream(stream);
@@ -75,18 +75,17 @@ public class ItemUtils {
         	for (int i = 0; i < items.length; i++) {
         		items[i] = (ItemStack) input.readObject();
         	}
-        	input.close();
         	return items;
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
-    	return null;
+    	return new ItemStack[0];
     }
     
     /**
      * Converts an array of ItemStacks to a Base64 String.
      */
-    public static String itemStackArrayToBase64(ItemStack[] items) {
+    public static String itemStackArrayToBase64(@NonNull ItemStack[] items) {
     	try {
     		ByteArrayOutputStream stream = new ByteArrayOutputStream();
     		BukkitObjectOutputStream output = new BukkitObjectOutputStream(stream);
@@ -95,7 +94,6 @@ public class ItemUtils {
     		for (ItemStack item : items) {
     			output.writeObject(item);
             }
-    		output.close();
         	return Base64Coder.encodeLines(stream.toByteArray());
     	} catch (Exception e) {
     		e.printStackTrace();
