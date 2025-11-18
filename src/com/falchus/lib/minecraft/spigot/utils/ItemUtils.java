@@ -66,7 +66,7 @@ public class ItemUtils {
     /**
      * Gets an array of ItemStacks from a Base64 String.
      */
-    public static ItemStack[] itemStackArrayFromBase64(@NonNull String base64) {
+    public static ItemStack[] itemStackArrayFromBase64(String base64) {
     	try {
         	ByteArrayInputStream stream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
         	BukkitObjectInputStream input = new BukkitObjectInputStream(stream);
@@ -85,7 +85,7 @@ public class ItemUtils {
     /**
      * Converts an array of ItemStacks to a Base64 String.
      */
-    public static String itemStackArrayToBase64(@NonNull ItemStack[] items) {
+    public static String itemStackArrayToBase64(ItemStack[] items) {
     	try {
     		ByteArrayOutputStream stream = new ByteArrayOutputStream();
     		BukkitObjectOutputStream output = new BukkitObjectOutputStream(stream);
