@@ -1,5 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -9,6 +11,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
 
@@ -56,6 +61,46 @@ public class ItemUtils {
             return UUID.fromString(nmsItem.getTag().getString("UUID"));
         }
         return null;
+    }
+    
+    /**
+     * Gets an array of ItemStacks from a Base64 String.
+     */
+    public static ItemStack[] itemStackArrayFromBase64(String base64) {
+    	try {
+        	ByteArrayInputStream stream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
+        	BukkitObjectInputStream input = new BukkitObjectInputStream(stream);
+        	
+        	ItemStack[] items = new ItemStack[input.readInt()];
+        	for (int i = 0; i < items.length; i++) {
+        		items[i] = (ItemStack) input.readObject();
+        	}
+        	input.close();
+        	return items;
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return null;
+    }
+    
+    /**
+     * Converts an array of ItemStacks to a Base64 String.
+     */
+    public static String itemStackArrayToBase64(ItemStack[] items) {
+    	try {
+    		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    		BukkitObjectOutputStream output = new BukkitObjectOutputStream(stream);
+        	
+    		output.writeInt(items.length);
+    		for (ItemStack item : items) {
+    			output.writeObject(item);
+            }
+    		output.close();
+        	return Base64Coder.encodeLines(stream.toByteArray());
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return null;
     }
 
     /**
