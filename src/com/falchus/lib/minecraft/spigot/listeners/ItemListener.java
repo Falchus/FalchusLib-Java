@@ -64,19 +64,20 @@ public class ItemListener implements Listener {
         }
     }
     
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-    	Inventory inventory = event.getInventory();
-    	
-    	for (ItemStack item : inventory.getContents()) {
-    		if (item == null) continue;
-    		
-    		UUID uuid = ItemUtils.getUUID(item);
-    		if (uuid == null) continue;
-    		
-    		ItemUtils.itemActionsInventory.remove(uuid);
-    	}
-    	
-    	ItemUtils.inventoryCallbacks.remove(inventory);
-    }
+    // TODO: search for a better, more bulletproof solution
+//    @EventHandler
+//    public void onInventoryClose(InventoryCloseEvent event) {
+//    	Inventory inventory = event.getInventory();
+//    	
+//    	for (ItemStack item : inventory.getContents()) {
+//    		if (item == null) continue;
+//    		
+//    		UUID uuid = ItemUtils.getUUID(item);
+//    		if (uuid == null) continue;
+//    		
+//    		ItemUtils.itemActionsInventory.remove(uuid);
+//    	}
+//    	
+//    	ItemUtils.inventoryCallbacks.remove(inventory);
+//    }
 }
