@@ -28,7 +28,7 @@ public class Bossbar extends PlayerElement {
     private final Map<UUID, EntityWither> withers = new HashMap<>();
     private final Map<UUID, Location> lastLocations = new HashMap<>();
     private final Map<UUID, String> lastMessages = new HashMap<>();
-    private final Map<UUID, Float> lastProgress = new HashMap<>();
+    private final Map<UUID, Float> lastProgresses = new HashMap<>();
     
 	/**
 	 * Constructs a new Bossbar.
@@ -49,18 +49,29 @@ public class Bossbar extends PlayerElement {
         float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
 
 	    EntityWither wither = withers.get(uuid);
-	    if (wither == null) {
+	    Location last = lastLocations.get(uuid);
+	    
+	    if (wither == null || (last != null && !last.getWorld().equals(location.getWorld()))) {
+	        if (wither != null) {
+	            PlayerUtils.sendPacket(player, new PacketPlayOutEntityDestroy(wither.getId()));
+	        }
+	        
             WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
             wither = new EntityWither(world);
             wither.setInvisible(true);
             wither.setHealth(wither.getMaxHealth());
             withers.put(uuid, wither);
-
+            
 	        wither.setLocation(location.getX(), location.getY(), location.getZ(), yaw, pitch);
 	        PlayerUtils.sendPacket(player, new PacketPlayOutSpawnEntityLiving(wither));
+	        
+	        Float lastProgress = lastProgresses.get(uuid);
+	        if (lastProgress != null) {
+	        	wither.setHealth(lastProgress);
+	        	PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
+	        }
 	    } else {
-            Location last = lastLocations.get(uuid);
-            boolean moved = last == null || !last.getWorld().equals(location.getWorld()) || location.distanceSquared(last) > 4;
+            boolean moved = last == null || location.distanceSquared(last) > 4;
             boolean rotated = last != null && (Math.abs(yaw - last.getYaw()) > 2 || Math.abs(pitch - last.getPitch()) > 2);
 
             if (moved || rotated) {
@@ -101,7 +112,7 @@ public class Bossbar extends PlayerElement {
         EntityWither wither = withers.remove(uuid);
         lastLocations.remove(uuid);
         lastMessages.remove(uuid);
-        lastProgress.remove(uuid);
+        lastProgresses.remove(uuid);
         if (wither != null) {
             PlayerUtils.sendPacket(player, new PacketPlayOutEntityDestroy(wither.getId()));
         }
@@ -116,11 +127,11 @@ public class Bossbar extends PlayerElement {
 
         float max = wither.getMaxHealth();
         float newHealth = (float) Math.max(1, Math.min(max, progress * max));
-        Float last = lastProgress.get(player.getUniqueId());
+        Float last = lastProgresses.get(player.getUniqueId());
         if (last == null || Math.abs(last - newHealth) > 0.01f) {
             wither.setHealth(newHealth);
             PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
-            lastProgress.put(player.getUniqueId(), newHealth);
+            lastProgresses.put(player.getUniqueId(), newHealth);
         }
 	}
 }
