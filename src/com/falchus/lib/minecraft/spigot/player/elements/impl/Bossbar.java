@@ -49,9 +49,9 @@ public class Bossbar extends PlayerElement {
         float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
 
 	    EntityWither wither = withers.get(uuid);
-	    Location last = lastLocations.get(uuid);
+	    Location lastLocation = lastLocations.get(uuid);
 	    
-	    if (wither == null || (last != null && !last.getWorld().equals(location.getWorld()))) {
+	    if (wither == null || (lastLocation != null && !lastLocation.getWorld().equals(location.getWorld()))) {
 	        if (wither != null) {
 	            PlayerUtils.sendPacket(player, new PacketPlayOutEntityDestroy(wither.getId()));
 	        }
@@ -59,20 +59,23 @@ public class Bossbar extends PlayerElement {
             WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
             wither = new EntityWither(world);
             wither.setInvisible(true);
+            wither.setCustomName(message);
+            wither.setCustomNameVisible(true);
             wither.setHealth(wither.getMaxHealth());
             withers.put(uuid, wither);
             
-	        wither.setLocation(location.getX(), location.getY(), location.getZ(), yaw, pitch);
-	        PlayerUtils.sendPacket(player, new PacketPlayOutSpawnEntityLiving(wither));
+            wither.setLocation(location.getX(), location.getY(), location.getZ(), yaw, pitch);
+            PlayerUtils.sendPacket(player, new PacketPlayOutSpawnEntityLiving(wither));
+            PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
 	        
-	        Float lastProgress = lastProgresses.get(uuid);
-	        if (lastProgress != null) {
-	        	wither.setHealth(lastProgress);
-	        	PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
-	        }
+            Float lastProgress = lastProgresses.get(uuid);
+            if (lastProgress != null) {
+                wither.setHealth(lastProgress);
+                PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
+            }
 	    } else {
-            boolean moved = last == null || location.distanceSquared(last) > 4;
-            boolean rotated = last != null && (Math.abs(yaw - last.getYaw()) > 2 || Math.abs(pitch - last.getPitch()) > 2);
+            boolean moved = lastLocation == null || location.distanceSquared(lastLocation) > 4;
+            boolean rotated = lastLocation != null && (Math.abs(yaw - lastLocation.getYaw()) > 2 || Math.abs(pitch - lastLocation.getPitch()) > 2);
 
             if (moved || rotated) {
                 wither.setLocation(location.getX(), location.getY(), location.getZ(), yaw, pitch);
