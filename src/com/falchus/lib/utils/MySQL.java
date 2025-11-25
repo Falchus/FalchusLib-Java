@@ -23,21 +23,18 @@ public class MySQL {
 	
 	/**
 	 * Establishes a new connection if none is currently open.
+	 * @throws SQLException 
 	 */
-	public void connect() {
+	public void connect() throws SQLException {
 		if (isConnected()) return;
-		try {
-			String url = "jdbc:mysql://" + host + ":" + port + "/" + database 
-					+ "?useSSL=false&autoReconnect=true&characterEncoding=UTF-8&useUnicode=true";
+		String url = "jdbc:mysql://" + host + ":" + port + "/" + database 
+				+ "?useSSL=false&autoReconnect=true&characterEncoding=UTF-8&useUnicode=true";
 
-            if (password == null) {
-                connection = DriverManager.getConnection(url, username, "");
-            } else {
-                connection = DriverManager.getConnection(url, username, password);
-            }
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        if (password == null) {
+            connection = DriverManager.getConnection(url, username, "");
+        } else {
+            connection = DriverManager.getConnection(url, username, password);
+        }
 	}
 	
 	/**
@@ -69,8 +66,9 @@ public class MySQL {
 	 * Returns the active connection, reconnecting if necessary.
 	 * 
 	 * @return an open {@link Connection} instance (may be newly created)
+	 * @throws SQLException 
 	 */
-    public Connection getConnection() {
+    public Connection getConnection() throws SQLException {
         if (!isConnected()) {
             connect();
         }
