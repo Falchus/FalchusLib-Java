@@ -1,0 +1,9 @@
+{
+  "id": "falchuslib",
+  "name": "FalchusLib",
+  "version": "${project.version}",
+  "main": "com.falchus.lib.velocity.FalchusLibMinecraftVelocity",
+  "authors": ["Falchus"],
+  "description": "A simple library.",
+  "url": "https://lib.falchus.com"
+}
