@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.falchus.lib.minecraft.FalchusLibMinecraft;
 import com.falchus.lib.minecraft.enums.Software;
 import com.google.gson.JsonElement;
+import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
+import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -30,15 +32,21 @@ public class LabyModProtocol {
 		if (software == Software.SPIGOT) {
 			net.minecraft.server.v1_8_R3.PacketDataSerializer pds = new net.minecraft.server.v1_8_R3.PacketDataSerializer(Unpooled.wrappedBuffer(bytes));
 			net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload payloadPacket = new net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload("labymod3:main", pds);
-			org.bukkit.entity.Player spigotPlayer = org.bukkit.Bukkit.getPlayer(uuid);
-			if (spigotPlayer == null) return;
+			org.bukkit.entity.Player player = org.bukkit.Bukkit.getPlayer(uuid);
+			if (player == null) return;
 			
-			com.falchus.lib.minecraft.spigot.utils.PlayerUtils.sendPacket(spigotPlayer, payloadPacket);
+			com.falchus.lib.minecraft.spigot.utils.PlayerUtils.sendPacket(player, payloadPacket);
 		} else if (software == Software.BUNGEECORD) {
-			net.md_5.bungee.api.connection.ProxiedPlayer bungeePlayer = com.falchus.lib.minecraft.bungee.FalchusLibMinecraftBungee.getInstance().getProxy().getPlayer(uuid);
-			if (bungeePlayer == null) return;
+			net.md_5.bungee.api.connection.ProxiedPlayer player = com.falchus.lib.minecraft.bungee.FalchusLibMinecraftBungee.getInstance().getProxy().getPlayer(uuid);
+			if (player == null) return;
 			
-			bungeePlayer.sendData("labymod3:main", bytes);
+			player.sendData("labymod3:main", bytes);
+		} else if (software == Software.VELOCITY) {
+			com.velocitypowered.api.proxy.Player player = com.falchus.lib.minecraft.velocity.FalchusLibMinecraftVelocity.getInstance().getServer().getPlayer(uuid).orElse(null);
+			if (player == null) return;
+			
+			ChannelIdentifier channel = new LegacyChannelIdentifier("labymod3:main");
+			player.sendPluginMessage(channel, bytes);
 		}
 	}
 	
