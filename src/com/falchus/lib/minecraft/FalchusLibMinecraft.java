@@ -15,12 +15,10 @@ public class FalchusLibMinecraft {
 	public static Software getSoftware() {
 		String[] classNames = {
             "org.bukkit.plugin.java.JavaPlugin",
-            "net.md_5.bungee.api.plugin.Plugin",
             "com.velocitypowered.api.plugin.Plugin"
 		};
 		Software[] softwares = {
 			Software.SPIGOT,
-			Software.BUNGEECORD,
 			Software.VELOCITY
 		};
 		

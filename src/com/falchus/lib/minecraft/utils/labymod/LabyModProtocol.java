@@ -36,11 +36,6 @@ public class LabyModProtocol {
 			if (player == null) return;
 			
 			com.falchus.lib.minecraft.spigot.utils.PlayerUtils.sendPacket(player, payloadPacket);
-		} else if (software == Software.BUNGEECORD) {
-			net.md_5.bungee.api.connection.ProxiedPlayer player = com.falchus.lib.minecraft.bungee.FalchusLibMinecraftBungee.getInstance().getProxy().getPlayer(uuid);
-			if (player == null) return;
-			
-			player.sendData("labymod3:main", bytes);
 		} else if (software == Software.VELOCITY) {
 			com.velocitypowered.api.proxy.Player player = com.falchus.lib.minecraft.velocity.FalchusLibMinecraftVelocity.getInstance().getServer().getPlayer(uuid).orElse(null);
 			if (player == null) return;

@@ -61,10 +61,6 @@ public interface IBaseCommand {
                 if (sender instanceof org.bukkit.entity.Player player) {
                     return player.hasPermission(permission);
                 }
-            } else if (software == Software.BUNGEECORD) {
-                if (sender instanceof net.md_5.bungee.api.connection.ProxiedPlayer player) {
-                    return player.hasPermission(permission);
-                }
             } else if (software == Software.VELOCITY) {
             	if (sender instanceof com.velocitypowered.api.proxy.Player player) {
             		return player.hasPermission(permission);
@@ -82,10 +78,6 @@ public interface IBaseCommand {
         if (software == Software.SPIGOT) {
             if (s instanceof org.bukkit.command.CommandSender sender) {
             	sender.sendMessage(message);
-            }
-        } else if (software == Software.BUNGEECORD) {
-            if (s instanceof net.md_5.bungee.api.CommandSender sender) {
-            	sender.sendMessage(new net.md_5.bungee.api.chat.TextComponent(message));
             }
         } else if (software == Software.VELOCITY) {
         	if (s instanceof com.velocitypowered.api.command.CommandSource sender) {
