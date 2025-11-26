@@ -56,14 +56,19 @@ public interface IBaseCommand {
     default boolean hasPermission(@NonNull Object sender) {
         String permission = getPermission();
         if (permission != null && !permission.isEmpty()) {
-            if (FalchusLibMinecraft.getSoftware() == Software.SPIGOT) {
+        	Software software = FalchusLibMinecraft.getSoftware();
+            if (software == Software.SPIGOT) {
                 if (sender instanceof org.bukkit.entity.Player player) {
                     return player.hasPermission(permission);
                 }
-            } else if (FalchusLibMinecraft.getSoftware() == Software.BUNGEECORD) {
+            } else if (software == Software.BUNGEECORD) {
                 if (sender instanceof net.md_5.bungee.api.connection.ProxiedPlayer player) {
                     return player.hasPermission(permission);
                 }
+            } else if (software == Software.VELOCITY) {
+            	if (sender instanceof com.velocitypowered.api.proxy.Player player) {
+            		return player.hasPermission(permission);
+            	}
             }
         }
         return true;
@@ -72,15 +77,20 @@ public interface IBaseCommand {
     /**
      * Sends a message to the command sender.
      */
-    default void sendMessage(@NonNull Object sender, @NonNull String message) {
-        if (FalchusLibMinecraft.getSoftware() == Software.SPIGOT) {
-            if (sender instanceof org.bukkit.command.CommandSender commandSender) {
-            	commandSender.sendMessage(message);
+    default void sendMessage(@NonNull Object s, @NonNull String message) {
+    	Software software = FalchusLibMinecraft.getSoftware();
+        if (software == Software.SPIGOT) {
+            if (s instanceof org.bukkit.command.CommandSender sender) {
+            	sender.sendMessage(message);
             }
-        } else if (FalchusLibMinecraft.getSoftware() == Software.BUNGEECORD) {
-            if (sender instanceof net.md_5.bungee.api.CommandSender commandSender) {
-            	commandSender.sendMessage(new net.md_5.bungee.api.chat.TextComponent(message));
+        } else if (software == Software.BUNGEECORD) {
+            if (s instanceof net.md_5.bungee.api.CommandSender sender) {
+            	sender.sendMessage(new net.md_5.bungee.api.chat.TextComponent(message));
             }
+        } else if (software == Software.VELOCITY) {
+        	if (s instanceof com.velocitypowered.api.command.CommandSource sender) {
+        		sender.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(message));
+        	}
         }
     }
 }

@@ -2,8 +2,10 @@ package com.falchus.lib.minecraft.bungee;
 
 import com.falchus.lib.minecraft.bungee.utils.Metrics;
 
+import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 
+@Getter
 public class FalchusLibMinecraftBungee extends Plugin {
 
 	private static FalchusLibMinecraftBungee instance;
@@ -19,9 +21,5 @@ public class FalchusLibMinecraftBungee extends Plugin {
 	
 	public static FalchusLibMinecraftBungee getInstance() {
 		return instance;
-	}
-	
-	public Contexts getContexts() {
-		return contexts;
 	}
 }

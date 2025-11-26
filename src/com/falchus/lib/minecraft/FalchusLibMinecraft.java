@@ -10,21 +10,26 @@ public class FalchusLibMinecraft {
 	/**
 	 * Detects the server software by checking for known classes.
 	 * 
-     * @return {@link Software#SPIGOT} if running on Spigot,
-     *         {@link Software#BUNGEECORD} if running on BungeeCord,
-     *         or {@code null} if unknown.
+     * @return {@link Software} or {@code null} if unknown.
 	 */
 	public static Software getSoftware() {
-		try {
-			Class.forName("org.bukkit.plugin.java.JavaPlugin");
-			return Software.SPIGOT;
-		} catch (ClassNotFoundException e1) {
+		String[] classNames = {
+            "org.bukkit.plugin.java.JavaPlugin",
+            "net.md_5.bungee.api.plugin.Plugin",
+            "com.velocitypowered.api.plugin.Plugin"
+		};
+		Software[] softwares = {
+			Software.SPIGOT,
+			Software.BUNGEECORD,
+			Software.VELOCITY
+		};
+		
+		for (int i = 0; i < classNames.length; i++) {
 			try {
-				Class.forName("net.md_5.bungee.api.plugin.Plugin");
-				return Software.BUNGEECORD;
-			} catch (ClassNotFoundException e2) {
-				return null;
-			}
+				Class.forName(classNames[i]);
+				return softwares[i];
+			} catch (ClassNotFoundException ignored) {}
 		}
+		return null;
 	}
 }

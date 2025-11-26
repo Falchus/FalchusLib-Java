@@ -4,6 +4,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.falchus.lib.minecraft.spigot.utils.Metrics;
 
+import lombok.Getter;
+
+@Getter
 public class FalchusLibMinecraftSpigot extends JavaPlugin {
 
 	private static FalchusLibMinecraftSpigot instance;
@@ -19,9 +22,5 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 	
 	public static FalchusLibMinecraftSpigot getInstance() {
 		return instance;
-	}
-	
-	public Contexts getContexts() {
-		return contexts;
 	}
 }

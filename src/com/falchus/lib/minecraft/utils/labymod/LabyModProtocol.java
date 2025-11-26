@@ -26,14 +26,15 @@ public class LabyModProtocol {
 	public static void sendMessage(@NonNull UUID uuid, String key, JsonElement messageContent) {
 		byte[] bytes = LabyModProtocol.getBytesToSend(key, messageContent.toString());
 		
-		if (FalchusLibMinecraft.getSoftware() == Software.SPIGOT) {
+		Software software = FalchusLibMinecraft.getSoftware();
+		if (software == Software.SPIGOT) {
 			net.minecraft.server.v1_8_R3.PacketDataSerializer pds = new net.minecraft.server.v1_8_R3.PacketDataSerializer(Unpooled.wrappedBuffer(bytes));
 			net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload payloadPacket = new net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload("labymod3:main", pds);
 			org.bukkit.entity.Player spigotPlayer = org.bukkit.Bukkit.getPlayer(uuid);
 			if (spigotPlayer == null) return;
 			
 			com.falchus.lib.minecraft.spigot.utils.PlayerUtils.sendPacket(spigotPlayer, payloadPacket);
-		} else if (FalchusLibMinecraft.getSoftware() == Software.BUNGEECORD) {
+		} else if (software == Software.BUNGEECORD) {
 			net.md_5.bungee.api.connection.ProxiedPlayer bungeePlayer = com.falchus.lib.minecraft.bungee.FalchusLibMinecraftBungee.getInstance().getProxy().getPlayer(uuid);
 			if (bungeePlayer == null) return;
 			

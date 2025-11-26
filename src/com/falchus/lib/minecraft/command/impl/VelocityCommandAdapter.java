@@ -2,42 +2,41 @@ package com.falchus.lib.minecraft.command.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.falchus.lib.minecraft.command.IBaseCommand;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
 
 import lombok.Getter;
-import lombok.NonNull;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.TabExecutor;
 
 /**
- * Abstract adapter for BungeeCord commands.
+ * Abstract adapter for Velocity commands.
  */
 @Getter
-public abstract class BungeeCommandAdapter extends Command implements IBaseCommand, TabExecutor {
-	
+public abstract class VelocityCommandAdapter implements IBaseCommand, SimpleCommand {
+
     private final String command;
     private final String[] aliases;
     private final String permission;
     private final String noPermissionMessage;
     private final String usageMessage;
-
+    
     /**
-     * Constructs a new BungeeCommandAdapter.
+     * Constructs a new VelocityCommandAdapter.
      */
-	public BungeeCommandAdapter(@NonNull String command, List<String> aliases, String permission, String noPermissionMessage, String usageMessage) {
-		super(command, permission, aliases != null ? aliases.toArray(new String[0]) : new String[0]);
-		
-        this.command = command;
-        this.aliases = aliases != null ? aliases.toArray(new String[0]) : new String[0];
+	public VelocityCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
+        this.command = "";
+        this.aliases = new String[0];
         this.permission = permission;
         this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";
         this.usageMessage = usageMessage != null ? usageMessage : "§cWrong usage.";
 	}
 	
 	@Override
-	public void execute(CommandSender sender, @NonNull String[] args) {
+	public void execute(Invocation invocation) {
+		CommandSource sender = invocation.source();
+		String[] args = invocation.arguments();
 		if (!hasPermission(sender)) {
 			sendMessage(sender, getNoPermissionMessage());
 			return;
@@ -46,9 +45,16 @@ public abstract class BungeeCommandAdapter extends Command implements IBaseComma
 	}
 	
 	@Override
-	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+	public List<String> suggest(Invocation invocation) {
+		CommandSource sender = invocation.source();
+		String[] args = invocation.arguments();
 		if (!hasPermission(sender)) return Collections.emptyList();
 		List<String> list = tabComplete(sender, args);
 		return list != null ? list : Collections.emptyList();
+	}
+	
+	@Override
+	public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
+		return CompletableFuture.completedFuture(suggest(invocation));
 	}
 }
