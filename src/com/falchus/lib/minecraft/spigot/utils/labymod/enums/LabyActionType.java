@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.utils.labymod.enums;
+package com.falchus.lib.minecraft.spigot.utils.labymod.enums;
 
 public enum LabyActionType {
 	NONE,

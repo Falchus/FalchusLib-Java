@@ -1,9 +1,9 @@
-package com.falchus.lib.minecraft.utils.labymod;
+package com.falchus.lib.minecraft.spigot.utils.labymod;
 
 import java.util.Collection;
 import java.util.UUID;
 
-import com.falchus.lib.minecraft.utils.labymod.enums.LabyBalanceType;
+import com.falchus.lib.minecraft.spigot.utils.labymod.enums.LabyBalanceType;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 

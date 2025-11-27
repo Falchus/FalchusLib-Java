@@ -1,10 +1,11 @@
-package com.falchus.lib.minecraft.utils.labymod;
+package com.falchus.lib.minecraft.spigot.utils.labymod;
 
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-import com.falchus.lib.minecraft.FalchusLibMinecraft;
-import com.falchus.lib.minecraft.enums.Software;
+import org.bukkit.entity.Player;
+
+import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.google.gson.JsonElement;
 
 import io.netty.buffer.ByteBuf;
@@ -13,6 +14,8 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload;
 
 @UtilityClass
 public class LabyModProtocol {
@@ -26,21 +29,12 @@ public class LabyModProtocol {
 	public static void sendMessage(@NonNull UUID uuid, String key, JsonElement messageContent) {
 		byte[] bytes = LabyModProtocol.getBytesToSend(key, messageContent.toString());
 		
-		Software software = FalchusLibMinecraft.getSoftware();
-		if (software == Software.SPIGOT) {
-			net.minecraft.server.v1_8_R3.PacketDataSerializer pds = new net.minecraft.server.v1_8_R3.PacketDataSerializer(Unpooled.wrappedBuffer(bytes));
-			net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload payloadPacket = new net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload("labymod3:main", pds);
-			org.bukkit.entity.Player player = org.bukkit.Bukkit.getPlayer(uuid);
-			if (player == null) return;
-			
-			com.falchus.lib.minecraft.spigot.utils.PlayerUtils.sendPacket(player, payloadPacket);
-		} else if (software == Software.VELOCITY) {
-			com.velocitypowered.api.proxy.Player player = com.falchus.lib.minecraft.velocity.FalchusLibMinecraftVelocity.getInstance().getServer().getPlayer(uuid).orElse(null);
-			if (player == null) return;
-			
-			com.velocitypowered.api.proxy.messages.ChannelIdentifier channel = new com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier("labymod3:main");
-			player.sendPluginMessage(channel, bytes);
-		}
+		PacketDataSerializer pds = new PacketDataSerializer(Unpooled.wrappedBuffer(bytes));
+		PacketPlayOutCustomPayload payloadPacket = new PacketPlayOutCustomPayload("labymod3:main", pds);
+		Player player = org.bukkit.Bukkit.getPlayer(uuid);
+		if (player == null) return;
+		
+		PlayerUtils.sendPacket(player, payloadPacket);
 	}
 	
     /**

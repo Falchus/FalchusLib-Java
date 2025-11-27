@@ -7,7 +7,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Client;
 import com.falchus.lib.minecraft.spigot.events.player.PlayerClientJoinEvent;
-import com.falchus.lib.minecraft.utils.labymod.LabyModProtocol;
+import com.falchus.lib.minecraft.spigot.utils.labymod.LabyModProtocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
