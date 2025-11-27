@@ -6,8 +6,6 @@ import java.util.UUID;
 import com.falchus.lib.minecraft.FalchusLibMinecraft;
 import com.falchus.lib.minecraft.enums.Software;
 import com.google.gson.JsonElement;
-import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
-import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -40,7 +38,7 @@ public class LabyModProtocol {
 			com.velocitypowered.api.proxy.Player player = com.falchus.lib.minecraft.velocity.FalchusLibMinecraftVelocity.getInstance().getServer().getPlayer(uuid).orElse(null);
 			if (player == null) return;
 			
-			ChannelIdentifier channel = new LegacyChannelIdentifier("labymod3:main");
+			com.velocitypowered.api.proxy.messages.ChannelIdentifier channel = new com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier("labymod3:main");
 			player.sendPluginMessage(channel, bytes);
 		}
 	}
