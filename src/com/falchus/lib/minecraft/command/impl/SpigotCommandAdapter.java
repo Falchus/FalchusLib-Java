@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.command.IBaseCommand;
 
@@ -51,5 +52,23 @@ public abstract class SpigotCommandAdapter implements IBaseCommand, CommandExecu
 		if (!hasPermission(sender)) return Collections.emptyList();
 		List<String> list = tabComplete(sender, args);
 		return list != null ? list : Collections.emptyList();
+	}
+	
+	@Override
+	public boolean hasPermission(@NonNull Object sender) {
+        String permission = getPermission();
+        if (permission != null) {
+            if (sender instanceof Player player) {
+                return player.hasPermission(permission);
+            }
+        }
+        return true;
+	}
+	
+	@Override
+	public void sendMessage(@NonNull Object s, @NonNull String message) {
+        if (s instanceof CommandSender sender) {
+        	sender.sendMessage(message);
+        }
 	}
 }

@@ -3,9 +3,6 @@ package com.falchus.lib.minecraft.command;
 import java.util.Collections;
 import java.util.List;
 
-import com.falchus.lib.minecraft.FalchusLibMinecraft;
-import com.falchus.lib.minecraft.enums.Software;
-
 import lombok.NonNull;
 
 /**
@@ -53,36 +50,10 @@ public interface IBaseCommand {
     /**
      * Checks if the sender has the permission required to execute this command.
      */
-    default boolean hasPermission(@NonNull Object sender) {
-        String permission = getPermission();
-        if (permission != null && !permission.isEmpty()) {
-        	Software software = FalchusLibMinecraft.getSoftware();
-            if (software == Software.SPIGOT) {
-                if (sender instanceof org.bukkit.entity.Player player) {
-                    return player.hasPermission(permission);
-                }
-            } else if (software == Software.VELOCITY) {
-            	if (sender instanceof com.velocitypowered.api.proxy.Player player) {
-            		return player.hasPermission(permission);
-            	}
-            }
-        }
-        return true;
-    }
+    boolean hasPermission(@NonNull Object sender);
 
     /**
      * Sends a message to the command sender.
      */
-    default void sendMessage(@NonNull Object s, @NonNull String message) {
-    	Software software = FalchusLibMinecraft.getSoftware();
-        if (software == Software.SPIGOT) {
-            if (s instanceof org.bukkit.command.CommandSender sender) {
-            	sender.sendMessage(message);
-            }
-        } else if (software == Software.VELOCITY) {
-        	if (s instanceof com.velocitypowered.api.command.CommandSource sender) {
-        		sender.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(message));
-        	}
-        }
-    }
+    void sendMessage(@NonNull Object s, @NonNull String message);
 }

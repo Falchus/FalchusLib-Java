@@ -7,8 +7,11 @@ import java.util.concurrent.CompletableFuture;
 import com.falchus.lib.minecraft.command.IBaseCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.Player;
 
 import lombok.Getter;
+import lombok.NonNull;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
  * Abstract adapter for Velocity commands.
@@ -56,5 +59,23 @@ public abstract class VelocityCommandAdapter implements IBaseCommand, SimpleComm
 	@Override
 	public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
 		return CompletableFuture.completedFuture(suggest(invocation));
+	}
+	
+	@Override
+	public boolean hasPermission(@NonNull Object sender) {
+        String permission = getPermission();
+        if (permission != null) {
+        	if (sender instanceof Player player) {
+        		return player.hasPermission(permission);
+        	}	
+        }
+    	return true;
+	}
+	
+	@Override
+	public void sendMessage(@NonNull Object s, @NonNull String message) {
+    	if (s instanceof CommandSource sender) {
+    		sender.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
+    	}
 	}
 }
