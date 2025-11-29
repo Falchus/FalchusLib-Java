@@ -43,6 +43,14 @@ public class InventoryBackup {
 
         backups.put(id, new BackupData(inventory, armor));
     }
+    
+    /**
+     * Creates a backup using the next available ID.
+     */
+    public static void backupInventory(@NonNull Player player) {
+    	int id = getNextBackupId(player);
+    	backupInventory(player, id);
+    }
 
     /**
      * Restores a specific backup by its ID.
@@ -64,6 +72,19 @@ public class InventoryBackup {
         }
         return true;
     }
+    
+    /**
+     * Loads the newest (highest ID) backup.
+     * 
+     * @return true if loaded successfully
+     */
+    public static boolean loadInventory(@NonNull Player player) {
+        Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
+        if (backups == null || backups.isEmpty()) return false;
+
+        int id = backups.keySet().stream().max(Integer::compareTo).get();
+        return loadInventory(player, id);
+    }
 
     /**
      * Checks if a specific backup exists for a player.
@@ -71,6 +92,14 @@ public class InventoryBackup {
     public static boolean hasBackup(@NonNull Player player, int id) {
         Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
         return backups != null && backups.containsKey(id);
+    }
+    
+    /**
+     * Returns true if the player has at least one backup.
+     */
+    public static boolean hasBackup(@NonNull Player player) {
+        Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
+        return backups != null && !backups.isEmpty();
     }
     
     /**
@@ -94,5 +123,16 @@ public class InventoryBackup {
     		return true;
     	}
     	return false;
+    }
+    
+    /**
+     * Creates the next available backup ID for a player.
+     */
+    public static int getNextBackupId(@NonNull Player player) {
+    	Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
+    	if (backups == null || backups.isEmpty()) {
+    		return 1;
+    	}
+    	return backups.keySet().stream().max(Integer::compareTo).orElse(0) + 1;
     }
 }
