@@ -13,11 +13,12 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for backing up and restoring a player's inventory and armor.
+ * supporting multiple backups per player by IDs.
  */
 @UtilityClass
 public class InventoryBackup {
 
-    private static final Map<UUID, BackupData> playerInventories = new HashMap<>();
+    private static final Map<UUID, Map<Integer, BackupData>> playerInventories = new HashMap<>();
 
     /**
      * Internal class to hold data.
@@ -29,37 +30,69 @@ public class InventoryBackup {
     }
 
     /**
-     * Backs up the inventory and armor of the given player.
-     * If a backup already exists, it is overwritten.
+     * Creates or overwrites a backup with the given ID for a player.
      */
-    public static void backupInventory(@NonNull Player player) {
-        playerInventories.remove(player.getUniqueId());
+    public static void backupInventory(@NonNull Player player, int id) {
+    	Map<Integer, BackupData> backups = playerInventories.computeIfAbsent(
+    		player.getUniqueId(),
+    		k -> new HashMap<>()
+    	);
 
         ItemStack[] inventory = player.getInventory().getContents().clone();
         ItemStack[] armor = player.getInventory().getArmorContents().clone();
 
-        playerInventories.put(player.getUniqueId(), new BackupData(inventory, armor));
+        backups.put(id, new BackupData(inventory, armor));
     }
 
     /**
-     * Restores the inventory and armor of the given player from the backup.
+     * Restores a specific backup by its ID.
      * The backup is removed after restoration.
+     * 
+     * @return true if restored successfully
      */
-    public static void loadInventory(@NonNull Player player) {
-        if (playerInventories.containsKey(player.getUniqueId())) {
-            BackupData backup = playerInventories.get(player.getUniqueId());
+    public static boolean loadInventory(@NonNull Player player, int id) {
+    	Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
+    	if (backups == null || !backups.containsKey(id)) return false;
+        BackupData backup = backups.get(id);
 
-            player.getInventory().setContents(backup.inventory);
-            player.getInventory().setArmorContents(backup.armor);
+        player.getInventory().setContents(backup.inventory);
+        player.getInventory().setArmorContents(backup.armor);
 
-            playerInventories.remove(player.getUniqueId());
+        backups.remove(id);
+        if (backups.isEmpty()) {
+        	playerInventories.remove(player.getUniqueId());
         }
+        return true;
     }
 
     /**
-     * Checks if a backup exists for the given player.
+     * Checks if a specific backup exists for a player.
      */
-    public static boolean hasBackup(@NonNull Player player) {
-        return playerInventories.containsKey(player.getUniqueId());
+    public static boolean hasBackup(@NonNull Player player, int id) {
+        Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
+        return backups != null && backups.containsKey(id);
+    }
+    
+    /**
+     * Returns all backups for a player.
+     */
+    public static Map<Integer, BackupData> getBackups(@NonNull Player player) {
+    	return playerInventories.getOrDefault(player.getUniqueId(), Map.of());
+    }
+    
+    /**
+     * Deletes a specific backup.
+     * 
+     * @return true if deleted
+     */
+    public static boolean deleteBackup(@NonNull Player player, int id) {
+    	Map<Integer, BackupData> backups = playerInventories.get(player.getUniqueId());
+    	if (backups != null && backups.remove(id) != null) {
+    		if (backups.isEmpty()) {
+    			playerInventories.remove(player.getUniqueId());
+    		}
+    		return true;
+    	}
+    	return false;
     }
 }
