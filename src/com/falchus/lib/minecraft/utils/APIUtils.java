@@ -2,7 +2,7 @@ package com.falchus.lib.minecraft.utils;
 
 import java.util.UUID;
 
-import com.falchus.lib.utils.HTTPRequest;
+import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

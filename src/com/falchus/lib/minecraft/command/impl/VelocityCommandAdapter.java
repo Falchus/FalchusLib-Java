@@ -19,8 +19,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 @Getter
 public abstract class VelocityCommandAdapter implements IBaseCommand, SimpleCommand {
 
-    private final String command;
-    private final String[] aliases;
     private final String permission;
     private final String noPermissionMessage;
     private final String usageMessage;
@@ -29,8 +27,6 @@ public abstract class VelocityCommandAdapter implements IBaseCommand, SimpleComm
      * Constructs a new VelocityCommandAdapter.
      */
 	public VelocityCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
-        this.command = "";
-        this.aliases = new String[0];
         this.permission = permission;
         this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";
         this.usageMessage = usageMessage != null ? usageMessage : "§cWrong usage.";

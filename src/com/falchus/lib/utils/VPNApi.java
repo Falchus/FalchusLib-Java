@@ -1,5 +1,6 @@
 package com.falchus.lib.utils;
 
+import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

@@ -1,4 +1,4 @@
-package com.falchus.lib.utils;
+package com.falchus.lib.utils.http;
 
 import java.net.URI;
 import java.net.http.HttpClient;

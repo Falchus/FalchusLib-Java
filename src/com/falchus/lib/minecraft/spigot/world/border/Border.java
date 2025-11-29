@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.spigot.world;
+package com.falchus.lib.minecraft.spigot.world.border;
 
 import org.bukkit.Location;
 

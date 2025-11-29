@@ -1,4 +1,4 @@
-package com.falchus.lib.utils;
+package com.falchus.lib.utils.http;
 
 import java.io.IOException;
 import java.io.OutputStream;

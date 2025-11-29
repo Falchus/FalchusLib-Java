@@ -26,9 +26,9 @@ public class Tablist extends PlayerElement {
 	/**
 	 * Sends a custom header and footer.
 	 */
-	public void send(@NonNull List<String> header, @NonNull List<String> footer, @NonNull String name) {
-		String headerText = String.join("\n", header);
-		String footerText = String.join("\n", footer);
+	public void send(List<String> header, List<String> footer, String name) {
+	    String headerText = header != null ? String.join("\n", header) : "";
+	    String footerText = footer != null ? String.join("\n", footer) : "";
 		
 		IChatBaseComponent headerComponent = new ChatComponentText(headerText);
         IChatBaseComponent footerComponent = new ChatComponentText(footerText);
@@ -51,7 +51,7 @@ public class Tablist extends PlayerElement {
 	/**
 	 * Updates the tablist periodically with dynamic content.
 	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<List<String>> headerSupplier, @NonNull Supplier<List<String>> footerSupplier, @NonNull Supplier<String> nameSupplier) {
+	public void sendUpdating(long intervalTicks, Supplier<List<String>> headerSupplier, Supplier<List<String>> footerSupplier, Supplier<String> nameSupplier) {
 		super.sendUpdating(intervalTicks, () -> {
 			List<String> header = headerSupplier.get();
 			List<String> footer = footerSupplier.get();
@@ -63,6 +63,6 @@ public class Tablist extends PlayerElement {
 	public void remove() {
 		super.remove();
 		
-		send(null, null, player.getName());
+		send(null, null, null);
 	}
 }

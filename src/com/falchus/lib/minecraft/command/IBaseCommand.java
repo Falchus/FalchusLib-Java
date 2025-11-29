@@ -9,16 +9,6 @@ import lombok.NonNull;
  * Abstraction for commands.
  */
 public interface IBaseCommand {
-	
-	/**
-	 * Returns the main command.
-	 */
-    String getCommand();
-    
-    /**
-     * Returns the aliases.
-     */
-    String[] getAliases();
     
     /**
      * Returns the permission node required.

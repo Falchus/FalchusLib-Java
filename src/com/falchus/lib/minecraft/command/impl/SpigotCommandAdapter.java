@@ -20,8 +20,6 @@ import lombok.NonNull;
 @Getter
 public abstract class SpigotCommandAdapter implements IBaseCommand, CommandExecutor, TabCompleter {
 
-    private final String command;
-    private final String[] aliases;
     private final String permission;
     private final String noPermissionMessage;
     private final String usageMessage;
@@ -29,9 +27,7 @@ public abstract class SpigotCommandAdapter implements IBaseCommand, CommandExecu
     /**
      * Constructs a new SpigotCommandAdapter.
      */
-	public SpigotCommandAdapter(@NonNull String command, String permission, String noPermissionMessage, String usageMessage) {
-        this.command = command;
-        this.aliases = new String[0];
+	public SpigotCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
         this.permission = permission;
         this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";
         this.usageMessage = usageMessage != null ? usageMessage : "§cWrong usage.";
