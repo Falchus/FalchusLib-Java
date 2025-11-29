@@ -32,7 +32,7 @@ public class Scoreboard extends PlayerElement {
      */
 	private Scoreboard(@NonNull Player player) {
 		super(player);
-		this.scoreboard = player.getScoreboard() != null ? player.getScoreboard() : Bukkit.getScoreboardManager().getNewScoreboard();
+		this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.objective = scoreboard.registerNewObjective("FalchusLib", "dummy");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         player.setScoreboard(scoreboard);
@@ -60,6 +60,8 @@ public class Scoreboard extends PlayerElement {
 	
 	public void remove() {
 		super.remove();
+		
+		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
 	
 	private void update(@NonNull String title, @NonNull String titleColor, String titleSecondColor, @NonNull List<String> lines) {
