@@ -38,14 +38,18 @@ public class ItemUtils {
      * Sets a UUID on the given item via NBT.
      */
     @SuppressWarnings("deprecation")
-	public static ItemStack setUUID(@NonNull ItemStack item, @NonNull UUID uuid) {
+	public static ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
         net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
         if (nmsItem == null) {
             nmsItem = new net.minecraft.server.v1_8_R3.ItemStack(net.minecraft.server.v1_8_R3.Item.getById(item.getType().getId()));
         }
 
         NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
-        tag.setString("UUID", uuid.toString());
+        if (uuid == null) {
+        	tag.remove("UUID");
+        } else {
+            tag.setString("UUID", uuid.toString());
+        }
         nmsItem.setTag(tag);
         return CraftItemStack.asBukkitCopy(nmsItem);
     }
