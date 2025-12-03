@@ -64,6 +64,18 @@ public class ItemUtils {
     }
     
     /**
+     * Removes all NBT tags from the item.
+     */
+    public static ItemStack clearNBT(@NonNull ItemStack item) {
+        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        if (nmsItem == null) return item;
+        
+        nmsItem.setTag(new NBTTagCompound());
+
+        return CraftItemStack.asBukkitCopy(nmsItem);
+    }
+    
+    /**
      * Gets an array of ItemStacks from a Base64 String.
      */
     public static ItemStack[] itemStackArrayFromBase64(String base64) {
