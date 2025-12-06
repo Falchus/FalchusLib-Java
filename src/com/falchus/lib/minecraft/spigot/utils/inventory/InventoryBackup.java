@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
@@ -24,7 +25,8 @@ public class InventoryBackup {
      * Internal class to hold data.
      */
     @AllArgsConstructor
-    private static class BackupData {
+    @Getter
+    public static class BackupData {
         ItemStack[] inventory;
         ItemStack[] armor;
     }
