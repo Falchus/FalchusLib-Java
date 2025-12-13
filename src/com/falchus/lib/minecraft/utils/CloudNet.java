@@ -11,6 +11,7 @@ import eu.cloudnetservice.driver.registry.ServiceRegistry;
 import eu.cloudnetservice.driver.service.ServiceConfiguration;
 import eu.cloudnetservice.driver.service.ServiceCreateResult;
 import eu.cloudnetservice.driver.service.ServiceInfoSnapshot;
+import eu.cloudnetservice.modules.bridge.BridgeDocProperties;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import eu.cloudnetservice.modules.bridge.player.PlayerManager;
 import eu.cloudnetservice.modules.bridge.player.PlayerProvider;
@@ -77,6 +78,14 @@ public class CloudNet {
 	public static int getPlayerCountFromTask(@NonNull String task) {
 		PlayerProvider playerProvider = playerManager.taskOnlinePlayers(task);
 		return playerProvider.count();
+	}
+	
+	/**
+	 * Gets the player count for the service.
+	 */
+	public static int getPlayerCountFromService(@NonNull String service) {
+		ServiceInfoSnapshot playerProvider = cloudServiceProvider.serviceByName(service);
+		return playerProvider.readProperty(BridgeDocProperties.ONLINE_COUNT);
 	}
 	
 	/**
