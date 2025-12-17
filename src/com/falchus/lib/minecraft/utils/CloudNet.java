@@ -117,13 +117,20 @@ public class CloudNet {
     public static void setMotd(@NonNull String newMotd) {
         bridgeServiceHelper.motd().set(newMotd);
     }
+    
+    /**
+     * Changes the service state to "ingame" and publishes the update.
+     */
+    public static void changeToIngame(boolean autoStartService) {
+        bridgeServiceHelper.changeToIngame(autoStartService);
+        publishServiceInfoUpdate();
+    }
 
     /**
      * Changes the service state to "ingame" and publishes the update.
      */
     public static void changeToIngame() {
-        bridgeServiceHelper.changeToIngame();
-        publishServiceInfoUpdate();
+    	changeToIngame(true);
     }
 
     /**
