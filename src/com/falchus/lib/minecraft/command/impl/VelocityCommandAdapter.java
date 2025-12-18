@@ -59,7 +59,6 @@ public abstract class VelocityCommandAdapter implements IBaseCommand, SimpleComm
 	
 	@Override
 	public boolean hasPermission(@NonNull Object sender) {
-        String permission = getPermission();
         if (permission != null) {
         	if (sender instanceof Player player) {
         		return player.hasPermission(permission);

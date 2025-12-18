@@ -52,7 +52,6 @@ public abstract class SpigotCommandAdapter implements IBaseCommand, CommandExecu
 	
 	@Override
 	public boolean hasPermission(@NonNull Object sender) {
-        String permission = getPermission();
         if (permission != null) {
             if (sender instanceof Player player) {
                 return player.hasPermission(permission);
