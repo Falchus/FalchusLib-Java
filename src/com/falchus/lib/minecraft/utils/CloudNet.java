@@ -119,6 +119,20 @@ public class CloudNet {
     }
     
     /**
+     * Gets the "extra" field of the current service.
+     */
+    public static String getExtra() {
+    	return bridgeServiceHelper.extra().get();
+    }
+    
+    /**
+     * Gets the MOTD of the current service.
+     */
+    public static String getMotd() {
+        return bridgeServiceHelper.motd().get();
+    }
+    
+    /**
      * Changes the service state to "ingame" and publishes the update.
      */
     public static void changeToIngame(boolean autoStartService) {
