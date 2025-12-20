@@ -1,18 +1,17 @@
-// From https://github.com/MaxWgamer/AW-Spigot/blob/71d7e988e006b527af2604062122169f475007cb/PaperSpigot-Server/src/main/java/fr/MaxWgamer/custom/utils/FastRandom.java
 package com.falchus.lib.utils;
 
 import java.io.Serial;
 import java.util.Random;
 
-import javax.annotation.concurrent.ThreadSafe;
+import lombok.AllArgsConstructor;
 
 /**
  * Implementation of George Marsaglia's elegant Xorshift random generator which is 
  * 30% faster and better quality than the built-in java.util.random see also see
  * http://www.javamex.com/tutorials/random_numbers/xorshift.shtml
  */
-@ThreadSafe // The fast random can be used with multiple threads
-public strictfp class FastRandom extends Random implements Cloneable {
+@AllArgsConstructor
+public class FastRandom extends Random implements Cloneable {
 	
 	@Serial
     private static final long serialVersionUID = 1L;
@@ -25,16 +24,6 @@ public strictfp class FastRandom extends Random implements Cloneable {
 	 */
 	public FastRandom() {
 		this(System.nanoTime());
-	}
-
-	/**
-	 * Creates a new pseudo random number generator, starting with the specified
-	 * seed, using <code>setSeed(seed);</code>.
-	 *
-	 * @param seed the initial seed
-	 */
-	public FastRandom(long seed) {
-		this.seed = seed;
 	}
 
 	/**
