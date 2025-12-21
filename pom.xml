@@ -27,14 +27,6 @@
   	</repository>
   </repositories>
   
-  <distributionManagement>
-  	<repository>
-  		<id>github</id>
-  		<name>GitHub Falchus Apache Maven Packages</name>
-  		<url>https://maven.pkg.github.com/Falchus/FalchusLib-Java</url>
-  	</repository>
-  </distributionManagement>
-  
   <dependencies>
   	<dependency>
   		<groupId>org.projectlombok</groupId>
