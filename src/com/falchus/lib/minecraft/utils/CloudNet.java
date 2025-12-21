@@ -14,7 +14,6 @@ import eu.cloudnetservice.driver.service.ServiceInfoSnapshot;
 import eu.cloudnetservice.modules.bridge.BridgeDocProperties;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import eu.cloudnetservice.modules.bridge.player.PlayerManager;
-import eu.cloudnetservice.modules.bridge.player.PlayerProvider;
 import eu.cloudnetservice.modules.bridge.player.executor.ServerSelectorType;
 import eu.cloudnetservice.wrapper.holder.ServiceInfoHolder;
 import lombok.NonNull;
@@ -32,6 +31,7 @@ public class CloudNet {
 	public static final PlayerManager playerManager = InjectionLayer.ext().instance(ServiceRegistry.class).defaultInstance(PlayerManager.class);
 	public static final CloudServiceFactory cloudServiceFactory = InjectionLayer.ext().instance(CloudServiceFactory.class);
 	public static final CloudServiceProvider cloudServiceProvider = InjectionLayer.ext().instance(CloudServiceProvider.class);
+	public static final ServiceInfoHolder serviceInfoHolder = InjectionLayer.ext().instance(ServiceInfoHolder.class);
 
 	/**
 	 * Broadcasts a message to all players globally.
@@ -46,7 +46,6 @@ public class CloudNet {
 	 * Published an update for the current service info snapshot.
 	 */
 	public static void publishServiceInfoUpdate() {
-        ServiceInfoHolder serviceInfoHolder = InjectionLayer.ext().instance(ServiceInfoHolder.class);
         serviceInfoHolder.publishServiceInfoUpdate();
 	}
 	
@@ -56,7 +55,7 @@ public class CloudNet {
 	public static void createAndStartService(@NonNull ServiceConfiguration serviceConfig) {
 		cloudServiceFactory.createCloudServiceAsync(serviceConfig)
 			.thenAccept(result -> {
-				if (result != null && result.state() == ServiceCreateResult.State.CREATED) {
+				if (result.state() == ServiceCreateResult.State.CREATED) {
 					UUID uuid = result.serviceInfo().serviceId().uniqueId();
 					ServiceInfoSnapshot service = cloudServiceProvider.service(uuid);
 					service.provider().startAsync();
@@ -68,40 +67,42 @@ public class CloudNet {
 	 * Gets the player count for the group.
 	 */
 	public static int getPlayerCountFromGroup(@NonNull String group) {
-		PlayerProvider playerProvider = playerManager.groupOnlinePlayers(group);
-		return playerProvider.count();
+		return playerManager.groupOnlinePlayers(group).count();
 	}
 	
 	/**
 	 * Gets the player count for the task.
 	 */
 	public static int getPlayerCountFromTask(@NonNull String task) {
-		PlayerProvider playerProvider = playerManager.taskOnlinePlayers(task);
-		return playerProvider.count();
+		return playerManager.taskOnlinePlayers(task).count();
 	}
 	
 	/**
 	 * Gets the player count for the service.
 	 */
 	public static int getPlayerCountFromService(@NonNull String service) {
-		ServiceInfoSnapshot playerProvider = cloudServiceProvider.serviceByName(service);
-		return playerProvider.readProperty(BridgeDocProperties.ONLINE_COUNT);
+		return getService(service).readProperty(BridgeDocProperties.ONLINE_COUNT);
+	}
+	
+	/**
+	 * Get service by name
+	 */
+	public static ServiceInfoSnapshot getService(@NonNull String service) {
+		return cloudServiceProvider.serviceByName(service);
 	}
 	
 	/**
 	 * Get services by group
 	 */
 	public static Collection<ServiceInfoSnapshot> getServicesByGroup(@NonNull String group) {
-		Collection<ServiceInfoSnapshot> services = cloudServiceProvider.servicesByGroup(group);
-		return services;
+		return cloudServiceProvider.servicesByGroup(group);
 	}
 	
 	/**
 	 * Get services by task
 	 */
 	public static Collection<ServiceInfoSnapshot> getServicesByTask(@NonNull String task) {
-		Collection<ServiceInfoSnapshot> services = cloudServiceProvider.servicesByTask(task);
-		return services;
+		return cloudServiceProvider.servicesByTask(task);
 	}
 
     /**
@@ -130,6 +131,13 @@ public class CloudNet {
      */
     public static String getMotd() {
         return bridgeServiceHelper.motd().get();
+    }
+    
+    /**
+     * Gets the state of the current service.
+     */
+    public static String getState() {
+    	return bridgeServiceHelper.state().get();
     }
     
     /**
