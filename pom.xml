@@ -9,7 +9,7 @@
   	<maven.compiler.target>17</maven.compiler.target>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	<lombok.version>1.18.42</lombok.version>
-  	<cloudnet.version>4.0.0-RC15</cloudnet.version>
+  	<cloudnet.version>4.0.0-RC14</cloudnet.version>
   </properties>
   
   <repositories>
