@@ -14,6 +14,7 @@ import eu.cloudnetservice.driver.service.ServiceInfoSnapshot;
 import eu.cloudnetservice.modules.bridge.BridgeDocProperties;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import eu.cloudnetservice.modules.bridge.player.PlayerManager;
+import eu.cloudnetservice.modules.bridge.player.executor.PlayerExecutor;
 import eu.cloudnetservice.modules.bridge.player.executor.ServerSelectorType;
 import eu.cloudnetservice.wrapper.holder.ServiceInfoHolder;
 import lombok.NonNull;
@@ -167,5 +168,12 @@ public class CloudNet {
      */
     public static void connectPlayerToService(@NonNull UUID uuid, @NonNull String service) {
         playerManager.playerExecutor(uuid).connect(service);
+    }
+    
+    /**
+     * Gets a PlayerExecutor by UUID.
+     */
+    public static PlayerExecutor getPlayerExecutor(@NonNull UUID uuid) {
+    	return playerManager.playerExecutor(uuid);
     }
 }
