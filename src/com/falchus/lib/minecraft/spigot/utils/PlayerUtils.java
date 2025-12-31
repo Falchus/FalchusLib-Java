@@ -42,10 +42,8 @@ public class PlayerUtils {
 	}
 	
 	/**
-	 * @deprecated since 1.1.5, use Paper methods instead!
 	 * Sends a title and/or subtitle to a player.
 	 */
-	@Deprecated(since = "1.1.5")
 	public static void sendTitle(@NonNull Player player, String title, String subtitle) {
         nms.sendTitle(player, title, subtitle);
 	}

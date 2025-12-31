@@ -49,10 +49,8 @@ public interface NmsAdapter {
 	Object createPacket(@NonNull Class<?> packetClass, Object... constructorArgs);
 	
 	/**
-	 * @deprecated since 1.1.5, use Paper methods instead!
 	 * Sends a title and/or subtitle to a player.
 	 */
-	@Deprecated
 	void sendTitle(@NonNull Player player, String title, String subtitle);
 
 	/**
