@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
 
-import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
 import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 
 import lombok.NonNull;
@@ -16,6 +16,8 @@ import lombok.NonNull;
  * Represents a Actionbar.
  */
 public class Actionbar extends PlayerElement {
+	
+	private final NmsAdapter nms = NmsProvider.get();
 
 	/**
 	 * Constructs a new Actionbar.
@@ -29,9 +31,8 @@ public class Actionbar extends PlayerElement {
 	 */
 	public void send(@NonNull String message) {
 		try {
-			Object chatMessage = NmsProvider.get().getChatComponentText().getConstructor(String.class).newInstance(message);
-			Object packet = new NmsPacketBuilder(PacketType.NMS)
-					.packet("PacketPlayOutChat")
+			Object chatMessage = nms.getChatComponentText().getConstructor(String.class).newInstance(message);
+			Object packet = new NmsPacketBuilder(nms.getPackageNms() + "PacketPlayOutChat")
 					.withArgs(chatMessage, (byte) 2)
 					.build();
 			PlayerUtils.sendPacket(player, packet);

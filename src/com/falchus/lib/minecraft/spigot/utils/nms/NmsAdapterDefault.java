@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
+import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.utils.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -30,6 +32,7 @@ import lombok.NonNull;
 public class NmsAdapterDefault extends AbstractNmsAdapter {
 	
     private Class<?> craftItemStack;
+    private Class<?> nmsItemStack;
     private Class<?> nbtTagCompound;
     private Method craftItemStack_asNMSCopy;
     private Method craftItemStack_asBukkitCopy;
@@ -53,18 +56,20 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     private Class<?> packetPlayOutPlayerInfo;
     private Class<?> packetPlayOutNamedEntitySpawn;
     private Class<?> packetPlayOutEntityTeleport;
+    private Class<?> packetPlayOutGameStateChange;
     private Class<?> enumPlayerInfoActionClass;
     private Object enumPlayerInfoAction_UPDATE_DISPLAY_NAME;
     private Object enumPlayerInfoAction_ADD_PLAYER;
     private Object enumPlayerInfoAction_REMOVE_PLAYER;
     private Class<?> chatComponentText;
+    private Class<?> iChatBaseComponent;
     private Class<?> packetPlayOutTitle;
     private Class<?> enumTitleActionClass;
     private Object enumTitleAction_TITLE;
     private Object enumTitleAction_SUBTITLE;
 
-	private Class<?> dedicatedServer;
-	private Field dedicatedServer_propertyManager;
+    private Class<?> dedicatedServer;
+    private Field dedicatedServer_propertyManager;
     private Class<?> propertyManager;
     private Method propertyManager_saveProperties;
     private Method propertyManager_setProperty;
@@ -80,9 +85,15 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     
     public NmsAdapterDefault() {
     	try {
-            craftItemStack = Class.forName(packageObc + "inventory.CraftItemStack");
-            nmsItemStack = Class.forName(packageNms + "ItemStack");
-            nbtTagCompound = Class.forName(packageNms + "NBTTagCompound");
+            craftItemStack = ReflectionUtils.getFirstAvailableClass(
+            	packageObc + "inventory.CraftItemStack"
+            );
+            nmsItemStack = ReflectionUtils.getFirstAvailableClass(
+            	packageNms + "ItemStack"
+            );
+            nbtTagCompound = ReflectionUtils.getFirstAvailableClass(
+            	packageNms + "NBTTagCompound"
+            );
             craftItemStack_asNMSCopy = craftItemStack.getMethod("asNMSCopy", ItemStack.class);
             craftItemStack_asBukkitCopy = craftItemStack.getMethod("asBukkitCopy", nmsItemStack);
             nmsItemStack_getTag = nmsItemStack.getMethod("getTag");
@@ -93,44 +104,58 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             nbtTagCompound_hasKey = nbtTagCompound.getMethod("hasKey", String.class);
             nbtTagCompound_getString = nbtTagCompound.getMethod("getString", String.class);
     		
-            packet = Class.forName(packageNms + "Packet");
-            entityPlayer = Class.forName(packageNms + "EntityPlayer");
-            entityPlayer_playerConnection = entityPlayer.getField("playerConnection");
-            playerConnection = Class.forName(packageNms + "PlayerConnection");
+            packet = ReflectionUtils.getClass(packageNms + "Packet");
+            entityPlayer = ReflectionUtils.getClass(packageNms + "EntityPlayer");
+            entityPlayer_playerConnection = ReflectionUtils.getFirstAvailableField(entityPlayer,
+            	"playerConnection",
+            	"b",
+            	"playerConnectionField"
+            );
+            playerConnection = ReflectionUtils.getClass(packageNms + "PlayerConnection");
             playerConnection_sendPacket = playerConnection.getMethod("sendPacket", packet);
-            craftPlayer = Class.forName(packageObc + "entity.CraftPlayer");
+            craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = craftPlayer.getMethod("getHandle");
             entityHuman = entityPlayer.getSuperclass();
-        	entityPlayer_profile = entityHuman.getDeclaredField("bH");
-            entityPlayer_profile.setAccessible(true);
-            packetPlayOutPlayerInfo = Class.forName(packageNms + "PacketPlayOutPlayerInfo");
-            packetPlayOutNamedEntitySpawn = Class.forName(packageNms + "PacketPlayOutNamedEntitySpawn");
-            packetPlayOutEntityTeleport = Class.forName(packageNms + "PacketPlayOutEntityTeleport");
-            enumPlayerInfoActionClass = Class.forName(packageNms + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
-            enumPlayerInfoAction_UPDATE_DISPLAY_NAME = enumPlayerInfoActionClass.getField("UPDATE_DISPLAY_NAME").get(null);
-            enumPlayerInfoAction_ADD_PLAYER = enumPlayerInfoActionClass.getField("ADD_PLAYER").get(null);
-            enumPlayerInfoAction_REMOVE_PLAYER = enumPlayerInfoActionClass.getField("REMOVE_PLAYER").get(null);
-            chatComponentText = Class.forName(packageNms + "ChatComponentText");
-            packetPlayOutTitle = Class.forName(packageNms + "PacketPlayOutTitle");
-            enumTitleActionClass = Class.forName(packageNms + "PacketPlayOutTitle$EnumTitleAction");
-            enumTitleAction_TITLE = enumTitleActionClass.getField("TITLE").get(null);
-            enumTitleAction_SUBTITLE = enumTitleActionClass.getField("SUBTITLE").get(null);
+            entityPlayer_profile = ReflectionUtils.getFirstAvailableField(entityHuman,
+            	"bH",
+            	"profile"
+            );
+            packetPlayOutPlayerInfo = ReflectionUtils.getFirstAvailableClass(
+            	packageNms + "PacketPlayOutPlayerInfo"
+            );
+            packetPlayOutNamedEntitySpawn = ReflectionUtils.getFirstAvailableClass(
+            	packageNms + "PacketPlayOutNamedEntitySpawn"
+            );
+            packetPlayOutEntityTeleport = ReflectionUtils.getFirstAvailableClass(
+            	packageNms + "PacketPlayOutEntityTeleport"
+            );
+            packetPlayOutGameStateChange = ReflectionUtils.getFirstAvailableClass(
+        		packageNms + "PacketPlayOutGameStateChange"
+    		);
+            enumPlayerInfoActionClass = ReflectionUtils.getFirstAvailableClass(packageNms + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+            enumPlayerInfoAction_UPDATE_DISPLAY_NAME = ReflectionUtils.getFirstAvailableStaticField(enumPlayerInfoActionClass, "UPDATE_DISPLAY_NAME").get(null);
+            enumPlayerInfoAction_ADD_PLAYER = ReflectionUtils.getFirstAvailableStaticField(enumPlayerInfoActionClass, "ADD_PLAYER").get(null);
+            enumPlayerInfoAction_REMOVE_PLAYER = ReflectionUtils.getFirstAvailableStaticField(enumPlayerInfoActionClass, "REMOVE_PLAYER").get(null);
+            chatComponentText = ReflectionUtils.getClass(packageNms + "ChatComponentText");
+            iChatBaseComponent = ReflectionUtils.getClass(packageNms + "IChatBaseComponent");
+            packetPlayOutTitle = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle");
+            enumTitleActionClass = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle$EnumTitleAction");
+            enumTitleAction_TITLE = ReflectionUtils.getFirstAvailableStaticField(enumTitleActionClass, "TITLE").get(null);
+            enumTitleAction_SUBTITLE = ReflectionUtils.getFirstAvailableStaticField(enumTitleActionClass, "SUBTITLE").get(null);
     		
-            dedicatedServer = Class.forName(packageNms + "DedicatedServer");
-            dedicatedServer_propertyManager = dedicatedServer.getDeclaredField("propertyManager");
-            dedicatedServer_propertyManager.setAccessible(true);
-            propertyManager = Class.forName(packageNms + "PropertyManager");
+            dedicatedServer = ReflectionUtils.getClass(packageNms + "DedicatedServer");
+            dedicatedServer_propertyManager = ReflectionUtils.getFirstAvailableField(dedicatedServer, "propertyManager");
+            propertyManager = ReflectionUtils.getClass(packageNms + "PropertyManager");
             propertyManager_saveProperties = propertyManager.getMethod("savePropertiesFile");
             propertyManager_setProperty = propertyManager.getMethod("setProperty", String.class, Object.class);
     		
-            craftServer = Class.forName(packageObc + "CraftServer");
+            craftServer = ReflectionUtils.getClass(packageObc + "CraftServer");
             craftServer_getServer = craftServer.getMethod("getServer");
-            minecraftServer = Class.forName(packageNms + "MinecraftServer");
+            minecraftServer = ReflectionUtils.getClass(packageNms + "MinecraftServer");
             minecraftServer_getVersion = minecraftServer.getMethod("getVersion");
     		
-    		biomeBase = Class.forName(packageNms + "BiomeBase");
-            biomeBase_biomes = biomeBase.getDeclaredField("biomes");
-            biomeBase_biomes.setAccessible(true);
+    		biomeBase = ReflectionUtils.getClass(packageNms + "BiomeBase");
+            biomeBase_biomes = ReflectionUtils.getFirstAvailableStaticField(biomeBase, "biomes");
             biomeBase_getBiome = biomeBase.getMethod("getBiome", int.class);
     	} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
@@ -220,7 +245,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		if (title != null && !title.isEmpty()) {
     			Object component = chatComponentText.getConstructor(String.class).newInstance(title);
     			Object titlePacket = packetPlayOutTitle
-    					.getConstructor(enumTitleAction_TITLE.getClass(), component.getClass())
+    					.getConstructor(enumTitleActionClass, iChatBaseComponent)
     					.newInstance(enumTitleAction_TITLE, component);
     			sendPacket(player, titlePacket);
     		}
@@ -228,7 +253,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		if (subtitle != null && !subtitle.isEmpty()) {
     			Object component = chatComponentText.getConstructor(String.class).newInstance(subtitle);
     			Object subtitlePacket = packetPlayOutTitle
-    					.getConstructor(enumTitleAction_SUBTITLE.getClass(), component.getClass())
+    					.getConstructor(enumTitleActionClass, iChatBaseComponent)
     					.newInstance(enumTitleAction_SUBTITLE, component);
     			sendPacket(player, subtitlePacket);
     		}
@@ -240,8 +265,9 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     @Override
     public void sendEndCredits(@NonNull Player player) {
     	try {
-    		Object packet = Class.forName(packageNms + "PacketPlayOutGameStateChange")
-    				.getConstructor(int.class, float.class).newInstance(4, 0.0F);
+    		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutGameStateChange")
+    				.withArgs(4, 0.0F)
+    				.build();
     		sendPacket(player, packet);
     	} catch (Exception e) {
             throw new RuntimeException(e);
@@ -328,7 +354,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
 	        player.setCustomNameVisible(true);
 	        player.setDisplayName(name);
 	        
-	        Field nameField = GameProfile.class.getDeclaredField("name");
+	        Field nameField = ReflectionUtils.getFirstAvailableField(GameProfile.class, "name");
 	        nameField.setAccessible(true);
 	        nameField.set(profile, name);
 
@@ -351,7 +377,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
 	        player.setCustomNameVisible(true);
 	        player.setDisplayName(original);
 
-	        Field nameField = GameProfile.class.getDeclaredField("name");
+	        Field nameField = ReflectionUtils.getFirstAvailableField(GameProfile.class, "name");
 	        nameField.setAccessible(true);
 	        nameField.set(profile, original);
 
@@ -369,9 +395,9 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		Object entityPlayer = getEntityPlayer(player);
     		
     		Object update = enumPlayerInfoAction_UPDATE_DISPLAY_NAME;
-    		Object packet = packetPlayOutPlayerInfo
-    				.getConstructor(update.getClass(), Iterable.class)
-    				.newInstance(update, Collections.singletonList(entityPlayer));
+    		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
+    				.withArgs(update, Collections.singletonList(entityPlayer))
+    				.build();
     	    for (Player online : Bukkit.getOnlinePlayers()) {
     	        sendPacket(online, packet);
     	    }
@@ -384,9 +410,9 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     public void addEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
     	try {
     		Object add = enumPlayerInfoAction_ADD_PLAYER;
-    		Object packet = packetPlayOutPlayerInfo
-    				.getConstructor(add.getClass(), Iterable.class)
-    				.newInstance(add, Collections.singletonList(entityPlayer));
+    		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
+    				.withArgs(add, Collections.singletonList(entityPlayer))
+    				.build();
             sendPacket(player, packet);
     	} catch (Exception e) {
             throw new RuntimeException(e);
@@ -397,9 +423,9 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     public void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
     	try {
     		Object remove = enumPlayerInfoAction_REMOVE_PLAYER;
-    		Object packet = packetPlayOutPlayerInfo
-    				.getConstructor(remove.getClass(), Iterable.class)
-    				.newInstance(remove, Collections.singletonList(entityPlayer));
+    		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
+    				.withArgs(remove, Collections.singletonList(entityPlayer))
+    				.build();
             sendPacket(player, packet);
     	} catch (Exception e) {
             throw new RuntimeException(e);
@@ -411,14 +437,14 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     	try {
     		addEntityPlayer(player, entityPlayer);
     		
-    		Object spawn = packetPlayOutNamedEntitySpawn
-    				.getConstructor(entityPlayer.getClass())
-    				.newInstance(entityPlayer);
+    		Object spawn = new NmsPacketBuilder(packageNms + "PacketPlayOutNamedEntitySpawn")
+    				.withArgs(entityPlayer)
+    				.build();
     		sendPacket(player, spawn);
     		
-    		Object teleport = packetPlayOutEntityTeleport
-    				.getConstructor(entityPlayer.getClass())
-    				.newInstance(entityPlayer);
+    		Object teleport = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityTeleport")
+    				.withArgs(entityPlayer)
+    				.build();
     		sendPacket(player, teleport);
     		
     		Bukkit.getScheduler().runTask(FalchusLibMinecraftSpigot.getInstance(), () -> removeEntityPlayer(player, entityPlayer));

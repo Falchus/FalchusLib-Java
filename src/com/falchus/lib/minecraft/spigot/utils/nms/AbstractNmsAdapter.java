@@ -11,8 +11,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 	protected String packageNm = "net.minecraft.";
 	protected String packageNms = packageNm + "server.";
 	
-    protected Class<?> nmsItemStack;
-	
 	public AbstractNmsAdapter() {
 		try {
     		String version;

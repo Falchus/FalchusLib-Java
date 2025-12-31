@@ -5,10 +5,11 @@ import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
 
-import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
@@ -20,6 +21,11 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
  */
 public class Tablist extends PlayerElement {
 	
+	private final NmsAdapter nms = NmsProvider.get();
+	
+    /**
+     * Constructs a Tablist.
+     */
 	private Tablist(@NonNull Player player) {
 		super(player);
 	}
@@ -34,8 +40,7 @@ public class Tablist extends PlayerElement {
 		IChatBaseComponent headerComponent = new ChatComponentText(headerText);
         IChatBaseComponent footerComponent = new ChatComponentText(footerText);
         
-        Object packet = new NmsPacketBuilder(PacketType.NMS)
-        		.packet("PacketPlayOutPlayerListHeaderFooter")
+        Object packet = new NmsPacketBuilder(nms.getPackageNms() + "PacketPlayOutPlayerListHeaderFooter")
         		.withArgs(headerComponent)
         		.build();
 

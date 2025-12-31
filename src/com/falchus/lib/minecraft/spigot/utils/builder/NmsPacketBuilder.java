@@ -1,12 +1,11 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
-import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
 import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
+import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
@@ -14,30 +13,32 @@ import lombok.SneakyThrows;
  * to use with {@link NmsProvider}
  */
 @Getter
-@RequiredArgsConstructor
 public class NmsPacketBuilder {
 
-	private final NmsAdapter adapter = NmsProvider.get();
-	private final PacketType type;
+	private final NmsAdapter nms = NmsProvider.get();
 	private Class<?> packet;
 	private Object[] args = new Object[0];
 	
 	/**
-	 * Sets the NMS packet class to build.
+	 * Creates a new {@link NmsPacketBuilder} for the given packet.
 	 */
-	public NmsPacketBuilder packet(@NonNull Class<?> packet) {
+	public NmsPacketBuilder(@NonNull Class<?> packet) {
 		this.packet = packet;
-		return this;
 	}
 	
 	/**
-	 * Sets the NMS packet class by class name (full package).
+	 * Creates a new {@link NmsPacketBuilder} for the given packet by class name (full package).
 	 */
 	@SneakyThrows
-	public NmsPacketBuilder packet(@NonNull String className) {
-		String packageName = type == PacketType.OBC ? adapter.getPackageObc() : adapter.getPackageNms();
-		this.packet = Class.forName(packageName + className);
-		return this;
+	public NmsPacketBuilder(@NonNull String className) {
+		this.packet = Class.forName(className);
+	}
+	
+	/**
+	 * Creates a new {@link NmsPacketBuilder} for the given packet by trying class names (full packages).
+	 */
+	public NmsPacketBuilder(@NonNull String... classNames) {
+		this.packet = ReflectionUtils.getFirstAvailableClass(classNames);
 	}
 	
 	/**
@@ -57,6 +58,6 @@ public class NmsPacketBuilder {
 		if (packet == null) {
 			throw new IllegalStateException("Packet class must be set");
 		}
-		return adapter.createPacket(packet, args);
+		return nms.createPacket(packet, args);
 	}
 }

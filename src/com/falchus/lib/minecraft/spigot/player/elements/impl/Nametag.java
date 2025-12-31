@@ -9,10 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
@@ -22,6 +23,7 @@ import lombok.NonNull;
  */
 public class Nametag extends PlayerElement {
 	
+	private final NmsAdapter nms = NmsProvider.get();
 	private final Scoreboard scoreboard;
 	private Team team;
 	
@@ -57,24 +59,21 @@ public class Nametag extends PlayerElement {
 		try {
             HashSet<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
 
-            create = new NmsPacketBuilder(PacketType.NMS)
-            		.packet("PacketPlayOutScoreboardTeam")
+            create = new NmsPacketBuilder(nms.getPackageNms() + "PacketPlayOutScoreboardTeam")
             		.build();
             ReflectionUtils.setField(create, nameField, player.getName());
             ReflectionUtils.setField(create, displayNameField, player.getName());
             ReflectionUtils.setField(create, playersField, entries);
             ReflectionUtils.setField(create, modeField, 0);
 
-            update = new NmsPacketBuilder(PacketType.NMS)
-            		.packet("PacketPlayOutScoreboardTeam")
+            update = new NmsPacketBuilder(nms.getPackageNms() + "PacketPlayOutScoreboardTeam")
             		.build();
             ReflectionUtils.setField(update, nameField, player.getName());
             ReflectionUtils.setField(update, displayNameField, player.getName());
             ReflectionUtils.setField(update, playersField, entries);
             ReflectionUtils.setField(update, modeField, 2);
             
-            remove = new NmsPacketBuilder(PacketType.NMS)
-            		.packet("PacketPlayOutScoreboardTeam")
+            remove = new NmsPacketBuilder(nms.getPackageNms() + "PacketPlayOutScoreboardTeam")
             		.build();
             ReflectionUtils.setField(remove, nameField, player.getName());
             ReflectionUtils.setField(remove, playersField, entries);
