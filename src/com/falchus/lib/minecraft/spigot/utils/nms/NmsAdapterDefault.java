@@ -85,13 +85,14 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     
     public NmsAdapterDefault() {
     	try {
-            craftItemStack = ReflectionUtils.getFirstAvailableClass(
+            craftItemStack = ReflectionUtils.getFirstClass(
             	packageObc + "inventory.CraftItemStack"
             );
-            nmsItemStack = ReflectionUtils.getFirstAvailableClass(
-            	packageNms + "ItemStack"
+            nmsItemStack = ReflectionUtils.getFirstClass(
+            	packageNms + "ItemStack",
+            	packageNm + "world.item.ItemStack"
             );
-            nbtTagCompound = ReflectionUtils.getFirstAvailableClass(
+            nbtTagCompound = ReflectionUtils.getFirstClass(
             	packageNms + "NBTTagCompound"
             );
             craftItemStack_asNMSCopy = craftItemStack.getMethod("asNMSCopy", ItemStack.class);
@@ -104,9 +105,12 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             nbtTagCompound_hasKey = nbtTagCompound.getMethod("hasKey", String.class);
             nbtTagCompound_getString = nbtTagCompound.getMethod("getString", String.class);
     		
-            packet = ReflectionUtils.getClass(packageNms + "Packet");
+            packet = ReflectionUtils.getFirstClass(
+            	packageNms + "Packet",
+            	packageNm + "network.protocol.Packet"
+            );
             entityPlayer = ReflectionUtils.getClass(packageNms + "EntityPlayer");
-            entityPlayer_playerConnection = ReflectionUtils.getFirstAvailableField(entityPlayer,
+            entityPlayer_playerConnection = ReflectionUtils.getFirstField(entityPlayer,
             	"playerConnection",
             	"b",
             	"playerConnectionField"
@@ -116,35 +120,35 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = craftPlayer.getMethod("getHandle");
             entityHuman = entityPlayer.getSuperclass();
-            entityPlayer_profile = ReflectionUtils.getFirstAvailableField(entityHuman,
+            entityPlayer_profile = ReflectionUtils.getFirstField(entityHuman,
             	"bH",
             	"profile"
             );
-            packetPlayOutPlayerInfo = ReflectionUtils.getFirstAvailableClass(
+            packetPlayOutPlayerInfo = ReflectionUtils.getFirstClass(
             	packageNms + "PacketPlayOutPlayerInfo"
             );
-            packetPlayOutNamedEntitySpawn = ReflectionUtils.getFirstAvailableClass(
+            packetPlayOutNamedEntitySpawn = ReflectionUtils.getFirstClass(
             	packageNms + "PacketPlayOutNamedEntitySpawn"
             );
-            packetPlayOutEntityTeleport = ReflectionUtils.getFirstAvailableClass(
+            packetPlayOutEntityTeleport = ReflectionUtils.getFirstClass(
             	packageNms + "PacketPlayOutEntityTeleport"
             );
-            packetPlayOutGameStateChange = ReflectionUtils.getFirstAvailableClass(
+            packetPlayOutGameStateChange = ReflectionUtils.getFirstClass(
         		packageNms + "PacketPlayOutGameStateChange"
     		);
-            enumPlayerInfoActionClass = ReflectionUtils.getFirstAvailableClass(packageNms + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
-            enumPlayerInfoAction_UPDATE_DISPLAY_NAME = ReflectionUtils.getFirstAvailableStaticField(enumPlayerInfoActionClass, "UPDATE_DISPLAY_NAME").get(null);
-            enumPlayerInfoAction_ADD_PLAYER = ReflectionUtils.getFirstAvailableStaticField(enumPlayerInfoActionClass, "ADD_PLAYER").get(null);
-            enumPlayerInfoAction_REMOVE_PLAYER = ReflectionUtils.getFirstAvailableStaticField(enumPlayerInfoActionClass, "REMOVE_PLAYER").get(null);
+            enumPlayerInfoActionClass = ReflectionUtils.getFirstClass(packageNms + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
+            enumPlayerInfoAction_UPDATE_DISPLAY_NAME = ReflectionUtils.getFirstField(enumPlayerInfoActionClass, "UPDATE_DISPLAY_NAME").get(null);
+            enumPlayerInfoAction_ADD_PLAYER = ReflectionUtils.getFirstField(enumPlayerInfoActionClass, "ADD_PLAYER").get(null);
+            enumPlayerInfoAction_REMOVE_PLAYER = ReflectionUtils.getFirstField(enumPlayerInfoActionClass, "REMOVE_PLAYER").get(null);
             chatComponentText = ReflectionUtils.getClass(packageNms + "ChatComponentText");
             iChatBaseComponent = ReflectionUtils.getClass(packageNms + "IChatBaseComponent");
             packetPlayOutTitle = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle");
             enumTitleActionClass = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle$EnumTitleAction");
-            enumTitleAction_TITLE = ReflectionUtils.getFirstAvailableStaticField(enumTitleActionClass, "TITLE").get(null);
-            enumTitleAction_SUBTITLE = ReflectionUtils.getFirstAvailableStaticField(enumTitleActionClass, "SUBTITLE").get(null);
+            enumTitleAction_TITLE = ReflectionUtils.getFirstField(enumTitleActionClass, "TITLE").get(null);
+            enumTitleAction_SUBTITLE = ReflectionUtils.getFirstField(enumTitleActionClass, "SUBTITLE").get(null);
     		
             dedicatedServer = ReflectionUtils.getClass(packageNms + "DedicatedServer");
-            dedicatedServer_propertyManager = ReflectionUtils.getFirstAvailableField(dedicatedServer, "propertyManager");
+            dedicatedServer_propertyManager = ReflectionUtils.getFirstField(dedicatedServer, "propertyManager");
             propertyManager = ReflectionUtils.getClass(packageNms + "PropertyManager");
             propertyManager_saveProperties = propertyManager.getMethod("savePropertiesFile");
             propertyManager_setProperty = propertyManager.getMethod("setProperty", String.class, Object.class);
@@ -155,7 +159,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             minecraftServer_getVersion = minecraftServer.getMethod("getVersion");
     		
     		biomeBase = ReflectionUtils.getClass(packageNms + "BiomeBase");
-            biomeBase_biomes = ReflectionUtils.getFirstAvailableStaticField(biomeBase, "biomes");
+            biomeBase_biomes = ReflectionUtils.getFirstField(biomeBase, "biomes");
             biomeBase_getBiome = biomeBase.getMethod("getBiome", int.class);
     	} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
@@ -354,7 +358,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
 	        player.setCustomNameVisible(true);
 	        player.setDisplayName(name);
 	        
-	        Field nameField = ReflectionUtils.getFirstAvailableField(GameProfile.class, "name");
+	        Field nameField = ReflectionUtils.getFirstField(GameProfile.class, "name");
 	        nameField.setAccessible(true);
 	        nameField.set(profile, name);
 
@@ -377,7 +381,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
 	        player.setCustomNameVisible(true);
 	        player.setDisplayName(original);
 
-	        Field nameField = ReflectionUtils.getFirstAvailableField(GameProfile.class, "name");
+	        Field nameField = ReflectionUtils.getFirstField(GameProfile.class, "name");
 	        nameField.setAccessible(true);
 	        nameField.set(profile, original);
 

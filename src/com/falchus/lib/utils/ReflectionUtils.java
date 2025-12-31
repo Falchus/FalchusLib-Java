@@ -8,59 +8,54 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ReflectionUtils {
 
-    public static Class<?> getClass(@NonNull String className) {
+    public static Class<?> getClass(@NonNull String name) {
         try {
-            return Class.forName(className);
-        } catch (Exception e) {
-            throw new RuntimeException("Class not found: " + className, e);
-        }
-    }
-	
-    public static Field getField(@NonNull Object instance, @NonNull String name) {
-        try {
-            Field field = instance.getClass().getDeclaredField(name);
-            field.setAccessible(true);
-            return field;
+            return Class.forName(name);
+        } catch (ClassNotFoundException e) {
+        	return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+    
+    public static Class<?> getFirstClass(@NonNull String... names) {
+        for (String name : names) {
+        	Class<?> found = getClass(name);
+        	if (found != null) {
+        		return found;
+        	}
+        }
+        throw new RuntimeException("None of the classes exist: " + String.join(", ", names));
+    }
 	
-    public static Field getStaticField(@NonNull Class<?> clazz, @NonNull String name) {
+    public static Field getField(@NonNull Object instance, @NonNull String name) {
+        return getField(instance.getClass(), name);
+    }
+    
+    public static Field getField(@NonNull Class<?> clazz, @NonNull String name) {
         try {
             Field field = clazz.getDeclaredField(name);
             field.setAccessible(true);
             return field;
+        } catch (NoSuchFieldException e) {
+            return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     
-    public static Class<?> getFirstAvailableClass(@NonNull String... classNames) {
-        for (String name : classNames) {
-            try {
-                return Class.forName(name);
-            } catch (Exception ignored) {}
-        }
-        throw new RuntimeException("None of the classes exist: " + String.join(", ", classNames));
+    public static Field getFirstField(@NonNull Object instance, @NonNull String... names) {
+        return getFirstField(instance.getClass(), names);
     }
     
-    public static Field getFirstAvailableField(@NonNull Object instance, @NonNull String... names) {
+    public static Field getFirstField(@NonNull Class<?> clazz, @NonNull String... names) {
         for (String name : names) {
-            try {
-                return getField(instance, name);
-            } catch (Exception ignored) {}
+            Field found = getField(clazz, name);
+            if (found != null) {
+            	return found;
+            }
         }
         throw new RuntimeException("None of the fields exist: " + String.join(", ", names));
-    }
-    
-    public static Field getFirstAvailableStaticField(@NonNull Class<?> clazz, @NonNull String... names) {
-        for (String name : names) {
-            try {
-                return getStaticField(clazz, name);
-            } catch (Exception ignored) {}
-        }
-        throw new RuntimeException("None of the static fields exist: " + String.join(", ", names));
     }
     
     public static void setField(@NonNull Object instance, @NonNull String name, Object value) {
@@ -74,7 +69,7 @@ public class ReflectionUtils {
     
     public static void setStaticField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
         try {
-            Field field = getStaticField(clazz, name);
+            Field field = getField(clazz, name);
             field.set(null, value);
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -14,7 +14,8 @@ import com.mojang.authlib.GameProfile;
 import lombok.NonNull;
 
 public interface NmsAdapter {
-	
+
+	String getPackageOb();
 	String getPackageObc();
 	String getPackageNm();
 	String getPackageNms();

@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public abstract class AbstractNmsAdapter implements NmsAdapter {
 
-	protected String packageObc = "org.bukkit.craftbukkit.";
+	protected String packageOb = "org.bukkit.";
+	protected String packageObc = packageOb + "craftbukkit.";
 	protected String packageNm = "net.minecraft.";
 	protected String packageNms = packageNm + "server.";
 	

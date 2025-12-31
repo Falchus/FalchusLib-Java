@@ -38,7 +38,7 @@ public class NmsPacketBuilder {
 	 * Creates a new {@link NmsPacketBuilder} for the given packet by trying class names (full packages).
 	 */
 	public NmsPacketBuilder(@NonNull String... classNames) {
-		this.packet = ReflectionUtils.getFirstAvailableClass(classNames);
+		this.packet = ReflectionUtils.getFirstClass(classNames);
 	}
 	
 	/**
