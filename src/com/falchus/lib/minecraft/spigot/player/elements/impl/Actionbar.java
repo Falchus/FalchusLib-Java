@@ -4,13 +4,13 @@ import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
 
+import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 
 import lombok.NonNull;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 
 /**
  * Represents a Actionbar.
@@ -28,9 +28,16 @@ public class Actionbar extends PlayerElement {
 	 * Sends a one-time action bar message.
 	 */
 	public void send(@NonNull String message) {
-		IChatBaseComponent chatMessage = new ChatComponentText(message);
-		PacketPlayOutChat packet = new PacketPlayOutChat(chatMessage, (byte) 2);
-		PlayerUtils.sendPacket(player, packet);
+		try {
+			Object chatMessage = NmsProvider.get().getChatComponentText().getConstructor(String.class).newInstance(message);
+			Object packet = new NmsPacketBuilder(PacketType.NMS)
+					.packet("PacketPlayOutChat")
+					.withArgs(chatMessage, (byte) 2)
+					.build();
+			PlayerUtils.sendPacket(player, packet);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
 	}
 	
 	/**

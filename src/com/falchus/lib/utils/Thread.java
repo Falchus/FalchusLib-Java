@@ -1,6 +1,5 @@
 package com.falchus.lib.utils;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,7 +12,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Thread {
 
-	private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(4);
+	private static final int threads = Runtime.getRuntime().availableProcessors();
+	private static final ExecutorService executor = Executors.newFixedThreadPool(threads);
 	
 	/**
 	 * Runs the given task synchronously.
@@ -26,6 +26,13 @@ public class Thread {
 	 * Runs the given task asynchronously.
 	 */
     public static void runAsync(@NonNull Runnable task) {
-        CompletableFuture.runAsync(task, EXECUTOR);
+        executor.execute(task);
+    }
+    
+    /**
+     * Shutdown the executor.
+     */
+    public static void shutdown() {
+    	executor.shutdown();
     }
 }

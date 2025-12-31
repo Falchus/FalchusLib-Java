@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import com.falchus.lib.minecraft.command.IBaseCommand;
+import com.falchus.lib.minecraft.command.BaseCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -17,7 +17,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
  * Abstract adapter for Velocity commands.
  */
 @Getter
-public abstract class VelocityCommandAdapter implements IBaseCommand, SimpleCommand {
+public abstract class VelocityCommandAdapter implements BaseCommand, SimpleCommand {
 
     private final String permission;
     private final String noPermissionMessage;

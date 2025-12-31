@@ -21,7 +21,7 @@ import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.minecraft.server.v1_8_R3.WorldServer;
 
 /**
- * Builder for creating and managing {@link EntityPlayer}s.
+ * Builder class for creating and customizing {@link EntityPlayer}s.
  */
 @Getter
 public class EntityPlayerBuilder {

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import com.falchus.lib.minecraft.command.IBaseCommand;
+import com.falchus.lib.minecraft.command.BaseCommand;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,7 +18,7 @@ import lombok.NonNull;
  * Abstract adapter for Spigot commands.
  */
 @Getter
-public abstract class SpigotCommandAdapter implements IBaseCommand, CommandExecutor, TabCompleter {
+public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecutor, TabCompleter {
 
     private final String permission;
     private final String noPermissionMessage;

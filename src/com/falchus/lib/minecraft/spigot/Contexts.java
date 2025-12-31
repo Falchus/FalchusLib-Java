@@ -17,6 +17,7 @@ public class Contexts {
 	EntityPlayerListener entityPlayerListener;
 	FreezeListener freezeListener;
 	ItemListener itemListener;
+	LobbyCancelListener lobbyCancelListener;
 	VanishListener vanishListener;
 	ClientManager clientManager;
 	
@@ -30,6 +31,7 @@ public class Contexts {
 		entityPlayerListener = new EntityPlayerListener();
 		freezeListener = new FreezeListener();
 		itemListener = new ItemListener();
+		lobbyCancelListener = new LobbyCancelListener();
 		vanishListener = new VanishListener();
 		clientManager = new ClientManager();
 	}

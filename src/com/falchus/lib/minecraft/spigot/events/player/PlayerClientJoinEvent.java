@@ -16,7 +16,7 @@ import lombok.Getter;
 @Getter
 public class PlayerClientJoinEvent extends Event {
 
-	private final static HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 	
 	private final Player player;
 	private final Client client;

@@ -6,7 +6,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,17 +16,19 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import lombok.NonNull;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 /**
  * Builder class for creating and customizing {@link ItemStack}s.
  */
 public class ItemBuilder {
 
+	private final NmsAdapter nms = NmsProvider.get();
 	private ItemStack item;
 	
 	/**
@@ -147,14 +148,7 @@ public class ItemBuilder {
 	 * Sets a custom UUID (stored in NBT).
 	 */
 	public ItemBuilder setUuid(@NonNull UUID uuid) {
-		net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
-		if (nms == null) return this;
-		
-		NBTTagCompound tag = nms.hasTag() ? nms.getTag() : new NBTTagCompound();
-		tag.setString("UUID", uuid.toString());
-		nms.setTag(tag);
-		item = CraftItemStack.asBukkitCopy(nms);
-		
+		nms.setUUID(item, uuid);
 		return this;
 	}
 

@@ -9,15 +9,13 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Player;
 
+import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 
 import lombok.NonNull;
 import net.minecraft.server.v1_8_R3.EntityWither;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_8_R3.WorldServer;
 
 /**
@@ -53,7 +51,11 @@ public class Bossbar extends PlayerElement {
 	    
 	    if (wither == null || (lastLocation != null && !lastLocation.getWorld().equals(location.getWorld()))) {
 	        if (wither != null) {
-	            PlayerUtils.sendPacket(player, new PacketPlayOutEntityDestroy(wither.getId()));
+	        	Object destroyPacket = new NmsPacketBuilder(PacketType.NMS)
+	        			.packet("PacketPlayOutEntityDestroy")
+	        			.withArgs(wither.getId())
+	        			.build();
+	            PlayerUtils.sendPacket(player, destroyPacket);
 	        }
 	        
             WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
@@ -65,13 +67,28 @@ public class Bossbar extends PlayerElement {
             withers.put(uuid, wither);
             
             wither.setLocation(location.getX(), location.getY(), location.getZ(), yaw, pitch);
-            PlayerUtils.sendPacket(player, new PacketPlayOutSpawnEntityLiving(wither));
-            PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
+            
+            Object spawnPacket = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutSpawnEntityLiving")
+            		.withArgs(wither)
+            		.build();
+            PlayerUtils.sendPacket(player, spawnPacket);
+            
+            Object metadataPacket = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutEntityMetadata")
+            		.withArgs(wither.getId(), wither.getDataWatcher(), true)
+            		.build();
+            PlayerUtils.sendPacket(player, metadataPacket);
 	        
             Float lastProgress = lastProgresses.get(uuid);
             if (lastProgress != null) {
                 wither.setHealth(lastProgress);
-                PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
+                
+                metadataPacket = new NmsPacketBuilder(PacketType.NMS)
+                		.packet("PacketPlayOutEntityMetadata")
+                		.withArgs(wither.getId(), wither.getDataWatcher(), true)
+                		.build();
+                PlayerUtils.sendPacket(player, metadataPacket);
             }
 	    } else {
             boolean moved = lastLocation == null || location.distanceSquared(lastLocation) > 4;
@@ -79,7 +96,12 @@ public class Bossbar extends PlayerElement {
 
             if (moved || rotated) {
                 wither.setLocation(location.getX(), location.getY(), location.getZ(), yaw, pitch);
-                PlayerUtils.sendPacket(player, new PacketPlayOutEntityTeleport(wither));
+                
+                Object teleportPacket = new NmsPacketBuilder(PacketType.NMS)
+                		.packet("PacketPlayOutEntityTeleport")
+                		.withArgs(wither)
+                		.build();
+                PlayerUtils.sendPacket(player, teleportPacket);
             }
 	    }
 
@@ -87,7 +109,12 @@ public class Bossbar extends PlayerElement {
         if (!message.equals(lastMessage)) {
             wither.setCustomName(message);
             wither.setCustomNameVisible(true);
-            PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
+            
+            Object metadataPacket = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutEntityMetadata")
+            		.withArgs(wither.getId(), wither.getDataWatcher(), true)
+            		.build();
+            PlayerUtils.sendPacket(player, metadataPacket);
         }
 
         lastLocations.put(uuid, location);
@@ -117,7 +144,11 @@ public class Bossbar extends PlayerElement {
         lastMessages.remove(uuid);
         lastProgresses.remove(uuid);
         if (wither != null) {
-            PlayerUtils.sendPacket(player, new PacketPlayOutEntityDestroy(wither.getId()));
+        	Object destroyPacket = new NmsPacketBuilder(PacketType.NMS)
+        			.packet("PacketPlayOutEntityDestroy")
+        			.withArgs(wither.getId())
+        			.build();
+            PlayerUtils.sendPacket(player, destroyPacket);
         }
 	}
 	
@@ -133,7 +164,13 @@ public class Bossbar extends PlayerElement {
         Float last = lastProgresses.get(player.getUniqueId());
         if (last == null || Math.abs(last - newHealth) > 0.01f) {
             wither.setHealth(newHealth);
-            PlayerUtils.sendPacket(player, new PacketPlayOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true));
+            
+            Object metadataPacket = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutEntityMetadata")
+            		.withArgs(wither.getId(), wither.getDataWatcher(), true)
+            		.build();
+            PlayerUtils.sendPacket(player, metadataPacket);
+            
             lastProgresses.put(player.getUniqueId(), newHealth);
         }
 	}

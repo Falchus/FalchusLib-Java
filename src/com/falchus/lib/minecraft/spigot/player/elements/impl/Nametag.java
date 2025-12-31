@@ -1,6 +1,5 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.function.Supplier;
@@ -10,11 +9,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
-import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
 
 /**
  * Represents a Nametag.
@@ -24,16 +25,16 @@ public class Nametag extends PlayerElement {
 	private final Scoreboard scoreboard;
 	private Team team;
 	
-	private Field nameField;
-	private Field displayNameField;
-	private Field prefixField;
-	private Field suffixField;
-	private Field playersField;
-	private Field modeField;
+	private final String nameField = "a";
+	private final String displayNameField = "b";
+	private final String prefixField = "c";
+	private final String suffixField = "d";
+	private final String playersField = "g";
+	private final String modeField = "h";
 
-	private PacketPlayOutScoreboardTeam create;
-	private PacketPlayOutScoreboardTeam update;
-	private PacketPlayOutScoreboardTeam remove;
+	private Object create;
+	private Object update;
+	private Object remove;
 	
 	/**
 	 * Constructs a Nametag.
@@ -54,44 +55,30 @@ public class Nametag extends PlayerElement {
 		player.setScoreboard(scoreboard);
 		
 		try {
-            Class<?> teamClass = PacketPlayOutScoreboardTeam.class;
-            
-            nameField = teamClass.getDeclaredField("a");
-            nameField.setAccessible(true);
-            
-            displayNameField = teamClass.getDeclaredField("b");
-            displayNameField.setAccessible(true);
-            
-            prefixField = teamClass.getDeclaredField("c");
-            prefixField.setAccessible(true);
-            
-            suffixField = teamClass.getDeclaredField("d");
-            suffixField.setAccessible(true);
-            
-            playersField = teamClass.getDeclaredField("g");
-            playersField.setAccessible(true);
-            
-            modeField = teamClass.getDeclaredField("h");
-            modeField.setAccessible(true);
-            
             HashSet<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
 
-            create = new PacketPlayOutScoreboardTeam();
-            nameField.set(create, player.getName());
-            displayNameField.set(create, player.getName());
-            playersField.set(create, entries);
-            modeField.set(create, 0);
+            create = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutScoreboardTeam")
+            		.build();
+            ReflectionUtils.setField(create, nameField, player.getName());
+            ReflectionUtils.setField(create, displayNameField, player.getName());
+            ReflectionUtils.setField(create, playersField, entries);
+            ReflectionUtils.setField(create, modeField, 0);
 
-            update = new PacketPlayOutScoreboardTeam();
-            nameField.set(update, player.getName());
-            displayNameField.set(update, player.getName());
-            playersField.set(update, entries);
-            modeField.set(update, 2);
+            update = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutScoreboardTeam")
+            		.build();
+            ReflectionUtils.setField(update, nameField, player.getName());
+            ReflectionUtils.setField(update, displayNameField, player.getName());
+            ReflectionUtils.setField(update, playersField, entries);
+            ReflectionUtils.setField(update, modeField, 2);
             
-            remove = new PacketPlayOutScoreboardTeam();
-            nameField.set(remove, player.getName());
-            playersField.set(remove, entries);
-            modeField.set(remove, 4);
+            remove = new NmsPacketBuilder(PacketType.NMS)
+            		.packet("PacketPlayOutScoreboardTeam")
+            		.build();
+            ReflectionUtils.setField(remove, nameField, player.getName());
+            ReflectionUtils.setField(remove, playersField, entries);
+            ReflectionUtils.setField(remove, modeField, 4);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,10 +104,10 @@ public class Nametag extends PlayerElement {
 	
 	private void update(@NonNull String prefix, @NonNull String suffix) {
 		try {
-            prefixField.set(create, prefix);
-            suffixField.set(create, suffix);
-            prefixField.set(update, prefix);
-            suffixField.set(update, suffix);
+            ReflectionUtils.setField(create, prefixField, prefix);
+            ReflectionUtils.setField(create, suffixField, suffix);
+            ReflectionUtils.setField(update, prefixField, prefix);
+            ReflectionUtils.setField(update, suffixField, suffix);
             
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 	        	PlayerUtils.sendPacket(onlinePlayer, create);

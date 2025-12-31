@@ -1,18 +1,19 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
 
+import com.falchus.lib.minecraft.spigot.enums.PacketType;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 
 /**
  * Represents a per-player tablist.
@@ -33,16 +34,12 @@ public class Tablist extends PlayerElement {
 		IChatBaseComponent headerComponent = new ChatComponentText(headerText);
         IChatBaseComponent footerComponent = new ChatComponentText(footerText);
         
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(headerComponent);
+        Object packet = new NmsPacketBuilder(PacketType.NMS)
+        		.packet("PacketPlayOutPlayerListHeaderFooter")
+        		.withArgs(headerComponent)
+        		.build();
 
-        try {
-            Field b = packet.getClass().getDeclaredField("b");
-            b.setAccessible(true);
-            b.set(packet, footerComponent);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            return;
-        }
+        ReflectionUtils.setField(packet, "b", footerComponent);
 
         PlayerUtils.sendPacket(player, packet);
         player.setPlayerListName(name);

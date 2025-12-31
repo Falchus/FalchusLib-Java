@@ -8,7 +8,7 @@ import lombok.NonNull;
 /**
  * Abstraction for commands.
  */
-public interface IBaseCommand {
+public interface BaseCommand {
     
     /**
      * Returns the permission node required.

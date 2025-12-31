@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.function.Consumer;
 
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -16,10 +15,11 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 
 /**
  * Utility class for items.
@@ -27,6 +27,8 @@ import net.minecraft.server.v1_8_R3.NBTTagCompound;
 @UtilityClass
 public class ItemUtils {
 
+	private static final NmsAdapter nms = NmsProvider.get();
+	
 	public static final Map<UUID, Consumer<Player>> itemActions = new HashMap<>();
     public static final Map<UUID, TriConsumer<Player, ItemStack, InventoryClickEvent>> itemActionsInventory = new HashMap<>();
     public static final Map<Inventory, TriConsumer<Player, ItemStack, InventoryClickEvent>> inventoryCallbacks = new HashMap<>();
@@ -37,46 +39,22 @@ public class ItemUtils {
     /**
      * Sets a UUID on the given item via NBT.
      */
-    @SuppressWarnings("deprecation")
 	public static ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-        if (nmsItem == null) {
-            nmsItem = new net.minecraft.server.v1_8_R3.ItemStack(net.minecraft.server.v1_8_R3.Item.getById(item.getType().getId()));
-        }
-
-        NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
-        if (uuid == null) {
-        	tag.remove("UUID");
-        } else {
-            tag.setString("UUID", uuid.toString());
-        }
-        nmsItem.setTag(tag);
-        return CraftItemStack.asBukkitCopy(nmsItem);
+    	return nms.setUUID(item, uuid);
     }
 
     /**
      * Retrieves the UUID stores on the given item.
      */
     public static UUID getUUID(@NonNull ItemStack item) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-        if (nmsItem == null) return null;
-
-        if (nmsItem.hasTag() && nmsItem.getTag().hasKey("UUID")) {
-            return UUID.fromString(nmsItem.getTag().getString("UUID"));
-        }
-        return null;
+    	return nms.getUUID(item);
     }
     
     /**
      * Removes all NBT tags from the item.
      */
     public static ItemStack clearNBT(@NonNull ItemStack item) {
-        net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-        if (nmsItem == null) return item;
-        
-        nmsItem.setTag(new NBTTagCompound());
-
-        return CraftItemStack.asBukkitCopy(nmsItem);
+    	return nms.clearNBT(item);
     }
     
     /**
