@@ -1,10 +1,11 @@
 package com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.impl;
 
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.InventoryOpenAnimation;
 
 /**
@@ -21,7 +22,7 @@ public class ItemFillAnimation extends InventoryOpenAnimation {
 		ItemStack item = items[tick];
 		if (item != null) {
 			inventory.setItem(tick, item);
-			player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 2);
+			PlayerUtils.playSound(player, player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 2);
 		}
 	}
 }

@@ -1,13 +1,16 @@
 package com.falchus.lib.minecraft.spigot.utils.nms;
 
+import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.enums.Property;
+import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 import com.mojang.authlib.GameProfile;
 
@@ -20,7 +23,6 @@ public interface NmsAdapter {
 	String getPackageNm();
 	String getPackageNms();
 	
-	Class<?> getNmsItemStack();
 	Class<?> getChatComponentText();
 	
     /**
@@ -53,7 +55,17 @@ public interface NmsAdapter {
 	 * Sends a title and/or subtitle to a player.
 	 */
 	void sendTitle(@NonNull Player player, String title, String subtitle);
+	
+	/**
+	 * Sends a tablist to a player.
+	 */
+	void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name);
 
+	/**
+	 * Plays a sound to a player.
+	 */
+	void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch);
+	
 	/**
 	 * Sends the end credits screen to a player.
 	 */

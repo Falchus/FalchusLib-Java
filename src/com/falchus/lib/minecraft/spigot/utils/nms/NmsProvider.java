@@ -2,6 +2,8 @@ package com.falchus.lib.minecraft.spigot.utils.nms;
 
 import org.bukkit.Bukkit;
 
+import com.falchus.lib.minecraft.spigot.utils.nms.modern.NmsAdapter_Modern;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -25,7 +27,7 @@ public class NmsProvider {
         }
 		
         if (minor >= 17) {
-        	// TODO: return modern NmsAdapter
+        	return new NmsAdapter_Modern();
         }
 		
         String packageName = Bukkit.getServer().getClass().getPackageName();

@@ -1,6 +1,8 @@
 package com.falchus.lib.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -67,12 +69,34 @@ public class ReflectionUtils {
         }
     }
     
-    public static void setStaticField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
+    public static void setField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
         try {
             Field field = getField(clazz, name);
             field.set(null, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public static Method getMethod(@NonNull Class<?> clazz, @NonNull String name, Class<?>... params) {
+        try {
+            Method method = clazz.getDeclaredMethod(name, params);
+            method.setAccessible(true);
+            return method;
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static Method getFirstMethod(@NonNull Class<?> clazz, List<Class<?>> params, @NonNull String... names) {
+        for (String name : names) {
+            Method found = getMethod(clazz, name, params.toArray(new Class[0]));
+            if (found != null) {
+                return found;
+            }
+        }
+        throw new RuntimeException("None of the methods exist: " + String.join(", ", names));
     }
 }

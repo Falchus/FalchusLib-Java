@@ -1,13 +1,16 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
 import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 import com.mojang.authlib.GameProfile;
@@ -46,6 +49,20 @@ public class PlayerUtils {
 	 */
 	public static void sendTitle(@NonNull Player player, String title, String subtitle) {
         nms.sendTitle(player, title, subtitle);
+	}
+	
+	/**
+	 * Sends a tablist to a player.
+	 */
+	public static void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {
+		nms.sendTablist(player, header, footer, name);
+	}
+	
+	/**
+	 * Plays a sound to a player.
+	 */
+	public static void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
+		nms.playSound(player, location, sound, volume, pitch);
 	}
 	
 	/**

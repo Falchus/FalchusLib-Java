@@ -7,21 +7,13 @@ import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
-import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
-import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 
 /**
  * Represents a per-player tablist.
  */
 public class Tablist extends PlayerElement {
-	
-	private final NmsAdapter nms = NmsProvider.get();
 	
     /**
      * Constructs a Tablist.
@@ -34,20 +26,7 @@ public class Tablist extends PlayerElement {
 	 * Sends a custom header and footer.
 	 */
 	public void send(List<String> header, List<String> footer, String name) {
-	    String headerText = header != null ? String.join("\n", header) : "";
-	    String footerText = footer != null ? String.join("\n", footer) : "";
-		
-		IChatBaseComponent headerComponent = new ChatComponentText(headerText);
-        IChatBaseComponent footerComponent = new ChatComponentText(footerText);
-        
-        Object packet = new NmsPacketBuilder(nms.getPackageNms() + "PacketPlayOutPlayerListHeaderFooter")
-        		.withArgs(headerComponent)
-        		.build();
-
-        ReflectionUtils.setField(packet, "b", footerComponent);
-
-        PlayerUtils.sendPacket(player, packet);
-        player.setPlayerListName(name);
+		PlayerUtils.sendTablist(player, header, footer, name);
 	}
 	
 	/**
