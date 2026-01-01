@@ -1,10 +1,13 @@
 package com.falchus.lib.minecraft.spigot.utils.nms;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
@@ -21,6 +24,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NmsAdapterDefault extends AbstractNmsAdapter {
 	
+	Method nmsItemStack_getTag;
+	Method nmsItemStack_setTag;
+	Method nmsItemStack_hasTag;
+	
     Object enumPlayerInfoAction_REMOVE_PLAYER;
     Class<?> enumTitle$Action;
     Object enumTitle$Action_TITLE;
@@ -28,6 +35,10 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
 	
 	public NmsAdapterDefault() {
 		try {
+            nmsItemStack_getTag = ReflectionUtils.getMethod(nmsItemStack, "getTag");
+            nmsItemStack_setTag = ReflectionUtils.getMethod(nmsItemStack, "setTag", nbtTagCompound);
+            nmsItemStack_hasTag = ReflectionUtils.getMethod(nmsItemStack, "hasTag");
+			
             enumPlayerInfoAction_REMOVE_PLAYER = ReflectionUtils.getField(enumPlayerInfo$Action, "REMOVE_PLAYER").get(null);
             enumTitle$Action = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle$EnumTitleAction");
             enumTitle$Action_TITLE = ReflectionUtils.getField(enumTitle$Action, "TITLE").get(null);
@@ -36,6 +47,58 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
     	}
 	}
+	
+    @Override
+    public ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
+    	try {
+    		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
+    		if (nmsItem == null) return item;
+    		
+    		Object tag = (boolean) nmsItemStack_hasTag.invoke(nmsItem) ? nmsItemStack_getTag.invoke(nmsItem) : nbtTagCompound.getConstructor().newInstance();
+    		if (uuid == null) {
+    			nbtTagCompound_remove.invoke(tag, "UUID");
+    		} else {
+    			nbtTagCompound_setString.invoke(tag, "UUID", uuid.toString());
+    		}
+            nmsItemStack_setTag.invoke(nmsItem, tag);
+            return (ItemStack) craftItemStack_asBukkitCopy.invoke(null, nmsItem);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public UUID getUUID(@NonNull ItemStack item) {
+    	try {
+    		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
+    		if (nmsItem == null) return null;
+    		
+    		if ((boolean) nmsItemStack_hasTag.invoke(nmsItem)) {
+    			Object tag = nmsItemStack_getTag.invoke(nmsItem);
+    			if ((boolean) nbtTagCompound_hasKey.invoke(tag, "UUID")) {
+    				return UUID.fromString((String) nbtTagCompound_getString.invoke(tag, "UUID"));
+    			}
+    		}
+    		return null;
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public ItemStack clearNBT(@NonNull ItemStack item) {
+    	try {
+    		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
+    		if (nmsItem == null) return item;
+    		
+    		Object tag = nbtTagCompound.getConstructor().newInstance();
+    		nmsItemStack_setTag.invoke(nmsItem, tag);
+    		
+    		return (ItemStack) craftItemStack_asBukkitCopy.invoke(null, nmsItem);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
     @Override
     public void sendTitle(@NonNull Player player, String title, String subtitle) {

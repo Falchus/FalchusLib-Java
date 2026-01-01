@@ -30,6 +30,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class AbstractNmsAdapter implements NmsAdapter {
 
+	final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	
 	@Getter String packageOb = "org.bukkit.";
 	@Getter String packageObc = packageOb + "craftbukkit.";
 	@Getter String packageNm = "net.minecraft.";
@@ -40,9 +42,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 	Class<?> nbtTagCompound;
 	Method craftItemStack_asNMSCopy;
 	Method craftItemStack_asBukkitCopy;
-	Method nmsItemStack_getTag; // TODO: search for 1.21 replacement
-	Method nmsItemStack_setTag; // TODO: search for 1.21 replacement
-	Method nmsItemStack_hasTag; // TODO: search for 1.21 replacement
 	Method nbtTagCompound_setString;
 	Method nbtTagCompound_remove;
 	Method nbtTagCompound_hasKey;
@@ -100,9 +99,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             );
             craftItemStack_asNMSCopy = ReflectionUtils.getMethod(craftItemStack, "asNMSCopy", ItemStack.class);
             craftItemStack_asBukkitCopy = ReflectionUtils.getMethod(craftItemStack, "asBukkitCopy", nmsItemStack);
-            nmsItemStack_getTag = ReflectionUtils.getMethod(nmsItemStack, "getTag");
-            nmsItemStack_setTag = ReflectionUtils.getMethod(nmsItemStack, "setTag", nbtTagCompound);
-            nmsItemStack_hasTag = ReflectionUtils.getMethod(nmsItemStack, "hasTag");
             nbtTagCompound_setString = ReflectionUtils.getFirstMethod(nbtTagCompound, Arrays.asList(String.class, String.class),
         		"setString",
         		"putString"
@@ -179,58 +175,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
     	}
 	}
-	
-    @Override
-    public ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
-    	try {
-    		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
-    		if (nmsItem == null) return item;
-    		
-    		Object tag = (boolean) nmsItemStack_hasTag.invoke(nmsItem) ? nmsItemStack_getTag.invoke(nmsItem) : nbtTagCompound.getConstructor().newInstance();
-    		if (uuid == null) {
-    			nbtTagCompound_remove.invoke(tag, "UUID");
-    		} else {
-    			nbtTagCompound_setString.invoke(tag, "UUID", uuid.toString());
-    		}
-            nmsItemStack_setTag.invoke(nmsItem, tag);
-            return (ItemStack) craftItemStack_asBukkitCopy.invoke(null, nmsItem);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    @Override
-    public UUID getUUID(@NonNull ItemStack item) {
-    	try {
-    		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
-    		if (nmsItem == null) return null;
-    		
-    		if ((boolean) nmsItemStack_hasTag.invoke(nmsItem)) {
-    			Object tag = nmsItemStack_getTag.invoke(nmsItem);
-    			if ((boolean) nbtTagCompound_hasKey.invoke(tag, "UUID")) {
-    				return UUID.fromString((String) nbtTagCompound_getString.invoke(tag, "UUID"));
-    			}
-    		}
-    		return null;
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    @Override
-    public ItemStack clearNBT(@NonNull ItemStack item) {
-    	try {
-    		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
-    		if (nmsItem == null) return item;
-    		
-    		Object tag = nbtTagCompound.getConstructor().newInstance();
-    		nmsItemStack_setTag.invoke(nmsItem, tag);
-    		
-    		return (ItemStack) craftItemStack_asBukkitCopy.invoke(null, nmsItem);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 	
     @Override
     public void sendPacket(@NonNull Player player, @NonNull Object packet) {
