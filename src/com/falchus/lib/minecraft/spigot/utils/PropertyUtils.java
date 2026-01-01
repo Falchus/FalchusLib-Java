@@ -1,8 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Property;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -13,26 +12,26 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PropertyUtils {
 	
-	private static final NmsAdapter nms = NmsProvider.get();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	/**
 	 * @return PropertyManager
 	 */
 	public static Object getPropertyManager() {
-		return nms.getPropertyManager();
+		return plugin.getContexts().getNmsAdapter().getPropertyManager();
 	}
 
 	/**
 	 * Saves the properties.
 	 */
 	public static void saveProperties() {
-		nms.saveProperties();
+		plugin.getContexts().getNmsAdapter().saveProperties();
 	}
 	
 	/**
 	 * Set a property value.
 	 */
 	public static void setProperty(@NonNull Property property, @NonNull Object value) {
-		nms.setProperty(property, value);
+		plugin.getContexts().getNmsAdapter().setProperty(property, value);
 	}
 }

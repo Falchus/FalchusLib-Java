@@ -1,7 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
+import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
 import lombok.experimental.UtilityClass;
 
@@ -11,19 +10,19 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ServerUtils {
 	
-	private static final NmsAdapter nms = NmsProvider.get();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 
 	/**
 	 * @return MinecraftServer
 	 */
 	public static Object getMinecraftServer() {
-		return nms.getMinecraftServer();
+		return plugin.getContexts().getNmsAdapter().getMinecraftServer();
 	}
 	
 	/**
 	 * @return e.g. "1.8.8"
 	 */
 	public static String getVersion() {
-		return nms.getVersion();
+		return plugin.getContexts().getNmsAdapter().getVersion();
 	}
 }

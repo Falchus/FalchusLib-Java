@@ -3,6 +3,8 @@ package com.falchus.lib.minecraft.spigot;
 import com.falchus.lib.minecraft.spigot.listeners.*;
 import com.falchus.lib.minecraft.spigot.listeners.message.*;
 import com.falchus.lib.minecraft.spigot.manager.*;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,6 +22,7 @@ public class Contexts {
 	LobbyCancelListener lobbyCancelListener;
 	VanishListener vanishListener;
 	ClientManager clientManager;
+	NmsAdapter nmsAdapter;
 	
 	public Contexts() {
 		init();
@@ -34,5 +37,6 @@ public class Contexts {
 		lobbyCancelListener = new LobbyCancelListener();
 		vanishListener = new VanishListener();
 		clientManager = new ClientManager();
+		nmsAdapter = NmsProvider.get();
 	}
 }

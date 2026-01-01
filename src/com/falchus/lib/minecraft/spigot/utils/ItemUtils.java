@@ -15,8 +15,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
+import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -27,7 +26,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ItemUtils {
 
-	private static final NmsAdapter nms = NmsProvider.get();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public static final Map<UUID, Consumer<Player>> itemActions = new HashMap<>();
     public static final Map<UUID, TriConsumer<Player, ItemStack, InventoryClickEvent>> itemActionsInventory = new HashMap<>();
@@ -40,21 +39,21 @@ public class ItemUtils {
      * Sets a UUID on the given item via NBT.
      */
 	public static ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
-    	return nms.setUUID(item, uuid);
+    	return plugin.getContexts().getNmsAdapter().setUUID(item, uuid);
     }
 
     /**
      * Retrieves the UUID stores on the given item.
      */
     public static UUID getUUID(@NonNull ItemStack item) {
-    	return nms.getUUID(item);
+    	return plugin.getContexts().getNmsAdapter().getUUID(item);
     }
     
     /**
      * Removes all NBT tags from the item.
      */
     public static ItemStack clearNBT(@NonNull ItemStack item) {
-    	return nms.clearNBT(item);
+    	return plugin.getContexts().getNmsAdapter().clearNBT(item);
     }
     
     /**

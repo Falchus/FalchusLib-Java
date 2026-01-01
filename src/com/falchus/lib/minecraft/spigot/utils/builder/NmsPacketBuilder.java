@@ -1,6 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
@@ -15,7 +15,7 @@ import lombok.SneakyThrows;
 @Getter
 public class NmsPacketBuilder {
 
-	private final NmsAdapter nms = NmsProvider.get();
+	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	private Class<?> packet;
 	private Object[] args = new Object[0];
 	
@@ -58,6 +58,6 @@ public class NmsPacketBuilder {
 		if (packet == null) {
 			throw new IllegalStateException("Packet class must be set");
 		}
-		return nms.createPacket(packet, args);
+		return plugin.getContexts().getNmsAdapter().createPacket(packet, args);
 	}
 }
