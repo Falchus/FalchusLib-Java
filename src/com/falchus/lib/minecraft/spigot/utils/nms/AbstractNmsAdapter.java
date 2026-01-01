@@ -40,9 +40,9 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 	Class<?> nbtTagCompound;
 	Method craftItemStack_asNMSCopy;
 	Method craftItemStack_asBukkitCopy;
-	Method nmsItemStack_getTag;
-	Method nmsItemStack_setTag;
-	Method nmsItemStack_hasTag;
+	Method nmsItemStack_getTag; // TODO: search for 1.21 replacement
+	Method nmsItemStack_setTag; // TODO: search for 1.21 replacement
+	Method nmsItemStack_hasTag; // TODO: search for 1.21 replacement
 	Method nbtTagCompound_setString;
 	Method nbtTagCompound_remove;
 	Method nbtTagCompound_hasKey;
@@ -96,14 +96,17 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             );
             nbtTagCompound = ReflectionUtils.getFirstClass(
             	packageNms + "NBTTagCompound",
-            	packageNm + "nbt.CompoundTag"
+            	packageNm + "nbt.NBTTagCompound"
             );
             craftItemStack_asNMSCopy = ReflectionUtils.getMethod(craftItemStack, "asNMSCopy", ItemStack.class);
             craftItemStack_asBukkitCopy = ReflectionUtils.getMethod(craftItemStack, "asBukkitCopy", nmsItemStack);
             nmsItemStack_getTag = ReflectionUtils.getMethod(nmsItemStack, "getTag");
             nmsItemStack_setTag = ReflectionUtils.getMethod(nmsItemStack, "setTag", nbtTagCompound);
             nmsItemStack_hasTag = ReflectionUtils.getMethod(nmsItemStack, "hasTag");
-            nbtTagCompound_setString = ReflectionUtils.getMethod(nbtTagCompound, "setString", String.class, String.class);
+            nbtTagCompound_setString = ReflectionUtils.getFirstMethod(nbtTagCompound, Arrays.asList(String.class, String.class),
+        		"setString",
+        		"putString"
+        	);
             nbtTagCompound_remove = ReflectionUtils.getMethod(nbtTagCompound, "remove", String.class);
             nbtTagCompound_hasKey = ReflectionUtils.getFirstMethod(nbtTagCompound, Arrays.asList(String.class),
             	"hasKey",

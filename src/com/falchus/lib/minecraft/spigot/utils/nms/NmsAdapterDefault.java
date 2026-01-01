@@ -36,7 +36,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
     	}
 	}
-
+	
     @Override
     public void sendTitle(@NonNull Player player, String title, String subtitle) {
     	try {
