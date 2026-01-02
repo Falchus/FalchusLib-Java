@@ -3,6 +3,7 @@ package com.falchus.lib.minecraft.spigot.utils.labymod;
 import java.util.Collection;
 import java.util.UUID;
 
+import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.utils.labymod.enums.LabyBalanceType;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -12,6 +13,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class LabyMod {
+	
+	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 
 	/**
 	 * Just send this packet to update the value of the balance or to show/hide it
@@ -41,7 +44,7 @@ public class LabyMod {
 	    economyObject.add(type.getKey(), cashObject);
 
 	    // Send to LabyMod using the API
-	    LabyModProtocol.sendMessage(uuid, "economy", economyObject);
+	    LabyModProtocol.sendMessage(plugin, uuid, "economy", economyObject);
 	}
 	
 	public static void setSubtitle(@NonNull UUID receiver, UUID subtitlePlayer, String value) {
@@ -67,7 +70,7 @@ public class LabyMod {
 	    array.add(subtitle);
 
 	    // Send to LabyMod using the API
-	    LabyModProtocol.sendMessage(receiver, "account_subtitle", array);
+	    LabyModProtocol.sendMessage(plugin, receiver, "account_subtitle", array);
 	}
 	
 	public static void sendFlag(@NonNull UUID receiver, UUID uuid, String countryCode) {
@@ -85,7 +88,7 @@ public class LabyMod {
 	    // Add array to flag object packet
 	    flagPacket.add("users", users);
 
-	    LabyModProtocol.sendMessage(receiver, "language_flag", flagPacket);
+	    LabyModProtocol.sendMessage(plugin, receiver, "language_flag", flagPacket);
 	}
 	
 	public static void setMiddleClickActions(@NonNull UUID uuid, Collection<JsonObject> entries) {
@@ -98,7 +101,7 @@ public class LabyMod {
 	    }
 
 	    // Send to LabyMod using the API
-	    LabyModProtocol.sendMessage(uuid, "user_menu_actions", array);
+	    LabyModProtocol.sendMessage(plugin, uuid, "user_menu_actions", array);
 	}
 	
 	public static void sendCurrentPlayingGamemode(@NonNull UUID uuid, boolean visible, String gamemodeName) {
@@ -107,7 +110,7 @@ public class LabyMod {
 	    object.addProperty("gamemode_name", gamemodeName); // Name of the current playing gamemode
 
 	    // Send to LabyMod using the API
-	    LabyModProtocol.sendMessage(uuid, "server_gamemode", object);
+	    LabyModProtocol.sendMessage(plugin, uuid, "server_gamemode", object);
 	}
 	
 	/**
@@ -129,7 +132,7 @@ public class LabyMod {
 	    // If you want to use the new text format in 1.16+
 	    // object.add("raw_json_text", textObject);
 
-	    LabyModProtocol.sendMessage(uuid, "input_prompt", object);
+	    LabyModProtocol.sendMessage(plugin, uuid, "input_prompt", object);
 	}
 	
 	public static void sendClientToServer(@NonNull UUID uuid, String title, String address, boolean preview) {
@@ -139,7 +142,7 @@ public class LabyMod {
 	    object.addProperty("preview", preview); // Display the server icon, motd and user count
 
 	    // Send to LabyMod using the API
-	    LabyModProtocol.sendMessage(uuid, "server_switch", object);
+	    LabyModProtocol.sendMessage(plugin, uuid, "server_switch", object);
 	}
 	
 	/**
@@ -157,6 +160,6 @@ public class LabyMod {
 	    object.addProperty("duration", duration);
 
 	    // Send to LabyMod using the API
-	    LabyModProtocol.sendMessage(uuid, "cinescopes", object);
+	    LabyModProtocol.sendMessage(plugin, uuid, "cinescopes", object);
 	}
 }

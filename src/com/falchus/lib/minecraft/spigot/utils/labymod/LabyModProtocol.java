@@ -3,9 +3,10 @@ package com.falchus.lib.minecraft.spigot.utils.labymod;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.google.gson.JsonElement;
 
 import io.netty.buffer.ByteBuf;
@@ -14,8 +15,6 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutCustomPayload;
 
 @UtilityClass
 public class LabyModProtocol {
@@ -26,15 +25,13 @@ public class LabyModProtocol {
      * @param key LabyMod message key
      * @param messageContent json object content
      */
-	public static void sendMessage(@NonNull UUID uuid, String key, JsonElement messageContent) {
+	public static void sendMessage(@NonNull Plugin plugin, @NonNull UUID uuid, String key, JsonElement messageContent) {
+		Player player = Bukkit.getPlayer(uuid);
+		if (player == null || !player.isOnline()) return;
+		
 		byte[] bytes = LabyModProtocol.getBytesToSend(key, messageContent.toString());
 		
-		PacketDataSerializer pds = new PacketDataSerializer(Unpooled.wrappedBuffer(bytes));
-		PacketPlayOutCustomPayload payloadPacket = new PacketPlayOutCustomPayload("labymod3:main", pds);
-		Player player = org.bukkit.Bukkit.getPlayer(uuid);
-		if (player == null) return;
-		
-		PlayerUtils.sendPacket(player, payloadPacket);
+		player.sendPluginMessage(plugin, "labymod3:main", bytes);
 	}
 	
     /**
