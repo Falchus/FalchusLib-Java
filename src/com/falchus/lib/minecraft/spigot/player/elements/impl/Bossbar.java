@@ -51,7 +51,7 @@ public class Bossbar extends PlayerElement {
 	    if (wither == null || (lastLocation != null && !lastLocation.getWorld().equals(location.getWorld()))) {
 	        if (wither != null) {
 	        	Object destroyPacket = new NmsPacketBuilder(plugin.getContexts().getNmsAdapter().getPackageNms() + "PacketPlayOutEntityDestroy")
-	        			.withArgs(wither.getId())
+	        			.withArgs(new int[] { wither.getId() })
 	        			.build();
 	            PlayerUtils.sendPacket(player, destroyPacket);
 	        }
@@ -138,7 +138,7 @@ public class Bossbar extends PlayerElement {
         lastProgresses.remove(uuid);
         if (wither != null) {
         	Object destroyPacket = new NmsPacketBuilder(plugin.getContexts().getNmsAdapter().getPackageNms() + "PacketPlayOutEntityDestroy")
-        			.withArgs(wither.getId())
+        			.withArgs(new int[] { wither.getId() })
         			.build();
             PlayerUtils.sendPacket(player, destroyPacket);
         }
