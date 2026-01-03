@@ -180,4 +180,18 @@ public class CloudNet {
     public static void registerListener(@NonNull Class<?> listenerClass) {
     	eventManager.registerListener(listenerClass);
     }
+    
+    /**
+     * Registers a listener.
+     */
+    public static void registerListener(@NonNull Object listener) {
+    	eventManager.registerListener(listener);
+    }
+    
+    /**
+     * Registers listeners.
+     */
+    public static void registerListeners(@NonNull Object... listeners) {
+    	eventManager.registerListeners(listeners);
+    }
 }
