@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import eu.cloudnetservice.driver.event.EventManager;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.driver.provider.CloudServiceFactory;
 import eu.cloudnetservice.driver.provider.CloudServiceProvider;
@@ -29,6 +30,7 @@ public class CloudNet {
 	public static final CloudServiceFactory cloudServiceFactory = InjectionLayer.ext().instance(CloudServiceFactory.class);
 	public static final CloudServiceProvider cloudServiceProvider = InjectionLayer.ext().instance(CloudServiceProvider.class);
 	public static final ServiceInfoHolder serviceInfoHolder = InjectionLayer.ext().instance(ServiceInfoHolder.class);
+	public static final EventManager eventManager = InjectionLayer.ext().instance(EventManager.class);
 
 	/**
 	 * Broadcasts a message to all players globally.
@@ -170,5 +172,12 @@ public class CloudNet {
      */
     public static PlayerExecutor getPlayerExecutor(@NonNull UUID uuid) {
     	return playerManager.playerExecutor(uuid);
+    }
+    
+    /**
+     * Registers a listener.
+     */
+    public static void registerListener(@NonNull Class<?> listenerClass) {
+    	eventManager.registerListener(listenerClass);
     }
 }
