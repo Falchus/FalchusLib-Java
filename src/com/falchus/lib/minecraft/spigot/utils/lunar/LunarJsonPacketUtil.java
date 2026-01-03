@@ -29,8 +29,7 @@ public class LunarJsonPacketUtil {
 	public static void broadcastPacket(JsonObject message) {
 	    byte[] data = message.toString().getBytes();
 	 
-	    Bukkit.getOnlinePlayers().forEach(player ->
-	        player.sendPluginMessage(plugin, "apollo:json", data));
+	    Bukkit.getOnlinePlayers().forEach(player -> player.sendPluginMessage(plugin, "apollo:json", data));
 	}
 	
 	public static JsonObject createEnableModuleObject(@NonNull String module, Map<String, Object> properties) {

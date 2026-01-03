@@ -9,9 +9,6 @@ import com.google.gson.JsonParser;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for Minecraft-related API calls.
- */
 @UtilityClass
 public class APIUtils {
 

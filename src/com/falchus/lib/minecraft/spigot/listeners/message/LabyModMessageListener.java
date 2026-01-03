@@ -18,6 +18,7 @@ public class LabyModMessageListener implements PluginMessageListener {
 	
 	public LabyModMessageListener() {
 		plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "labymod3:main", this);
+		plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "labymod3:main");
 	}
 
 	@Override
@@ -29,8 +30,7 @@ public class LabyModMessageListener implements PluginMessageListener {
 		
 		// LabyMod user joins the server
 		if (key.equals("INFO")) {
-			Client client = Client.LABYMOD;
-			plugin.getContexts().getClientManager().set(player, client);
+			plugin.getContexts().getClientManager().set(player, Client.LABYMOD);
 			Bukkit.getPluginManager().callEvent(new PlayerClientJoinEvent(player, Client.LABYMOD));
 		}
 	}

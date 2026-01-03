@@ -33,7 +33,6 @@ public abstract class PlayerElement {
 	
 	/**
 	 * Sends the element to the player repeatedly with a fixed interval.
-	 * If a previous repeating task exists for this element, it will be canceled.
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
 	    Map<UUID, BukkitTask> map = tasks.computeIfAbsent(this.getClass(), c -> new HashMap<>());

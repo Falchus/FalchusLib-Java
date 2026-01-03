@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Utility class to manage MySQL connection.
- */
 @RequiredArgsConstructor
 public class MySQL {
 
@@ -23,6 +20,7 @@ public class MySQL {
 	
 	/**
 	 * Establishes a new connection if none is currently open.
+	 * 
 	 * @throws SQLException 
 	 */
 	public void connect() throws SQLException {

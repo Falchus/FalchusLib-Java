@@ -19,12 +19,8 @@ import eu.cloudnetservice.modules.bridge.player.executor.ServerSelectorType;
 import eu.cloudnetservice.wrapper.holder.ServiceInfoHolder;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-/**
- * Utility class for CloudNet-related operations.
- */
 @UtilityClass
 public class CloudNet {
 
@@ -37,21 +33,20 @@ public class CloudNet {
 	/**
 	 * Broadcasts a message to all players globally.
 	 */
-	public static void broadcastMessage(@NonNull List<String> message) {
-		final String messageFinal = String.join("\n", message);
-        Component component = LegacyComponentSerializer.legacySection().deserialize(messageFinal);
-        playerManager.globalPlayerExecutor().sendChatMessage(component);
+	public static void broadcastMessage(@NonNull List<String> messages) {
+		String message = String.join("\n", messages);
+        playerManager.globalPlayerExecutor().sendChatMessage(LegacyComponentSerializer.legacySection().deserialize(message));
 	}
 	
 	/**
-	 * Published an update for the current service info snapshot.
+	 * Publishes an update for the current service.
 	 */
 	public static void publishServiceInfoUpdate() {
         serviceInfoHolder.publishServiceInfoUpdate();
 	}
 	
 	/**
-	 * Creates and starts a new CloudNet service.
+	 * Creates and starts a new service.
 	 */
 	public static void createAndStartService(@NonNull ServiceConfiguration serviceConfig) {
 		cloudServiceFactory.createCloudServiceAsync(serviceConfig)
@@ -65,42 +60,42 @@ public class CloudNet {
 	}
 	
 	/**
-	 * Gets the player count for the group.
+	 * @return player count for the group
 	 */
 	public static int getPlayerCountFromGroup(@NonNull String group) {
 		return playerManager.groupOnlinePlayers(group).count();
 	}
 	
 	/**
-	 * Gets the player count for the task.
+	 * @return player count for the task
 	 */
 	public static int getPlayerCountFromTask(@NonNull String task) {
 		return playerManager.taskOnlinePlayers(task).count();
 	}
 	
 	/**
-	 * Gets the player count for the service.
+	 * @return player count for the service
 	 */
 	public static int getPlayerCountFromService(@NonNull String service) {
 		return getService(service).readProperty(BridgeDocProperties.ONLINE_COUNT);
 	}
 	
 	/**
-	 * Get service by name
+	 * @return service by name
 	 */
 	public static ServiceInfoSnapshot getService(@NonNull String service) {
 		return cloudServiceProvider.serviceByName(service);
 	}
 	
 	/**
-	 * Get services by group
+	 * @return services by group
 	 */
 	public static Collection<ServiceInfoSnapshot> getServicesByGroup(@NonNull String group) {
 		return cloudServiceProvider.servicesByGroup(group);
 	}
 	
 	/**
-	 * Get services by task
+	 * @return services by task
 	 */
 	public static Collection<ServiceInfoSnapshot> getServicesByTask(@NonNull String task) {
 		return cloudServiceProvider.servicesByTask(task);
@@ -135,7 +130,7 @@ public class CloudNet {
     }
     
     /**
-     * Gets the state of the current service.
+     * @return the state of the current service
      */
     public static String getState() {
     	return bridgeServiceHelper.state().get();
@@ -171,7 +166,7 @@ public class CloudNet {
     }
     
     /**
-     * Gets a PlayerExecutor by UUID.
+     * @return {@link PlayerExecutor} by UUID
      */
     public static PlayerExecutor getPlayerExecutor(@NonNull UUID uuid) {
     	return playerManager.playerExecutor(uuid);

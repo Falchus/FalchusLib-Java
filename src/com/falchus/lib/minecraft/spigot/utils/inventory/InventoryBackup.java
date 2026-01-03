@@ -12,18 +12,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for backing up and restoring a player's inventory and armor.
- * supporting multiple backups per player by IDs.
- */
 @UtilityClass
 public class InventoryBackup {
 
     private static final Map<UUID, Map<Integer, BackupData>> playerInventories = new HashMap<>();
 
-    /**
-     * Internal class to hold data.
-     */
     @AllArgsConstructor
     @Getter
     public static class BackupData {

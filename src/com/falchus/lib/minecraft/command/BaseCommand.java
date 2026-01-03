@@ -5,13 +5,10 @@ import java.util.List;
 
 import lombok.NonNull;
 
-/**
- * Abstraction for commands.
- */
 public interface BaseCommand {
     
     /**
-     * Returns the permission node required.
+     * Returns the permission required.
      */
     String getPermission();
     

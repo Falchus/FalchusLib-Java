@@ -14,9 +14,6 @@ import com.falchus.lib.minecraft.command.BaseCommand;
 import lombok.Getter;
 import lombok.NonNull;
 
-/**
- * Abstract adapter for Spigot commands.
- */
 @Getter
 public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecutor, TabCompleter {
 
@@ -24,9 +21,6 @@ public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecut
     private final String noPermissionMessage;
     private final String usageMessage;
 	
-    /**
-     * Constructs a new SpigotCommandAdapter.
-     */
 	public SpigotCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
         this.permission = permission;
         this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";

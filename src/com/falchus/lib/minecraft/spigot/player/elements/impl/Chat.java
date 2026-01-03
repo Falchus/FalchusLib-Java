@@ -16,17 +16,11 @@ import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 
 import lombok.NonNull;
 
-/**
- * Represents a per-player chat.
- */
 public class Chat extends PlayerElement implements Listener {
 
 	private final Map<UUID, String> prefix = new ConcurrentHashMap<>();
 	private boolean registered = false;
 	
-	/**
-	 * Constructs a Chat element.
-	 */
 	private Chat(@NonNull Player player) {
 		super(player);
 	}

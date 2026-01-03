@@ -6,9 +6,6 @@ import java.util.concurrent.Executors;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for running tasks.
- */
 @UtilityClass
 public class Thread {
 

@@ -17,9 +17,6 @@ import lombok.NonNull;
 import net.minecraft.server.v1_8_R3.EntityWither;
 import net.minecraft.server.v1_8_R3.WorldServer;
 
-/**
- * Represents a Bossbar.
- */
 public class Bossbar extends PlayerElement {
 
     private final Map<UUID, EntityWither> withers = new HashMap<>();
@@ -27,9 +24,6 @@ public class Bossbar extends PlayerElement {
     private final Map<UUID, String> lastMessages = new HashMap<>();
     private final Map<UUID, Float> lastProgresses = new HashMap<>();
     
-	/**
-	 * Constructs a new Bossbar.
-	 */
 	private Bossbar(@NonNull Player player) {
     	super(player);
     }

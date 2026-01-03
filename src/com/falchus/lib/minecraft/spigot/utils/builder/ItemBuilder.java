@@ -22,9 +22,6 @@ import com.mojang.authlib.properties.Property;
 
 import lombok.NonNull;
 
-/**
- * Builder class for creating and customizing {@link ItemStack}s.
- */
 public class ItemBuilder {
 
 	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();

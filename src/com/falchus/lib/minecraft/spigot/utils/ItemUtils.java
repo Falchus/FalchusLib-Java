@@ -20,9 +20,6 @@ import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for items.
- */
 @UtilityClass
 public class ItemUtils {
 

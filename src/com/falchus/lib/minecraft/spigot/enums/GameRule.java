@@ -3,9 +3,6 @@ package com.falchus.lib.minecraft.spigot.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * Represents Minecraft world game rules.
- */
 @AllArgsConstructor
 @Getter
 public enum GameRule {

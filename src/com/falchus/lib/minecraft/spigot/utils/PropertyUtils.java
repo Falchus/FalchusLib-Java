@@ -6,9 +6,6 @@ import com.falchus.lib.minecraft.spigot.enums.Property;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for properties.
- */
 @UtilityClass
 public class PropertyUtils {
 	

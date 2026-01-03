@@ -1,9 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils.labymod;
 
 import java.nio.charset.Charset;
-import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -21,17 +19,14 @@ public class LabyModProtocol {
 	
     /**
      * Send a message to LabyMod
-     * @param uuid Minecraft Client
+     * @param player Minecraft Client
      * @param key LabyMod message key
      * @param messageContent json object content
      */
-	public static void sendMessage(@NonNull Plugin plugin, @NonNull UUID uuid, String key, JsonElement messageContent) {
-		Player player = Bukkit.getPlayer(uuid);
-		if (player == null || !player.isOnline()) return;
+	public static void sendMessage(@NonNull Plugin plugin, @NonNull Player player, String key, JsonElement messageContent) {
+		byte[] data = LabyModProtocol.getBytesToSend(key, messageContent.toString());
 		
-		byte[] bytes = LabyModProtocol.getBytesToSend(key, messageContent.toString());
-		
-		player.sendPluginMessage(plugin, "labymod3:main", bytes);
+		player.sendPluginMessage(plugin, "labymod3:main", data);
 	}
 	
     /**

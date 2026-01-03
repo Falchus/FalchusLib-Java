@@ -14,18 +14,12 @@ import com.sun.net.httpserver.HttpServer;
 
 import lombok.NonNull;
 
-/**
- * Builder utility for {@link HTTPServer}.
- */
 public class HTTPServerBuilder {
 	
 	private int port = 8080;
     private final Map<@NonNull String, @NonNull BiConsumer<@NonNull HttpExchange, @NonNull Map<String, String>>> routes = new HashMap<>();
     private BiConsumer<@NonNull HttpExchange, @NonNull Map<String, String>> defaultHandler;
     
-    /**
-     * Sets the port.
-     */
     public HTTPServerBuilder port(@NonNull Integer port) {
     	this.port = port;
     	return this;
@@ -49,8 +43,6 @@ public class HTTPServerBuilder {
     }
     
     /**
-     * Builds the HTTP server.
-     * 
      * @param ip	usually 127.0.0.1
      */
     @NonNull

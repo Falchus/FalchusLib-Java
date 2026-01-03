@@ -4,9 +4,6 @@ import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for server.
- */
 @UtilityClass
 public class ServerUtils {
 	

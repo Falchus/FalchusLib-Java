@@ -7,9 +7,6 @@ import com.google.gson.JsonParser;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for checking if an IP is a VPN.
- */
 @UtilityClass
 public class VPNApi {
 

@@ -17,9 +17,6 @@ import com.mojang.authlib.properties.Property;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for players.
- */
 @UtilityClass
 public class PlayerUtils {
 	

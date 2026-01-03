@@ -16,9 +16,6 @@ import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
 
-/**
- * Represents a Nametag.
- */
 public class Nametag extends PlayerElement {
 	
 	private final Scoreboard scoreboard;
@@ -35,9 +32,6 @@ public class Nametag extends PlayerElement {
 	private Object update;
 	private Object remove;
 	
-	/**
-	 * Constructs a Nametag.
-	 */
 	private Nametag(@NonNull Player player) {
 		super(player);
 		this.scoreboard = player.getScoreboard() != null ? player.getScoreboard() : Bukkit.getScoreboardManager().getNewScoreboard();

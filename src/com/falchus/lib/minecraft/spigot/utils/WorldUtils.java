@@ -9,9 +9,6 @@ import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-/**
- * Utility class for Spigot world-related operations.
- */
 @UtilityClass
 public class WorldUtils {
 	

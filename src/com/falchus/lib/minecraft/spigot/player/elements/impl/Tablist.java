@@ -10,14 +10,8 @@ import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 
 import lombok.NonNull;
 
-/**
- * Represents a per-player tablist.
- */
 public class Tablist extends PlayerElement {
 	
-    /**
-     * Constructs a Tablist.
-     */
 	private Tablist(@NonNull Player player) {
 		super(player);
 	}

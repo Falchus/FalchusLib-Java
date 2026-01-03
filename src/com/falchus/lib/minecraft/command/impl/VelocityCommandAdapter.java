@@ -13,9 +13,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-/**
- * Abstract adapter for Velocity commands.
- */
 @Getter
 public abstract class VelocityCommandAdapter implements BaseCommand, SimpleCommand {
 
@@ -23,9 +20,6 @@ public abstract class VelocityCommandAdapter implements BaseCommand, SimpleComma
     private final String noPermissionMessage;
     private final String usageMessage;
     
-    /**
-     * Constructs a new VelocityCommandAdapter.
-     */
 	public VelocityCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
         this.permission = permission;
         this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";

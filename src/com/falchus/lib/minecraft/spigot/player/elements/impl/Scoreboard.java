@@ -17,9 +17,6 @@ import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 
 import lombok.NonNull;
 
-/**
- * Represents a per-player sidebar scoreboard.
- */
 public class Scoreboard extends PlayerElement {
 
 	private final org.bukkit.scoreboard.Scoreboard scoreboard;
@@ -27,9 +24,6 @@ public class Scoreboard extends PlayerElement {
 	private final Map<Integer, String> lastScores = new HashMap<>();
     private final Map<UUID, Integer> animationFrames = new HashMap<>();
 	
-    /**
-     * Constructs a Scoreboard.
-     */
 	private Scoreboard(@NonNull Player player) {
 		super(player);
 		this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();

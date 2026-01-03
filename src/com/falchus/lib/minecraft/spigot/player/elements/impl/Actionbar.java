@@ -10,14 +10,8 @@ import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 
 import lombok.NonNull;
 
-/**
- * Represents a Actionbar.
- */
 public class Actionbar extends PlayerElement {
 
-	/**
-	 * Constructs a new Actionbar.
-	 */
 	private Actionbar(@NonNull Player player) {
 		super(player);
 	}

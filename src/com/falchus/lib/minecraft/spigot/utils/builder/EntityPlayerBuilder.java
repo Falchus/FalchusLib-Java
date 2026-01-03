@@ -20,9 +20,6 @@ import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PlayerInteractManager;
 import net.minecraft.server.v1_8_R3.WorldServer;
 
-/**
- * Builder class for creating and customizing {@link EntityPlayer}s.
- */
 @Getter
 public class EntityPlayerBuilder {
 	
@@ -36,42 +33,27 @@ public class EntityPlayerBuilder {
 	private Location location;
 	private boolean lookAtPlayer = false;
 	
-	/**
-	 * Sets the name.
-	 */
 	public EntityPlayerBuilder setName(@NonNull String name) {
 		this.name = name;
 		return this;
 	}
 	
-	/**
-	 * Sets the UUID.
-	 */
 	public EntityPlayerBuilder setUUID(@NonNull UUID uuid) {
 		this.uuid = uuid;
 		return this;
 	}
 	
-	/**
-	 * Sets the skin with the skinValue & skinSignature.
-	 */
 	public EntityPlayerBuilder setSkin(@NonNull String skinValue, @NonNull String skinSignature) {
 		this.skinValue = skinValue;
 		this.skinSignature = skinSignature;
 		return this;
 	}
 	
-	/**
-	 * Makes the EntityPlayer invisible.
-	 */
 	public EntityPlayerBuilder setInvisible(boolean invisible) {
 		this.invisible = invisible;
 		return this;
 	}
 	
-	/**
-	 * Sets the location of the EntityPlayer.
-	 */
 	public EntityPlayerBuilder setLocation(@NonNull Location location) {
 		this.location = location;
 		return this;

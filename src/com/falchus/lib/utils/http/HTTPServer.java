@@ -11,25 +11,16 @@ import com.sun.net.httpserver.HttpServer;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-/**
- * Utility class to manage a minimal HTTP server.
- */
 @AllArgsConstructor
 public class HTTPServer {
 
 	@NonNull private final HttpServer server;
 	@NonNull private final Map<String, BiConsumer<HttpExchange, Map<String, String>>> routes;
 	
-	/**
-	 * Starts the server.
-	 */
 	public void start() {
 		server.start();
 	}
 	
-	/**
-	 * Stops the server after a given delay.
-	 */
 	public void stop(@NonNull Integer delay) {
 		server.stop(delay);
 	}

@@ -10,15 +10,11 @@ import lombok.experimental.UtilityClass;
 
 /**
  * @deprecated since 1.0.0, use JDA instead!
- * Utility class for sending messages to Discord webhooks.
  */
 @UtilityClass
 @Deprecated(since = "1.0.0")
 public class DiscordWebhook {
 
-	/**
-	 * Sends a plain text message.
-	 */
 	public static void sendMessage(@NonNull String message, @NonNull String webhookUrl) {
 	    Thread.runAsync(() -> {
 		    try {
@@ -48,20 +44,7 @@ public class DiscordWebhook {
 	    });
 	}
 
-	/**
-	 * Sends an embed message.
-	 */
-    public static void sendEmbedMessage(
-			String title, 
-			String description, 
-			int red, 
-			int green, 
-			int blue, 
-			String footerText, 
-			String footerImageUrl, 
-			String thumbnailUrl, 
-			@NonNull String webhookUrl
-    ) {
+    public static void sendEmbedMessage(String title, String description, int red, int green, int blue, String footerText, String footerImageUrl, String thumbnailUrl, @NonNull String webhookUrl) {
 	    Thread.runAsync(() -> {
 	        try {
 	            URL url = new URL(webhookUrl);

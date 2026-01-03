@@ -1,17 +1,12 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
-import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-/**
- * Builder class for creating and customizing NMS packets.
- * to use with {@link NmsProvider}
- */
 @Getter
 public class NmsPacketBuilder {
 
