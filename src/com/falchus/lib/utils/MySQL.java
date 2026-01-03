@@ -16,7 +16,7 @@ public class MySQL {
 	@NonNull private final String username;
 	private final String password;
 	
-	private Connection connection;
+    private final ThreadLocal<Connection> connection = new ThreadLocal<>();
 	
 	/**
 	 * Establishes a new connection if none is currently open.
@@ -28,11 +28,10 @@ public class MySQL {
 		String url = "jdbc:mysql://" + host + ":" + port + "/" + database 
 				+ "?useSSL=false&autoReconnect=true&characterEncoding=UTF-8&useUnicode=true";
 
-        if (password == null) {
-            connection = DriverManager.getConnection(url, username, "");
-        } else {
-            connection = DriverManager.getConnection(url, username, password);
-        }
+		Connection connection = (password == null)
+				? DriverManager.getConnection(url, username, "")
+				: DriverManager.getConnection(url, username, password);
+		this.connection.set(connection);
 	}
 	
 	/**
@@ -42,6 +41,7 @@ public class MySQL {
 	 */
 	public boolean isConnected() {
 		try {
+			Connection connection = this.connection.get();
 			return connection != null && !connection.isClosed();
 		} catch (SQLException e) {
 			return false;
@@ -52,11 +52,12 @@ public class MySQL {
 	 * Closes the current connection if it exists.
 	 */
 	public void disconnect() {
+		Connection connection = this.connection.get();
 		if (connection != null) {
 			try {
 				connection.close();
 			} catch (SQLException ignored) {}
-			connection = null;
+			this.connection.remove();
 		}
 	}
 	
@@ -70,6 +71,6 @@ public class MySQL {
         if (!isConnected()) {
             connect();
         }
-        return connection;
+        return connection.get();
     }
 }
