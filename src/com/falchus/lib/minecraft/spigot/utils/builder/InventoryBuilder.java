@@ -211,9 +211,6 @@ public class InventoryBuilder {
     	return pages;
     }
     
-    /**
-     * Builds and returns the final {@link Inventory}.
-     */
     private Inventory buildInventory(List<ItemUtils.InventoryItem> items, String inventoryTitle, int inventorySize) {
         int itemCount = items.size();
         int size = inventorySize;
@@ -261,5 +258,50 @@ public class InventoryBuilder {
             ItemUtils.inventoryCallbacks.put(inventory, globalClickListener);
         }
         return inventory;
+    }
+    
+    /**
+     * Updates the inventory for the given player.
+     */
+    public void update(@NonNull Player player) {
+    	Inventory inventory = player.getOpenInventory().getTopInventory();
+    	updateInventory(inventory, items);
+    }
+    
+    /**
+     * Updates the paginated inventory for the given player.
+     */
+    public void updatePages(@NonNull Player player) {
+    	Inventory inventory = player.getOpenInventory().getTopInventory();
+    	if (inventory == null || !inventory.getTitle().equals(title)) return;
+
+        int pageSize = size - 9;
+        int totalPages = (int) Math.ceil(items.size() / (double) pageSize);
+        totalPages = totalPages == 0 ? 1 : totalPages;
+
+        for (int page = 0; page < totalPages; page++) {
+            int start = page * pageSize;
+            int end = Math.min(start + pageSize, items.size());
+            List<ItemUtils.InventoryItem> pageItems = items.subList(start, end);
+            Inventory newInventory = buildInventory(pageItems, title, size);
+            
+            if (inventory.getSize() == newInventory.getSize()) {
+                updateInventory(inventory, pageItems);
+                break;
+            }
+        }
+    }
+    
+    private void updateInventory(@NonNull Inventory inventory, @NonNull List<ItemUtils.InventoryItem> items) {
+    	if (inventory == null || !inventory.getTitle().equals(title)) return;
+    	Inventory newInventory = buildInventory(items, title, size);
+    	
+    	inventory.clear();
+    	for (int i = 0; i < newInventory.getSize(); i++) {
+    		ItemStack item = newInventory.getItem(i);
+    		if (item != null) {
+    			inventory.setItem(i, item);
+    		}
+    	}
     }
 }
