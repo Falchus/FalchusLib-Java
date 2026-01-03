@@ -32,16 +32,20 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     Class<?> enumTitle$Action;
     Object enumTitle$Action_TITLE;
     Object enumTitle$Action_SUBTITLE;
+    Class<?> world;
+    Class<?> craftWorld;
+    Method craftWorld_getHandle;
+    Class<?> entity;
+    Method entity_setInvisible;
+    Method entity_setCustomName;
+    Method entity_setCustomNameVisible;
+    Method entity_setLocation;
+    Method entity_getId;
+    Class<?> entityLiving;
+    Method entityLiving_setHealth;
+    Method entityLiving_getMaxHealth;
     Class<?> entityWither;
-    Method entityWither_setInvisible;
-    Method entityWither_setCustomName;
-    Method entityWither_setCustomNameVisible;
-    Method entityWither_setHealth;
-    Method entityWither_getMaxHealth;
-    Method entityWither_setLocation;
-    Method entityWither_getId;
-    Method entityWither_getDataWatcher;
-    Class<?> worldServer;
+    Method entity_getDataWatcher;
 	
 	public NmsAdapterDefault() {
 		try {
@@ -53,16 +57,20 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             enumTitle$Action = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle$EnumTitleAction");
             enumTitle$Action_TITLE = ReflectionUtils.getField(enumTitle$Action, "TITLE").get(null);
             enumTitle$Action_SUBTITLE = ReflectionUtils.getField(enumTitle$Action, "SUBTITLE").get(null);
+            world = ReflectionUtils.getClass(packageNms + "World");
+            craftWorld = ReflectionUtils.getClass(packageObc + "CraftWorld");
+            craftWorld_getHandle = ReflectionUtils.getMethod(craftWorld, "getHandle");
+            entity = ReflectionUtils.getClass(packageNms + "Entity");
+            entity_setInvisible = ReflectionUtils.getMethod(entity, "setInvisible", boolean.class);
+            entity_setCustomName = ReflectionUtils.getMethod(entity, "setCustomName", String.class);
+            entity_setCustomNameVisible = ReflectionUtils.getMethod(entity, "setCustomNameVisible", boolean.class);
+            entity_setLocation = ReflectionUtils.getMethod(entity, "setLocation", double.class, double.class, double.class, float.class, float.class);
+            entity_getId = ReflectionUtils.getMethod(entity, "getId");
+            entity_getDataWatcher = ReflectionUtils.getMethod(entity, "getDataWatcher");
+            entityLiving = ReflectionUtils.getClass(packageNms + "EntityLiving");
+            entityLiving_setHealth = ReflectionUtils.getMethod(entityLiving, "setHealth", float.class);
+            entityLiving_getMaxHealth = ReflectionUtils.getMethod(entityLiving, "getMaxHealth");
             entityWither = ReflectionUtils.getClass(packageNms + "EntityWither");
-            entityWither_setInvisible = ReflectionUtils.getMethod(entityWither, "setInvisible", boolean.class);
-            entityWither_setCustomName = ReflectionUtils.getMethod(entityWither, "setCustomName", String.class);
-            entityWither_setCustomNameVisible = ReflectionUtils.getMethod(entityWither, "setCustomNameVisible", boolean.class);
-            entityWither_setHealth = ReflectionUtils.getMethod(entityWither, "setHealth", float.class);
-            entityWither_getMaxHealth = ReflectionUtils.getMethod(entityWither, "getMaxHealth");
-            entityWither_setLocation = ReflectionUtils.getMethod(entityWither, "setLocation", double.class, double.class, double.class, float.class, float.class);
-            entityWither_getId = ReflectionUtils.getMethod(entityWither, "getId");
-            entityWither_getDataWatcher = ReflectionUtils.getMethod(entityWither, "getDataWatcher");
-            worldServer = ReflectionUtils.getClass(packageNms + "WorldServer");
 		} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
     	}
@@ -177,17 +185,17 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
             
             Object worldServer = craftWorld_getHandle.invoke(player.getWorld());
-            Object wither = entityWither.getConstructor(this.worldServer).newInstance(worldServer);
+            Object wither = entityWither.getConstructor(world).newInstance(worldServer);
             
-            entityWither_setInvisible.invoke(wither, true);
-            entityWither_setCustomName.invoke(wither, title);
-            entityWither_setCustomNameVisible.invoke(wither, true);
+            entity_setInvisible.invoke(wither, true);
+            entity_setCustomName.invoke(wither, title);
+            entity_setCustomNameVisible.invoke(wither, true);
             
-            float maxHealth = (float) entityWither_getMaxHealth.invoke(wither);
+            float maxHealth = (float) entityLiving_getMaxHealth.invoke(wither);
             float newHealth = (float) Math.max(1, Math.min(maxHealth, progress * maxHealth));
-            entityWither_setHealth.invoke(wither, newHealth);
+            entityLiving_setHealth.invoke(wither, newHealth);
             
-            entityWither_setLocation.invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
+            entity_setLocation.invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
             
             Object spawnPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutSpawnEntityLiving")
             		.withArgs(wither)
@@ -195,7 +203,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             sendPacket(player, spawnPacket);
             
             Object metadataPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityMetadata")
-            		.withArgs(entityWither_getId.invoke(wither), entityWither_getDataWatcher.invoke(wither), true)
+            		.withArgs(entity_getId.invoke(wither), entity_getDataWatcher.invoke(wither), true)
             		.build();
             sendPacket(player, metadataPacket);
             
@@ -210,7 +218,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     	try {
     		Object wither = bossBars.remove(player);
     		if (wither != null) {
-    			int id = (int) entityWither_getId.invoke(wither);
+    			int id = (int) entity_getId.invoke(wither);
     			Object destroyPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityDestroy")
     					.withArgs(new int[] { id })
     					.build();

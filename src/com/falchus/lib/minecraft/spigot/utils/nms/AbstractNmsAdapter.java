@@ -55,8 +55,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Field entityPlayer_playerConnection;
     Class<?> playerConnection;
     Method playerConnection_sendPacket;
-    Class<?> craftWorld;
-    Method craftWorld_getHandle;
     Class<?> craftPlayer;
     Method craftPlayer_getHandle;
     Class<?> entityHuman;
@@ -136,8 +134,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             	"sendPacket",
             	"send"
             );
-            craftWorld = ReflectionUtils.getClass(packageObc + "CraftWorld");
-            craftWorld_getHandle = ReflectionUtils.getMethod(craftWorld, "getHandle");
             craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = ReflectionUtils.getMethod(craftPlayer, "getHandle");
             entityHuman = entityPlayer.getSuperclass();
