@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
@@ -60,6 +61,16 @@ public interface NmsAdapter {
 	 * Sends a tablist to a player.
 	 */
 	void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name);
+	
+	/**
+	 * Sends a bossbar to a player.
+	 */
+	void sendBossbar(@NonNull Player player, @NonNull String title, double progress);
+	
+	/**
+	 * Removes a bossbar from a player.
+	 */
+	void removeBossbar(@NonNull Player player);
 
 	/**
 	 * Plays a sound to a player.
@@ -145,6 +156,11 @@ public interface NmsAdapter {
 	 * @return MinecraftServer
 	 */
 	Object getMinecraftServer();
+	
+	/**
+	 * @return {@link Server}
+	 */
+	Object getBukkitServer();
 	
 	/**
 	 * @return e.g. "1.8.8"

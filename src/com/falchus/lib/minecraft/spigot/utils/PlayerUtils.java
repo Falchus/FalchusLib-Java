@@ -53,6 +53,20 @@ public class PlayerUtils {
 	}
 	
 	/**
+	 * Sends a bossbar to a player.
+	 */
+	public static void sendBossbar(@NonNull Player player, @NonNull String title, double progress) {
+		plugin.getContexts().getNmsAdapter().sendBossbar(player, title, progress);
+	}
+	
+	/**
+	 * Removes a bossbar from a player.
+	 */
+	public static void removeBossbar(@NonNull Player player) {
+		plugin.getContexts().getNmsAdapter().removeBossbar(player);
+	}
+	
+	/**
 	 * Plays a sound to a player.
 	 */
 	public static void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {

@@ -1,8 +1,5 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -18,7 +15,7 @@ import lombok.NonNull;
 
 public class Chat extends PlayerElement implements Listener {
 
-	private final Map<UUID, String> prefix = new ConcurrentHashMap<>();
+	private String prefix;
 	private boolean registered = false;
 	
 	private Chat(@NonNull Player player) {
@@ -29,7 +26,7 @@ public class Chat extends PlayerElement implements Listener {
 	 * Sets one-time.
 	 */
 	public void send(@NonNull String prefix) {
-		this.prefix.put(player.getUniqueId(), prefix);
+		this.prefix = prefix;
 		
 		if (!registered) {
 			Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -53,9 +50,7 @@ public class Chat extends PlayerElement implements Listener {
 	public void remove() {
 		super.remove();
 		
-		prefix.remove(player.getUniqueId());
-		
-		if (prefix.isEmpty() && registered) {
+		if (registered) {
 			HandlerList.unregisterAll(this);
 			registered = false;
 		}
@@ -63,11 +58,6 @@ public class Chat extends PlayerElement implements Listener {
 	
 	@EventHandler
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-		Player player = event.getPlayer();
-		String prefix = this.prefix.get(player.getUniqueId());
-		
-		if (prefix == null) return;
-		
 		event.setFormat(prefix + "%2$s");
 	}
 }

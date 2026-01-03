@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -31,6 +33,7 @@ import lombok.experimental.FieldDefaults;
 public abstract class AbstractNmsAdapter implements NmsAdapter {
 
 	final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	final Map<Player, Object> bossBars = new HashMap<>();
 	
 	@Getter String packageOb = "org.bukkit.";
 	@Getter String packageObc = packageOb + "craftbukkit.";
@@ -52,6 +55,8 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Field entityPlayer_playerConnection;
     Class<?> playerConnection;
     Method playerConnection_sendPacket;
+    Class<?> craftWorld;
+    Method craftWorld_getHandle;
     Class<?> craftPlayer;
     Method craftPlayer_getHandle;
     Class<?> entityHuman;
@@ -69,6 +74,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 	
     Class<?> craftServer;
     Method craftServer_getServer;
+    Class<?> bukkitServer;
     Class<?> minecraftServer;
     Method minecraftServer_getVersion;
 	
@@ -130,6 +136,8 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             	"sendPacket",
             	"send"
             );
+            craftWorld = ReflectionUtils.getClass(packageObc + "CraftWorld");
+            craftWorld_getHandle = ReflectionUtils.getMethod(craftWorld, "getHandle");
             craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = ReflectionUtils.getMethod(craftPlayer, "getHandle");
             entityHuman = entityPlayer.getSuperclass();
@@ -162,6 +170,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     		
             craftServer = ReflectionUtils.getClass(packageObc + "CraftServer");
             craftServer_getServer = ReflectionUtils.getMethod(craftServer, "getServer");
+            bukkitServer = ReflectionUtils.getClass(packageOb + "Server");
             minecraftServer = ReflectionUtils.getClass(packageNms + "MinecraftServer");
             minecraftServer_getVersion = ReflectionUtils.getMethod(minecraftServer, "getVersion");
     		
@@ -423,6 +432,15 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     	try {
     		Object server = craftServer.cast(Bukkit.getServer());
     		return craftServer_getServer.invoke(server);
+    	} catch (Exception e) {
+    		throw new RuntimeException(e);
+    	}
+    }
+    
+    @Override
+    public Object getBukkitServer() {
+    	try {
+    		return bukkitServer.cast(Bukkit.getServer());
     	} catch (Exception e) {
     		throw new RuntimeException(e);
     	}

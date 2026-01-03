@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils.nms.modern;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -44,6 +45,16 @@ public class NmsAdapter_Modern extends AbstractNmsAdapter {
     Class<?> clientboundSetTitleTextPacket;
     Class<?> clientboundSetSubtitleTextPacket;
     Class<?> clientboundPlayerListHeaderFooter;
+    Class<?> bossBar;
+    Method bossBar_setProgress;
+    Method bossBar_addPlayer;
+    Method bossBar_removeBossBar;
+    Class<?> barColor;
+    Object barColor_WHITE;
+    Class<?> barStyle;
+    Object barStyle_SOLID;
+    Class<?> bossFlag;
+    Method bukkitServer_createBossBar;
 	
 	public NmsAdapter_Modern() {
 		try {
@@ -66,6 +77,16 @@ public class NmsAdapter_Modern extends AbstractNmsAdapter {
 			clientboundSetTitleTextPacket = ReflectionUtils.getClass(packageNm + "network.protocol.game.ClientboundSetTitleTextPacket");
 			clientboundSetSubtitleTextPacket = ReflectionUtils.getClass(packageNm + "network.protocol.game.ClientboundSetSubtitleTextPacket");
 			clientboundPlayerListHeaderFooter = ReflectionUtils.getClass(packageNm + "network.protocol.game.ClientboundTabListPacket");
+			bossBar = ReflectionUtils.getClass(packageOb + "boss.BossBar");
+			bossBar_setProgress = ReflectionUtils.getMethod(bossBar, "setProgress", double.class);
+			bossBar_addPlayer = ReflectionUtils.getMethod(bossBar, "addPlayer", Player.class);
+			bossBar_removeBossBar = ReflectionUtils.getMethod(bukkitServer, "removeBossBar", namespacedKey);
+			barColor = ReflectionUtils.getClass(packageOb + "boss.BarColor");
+			barColor_WHITE = ReflectionUtils.getField(barColor, "WHITE").get(null);
+			barStyle = ReflectionUtils.getClass(packageOb + "boss.BarStyle");
+			barStyle_SOLID = ReflectionUtils.getField(barStyle, "SOLID").get(null);
+			bossFlag = ReflectionUtils.getClass(packageOb + "boss.BarFlag");
+			bukkitServer_createBossBar = ReflectionUtils.getMethod(bukkitServer, "createBossBar", String.class, barColor, barStyle, Array.newInstance(bossFlag, 0).getClass());
 		} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
     	}
@@ -163,6 +184,44 @@ public class NmsAdapter_Modern extends AbstractNmsAdapter {
             
             sendPacket(player, packet);
             player.setPlayerListName(name);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public void sendBossbar(@NonNull Player player, @NonNull String title, double progress) {
+    	try {
+    		removeBossbar(player);
+    		
+            Constructor<?> ctor = namespacedKey.getConstructor(Plugin.class, String.class);
+            Object key = ctor.newInstance(plugin, "Bossbar_" + player.getUniqueId());
+    		
+    		Object bossBar = bukkitServer_createBossBar.invoke(
+    			getBukkitServer(),
+    			key,
+    			title,
+    			barColor_WHITE,
+    			barStyle_SOLID,
+    			(Object) Array.newInstance(bossFlag, 0)
+    		);
+    		
+    		bossBar_setProgress.invoke(bossBar, progress);
+    		bossBar_addPlayer.invoke(bossBar, player);
+    		
+    		bossBars.put(player, key);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public void removeBossbar(@NonNull Player player) {
+    	try {
+    		Object key = bossBars.remove(player);
+    		if (key == null) return;
+    		
+    		bossBar_removeBossBar.invoke(getBukkitServer(), key);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

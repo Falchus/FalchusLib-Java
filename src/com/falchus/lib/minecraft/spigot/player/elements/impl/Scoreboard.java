@@ -3,7 +3,6 @@ package com.falchus.lib.minecraft.spigot.player.elements.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -22,7 +21,7 @@ public class Scoreboard extends PlayerElement {
 	private final org.bukkit.scoreboard.Scoreboard scoreboard;
 	private final Objective objective;
 	private final Map<Integer, String> lastScores = new HashMap<>();
-    private final Map<UUID, Integer> animationFrames = new HashMap<>();
+    private int frame = 0;
 	
 	private Scoreboard(@NonNull Player player) {
 		super(player);
@@ -98,7 +97,6 @@ public class Scoreboard extends PlayerElement {
     	
         if (titleSecondColor == null) return titleColor + title;
 
-        int frame = animationFrames.getOrDefault(player.getUniqueId(), 0);
         int length = title.length();
         int cycleLength = length * 2;
         int pos = frame % length;
@@ -118,7 +116,6 @@ public class Scoreboard extends PlayerElement {
         }
 
         frame = (frame + 1) % cycleLength;
-        animationFrames.put(player.getUniqueId(), frame);
 
         return sb.toString();
     }

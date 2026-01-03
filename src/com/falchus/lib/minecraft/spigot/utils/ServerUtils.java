@@ -1,5 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import org.bukkit.Server;
+
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
 import lombok.experimental.UtilityClass;
@@ -14,6 +16,13 @@ public class ServerUtils {
 	 */
 	public static Object getMinecraftServer() {
 		return plugin.getContexts().getNmsAdapter().getMinecraftServer();
+	}
+	
+	/**
+	 * @return {@link Server}
+	 */
+	public static Object getBukkitServer() {
+		return plugin.getContexts().getNmsAdapter().getBukkitServer();
 	}
 	
 	/**
