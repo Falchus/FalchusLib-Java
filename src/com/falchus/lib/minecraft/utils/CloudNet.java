@@ -118,17 +118,31 @@ public class CloudNet {
     }
     
     /**
-     * Gets the "extra" field of the current service.
+     * @return the "extra" of the current service
      */
     public static String getExtra() {
     	return bridgeServiceHelper.extra().get();
     }
     
     /**
-     * Gets the MOTD of the current service.
+     * @return the "extra" of the given service
+     */
+    public static String getExtra(@NonNull String service) {
+    	return getService(service).readProperty(BridgeDocProperties.EXTRA);
+    }
+    
+    /**
+     * @return the MOTD of the current service
      */
     public static String getMotd() {
         return bridgeServiceHelper.motd().get();
+    }
+    
+    /**
+     * @return the MOTD of the given service
+     */
+    public static String getMotd(@NonNull String service) {
+    	return getService(service).readProperty(BridgeDocProperties.MOTD);
     }
     
     /**
@@ -136,6 +150,13 @@ public class CloudNet {
      */
     public static String getState() {
     	return bridgeServiceHelper.state().get();
+    }
+    
+    /**
+     * @return the state of the given service
+     */
+    public static String getState(@NonNull String service) {
+    	return getService(service).readProperty(BridgeDocProperties.STATE);
     }
     
     /**
