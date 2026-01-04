@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import eu.cloudnetservice.driver.document.property.DocProperty;
 import eu.cloudnetservice.driver.event.EventManager;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.driver.provider.CloudServiceFactory;
@@ -157,6 +158,13 @@ public class CloudNet {
      */
     public static String getState(@NonNull String service) {
     	return getService(service).readProperty(BridgeDocProperties.STATE);
+    }
+    
+    /**
+     * @return the property of the given service
+     */
+    public static Object getProperty(@NonNull String service, @NonNull DocProperty<?> property) {
+    	return getService(service).readProperty(property);
     }
     
     /**
