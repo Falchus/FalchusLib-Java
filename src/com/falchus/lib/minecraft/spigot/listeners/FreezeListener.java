@@ -40,21 +40,21 @@ public class FreezeListener implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		
 		if (players.contains(player.getUniqueId())) {
 			Location from = event.getFrom();
 			Location to = event.getTo();
-			if (from.getBlockX() != to.getBlockX() ||
-				from.getBlockZ() != to.getBlockZ()) {
+			if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
+				event.setCancelled(true);
 				event.setTo(from);
 			}
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		
@@ -63,7 +63,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
 		Player player = event.getPlayer();
 		
@@ -72,7 +72,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
 		
@@ -81,7 +81,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onInventoryClick(InventoryClickEvent event) {		
 		if (event.getWhoClicked() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
@@ -90,7 +90,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
@@ -99,7 +99,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
@@ -114,7 +114,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		
@@ -123,7 +123,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		
@@ -132,7 +132,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
 		
@@ -141,7 +141,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
 		
@@ -150,7 +150,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {		
 		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
@@ -159,7 +159,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakEvent event) {
 		if (event.getEntity() instanceof Player player) {
 			if (players.contains(player.getUniqueId())) {
@@ -168,7 +168,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 		Player player = event.getPlayer();
 		
@@ -177,7 +177,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
 		Player player = event.getPlayer();
 		
@@ -186,7 +186,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerShearEntity(PlayerShearEntityEvent event) {
 		Player player = event.getPlayer();
 		
@@ -195,7 +195,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
 		Player player = event.getPlayer();
 		
@@ -204,7 +204,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 		
@@ -213,7 +213,7 @@ public class FreezeListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		
