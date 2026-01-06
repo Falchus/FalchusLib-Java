@@ -76,8 +76,12 @@ public class Scoreboard extends PlayerElement {
 	        	team.addEntry(entry);
 	        }
 	        
-	        String prefix = line.length() > 16 ? line.substring(0, 16) : line;
-	        String suffix = line.length() > 16 ? ChatColor.getLastColors(prefix) + line.substring(16) : "";
+	        String prefix = line;
+	        String suffix = "";
+	        if (prefix.length() > 16) {
+	        	prefix = line.substring(0, 16);
+	        	suffix = ChatColor.getLastColors(prefix) + line.substring(16);
+	        }
 	        team.setPrefix(prefix);
 	        team.setSuffix(suffix);
 
@@ -88,6 +92,9 @@ public class Scoreboard extends PlayerElement {
 	
     private String getTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
     	title = ChatColor.stripColor(title);
+    	if (title.length() > 32) {
+    		title = title.substring(0, 32);
+    	}
     	
         if (titleSecondColor == null) return titleColor + title;
 
