@@ -18,6 +18,7 @@ public class Scoreboard extends PlayerElement {
 
 	private final org.bukkit.scoreboard.Scoreboard scoreboard;
 	private final Objective objective;
+	private List<String> lines;
     private int frame = 0;
 	
 	private Scoreboard(@NonNull Player player) {
@@ -32,39 +33,26 @@ public class Scoreboard extends PlayerElement {
 	 * Updates the scoreboard immediately.
 	 */
 	public void send(@NonNull String title, @NonNull String titleColor, String titleSecondColor, @NonNull List<String> lines) {
-		update(title, titleColor, titleSecondColor, lines);
-	}
-
-	/**
-	 * Updates the scoreboard periodically with dynamic content.
-	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> titleSupplier, @NonNull Supplier<String> titleColorSupplier, Supplier<String> titleSecondColorSupplier, @NonNull Supplier<List<String>> linesSupplier) {
-		super.sendUpdating(intervalTicks, () -> {
-			String title = titleSupplier.get();
-			String titleColor = titleColorSupplier.get();
-			String titleSecondColor = titleSecondColorSupplier.get();
-			List<String> lines = linesSupplier.get();
-			update(title, titleColor, titleSecondColor, lines);
-		});
-	}
-	
-	public void remove() {
-		super.remove();
+		if (this.lines == null || lines.size() != this.lines.size()) {
+			for (Team team : scoreboard.getTeams()) {
+				team.unregister();
+			}
+			for (String entry : scoreboard.getEntries()) {
+				scoreboard.resetScores(entry);
+			}
+		}
+		this.lines = lines;
 		
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-	}
-	
-	private void update(@NonNull String title, @NonNull String titleColor, String titleSecondColor, @NonNull List<String> lines) {
 	    objective.setDisplayName(getTitle(title, titleColor, titleSecondColor));
-
+		
 	    int score = lines.size();
-        for (String line : lines) {
+	    for (String line : lines) {
 	        if (line.isEmpty()) {
 	        	line = "§r";
 	        } else if (line.length() > 32) {
 	            line = line.substring(0, 32);
 	        }
-
+	
 	        String teamName = getClass().getSimpleName() + "_" + score;
 	        Team team = scoreboard.getTeam(teamName);
 	        if (team == null) {
@@ -96,14 +84,34 @@ public class Scoreboard extends PlayerElement {
 	        }
 	        team.setPrefix(prefix);
 	        team.setSuffix(suffix);
-
+	
 	        objective.getScore(entry).setScore(score);
 	        score--;
 	    }
 	}
+
+	/**
+	 * Updates the scoreboard periodically with dynamic content.
+	 */
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> titleSupplier, @NonNull Supplier<String> titleColorSupplier, Supplier<String> titleSecondColorSupplier, @NonNull Supplier<List<String>> linesSupplier) {
+		super.sendUpdating(intervalTicks, () -> {
+			String title = titleSupplier.get();
+			String titleColor = titleColorSupplier.get();
+			String titleSecondColor = titleSecondColorSupplier.get();
+			List<String> lines = linesSupplier.get();
+			send(title, titleColor, titleSecondColor, lines);
+		});
+	}
+	
+	public void remove() {
+		super.remove();
+		
+		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+	}
 	
     private String getTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
     	title = ChatColor.stripColor(title);
+    	if (title.isEmpty()) return "";
     	
         if (titleSecondColor == null) return titleColor + title;
 
