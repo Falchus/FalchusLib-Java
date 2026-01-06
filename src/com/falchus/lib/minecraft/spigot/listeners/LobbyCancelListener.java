@@ -9,10 +9,10 @@ import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -155,7 +155,7 @@ public class LobbyCancelListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
+	public void onEntitySpawn(EntitySpawnEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
