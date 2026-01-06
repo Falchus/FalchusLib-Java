@@ -1,8 +1,6 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -10,7 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Team;
 
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 
@@ -20,14 +18,13 @@ public class Scoreboard extends PlayerElement {
 
 	private final org.bukkit.scoreboard.Scoreboard scoreboard;
 	private final Objective objective;
-	private final Map<Integer, String> lastScores = new HashMap<>();
     private int frame = 0;
 	
 	private Scoreboard(@NonNull Player player) {
 		super(player);
-		this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.objective = scoreboard.registerNewObjective("FalchusLib", "dummy");
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        objective = scoreboard.registerNewObjective("FalchusLib", "dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         player.setScoreboard(scoreboard);
 	}
 	
@@ -58,38 +55,35 @@ public class Scoreboard extends PlayerElement {
 	}
 	
 	private void update(@NonNull String title, @NonNull String titleColor, String titleSecondColor, @NonNull List<String> lines) {
-		title = getTitle(title, titleColor, titleSecondColor);
+	    objective.setDisplayName(getTitle(title, titleColor, titleSecondColor));
 
-	    objective.setDisplayName(title);
-
-	    int scoreValue = lines.size();
-	    Map<Integer, String> newLastScores = new HashMap<>();
-
-	    for (int i = 0; i < lines.size(); i++) {
-	        String newText = lines.get(i);
-	        if (newText.isEmpty()) {
-	            StringBuilder sb = new StringBuilder("§r");
-	            for (int j = 0; j < scoreValue; j++) {
-	                sb.append("§r");
-	            }
-	            newText = sb.toString();
-	        } else if (newText.length() > 40) {
-	            newText = newText.substring(0, 40);
+	    int score = lines.size();
+        for (String line : lines) {
+	        if (line.isEmpty()) {
+	        	line = "§r";
+	        } else if (line.length() > 32) {
+	            line = line.substring(0, 32);
 	        }
 
-	        String oldText = lastScores.get(scoreValue);
-	        if (oldText != null && !oldText.equals(newText)) {
-	            scoreboard.resetScores(oldText);
+	        String teamName = getClass().getSimpleName() + "_" + score;
+	        Team team = scoreboard.getTeam(teamName);
+	        if (team == null) {
+	        	team = scoreboard.registerNewTeam(teamName);
 	        }
+	        
+	        String entry = "§" + Integer.toHexString(score);
+	        if (!team.hasEntry(entry)) {
+	        	team.addEntry(entry);
+	        }
+	        
+	        String prefix = line.length() > 16 ? line.substring(0, 16) : line;
+	        String suffix = line.length() > 16 ? ChatColor.getLastColors(prefix) + line.substring(16) : "";
+	        team.setPrefix(prefix);
+	        team.setSuffix(suffix);
 
-	        Score score = objective.getScore(newText);
-	        score.setScore(scoreValue);
-	        newLastScores.put(scoreValue, newText);
-	        scoreValue--;
+	        objective.getScore(entry).setScore(score);
+	        score--;
 	    }
-
-	    lastScores.clear();
-	    lastScores.putAll(newLastScores);
 	}
 	
     private String getTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
