@@ -168,6 +168,11 @@ public interface NmsAdapter {
 	String getVersion();
 	
 	/**
+	 * @return e.g. 8 for 1.8.8
+	 */
+	int getMinorVersion();
+	
+	/**
 	 * @return BiomeBase[] from a World
 	 */
 	Object[] getWorldBiomes(@NonNull World world);

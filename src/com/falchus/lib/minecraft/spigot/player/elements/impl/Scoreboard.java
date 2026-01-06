@@ -76,11 +76,23 @@ public class Scoreboard extends PlayerElement {
 	        	team.addEntry(entry);
 	        }
 	        
+	        int maxLength = 16;
 	        String prefix = line;
 	        String suffix = "";
 	        if (prefix.length() > 16) {
-	        	prefix = line.substring(0, 16);
-	        	suffix = ChatColor.getLastColors(prefix) + line.substring(16);
+	        	int index = line.charAt(maxLength - 1) == ChatColor.COLOR_CHAR
+	        			? (maxLength - 1) : maxLength;
+	        	prefix = line.substring(0, index);
+	        	String suffixTmp = line.substring(index);
+	        	ChatColor chatColor = null;
+	        	
+	        	if (suffixTmp.length() >= 2 && suffixTmp.charAt(0) == ChatColor.COLOR_CHAR) {
+	        		chatColor = ChatColor.getByChar(suffixTmp.charAt(1));
+	        	}
+	        	
+	        	String color = ChatColor.getLastColors(prefix);
+	        	boolean addColor = chatColor == null || chatColor.isFormat();
+	        	suffix = (addColor ? (color.isEmpty() ? ChatColor.RESET.toString() : color) : "") + suffixTmp;
 	        }
 	        team.setPrefix(prefix);
 	        team.setSuffix(suffix);
@@ -92,9 +104,6 @@ public class Scoreboard extends PlayerElement {
 	
     private String getTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
     	title = ChatColor.stripColor(title);
-    	if (title.length() > 32) {
-    		title = title.substring(0, 32);
-    	}
     	
         if (titleSecondColor == null) return titleColor + title;
 
@@ -118,6 +127,10 @@ public class Scoreboard extends PlayerElement {
 
         frame = (frame + 1) % cycleLength;
 
-        return sb.toString();
+        title = sb.toString();
+    	if (title.length() > 32) {
+    		title = title.substring(0, 32);
+    	}
+        return title;
     }
 }

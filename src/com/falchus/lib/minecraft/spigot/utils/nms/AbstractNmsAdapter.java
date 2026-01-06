@@ -435,11 +435,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     
     @Override
     public Object getBukkitServer() {
-    	try {
-    		return bukkitServer.cast(Bukkit.getServer());
-    	} catch (Exception e) {
-    		throw new RuntimeException(e);
-    	}
+		return bukkitServer.cast(Bukkit.getServer());
     }
     
     @Override
@@ -450,6 +446,18 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     	} catch (Exception e) {
     		throw new RuntimeException(e);
     	}
+    }
+    
+    @Override
+    public int getMinorVersion() {
+		String bukkitVersion = Bukkit.getBukkitVersion();
+		String mc = bukkitVersion.split("-")[0];
+		
+		try {
+			return Integer.parseInt(mc.split("\\.")[1]);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+        }
     }
 	
     @Override

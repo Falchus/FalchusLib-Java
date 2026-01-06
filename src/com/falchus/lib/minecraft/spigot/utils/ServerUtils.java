@@ -31,4 +31,11 @@ public class ServerUtils {
 	public static String getVersion() {
 		return plugin.getContexts().getNmsAdapter().getVersion();
 	}
+	
+	/**
+	 * @return e.g. 8 for 1.8.8
+	 */
+	public static int getMinorVersion() {
+		return plugin.getContexts().getNmsAdapter().getMinorVersion();
+	}
 }
