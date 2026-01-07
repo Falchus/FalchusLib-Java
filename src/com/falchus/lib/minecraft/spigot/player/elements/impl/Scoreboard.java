@@ -93,14 +93,15 @@ public class Scoreboard extends PlayerElement {
 	/**
 	 * Updates the scoreboard periodically with dynamic content.
 	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> titleSupplier, @NonNull Supplier<String> titleColorSupplier, Supplier<String> titleSecondColorSupplier, @NonNull Supplier<List<String>> linesSupplier) {
-		super.sendUpdating(intervalTicks, () -> {
-			String title = titleSupplier.get();
-			String titleColor = titleColorSupplier.get();
-			String titleSecondColor = titleSecondColorSupplier.get();
-			List<String> lines = linesSupplier.get();
-			send(title, titleColor, titleSecondColor, lines);
-		});
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> title, @NonNull Supplier<String> titleColor, Supplier<String> titleSecondColor, @NonNull Supplier<List<String>> lines) {
+		super.sendUpdating(intervalTicks, () ->
+			send(
+				title.get(),
+				titleColor.get(),
+				titleSecondColor != null ? titleSecondColor.get() : null,
+				lines.get()
+			)
+		);
 	}
 	
 	public void remove() {
@@ -122,15 +123,15 @@ public class Scoreboard extends PlayerElement {
         StringBuilder sb = new StringBuilder();
 
         if (frame < length) {
-            sb.append(titleSecondColor);
-            sb.append(title.substring(0, pos + 1));
-            sb.append(titleColor);
-            sb.append(title.substring(pos + 1));
+            sb.append(titleSecondColor)
+            	.append(title.substring(0, pos + 1))
+            	.append(titleColor)
+            	.append(title.substring(pos + 1));
         } else {
-            sb.append(titleColor);
-            sb.append(title.substring(0, pos + 1));
-            sb.append(titleSecondColor);
-            sb.append(title.substring(pos + 1));
+            sb.append(titleColor)
+            	.append(title.substring(0, pos + 1))
+            	.append(titleSecondColor)
+            	.append(title.substring(pos + 1));
         }
 
         frame = (frame + 1) % cycleLength;

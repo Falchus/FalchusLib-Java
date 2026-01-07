@@ -37,11 +37,12 @@ public class Chat extends PlayerElement implements Listener {
 	/**
 	 * Updates periodically.
 	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefixSupplier) {
-		super.sendUpdating(intervalTicks, () -> {
-			String prefix = prefixSupplier.get();
-			send(prefix);
-		});
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix) {
+		super.sendUpdating(intervalTicks, () ->
+			send(
+				prefix.get()
+			)
+		);
 	}
 	
 	/**

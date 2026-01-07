@@ -26,13 +26,14 @@ public class Tablist extends PlayerElement {
 	/**
 	 * Updates the tablist periodically with dynamic content.
 	 */
-	public void sendUpdating(long intervalTicks, Supplier<List<String>> headerSupplier, Supplier<List<String>> footerSupplier, Supplier<String> nameSupplier) {
-		super.sendUpdating(intervalTicks, () -> {
-			List<String> header = headerSupplier.get();
-			List<String> footer = footerSupplier.get();
-			String name = nameSupplier.get(); 
-			send(header, footer, name);
-		});
+	public void sendUpdating(long intervalTicks, Supplier<List<String>> header, Supplier<List<String>> footer, Supplier<String> name) {
+		super.sendUpdating(intervalTicks, () ->
+			send(
+				header != null ? header.get() : null,
+				footer != null ? footer.get() : null,
+				name != null ? name.get() : null
+			)
+		);
 	}
 	
 	public void remove() {
