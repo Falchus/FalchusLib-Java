@@ -32,7 +32,6 @@ public class FalchusLibMinecraftVelocity {
 	private final Metrics.Factory metricsFactory;
 	
 	private static FalchusLibMinecraftVelocity instance;
-	private Contexts contexts;
 	
 	@Inject
 	public FalchusLibMinecraftVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataFolder, Metrics.Factory metricsFactory) {
@@ -51,8 +50,6 @@ public class FalchusLibMinecraftVelocity {
 	@Subscribe
 	public void onProxyInitialize(ProxyInitializeEvent event) {
 		instance = this;
-		contexts = new Contexts();
-		
 		metricsFactory.make(this, 28136);
 	}
 	

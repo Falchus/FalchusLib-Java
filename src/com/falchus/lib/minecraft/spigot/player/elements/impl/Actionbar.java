@@ -21,8 +21,8 @@ public class Actionbar extends PlayerElement {
 	 */
 	public void send(@NonNull String message) {
 		try {
-			Object chatMessage = plugin.getContexts().getNmsAdapter().getChatComponentText().getConstructor(String.class).newInstance(message);
-			Object packet = new NmsPacketBuilder(plugin.getContexts().getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
+			Object chatMessage = plugin.getNmsAdapter().getChatComponentText().getConstructor(String.class).newInstance(message);
+			Object packet = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
 					.withArgs(chatMessage, (byte) 2)
 					.build();
 			PlayerUtils.sendPacket(player, packet);

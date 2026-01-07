@@ -30,7 +30,7 @@ public class LabyModMessageListener implements PluginMessageListener {
 		
 		// LabyMod user joins the server
 		if (key.equals("INFO")) {
-			plugin.getContexts().getClientManager().set(player, Client.LABYMOD);
+			plugin.getClientManager().set(player, Client.LABYMOD);
 			Bukkit.getPluginManager().callEvent(new PlayerClientJoinEvent(player, Client.LABYMOD));
 		}
 	}

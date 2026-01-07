@@ -53,6 +53,6 @@ public class NmsPacketBuilder {
 		if (packet == null) {
 			throw new IllegalStateException("Packet class must be set");
 		}
-		return plugin.getContexts().getNmsAdapter().createPacket(packet, args);
+		return plugin.getNmsAdapter().createPacket(packet, args);
 	}
 }

@@ -36,21 +36,21 @@ public class ItemUtils {
      * Sets a UUID on the given item via NBT.
      */
 	public static ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
-    	return plugin.getContexts().getNmsAdapter().setUUID(item, uuid);
+    	return plugin.getNmsAdapter().setUUID(item, uuid);
     }
 
     /**
      * Retrieves the UUID stores on the given item.
      */
     public static UUID getUUID(@NonNull ItemStack item) {
-    	return plugin.getContexts().getNmsAdapter().getUUID(item);
+    	return plugin.getNmsAdapter().getUUID(item);
     }
     
     /**
      * Removes all NBT tags from the item.
      */
     public static ItemStack clearNBT(@NonNull ItemStack item) {
-    	return plugin.getContexts().getNmsAdapter().clearNBT(item);
+    	return plugin.getNmsAdapter().clearNBT(item);
     }
     
     /**

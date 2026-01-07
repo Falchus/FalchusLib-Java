@@ -36,7 +36,7 @@ public class LunarMessageListener implements Listener {
         // Sending the player's world name to the client is required for some modules
         LunarJsonPacketUtil.sendPacket(player, createUpdatePlayerWorldMessage(player));
  
-        plugin.getContexts().getClientManager().set(player, Client.LUNAR);
+        plugin.getClientManager().set(player, Client.LUNAR);
         Bukkit.getPluginManager().callEvent(new PlayerClientJoinEvent(player, Client.LUNAR));
     }
     

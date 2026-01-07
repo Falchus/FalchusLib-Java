@@ -15,27 +15,27 @@ public class ServerUtils {
 	 * @return MinecraftServer
 	 */
 	public static Object getMinecraftServer() {
-		return plugin.getContexts().getNmsAdapter().getMinecraftServer();
+		return plugin.getNmsAdapter().getMinecraftServer();
 	}
 	
 	/**
 	 * @return {@link Server}
 	 */
 	public static Object getBukkitServer() {
-		return plugin.getContexts().getNmsAdapter().getBukkitServer();
+		return plugin.getNmsAdapter().getBukkitServer();
 	}
 	
 	/**
 	 * @return e.g. "1.8.8"
 	 */
 	public static String getVersion() {
-		return plugin.getContexts().getNmsAdapter().getVersion();
+		return plugin.getNmsAdapter().getVersion();
 	}
 	
 	/**
 	 * @return e.g. 8 for 1.8.8
 	 */
 	public static int getMinorVersion() {
-		return plugin.getContexts().getNmsAdapter().getMinorVersion();
+		return plugin.getNmsAdapter().getMinorVersion();
 	}
 }

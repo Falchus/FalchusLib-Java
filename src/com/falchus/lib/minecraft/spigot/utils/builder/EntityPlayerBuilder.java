@@ -63,7 +63,7 @@ public class EntityPlayerBuilder {
 	 * Registers a callback to be executed when a player interacts with this EntityPlayer.
 	 */
 	public EntityPlayerBuilder withInteractListener(@NonNull Consumer<Player> onPlayerInteract) {
-		plugin.getContexts().getEntityPlayerListener().actions.put(uuid, onPlayerInteract);
+		plugin.getEntityPlayerListener().actions.put(uuid, onPlayerInteract);
 		return this;
 	}
 	
@@ -98,7 +98,7 @@ public class EntityPlayerBuilder {
 		}
 		entityPlayer.setInvisible(invisible);
 		
-		plugin.getContexts().getEntityPlayerListener().players.put(uuid, entityPlayer);
+		plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
 		
 		if (lookAtPlayer) {
 			new BukkitRunnable() {

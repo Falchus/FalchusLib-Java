@@ -28,63 +28,63 @@ public class PlayerUtils {
 	 * Sends a raw NMS packet to a player.
 	 */
 	public static void sendPacket(@NonNull Player player, @NonNull Object packet) {
-		plugin.getContexts().getNmsAdapter().sendPacket(player, packet);
+		plugin.getNmsAdapter().sendPacket(player, packet);
 	}
 	
 	/**
 	 * Creates an instance of a packet.
 	 */
 	public static Object createPacket(@NonNull Class<?> packetClass, Object... constructorArgs) {
-		return plugin.getContexts().getNmsAdapter().createPacket(packetClass, constructorArgs);
+		return plugin.getNmsAdapter().createPacket(packetClass, constructorArgs);
 	}
 	
 	/**
 	 * Sends a title and/or subtitle to a player.
 	 */
 	public static void sendTitle(@NonNull Player player, String title, String subtitle) {
-		plugin.getContexts().getNmsAdapter().sendTitle(player, title, subtitle);
+		plugin.getNmsAdapter().sendTitle(player, title, subtitle);
 	}
 	
 	/**
 	 * Sends a tablist to a player.
 	 */
 	public static void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {
-		plugin.getContexts().getNmsAdapter().sendTablist(player, header, footer, name);
+		plugin.getNmsAdapter().sendTablist(player, header, footer, name);
 	}
 	
 	/**
 	 * Sends a bossbar to a player.
 	 */
 	public static void sendBossbar(@NonNull Player player, @NonNull String title, double progress) {
-		plugin.getContexts().getNmsAdapter().sendBossbar(player, title, progress);
+		plugin.getNmsAdapter().sendBossbar(player, title, progress);
 	}
 	
 	/**
 	 * Removes a bossbar from a player.
 	 */
 	public static void removeBossbar(@NonNull Player player) {
-		plugin.getContexts().getNmsAdapter().removeBossbar(player);
+		plugin.getNmsAdapter().removeBossbar(player);
 	}
 	
 	/**
 	 * Plays a sound to a player.
 	 */
 	public static void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
-		plugin.getContexts().getNmsAdapter().playSound(player, location, sound, volume, pitch);
+		plugin.getNmsAdapter().playSound(player, location, sound, volume, pitch);
 	}
 	
 	/**
 	 * Freezes a player.
 	 */
 	public static void freeze(@NonNull Player player) {
-		plugin.getContexts().getFreezeListener().players.add(player.getUniqueId());
+		plugin.getFreezeListener().players.add(player.getUniqueId());
 	}
 	
 	/**
 	 * Unfreezes a player.
 	 */
 	public static void unfreeze(@NonNull Player player) {
-		plugin.getContexts().getFreezeListener().players.remove(player.getUniqueId());
+		plugin.getFreezeListener().players.remove(player.getUniqueId());
 	}
 	
 	/**
@@ -104,14 +104,14 @@ public class PlayerUtils {
 	 * Sends the end credits screen to a player.
 	 */
 	public static void sendEndCredits(@NonNull Player player) {
-		plugin.getContexts().getNmsAdapter().sendEndCredits(player);
+		plugin.getNmsAdapter().sendEndCredits(player);
 	}
 	
 	/**
 	 * Vanishes a player.
 	 */
 	public static void vanish(@NonNull Player player) {
-		if (plugin.getContexts().getVanishListener().players.add(player.getUniqueId())) {
+		if (plugin.getVanishListener().players.add(player.getUniqueId())) {
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				onlinePlayer.hidePlayer(player);
 			}
@@ -122,7 +122,7 @@ public class PlayerUtils {
 	 * Unvanishes a player.
 	 */
 	public static void unvanish(@NonNull Player player) {
-		if (plugin.getContexts().getVanishListener().players.remove(player.getUniqueId())) {
+		if (plugin.getVanishListener().players.remove(player.getUniqueId())) {
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				onlinePlayer.showPlayer(player);
 			}
@@ -133,69 +133,69 @@ public class PlayerUtils {
 	 * @return EntityPlayer from Player
 	 */
 	public Object getEntityPlayer(@NonNull Player player) {
-		return plugin.getContexts().getNmsAdapter().getEntityPlayer(player);
+		return plugin.getNmsAdapter().getEntityPlayer(player);
 	}
 	
 	/**
 	 * @return GameProfile from EntityPlayer
 	 */
 	public GameProfile getProfile(@NonNull Object entityPlayer) {
-		return plugin.getContexts().getNmsAdapter().getProfile(entityPlayer);
+		return plugin.getNmsAdapter().getProfile(entityPlayer);
 	}
 	
 	/**
 	 * Sets a custom skin.
 	 */
 	public static void setSkin(@NonNull Player player, @NonNull UUID uuid) {
-		plugin.getContexts().getNmsAdapter().setSkin(player, uuid);
+		plugin.getNmsAdapter().setSkin(player, uuid);
 	}
 	
 	/**
 	 * Resets the skin back to the original.
 	 */
 	public static void resetSkin(@NonNull Player player) {
-		plugin.getContexts().getNmsAdapter().resetSkin(player);
+		plugin.getNmsAdapter().resetSkin(player);
 	}
 	
 	/**
 	 * Sets a custom name.
 	 */
 	public static void setName(@NonNull Player player, @NonNull String name) {
-		plugin.getContexts().getNmsAdapter().setName(player, name);
+		plugin.getNmsAdapter().setName(player, name);
 	}
 	
 	/**
 	 * Resets the name back to the original.
 	 */
 	public static void resetName(@NonNull Player player) {
-		plugin.getContexts().getNmsAdapter().resetName(player);
+		plugin.getNmsAdapter().resetName(player);
 	}
 	
 	/**
 	 * Forces clients to reload the player's GameProfile.
 	 */
 	public static void refresh(@NonNull Player player) {
-		plugin.getContexts().getNmsAdapter().refresh(player);
+		plugin.getNmsAdapter().refresh(player);
 	}
 	
 	/**
 	 * Adds a EntityPlayer.
 	 */
 	public static void addEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		plugin.getContexts().getNmsAdapter().addEntityPlayer(player, entityPlayer);
+		plugin.getNmsAdapter().addEntityPlayer(player, entityPlayer);
 	}
 	
 	/**
 	 * Removes a EntityPlayer.
 	 */
 	public static void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		plugin.getContexts().getNmsAdapter().removeEntityPlayer(player, entityPlayer);
+		plugin.getNmsAdapter().removeEntityPlayer(player, entityPlayer);
 	}
 	
 	/**
 	 * Spawns a EntityPlayer.
 	 */
 	public static void spawnEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		plugin.getContexts().getNmsAdapter().spawnEntityPlayer(player, entityPlayer);
+		plugin.getNmsAdapter().spawnEntityPlayer(player, entityPlayer);
 	}
 }

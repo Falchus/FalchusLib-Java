@@ -15,20 +15,20 @@ public class PropertyUtils {
 	 * @return PropertyManager
 	 */
 	public static Object getPropertyManager() {
-		return plugin.getContexts().getNmsAdapter().getPropertyManager();
+		return plugin.getNmsAdapter().getPropertyManager();
 	}
 
 	/**
 	 * Saves the properties.
 	 */
 	public static void saveProperties() {
-		plugin.getContexts().getNmsAdapter().saveProperties();
+		plugin.getNmsAdapter().saveProperties();
 	}
 	
 	/**
 	 * Set a property value.
 	 */
 	public static void setProperty(@NonNull Property property, @NonNull Object value) {
-		plugin.getContexts().getNmsAdapter().setProperty(property, value);
+		plugin.getNmsAdapter().setProperty(property, value);
 	}
 }

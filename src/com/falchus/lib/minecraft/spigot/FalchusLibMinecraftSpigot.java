@@ -2,22 +2,52 @@ package com.falchus.lib.minecraft.spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.falchus.lib.minecraft.spigot.listeners.EntityPlayerListener;
+import com.falchus.lib.minecraft.spigot.listeners.FreezeListener;
+import com.falchus.lib.minecraft.spigot.listeners.ItemListener;
+import com.falchus.lib.minecraft.spigot.listeners.LobbyCancelListener;
+import com.falchus.lib.minecraft.spigot.listeners.VanishListener;
+import com.falchus.lib.minecraft.spigot.listeners.message.LabyModMessageListener;
+import com.falchus.lib.minecraft.spigot.listeners.message.LunarMessageListener;
+import com.falchus.lib.minecraft.spigot.manager.ClientManager;
 import com.falchus.lib.minecraft.spigot.utils.Metrics;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsAdapter;
+import com.falchus.lib.minecraft.spigot.utils.nms.NmsProvider;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FalchusLibMinecraftSpigot extends JavaPlugin {
 
-	private static FalchusLibMinecraftSpigot instance;
-	private Contexts contexts;
+	static FalchusLibMinecraftSpigot instance;
+	
+	LabyModMessageListener labyModMessageListener;
+	LunarMessageListener lunarMessageListener;
+	EntityPlayerListener entityPlayerListener;
+	FreezeListener freezeListener;
+	ItemListener itemListener;
+	LobbyCancelListener lobbyCancelListener;
+	VanishListener vanishListener;
+	ClientManager clientManager;
+	NmsAdapter nmsAdapter;
 	
 	@Override
 	public void onEnable() {
 		instance = this;
-		contexts = new Contexts();
-		
 		new Metrics(this, 28050);
+		
+		labyModMessageListener = new LabyModMessageListener();
+		lunarMessageListener = new LunarMessageListener();
+		entityPlayerListener = new EntityPlayerListener();
+		freezeListener = new FreezeListener();
+		itemListener = new ItemListener();
+		lobbyCancelListener = new LobbyCancelListener();
+		vanishListener = new VanishListener();
+		clientManager = new ClientManager();
+		nmsAdapter = NmsProvider.get();
 	}
 	
 	public static FalchusLibMinecraftSpigot getInstance() {

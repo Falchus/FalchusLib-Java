@@ -25,20 +25,20 @@ public class WorldUtils {
 	 * @return World Biomes
 	 */
 	public static Object[] getWorldBiomes(@NonNull World world) {
-		return plugin.getContexts().getNmsAdapter().getWorldBiomes(world);
+		return plugin.getNmsAdapter().getWorldBiomes(world);
 	}
 	
 	/**
 	 * @return BiomeBase from a Biome
 	 */
 	public static Object getNmsBiome(Biome biome) {
-        return plugin.getContexts().getNmsAdapter().getNmsBiome(biome);
+        return plugin.getNmsAdapter().getNmsBiome(biome);
     }
 	
 	/**
 	 * @return id from a Biome
 	 */
 	public static int getBiomeId(Biome biome) {
-		return plugin.getContexts().getNmsAdapter().getBiomeId(biome);
+		return plugin.getNmsAdapter().getBiomeId(biome);
 	}
 }
