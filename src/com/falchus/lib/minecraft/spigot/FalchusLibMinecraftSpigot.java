@@ -33,6 +33,8 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		instance = this;
 		new Metrics(this, 28050);
 		
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+		
 		labyModMessageListener = new LabyModMessageListener();
 		lunarMessageListener = new LunarMessageListener();
 		entityPlayerListener = new EntityPlayerListener();

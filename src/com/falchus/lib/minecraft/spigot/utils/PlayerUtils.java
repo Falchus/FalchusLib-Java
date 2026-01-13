@@ -11,10 +11,13 @@ import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -197,5 +200,19 @@ public class PlayerUtils {
 	 */
 	public static void spawnEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
 		plugin.getNmsAdapter().spawnEntityPlayer(player, entityPlayer);
+	}
+	
+	/**
+	 * Connects the player to a proxy server.
+	 * via BungeeCord messaging
+	 */
+	@SneakyThrows
+	public static void connectToServer(@NonNull Player player, @NonNull String server) {
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		
+		out.writeUTF("Connect");
+		out.writeUTF(server);
+		
+		player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
 	}
 }
