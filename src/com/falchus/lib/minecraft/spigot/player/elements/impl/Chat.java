@@ -59,6 +59,7 @@ public class Chat extends PlayerElement implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+		if (!event.getPlayer().equals(player)) return;
 		event.setFormat(prefix + "%2$s");
 	}
 }
