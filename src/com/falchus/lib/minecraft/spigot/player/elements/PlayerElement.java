@@ -11,25 +11,50 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Abstract base class for player-related elements.
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public abstract class PlayerElement {
 
 	protected final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
-	@NonNull protected final Player player;
+	protected final Player player;
 	
     private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new HashMap<>();
     private static final Map<Class<? extends PlayerElement>, Map<UUID, BukkitTask>> tasks = new HashMap<>();
+    
+    protected Runnable updateRunnable;
 	
     /**
      * Sends the element to the player.
      */
 	public void send() {}
+	
+	/**
+	 * Updates the element manually.
+	 */
+	public void update() {
+		if (updateRunnable == null) return;
+		
+		if (!player.isOnline()) {
+			remove();
+			return;
+		}
+		updateRunnable.run();
+	}
+	
+	/**
+	 * Updates all online players manually.
+	 */
+	public static <T extends PlayerElement> void updateAll(@NonNull Class<T> clazz) {
+		Map<UUID, PlayerElement> map = instances.get(clazz);
+		if (map == null) return;
+		
+		map.values().forEach(PlayerElement::update);
+	}
 	
 	/**
 	 * Sends the element to the player repeatedly with a fixed interval.

@@ -16,9 +16,14 @@ import lombok.NonNull;
 
 public class Scoreboard extends PlayerElement {
 
+	private Supplier<String> titleSupplier;
+	private Supplier<String> titleColorSupplier;
+	private Supplier<String> titleSecondColorSupplier;
+	private Supplier<List<String>> linesSupplier;
+	private List<String> lastLines;
+	
 	private final org.bukkit.scoreboard.Scoreboard scoreboard;
 	private final Objective objective;
-	private List<String> lines;
     private int frame = 0;
 	
 	private Scoreboard(@NonNull Player player) {
@@ -32,62 +37,75 @@ public class Scoreboard extends PlayerElement {
 	/**
 	 * Updates the scoreboard immediately.
 	 */
-	public void send(@NonNull String title, @NonNull String titleColor, String titleSecondColor, @NonNull List<String> lines) {
-		if (this.lines == null || lines.size() != this.lines.size()) {
-			for (Team team : scoreboard.getTeams()) {
-				team.unregister();
-			}
-			for (String entry : scoreboard.getEntries()) {
-				scoreboard.resetScores(entry);
-			}
-		}
-		this.lines = lines;
+	public void send(@NonNull Supplier<String> title, @NonNull Supplier<String> titleColor, Supplier<String> titleSecondColor, @NonNull Supplier<List<String>> lines) {
+		titleSupplier = title;
+		titleColorSupplier = titleColor;
+		titleSecondColorSupplier = titleSecondColor;
+		linesSupplier = lines;
 		
-	    objective.setDisplayName(getTitle(title, titleColor, titleSecondColor));
+		updateRunnable = () -> {
+			String newTitle = titleSupplier.get();
+			String newTitleColor = titleColorSupplier.get();
+			String newTitleSecondColor = titleSecondColorSupplier.get();
+			List<String> newLines = linesSupplier.get();
+			
+			if (lastLines == null || lastLines.size() != newLines.size()) {
+				for (Team team : scoreboard.getTeams()) {
+					team.unregister();
+				}
+				for (String entry : scoreboard.getEntries()) {
+					scoreboard.resetScores(entry);
+				}
+			}
+			lastLines = newLines;
+			
+		    objective.setDisplayName(getTitle(newTitle, newTitleColor, newTitleSecondColor));
+			
+		    int score = newLines.size();
+		    for (String line : newLines) {
+		        if (line.isEmpty()) {
+		        	line = "§r";
+		        } else if (line.length() > 32) {
+		            line = line.substring(0, 32);
+		        }
 		
-	    int score = lines.size();
-	    for (String line : lines) {
-	        if (line.isEmpty()) {
-	        	line = "§r";
-	        } else if (line.length() > 32) {
-	            line = line.substring(0, 32);
-	        }
-	
-	        String teamName = getClass().getSimpleName() + "_" + score;
-	        Team team = scoreboard.getTeam(teamName);
-	        if (team == null) {
-	        	team = scoreboard.registerNewTeam(teamName);
-	        }
-	        
-	        String entry = "§" + Integer.toHexString(score);
-	        if (!team.hasEntry(entry)) {
-	        	team.addEntry(entry);
-	        }
-	        
-	        int maxLength = 16;
-	        String prefix = line;
-	        String suffix = "";
-	        if (prefix.length() > 16) {
-	        	int index = line.charAt(maxLength - 1) == ChatColor.COLOR_CHAR
-	        			? (maxLength - 1) : maxLength;
-	        	prefix = line.substring(0, index);
-	        	String suffixTmp = line.substring(index);
-	        	ChatColor chatColor = null;
-	        	
-	        	if (suffixTmp.length() >= 2 && suffixTmp.charAt(0) == ChatColor.COLOR_CHAR) {
-	        		chatColor = ChatColor.getByChar(suffixTmp.charAt(1));
-	        	}
-	        	
-	        	String color = ChatColor.getLastColors(prefix);
-	        	boolean addColor = chatColor == null || chatColor.isFormat();
-	        	suffix = (addColor ? (color.isEmpty() ? ChatColor.RESET.toString() : color) : "") + suffixTmp;
-	        }
-	        team.setPrefix(prefix);
-	        team.setSuffix(suffix);
-	
-	        objective.getScore(entry).setScore(score);
-	        score--;
-	    }
+		        String teamName = getClass().getSimpleName() + "_" + score;
+		        Team team = scoreboard.getTeam(teamName);
+		        if (team == null) {
+		        	team = scoreboard.registerNewTeam(teamName);
+		        }
+		        
+		        String entry = "§" + Integer.toHexString(score);
+		        if (!team.hasEntry(entry)) {
+		        	team.addEntry(entry);
+		        }
+		        
+		        int maxLength = 16;
+		        String prefix = line;
+		        String suffix = "";
+		        if (prefix.length() > 16) {
+		        	int index = line.charAt(maxLength - 1) == ChatColor.COLOR_CHAR
+		        			? (maxLength - 1) : maxLength;
+		        	prefix = line.substring(0, index);
+		        	String suffixTmp = line.substring(index);
+		        	ChatColor chatColor = null;
+		        	
+		        	if (suffixTmp.length() >= 2 && suffixTmp.charAt(0) == ChatColor.COLOR_CHAR) {
+		        		chatColor = ChatColor.getByChar(suffixTmp.charAt(1));
+		        	}
+		        	
+		        	String color = ChatColor.getLastColors(prefix);
+		        	boolean addColor = chatColor == null || chatColor.isFormat();
+		        	suffix = (addColor ? (color.isEmpty() ? ChatColor.RESET.toString() : color) : "") + suffixTmp;
+		        }
+		        team.setPrefix(prefix);
+		        team.setSuffix(suffix);
+		
+		        objective.getScore(entry).setScore(score);
+		        score--;
+		    }
+		};
+		update();
 	}
 
 	/**
@@ -96,10 +114,10 @@ public class Scoreboard extends PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> title, @NonNull Supplier<String> titleColor, Supplier<String> titleSecondColor, @NonNull Supplier<List<String>> lines) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				title.get(),
-				titleColor.get(),
-				titleSecondColor != null ? titleSecondColor.get() : null,
-				lines.get()
+				title,
+				titleColor,
+				titleSecondColor,
+				lines
 			)
 		);
 	}

@@ -18,6 +18,11 @@ import lombok.NonNull;
 
 public class Nametag extends PlayerElement {
 	
+	private Supplier<String> prefixSupplier;
+	private Supplier<String> suffixSupplier;
+	private String lastPrefix = "";
+	private String lastSuffix = "";
+	
 	private final Scoreboard scoreboard;
 	private Team team;
 	
@@ -31,9 +36,6 @@ public class Nametag extends PlayerElement {
 	private Object create;
 	private Object update;
 	private Object remove;
-	
-	private String lastPrefix = "";
-	private String lastSuffix = "";
 	
 	private Nametag(@NonNull Player player) {
 		super(player);
@@ -84,22 +86,31 @@ public class Nametag extends PlayerElement {
 	/**
 	 * Sets a one-time prefix and suffix.
 	 */
-	public void send(@NonNull String prefix, @NonNull String suffix) {
-		if (!prefix.equals(lastPrefix)) {
-	        ReflectionUtils.setField(create, prefixField, prefix);
-	        ReflectionUtils.setField(update, prefixField, prefix);
-	        lastPrefix = prefix;
-		}
-		if (!suffix.equals(lastSuffix)) {
-	        ReflectionUtils.setField(create, suffixField, suffix);
-	        ReflectionUtils.setField(update, suffixField, suffix);
-	        lastSuffix = suffix;
-		}
-        
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        	PlayerUtils.sendPacket(onlinePlayer, create);
-        	PlayerUtils.sendPacket(onlinePlayer, update);
-        }
+	public void send(@NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
+		prefixSupplier = prefix;
+		suffixSupplier = suffix;
+		
+		updateRunnable = () -> {
+			String newPrefix = prefixSupplier.get();
+			String newSuffix = suffixSupplier.get();
+			
+			if (!newPrefix.equals(lastPrefix)) {
+		        ReflectionUtils.setField(create, prefixField, newPrefix);
+		        ReflectionUtils.setField(update, prefixField, newPrefix);
+		        lastPrefix = newPrefix;
+			}
+			if (!newSuffix.equals(lastSuffix)) {
+		        ReflectionUtils.setField(create, suffixField, newSuffix);
+		        ReflectionUtils.setField(update, suffixField, newSuffix);
+		        lastSuffix = newSuffix;
+			}
+			
+	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+	        	PlayerUtils.sendPacket(onlinePlayer, create);
+	        	PlayerUtils.sendPacket(onlinePlayer, update);
+	        }
+		};
+		update();
 	}
 	
 	/**
@@ -108,8 +119,8 @@ public class Nametag extends PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				prefix.get(),
-				suffix.get()
+				prefix,
+				suffix
 			)
 		);
 	}

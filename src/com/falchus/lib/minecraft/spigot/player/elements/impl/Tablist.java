@@ -12,6 +12,10 @@ import lombok.NonNull;
 
 public class Tablist extends PlayerElement {
 	
+	private Supplier<List<String>> headerSupplier;
+	private Supplier<List<String>> footerSupplier;
+	private Supplier<String> nameSupplier;
+	
 	private Tablist(@NonNull Player player) {
 		super(player);
 	}
@@ -19,8 +23,19 @@ public class Tablist extends PlayerElement {
 	/**
 	 * Sends a custom header and footer.
 	 */
-	public void send(List<String> header, List<String> footer, String name) {
-		PlayerUtils.sendTablist(player, header, footer, name);
+	public void send(Supplier<List<String>> header, Supplier<List<String>> footer, Supplier<String> name) {
+		headerSupplier = header;
+		footerSupplier = footer;
+		nameSupplier = name;
+		
+		updateRunnable = () -> {
+			List<String> newHeader = headerSupplier != null ? headerSupplier.get() : null;
+			List<String> newFooter = footerSupplier != null ? footerSupplier.get() : null;
+			String newName = nameSupplier != null ? nameSupplier.get() : null;
+			
+			PlayerUtils.sendTablist(player, newHeader, newFooter, newName);
+		};
+		update();
 	}
 	
 	/**
@@ -29,9 +44,9 @@ public class Tablist extends PlayerElement {
 	public void sendUpdating(long intervalTicks, Supplier<List<String>> header, Supplier<List<String>> footer, Supplier<String> name) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				header != null ? header.get() : null,
-				footer != null ? footer.get() : null,
-				name != null ? name.get() : null
+				header,
+				footer,
+				name
 			)
 		);
 	}

@@ -15,7 +15,9 @@ import lombok.NonNull;
 
 public class Chat extends PlayerElement implements Listener {
 
-	private String prefix;
+	private Supplier<String> prefixSupplier;
+	private String lastPrefix = "";
+	
 	private boolean registered = false;
 	
 	private Chat(@NonNull Player player) {
@@ -25,8 +27,17 @@ public class Chat extends PlayerElement implements Listener {
 	/**
 	 * Sets one-time.
 	 */
-	public void send(@NonNull String prefix) {
-		this.prefix = prefix;
+	public void send(@NonNull Supplier<String> prefix) {
+		prefixSupplier = prefix;
+		
+		updateRunnable = () -> {
+			String newPrefix = prefixSupplier.get();
+			
+			if (!newPrefix.equals(lastPrefix)) {
+				lastPrefix = newPrefix;
+			}
+		};
+		update();
 		
 		if (!registered) {
 			Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -40,7 +51,7 @@ public class Chat extends PlayerElement implements Listener {
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				prefix.get()
+				prefix
 			)
 		);
 	}
@@ -60,6 +71,6 @@ public class Chat extends PlayerElement implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
 		if (!event.getPlayer().equals(player)) return;
-		event.setFormat(prefix + "%2$s");
+		event.setFormat(prefixSupplier.get() + "%2$s");
 	}
 }

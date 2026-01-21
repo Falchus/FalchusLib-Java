@@ -11,8 +11,9 @@ import lombok.NonNull;
 
 public class Bossbar extends PlayerElement {
 
-	private String message;
-    
+	private Supplier<String> messageSupplier;
+	private Supplier<Double> progressSupplier;
+	
 	private Bossbar(@NonNull Player player) {
     	super(player);
     }
@@ -20,10 +21,17 @@ public class Bossbar extends PlayerElement {
 	/**
 	 * Sends a one-time Bossbar message.
 	 */
-	public void send(@NonNull String message, double progress) {
-		this.message = message;
-		
-		PlayerUtils.sendBossbar(player, message, progress);
+	public void send(@NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
+        messageSupplier = message;
+        progressSupplier = progress;
+        
+        updateRunnable = () -> {
+        	String newMessage = messageSupplier.get();
+        	Double newProgress = progressSupplier.get();
+        	
+    		PlayerUtils.sendBossbar(player, newMessage, newProgress);
+        };
+        update();
 	}
 	
 	/**
@@ -32,8 +40,8 @@ public class Bossbar extends PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				message.get(),
-				progress.get()
+				message,
+				progress
 			)
 		);
 	}
@@ -44,6 +52,7 @@ public class Bossbar extends PlayerElement {
 	@Override
 	public void remove() {
 		super.remove();
+		
 		PlayerUtils.removeBossbar(player);
 	}
 	
@@ -51,6 +60,9 @@ public class Bossbar extends PlayerElement {
 	 * Sets the health/progress of the Bossbar.
 	 */
 	public void setProgress(double progress) {
-		send(message, progress);
+		send(
+			messageSupplier,
+			() -> progress
+		);
 	}
 }

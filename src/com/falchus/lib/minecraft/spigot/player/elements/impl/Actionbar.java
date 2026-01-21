@@ -11,6 +11,8 @@ import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 import lombok.NonNull;
 
 public class Actionbar extends PlayerElement {
+	
+	private Supplier<String> messageSupplier;
 
 	private Actionbar(@NonNull Player player) {
 		super(player);
@@ -19,16 +21,23 @@ public class Actionbar extends PlayerElement {
 	/**
 	 * Sends a one-time action bar message.
 	 */
-	public void send(@NonNull String message) {
-		try {
-			Object chatMessage = plugin.getNmsAdapter().getChatComponentText().getConstructor(String.class).newInstance(message);
-			Object packet = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
-					.withArgs(chatMessage, (byte) 2)
-					.build();
-			PlayerUtils.sendPacket(player, packet);
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
+	public void send(@NonNull Supplier<String> message) {
+		messageSupplier = message;
+		
+		updateRunnable = () -> {
+			String newMessage = messageSupplier.get();
+			
+			try {
+				Object chatMessage = plugin.getNmsAdapter().getChatComponentText().getConstructor(String.class).newInstance(newMessage);
+				Object packet = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
+						.withArgs(chatMessage, (byte) 2)
+						.build();
+				PlayerUtils.sendPacket(player, packet);
+			} catch (Exception e) {
+		        throw new RuntimeException(e);
+		    }
+		};
+		update();
 	}
 	
 	/**
@@ -37,7 +46,7 @@ public class Actionbar extends PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				message.get()
+				message
 			)
 		);
 	}
