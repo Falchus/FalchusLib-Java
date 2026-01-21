@@ -22,7 +22,7 @@ public class Scoreboard extends PlayerElement {
 	private Supplier<List<String>> linesSupplier;
 	private List<String> lastLines;
 	
-	private final org.bukkit.scoreboard.Scoreboard scoreboard;
+	public final org.bukkit.scoreboard.Scoreboard scoreboard;
 	private final Objective objective;
     private int frame = 0;
 	
@@ -126,6 +126,13 @@ public class Scoreboard extends PlayerElement {
 		super.remove();
 		
 		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+	}
+
+	/**
+	 * Sets the title of the Scoreboard.
+	 */
+	public void setTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
+		objective.setDisplayName(getTitle(title, titleColor, titleSecondColor));
 	}
 	
     private String getTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {

@@ -28,6 +28,11 @@ public class Chat extends PlayerElement implements Listener {
 	 * Sets one-time.
 	 */
 	public void send(@NonNull Supplier<String> prefix) {
+		if (!registered) {
+			Bukkit.getPluginManager().registerEvents(this, plugin);
+			registered = true;
+		}
+		
 		prefixSupplier = prefix;
 		
 		updateRunnable = () -> {
@@ -38,11 +43,6 @@ public class Chat extends PlayerElement implements Listener {
 			}
 		};
 		update();
-		
-		if (!registered) {
-			Bukkit.getPluginManager().registerEvents(this, plugin);
-			registered = true;
-		}
 	}
 	
 	/**
