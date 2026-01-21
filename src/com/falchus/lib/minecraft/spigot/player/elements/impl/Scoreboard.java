@@ -46,7 +46,7 @@ public class Scoreboard extends PlayerElement {
 		updateRunnable = () -> {
 			String newTitle = titleSupplier.get();
 			String newTitleColor = titleColorSupplier.get();
-			String newTitleSecondColor = titleSecondColorSupplier.get();
+			String newTitleSecondColor = titleSecondColorSupplier != null ? titleSecondColorSupplier.get() : null;
 			List<String> newLines = linesSupplier.get();
 			
 			if (lastLines == null || lastLines.size() != newLines.size()) {
