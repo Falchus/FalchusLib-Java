@@ -33,7 +33,7 @@ public class Chat extends PlayerElement implements Listener {
 		updateRunnable = () -> {
 			String newPrefix = prefixSupplier.get();
 			
-			if (!newPrefix.equals(lastPrefix)) {
+			if (lastPrefix == "" || !newPrefix.equals(lastPrefix)) {
 				lastPrefix = newPrefix;
 			}
 		};
