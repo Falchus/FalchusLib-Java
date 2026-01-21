@@ -32,9 +32,14 @@ public class Nametag extends PlayerElement {
 	private Object update;
 	private Object remove;
 	
+	private String lastPrefix = "";
+	private String lastSuffix = "";
+	
 	private Nametag(@NonNull Player player) {
 		super(player);
-		this.scoreboard = player.getScoreboard() != null ? player.getScoreboard() : Bukkit.getScoreboardManager().getNewScoreboard();
+		scoreboard = player.getScoreboard() != null
+				? player.getScoreboard()
+				: Bukkit.getScoreboardManager().getNewScoreboard();
 		
 		Team team = scoreboard.getTeam(player.getName());
 		if (team == null) {
@@ -47,24 +52,30 @@ public class Nametag extends PlayerElement {
 		
 		player.setScoreboard(scoreboard);
 		
-        HashSet<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
+		HashSet<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
 
-        create = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam")
-        		.build();
+        create = new NmsPacketBuilder(
+        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+        	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+        ).build();
         ReflectionUtils.setField(create, nameField, player.getName());
         ReflectionUtils.setField(create, displayNameField, player.getName());
         ReflectionUtils.setField(create, playersField, entries);
         ReflectionUtils.setField(create, modeField, 0);
 
-        update = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam")
-        		.build();
+        update = new NmsPacketBuilder(
+            	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+            	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+            ).build();
         ReflectionUtils.setField(update, nameField, player.getName());
         ReflectionUtils.setField(update, displayNameField, player.getName());
         ReflectionUtils.setField(update, playersField, entries);
         ReflectionUtils.setField(update, modeField, 2);
         
-        remove = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam")
-        		.build();
+        remove = new NmsPacketBuilder(
+        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+        	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+        ).build();
         ReflectionUtils.setField(remove, nameField, player.getName());
         ReflectionUtils.setField(remove, playersField, entries);
         ReflectionUtils.setField(remove, modeField, 4);
@@ -74,7 +85,21 @@ public class Nametag extends PlayerElement {
 	 * Sets a one-time prefix and suffix.
 	 */
 	public void send(@NonNull String prefix, @NonNull String suffix) {
-		update(prefix, suffix);
+		if (!prefix.equals(lastPrefix)) {
+	        ReflectionUtils.setField(create, prefixField, prefix);
+	        ReflectionUtils.setField(update, prefixField, prefix);
+	        lastPrefix = prefix;
+		}
+		if (!suffix.equals(lastSuffix)) {
+	        ReflectionUtils.setField(create, suffixField, suffix);
+	        ReflectionUtils.setField(update, suffixField, suffix);
+	        lastSuffix = suffix;
+		}
+        
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        	PlayerUtils.sendPacket(onlinePlayer, create);
+        	PlayerUtils.sendPacket(onlinePlayer, update);
+        }
 	}
 	
 	/**
@@ -82,23 +107,11 @@ public class Nametag extends PlayerElement {
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
 		super.sendUpdating(intervalTicks, () ->
-			update(
+			send(
 				prefix.get(),
 				suffix.get()
 			)
 		);
-	}
-	
-	private void update(@NonNull String prefix, @NonNull String suffix) {
-        ReflectionUtils.setField(create, prefixField, prefix);
-        ReflectionUtils.setField(create, suffixField, suffix);
-        ReflectionUtils.setField(update, prefixField, prefix);
-        ReflectionUtils.setField(update, suffixField, suffix);
-        
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        	PlayerUtils.sendPacket(onlinePlayer, create);
-        	PlayerUtils.sendPacket(onlinePlayer, update);
-        }
 	}
 	
 	public void remove() {
