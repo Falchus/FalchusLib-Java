@@ -94,12 +94,12 @@ public class Nametag extends PlayerElement {
 			String newPrefix = prefixSupplier.get();
 			String newSuffix = suffixSupplier.get();
 			
-			if (lastPrefix == "" || !newPrefix.equals(lastPrefix)) {
+			if (!newPrefix.equals(lastPrefix)) {
 		        ReflectionUtils.setField(create, prefixField, newPrefix);
 		        ReflectionUtils.setField(update, prefixField, newPrefix);
 		        lastPrefix = newPrefix;
 			}
-			if (lastSuffix == "" || !newSuffix.equals(lastSuffix)) {
+			if (!newSuffix.equals(lastSuffix)) {
 		        ReflectionUtils.setField(create, suffixField, newSuffix);
 		        ReflectionUtils.setField(update, suffixField, newSuffix);
 		        lastSuffix = newSuffix;
