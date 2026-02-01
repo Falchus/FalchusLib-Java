@@ -21,7 +21,7 @@ import lombok.Getter;
 //		version = "0.0.0",
 		description = "A simple library.",
 		authors = {"Falchus"},
-		url = "https://lib.falchus.com")
+		url = "https://lib-java.falchus.com")
 @Getter
 public class FalchusLibMinecraftVelocity {
 
