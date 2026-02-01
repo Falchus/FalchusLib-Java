@@ -13,6 +13,33 @@
 </dependency>
 ```
 
+<details>
+<summary>plugin.yml</summary>
+
+```yaml
+name: Example
+version: 1.0.0
+main: com.example.Example
+author: Example
+
+depend: [FalchusLib]
+```
+</details>
+<details>
+<summary>velocity-plugin.json</summary>
+
+```json
+{
+  "id": "example",
+  "name": "Example",
+  "version": "1.0.0",
+  "main": "com.example.Example",
+  "authors": ["Example"],
+  "dependencies": [{"id": "falchuslib", "optional": false}]
+}
+```
+</details>
+
 ### Download
 Get the latest release [**here**](https://www.spigotmc.org/resources/falchuslib.132261/).
 
