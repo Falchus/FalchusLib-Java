@@ -12,3 +12,9 @@
   <scope>provided</scope>
 </dependency>
 ```
+
+### Download
+Get the latest release [**here**](https://www.spigotmc.org/resources/falchuslib.132261/).
+
+![](https://bstats.org/signatures/bukkit/FalchusLib.svg)
+![](https://bstats.org/signatures/velocity/FalchusLib.svg)
