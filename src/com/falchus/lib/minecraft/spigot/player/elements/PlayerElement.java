@@ -28,11 +28,6 @@ public abstract class PlayerElement {
     
     protected Runnable updateRunnable;
 	
-    /**
-     * Sends the element to the player.
-     */
-	public void send() {}
-	
 	/**
 	 * Updates the element manually.
 	 */
@@ -60,7 +55,7 @@ public abstract class PlayerElement {
 	 * Sends the element to the player repeatedly with a fixed interval.
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
-	    Map<UUID, BukkitTask> map = tasks.computeIfAbsent(this.getClass(), c -> new HashMap<>());
+	    Map<UUID, BukkitTask> map = tasks.computeIfAbsent(getClass(), c -> new HashMap<>());
 	    
 		BukkitTask oldTask = map.get(player.getUniqueId());
 		if (oldTask != null) {
@@ -85,7 +80,7 @@ public abstract class PlayerElement {
 	 * Removes this element and cancels any schedules repeating tasks.
 	 */
 	public void remove() {
-		Map<UUID, BukkitTask> map = tasks.get(this.getClass());
+		Map<UUID, BukkitTask> map = tasks.get(getClass());
 		if (map != null) {
 	        BukkitTask task = map.remove(player.getUniqueId());
 	        if (task != null) {
@@ -93,7 +88,7 @@ public abstract class PlayerElement {
 	        }
 		}
 		
-		Map<UUID, PlayerElement> instance = instances.get(this.getClass());
+		Map<UUID, PlayerElement> instance = instances.get(getClass());
 		if (instance != null) {
 			instance.remove(player.getUniqueId());
 		}
@@ -108,7 +103,7 @@ public abstract class PlayerElement {
 		if (!PlayerElement.class.isAssignableFrom(clazz)) return null;
 		Map<UUID, PlayerElement> map = instances.computeIfAbsent(clazz, c -> new HashMap<>());
 		
-		return (T) map.computeIfAbsent(player.getUniqueId(), id -> {
+		return (T) map.computeIfAbsent(player.getUniqueId(), uuid -> {
 			try {
 				Constructor<T> ctor = clazz.getDeclaredConstructor(Player.class);
 	            ctor.setAccessible(true);
