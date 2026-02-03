@@ -16,9 +16,6 @@ import lombok.NonNull;
 
 public class Scoreboard extends PlayerElement {
 
-	private Supplier<String> titleSupplier;
-	private Supplier<String> titleColorSupplier;
-	private Supplier<String> titleSecondColorSupplier;
 	private Supplier<List<String>> linesSupplier;
 	private List<String> lastLines;
 	
@@ -37,16 +34,10 @@ public class Scoreboard extends PlayerElement {
 	/**
 	 * Updates the scoreboard immediately.
 	 */
-	public void send(@NonNull Supplier<String> title, @NonNull Supplier<String> titleColor, Supplier<String> titleSecondColor, @NonNull Supplier<List<String>> lines) {
-		titleSupplier = title;
-		titleColorSupplier = titleColor;
-		titleSecondColorSupplier = titleSecondColor;
+	public void send(@NonNull Supplier<List<String>> lines) {
 		linesSupplier = lines;
 		
 		updateRunnable = () -> {
-			String newTitle = titleSupplier.get();
-			String newTitleColor = titleColorSupplier.get();
-			String newTitleSecondColor = titleSecondColorSupplier != null ? titleSecondColorSupplier.get() : null;
 			List<String> newLines = linesSupplier.get();
 			
 			if (lastLines == null || lastLines.size() != newLines.size()) {
@@ -58,8 +49,6 @@ public class Scoreboard extends PlayerElement {
 				}
 			}
 			lastLines = newLines;
-			
-		    objective.setDisplayName(getTitle(newTitle, newTitleColor, newTitleSecondColor));
 			
 		    int score = newLines.size();
 		    for (String line : newLines) {
@@ -114,9 +103,6 @@ public class Scoreboard extends PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> title, @NonNull Supplier<String> titleColor, Supplier<String> titleSecondColor, @NonNull Supplier<List<String>> lines) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				title,
-				titleColor,
-				titleSecondColor,
 				lines
 			)
 		);
