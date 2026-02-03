@@ -23,6 +23,7 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 	EntityPlayerListener entityPlayerListener;
 	FreezeListener freezeListener;
 	ItemListener itemListener;
+	JoinQuitListener joinQuitListener;
 	LobbyCancelListener lobbyCancelListener;
 	VanishListener vanishListener;
 	ClientManager clientManager;
@@ -40,6 +41,7 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		entityPlayerListener = new EntityPlayerListener();
 		freezeListener = new FreezeListener();
 		itemListener = new ItemListener();
+		joinQuitListener = new JoinQuitListener();
 		lobbyCancelListener = new LobbyCancelListener();
 		vanishListener = new VanishListener();
 		clientManager = new ClientManager();
