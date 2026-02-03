@@ -2,12 +2,11 @@ package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
@@ -23,9 +22,6 @@ public class Nametag extends PlayerElement {
 	private String lastPrefix = "";
 	private String lastSuffix = "";
 	
-	private final Scoreboard scoreboard;
-	private Team team;
-	
 	private final String nameField = "a";
 	private final String displayNameField = "b";
 	private final String prefixField = "c";
@@ -39,22 +35,7 @@ public class Nametag extends PlayerElement {
 	
 	private Nametag(@NonNull Player player) {
 		super(player);
-		scoreboard = player.getScoreboard() != null
-				? player.getScoreboard()
-				: Bukkit.getScoreboardManager().getNewScoreboard();
-		
-		Team team = scoreboard.getTeam(player.getName());
-		if (team == null) {
-			team = scoreboard.registerNewTeam(player.getName());
-		}
-		if (!team.hasEntry(player.getName())) {
-			team.addEntry(player.getName());
-		}
-		this.team = team;
-		
-		player.setScoreboard(scoreboard);
-		
-		HashSet<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
+		Set<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
 
         create = new NmsPacketBuilder(
         	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
@@ -66,9 +47,9 @@ public class Nametag extends PlayerElement {
         ReflectionUtils.setField(create, modeField, 0);
 
         update = new NmsPacketBuilder(
-            	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-            	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
-            ).build();
+        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+        	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+        ).build();
         ReflectionUtils.setField(update, nameField, player.getName());
         ReflectionUtils.setField(update, displayNameField, player.getName());
         ReflectionUtils.setField(update, playersField, entries);
@@ -127,10 +108,6 @@ public class Nametag extends PlayerElement {
 	
 	public void remove() {
 		super.remove();
-		
-		if (team.hasEntry(player.getName())) {
-			team.removeEntry(player.getName());
-		}
 		
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         	PlayerUtils.sendPacket(onlinePlayer, remove);
