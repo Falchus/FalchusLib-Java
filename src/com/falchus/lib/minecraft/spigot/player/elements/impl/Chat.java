@@ -1,5 +1,9 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -15,10 +19,10 @@ import lombok.NonNull;
 
 public class Chat extends PlayerElement implements Listener {
 
-	private Supplier<String> prefixSupplier;
-	private String lastPrefix = "";
+	private static final Map<Player, Supplier<String>> prefixSuppliers = new HashMap<>();
+	private static final Map<Player, String> lastPrefixes = new HashMap<>();
 	
-	private boolean registered = false;
+	private static final List<Boolean> registered = new ArrayList<>();
 	
 	private Chat(@NonNull Player player) {
 		super(player);
@@ -28,18 +32,19 @@ public class Chat extends PlayerElement implements Listener {
 	 * Sets one-time.
 	 */
 	public void send(@NonNull Supplier<String> prefix) {
-		if (!registered) {
+		if (registered.size() == 0) {
 			Bukkit.getPluginManager().registerEvents(this, plugin);
-			registered = true;
+			registered.add(true);
 		}
 		
-		prefixSupplier = prefix;
+		prefixSuppliers.put(player, prefix);
 		
 		updateRunnable = () -> {
-			String newPrefix = prefixSupplier.get();
+			String lastPrefix = lastPrefixes.get(player);
+			String newPrefix = prefixSuppliers.get(player).get();
 			
-			if (!newPrefix.equals(lastPrefix)) {
-				lastPrefix = newPrefix;
+			if (lastPrefix == null || !newPrefix.equals(lastPrefix)) {
+				lastPrefixes.put(player, newPrefix);
 			}
 		};
 		update();
@@ -62,15 +67,20 @@ public class Chat extends PlayerElement implements Listener {
 	public void remove() {
 		super.remove();
 		
-		if (registered) {
+		prefixSuppliers.remove(player);
+		lastPrefixes.remove(player);
+		
+		if (registered.size() == 1 && registered.getFirst() == true) {
 			HandlerList.unregisterAll(this);
-			registered = false;
+			registered.clear();
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-		if (!event.getPlayer().equals(player)) return;
-		event.setFormat(prefixSupplier.get() + "%2$s");
+		String prefix = prefixSuppliers.get(event.getPlayer()).get();
+		if (prefix == null) return;
+		
+		event.setFormat(prefix + "%2$s");
 	}
 }
