@@ -76,6 +76,15 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     	}
 	}
 	
+	@Override
+	public Object createChatComponentText(@NonNull String text) {
+		try {
+			return chatComponentText.getConstructor(String.class).newInstance(text);
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+	}
+	
     @Override
     public ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
     	try {

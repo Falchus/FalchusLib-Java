@@ -40,8 +40,9 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 	@Getter String packageNm = "net.minecraft.";
 	@Getter String packageNms = packageNm + "server.";
 	
-    @Getter Class<?> chatComponentText;
     @Getter Class<?> blockPosition;
+    
+    Class<?> chatComponentText;
 	
 	Class<?> craftItemStack;
 	Class<?> nmsItemStack;

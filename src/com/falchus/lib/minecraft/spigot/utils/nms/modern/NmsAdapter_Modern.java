@@ -93,6 +93,15 @@ public class NmsAdapter_Modern extends AbstractNmsAdapter {
 	}
 	
 	@Override
+	public Object createChatComponentText(@NonNull String text) {
+		try {
+			return chatComponentText_literal.invoke(null, text);
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+	}
+	
+	@Override
     public ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
     	try {
     		Object meta = itemStack_getItemMeta.invoke(item);
