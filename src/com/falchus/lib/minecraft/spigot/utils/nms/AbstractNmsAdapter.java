@@ -59,6 +59,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Method craftPlayer_getHandle;
     Class<?> entityHuman;
     Field entityPlayer_profile;
+    Field entityPlayer_ping;
     Class<?> enumPlayerInfo$Action;
     Object enumPlayerInfo$Action_UPDATE_DISPLAY_NAME;
     Object enumPlayerInfo$Action_ADD_PLAYER;
@@ -141,6 +142,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             	"bH",
             	"gameProfile"
             );
+            entityPlayer_ping = ReflectionUtils.getField(entityPlayer, "ping");
             enumPlayerInfo$Action = ReflectionUtils.getFirstClass(
             	packageNms + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction",
             	packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket$Action"
@@ -270,6 +272,16 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     public GameProfile getProfile(@NonNull Object entityPlayer) {
     	try {
             return (GameProfile) entityPlayer_profile.get(entityPlayer);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public int getPing(@NonNull Player player) {
+    	try {
+    		Object entityPlayer = getEntityPlayer(player);
+    		return (int) entityPlayer_ping.get(entityPlayer);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

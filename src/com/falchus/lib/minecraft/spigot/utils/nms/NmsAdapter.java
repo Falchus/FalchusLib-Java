@@ -98,6 +98,11 @@ public interface NmsAdapter {
 	GameProfile getProfile(@NonNull Object entityPlayer);
 	
 	/**
+	 * @return ping from a player.
+	 */
+	int getPing(@NonNull Player player);
+	
+	/**
 	 * Sets a custom skin.
 	 */
 	void setSkin(@NonNull Player player, @NonNull UUID uuid);

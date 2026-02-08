@@ -147,6 +147,13 @@ public class PlayerUtils {
 	}
 	
 	/**
+	 * @return ping from a player.
+	 */
+	public int getPing(@NonNull Player player) {
+		return plugin.getNmsAdapter().getPing(player);
+	}
+	
+	/**
 	 * Sets a custom skin.
 	 */
 	public static void setSkin(@NonNull Player player, @NonNull UUID uuid) {
