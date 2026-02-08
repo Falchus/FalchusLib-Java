@@ -41,4 +41,14 @@ public class WorldUtils {
 	public static int getBiomeId(Biome biome) {
 		return plugin.getNmsAdapter().getBiomeId(biome);
 	}
+	
+	/**
+	 * @return {@link Biome}
+	 */
+	public static Biome getBiome(com.falchus.lib.minecraft.spigot.enums.Biome biome) {
+		if (ServerUtils.getMinorVersion() < 17) {
+			return Biome.valueOf(biome.name());
+		}
+		return Biome.valueOf(biome.getModernName());
+	}
 }
