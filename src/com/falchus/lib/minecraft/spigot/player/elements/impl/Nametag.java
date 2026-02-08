@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 import com.falchus.lib.utils.ReflectionUtils;
 
@@ -35,33 +36,35 @@ public class Nametag extends PlayerElement {
 	
 	private Nametag(@NonNull Player player) {
 		super(player);
-		Set<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
-
-        create = new NmsPacketBuilder(
-        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
-        ).build();
-        ReflectionUtils.setField(create, nameField, player.getName());
-        ReflectionUtils.setField(create, displayNameField, player.getName());
-        ReflectionUtils.setField(create, playersField, entries);
-        ReflectionUtils.setField(create, modeField, 0);
-
-        update = new NmsPacketBuilder(
-        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
-        ).build();
-        ReflectionUtils.setField(update, nameField, player.getName());
-        ReflectionUtils.setField(update, displayNameField, player.getName());
-        ReflectionUtils.setField(update, playersField, entries);
-        ReflectionUtils.setField(update, modeField, 2);
-        
-        remove = new NmsPacketBuilder(
-        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
-        ).build();
-        ReflectionUtils.setField(remove, nameField, player.getName());
-        ReflectionUtils.setField(remove, playersField, entries);
-        ReflectionUtils.setField(remove, modeField, 4);
+		if (ServerUtils.getMinorVersion() < 17) {
+			Set<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
+	
+	        create = new NmsPacketBuilder(
+	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        ).build();
+	        ReflectionUtils.setField(create, nameField, player.getName());
+	        ReflectionUtils.setField(create, displayNameField, player.getName());
+	        ReflectionUtils.setField(create, playersField, entries);
+	        ReflectionUtils.setField(create, modeField, 0);
+	
+	        update = new NmsPacketBuilder(
+	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        ).build();
+	        ReflectionUtils.setField(update, nameField, player.getName());
+	        ReflectionUtils.setField(update, displayNameField, player.getName());
+	        ReflectionUtils.setField(update, playersField, entries);
+	        ReflectionUtils.setField(update, modeField, 2);
+	        
+	        remove = new NmsPacketBuilder(
+	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        ).build();
+	        ReflectionUtils.setField(remove, nameField, player.getName());
+	        ReflectionUtils.setField(remove, playersField, entries);
+	        ReflectionUtils.setField(remove, modeField, 4);
+		}
 	}
 
 	/**
@@ -75,21 +78,23 @@ public class Nametag extends PlayerElement {
 			String newPrefix = prefixSupplier.get();
 			String newSuffix = suffixSupplier.get();
 			
-			if (!newPrefix.equals(lastPrefix)) {
-		        ReflectionUtils.setField(create, prefixField, newPrefix);
-		        ReflectionUtils.setField(update, prefixField, newPrefix);
-		        lastPrefix = newPrefix;
+			if (ServerUtils.getMinorVersion() < 17) {
+				if (!newPrefix.equals(lastPrefix)) {
+			        ReflectionUtils.setField(create, prefixField, newPrefix);
+			        ReflectionUtils.setField(update, prefixField, newPrefix);
+			        lastPrefix = newPrefix;
+				}
+				if (!newSuffix.equals(lastSuffix)) {
+			        ReflectionUtils.setField(create, suffixField, newSuffix);
+			        ReflectionUtils.setField(update, suffixField, newSuffix);
+			        lastSuffix = newSuffix;
+				}
+				
+		        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+		        	PlayerUtils.sendPacket(onlinePlayer, create);
+		        	PlayerUtils.sendPacket(onlinePlayer, update);
+		        }
 			}
-			if (!newSuffix.equals(lastSuffix)) {
-		        ReflectionUtils.setField(create, suffixField, newSuffix);
-		        ReflectionUtils.setField(update, suffixField, newSuffix);
-		        lastSuffix = newSuffix;
-			}
-			
-	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-	        	PlayerUtils.sendPacket(onlinePlayer, create);
-	        	PlayerUtils.sendPacket(onlinePlayer, update);
-	        }
 		};
 		update();
 	}
@@ -109,8 +114,10 @@ public class Nametag extends PlayerElement {
 	public void remove() {
 		super.remove();
 		
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        	PlayerUtils.sendPacket(onlinePlayer, remove);
-        }
+		if (ServerUtils.getMinorVersion() < 17) {
+	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+	        	PlayerUtils.sendPacket(onlinePlayer, remove);
+	        }
+		}
 	}
 }
