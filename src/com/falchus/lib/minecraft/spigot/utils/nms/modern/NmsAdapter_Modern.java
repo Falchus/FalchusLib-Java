@@ -86,7 +86,7 @@ public class NmsAdapter_Modern extends AbstractNmsAdapter {
 			barStyle = ReflectionUtils.getClass(packageOb + "boss.BarStyle");
 			barStyle_SOLID = ReflectionUtils.getField(barStyle, "SOLID").get(null);
 			bossFlag = ReflectionUtils.getClass(packageOb + "boss.BarFlag");
-			bukkitServer_createBossBar = ReflectionUtils.getMethod(bukkitServer, "createBossBar", String.class, barColor, barStyle, Array.newInstance(bossFlag, 0).getClass());
+			bukkitServer_createBossBar = ReflectionUtils.getMethod(bukkitServer, "createBossBar", namespacedKey, String.class, barColor, barStyle, Array.newInstance(bossFlag, 0).getClass());
 		} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
     	}
@@ -212,7 +212,7 @@ public class NmsAdapter_Modern extends AbstractNmsAdapter {
     			title,
     			barColor_WHITE,
     			barStyle_SOLID,
-    			(Object) Array.newInstance(bossFlag, 0)
+    			Array.newInstance(bossFlag, 0)
     		);
     		
     		bossBar_setProgress.invoke(bossBar, progress);
