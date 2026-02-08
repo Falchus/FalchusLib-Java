@@ -25,6 +25,7 @@ public interface NmsAdapter {
 	String getPackageNms();
 	
 	Class<?> getChatComponentText();
+	Class<?> getBlockPosition();
 	
     /**
      * Sets a UUID on the given item via NBT.

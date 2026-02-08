@@ -40,6 +40,9 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 	@Getter String packageNm = "net.minecraft.";
 	@Getter String packageNms = packageNm + "server.";
 	
+    @Getter Class<?> chatComponentText;
+    @Getter Class<?> blockPosition;
+	
 	Class<?> craftItemStack;
 	Class<?> nmsItemStack;
 	Class<?> nbtTagCompound;
@@ -63,7 +66,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Class<?> enumPlayerInfo$Action;
     Object enumPlayerInfo$Action_UPDATE_DISPLAY_NAME;
     Object enumPlayerInfo$Action_ADD_PLAYER;
-    @Getter Class<?> chatComponentText;
 
     Class<?> dedicatedServer;
     Field dedicatedServer_propertyManager;
@@ -91,6 +93,15 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             
     		packageObc = packageObc + (!version.equals("Unknown") ? version + "." : "");
     		packageNms = packageNms + (!version.equals("Unknown") ? version + "." : "");
+    		
+            chatComponentText = ReflectionUtils.getFirstClass(
+            	packageNms + "ChatComponentText",
+            	packageNm + "network.chat.IChatBaseComponent"
+            );
+            blockPosition = ReflectionUtils.getFirstClass(
+            	packageNms + "BlockPosition",
+            	packageNm + "core.BlockPosition"
+            );
     		
             craftItemStack = ReflectionUtils.getFirstClass(
             	packageObc + "inventory.CraftItemStack"
@@ -150,10 +161,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             );
             enumPlayerInfo$Action_UPDATE_DISPLAY_NAME = ReflectionUtils.getField(enumPlayerInfo$Action, "UPDATE_DISPLAY_NAME").get(null);
             enumPlayerInfo$Action_ADD_PLAYER = ReflectionUtils.getField(enumPlayerInfo$Action, "ADD_PLAYER").get(null);
-            chatComponentText = ReflectionUtils.getFirstClass(
-            	packageNms + "ChatComponentText",
-            	packageNm + "network.chat.IChatBaseComponent"
-            );
     		
             dedicatedServer = ReflectionUtils.getFirstClass(
             	packageNms + "DedicatedServer",
