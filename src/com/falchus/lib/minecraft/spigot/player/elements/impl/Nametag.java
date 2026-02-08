@@ -39,7 +39,7 @@ public class Nametag extends PlayerElement {
 
         create = new NmsPacketBuilder(
         	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-        	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
         ).build();
         ReflectionUtils.setField(create, nameField, player.getName());
         ReflectionUtils.setField(create, displayNameField, player.getName());
@@ -48,7 +48,7 @@ public class Nametag extends PlayerElement {
 
         update = new NmsPacketBuilder(
         	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-        	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
         ).build();
         ReflectionUtils.setField(update, nameField, player.getName());
         ReflectionUtils.setField(update, displayNameField, player.getName());
@@ -57,7 +57,7 @@ public class Nametag extends PlayerElement {
         
         remove = new NmsPacketBuilder(
         	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-        	plugin.getNmsAdapter().getPackageNm() + "protocol.game.PacketPlayOutScoreboardTeam"
+        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
         ).build();
         ReflectionUtils.setField(remove, nameField, player.getName());
         ReflectionUtils.setField(remove, playersField, entries);
