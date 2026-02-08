@@ -1,7 +1,6 @@
 package com.falchus.lib.minecraft.spigot.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -36,15 +35,6 @@ public class JoinQuitListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		
-		PlayerElement.get(Actionbar.class, player).remove();
-		PlayerElement.get(Bossbar.class, player).remove();
-		PlayerElement.get(Chat.class, player).remove();
-		PlayerElement.get(Nametag.class, player).remove();
-		PlayerElement.get(Scoreboard.class, player).remove();
-		PlayerElement.get(Tablist.class, player).remove();
-		
     	PlayerElement.updateAll(Actionbar.class);
     	PlayerElement.updateAll(Bossbar.class);
     	PlayerElement.updateAll(Chat.class);

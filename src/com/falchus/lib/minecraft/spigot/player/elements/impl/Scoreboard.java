@@ -25,10 +25,21 @@ public class Scoreboard extends PlayerElement {
 	
 	private Scoreboard(@NonNull Player player) {
 		super(player);
-		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        objective = scoreboard.registerNewObjective("FalchusLib", "dummy");
+		org.bukkit.scoreboard.Scoreboard scoreboard = player.getScoreboard();
+		if (scoreboard == null || scoreboard == Bukkit.getScoreboardManager().getMainScoreboard()) {
+			scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+		}
+		
+        Objective objective = scoreboard.getObjective("FalchusLib");
+        if (objective == null) {
+        	objective = scoreboard.registerNewObjective("FalchusLib", "dummy");
+        }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        
         player.setScoreboard(scoreboard);
+        
+		this.scoreboard = scoreboard;
+        this.objective = objective;
 	}
 	
 	/**
@@ -111,7 +122,7 @@ public class Scoreboard extends PlayerElement {
 	public void remove() {
 		super.remove();
 		
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
 
 	/**
