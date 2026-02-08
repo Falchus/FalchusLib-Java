@@ -66,12 +66,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Class<?> enumPlayerInfo$Action;
     Object enumPlayerInfo$Action_UPDATE_DISPLAY_NAME;
     Object enumPlayerInfo$Action_ADD_PLAYER;
-
-    Class<?> dedicatedServer;
-    Field dedicatedServer_propertyManager;
-    Class<?> propertyManager;
-    Method propertyManager_saveProperties;
-    Method propertyManager_setProperty;
 	
     Class<?> craftServer;
     Method craftServer_getServer;
@@ -161,18 +155,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             );
             enumPlayerInfo$Action_UPDATE_DISPLAY_NAME = ReflectionUtils.getField(enumPlayerInfo$Action, "UPDATE_DISPLAY_NAME").get(null);
             enumPlayerInfo$Action_ADD_PLAYER = ReflectionUtils.getField(enumPlayerInfo$Action, "ADD_PLAYER").get(null);
-    		
-            dedicatedServer = ReflectionUtils.getFirstClass(
-            	packageNms + "DedicatedServer",
-            	packageNms + "dedicated.DedicatedServer"
-            );
-            dedicatedServer_propertyManager = ReflectionUtils.getField(dedicatedServer, "propertyManager");
-            propertyManager = ReflectionUtils.getFirstClass(
-            	packageNms + "PropertyManager",
-            	packageNms + "dedicated.PropertyManager"
-            );
-            propertyManager_saveProperties = ReflectionUtils.getMethod(propertyManager, "savePropertiesFile");
-            propertyManager_setProperty = ReflectionUtils.getMethod(propertyManager, "setProperty", String.class, Object.class);
     		
             craftServer = ReflectionUtils.getClass(packageObc + "CraftServer");
             craftServer_getServer = ReflectionUtils.getMethod(craftServer, "getServer");
@@ -406,40 +388,6 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     		
     		Bukkit.getScheduler().runTask(FalchusLibMinecraftSpigot.getInstance(), () -> removeEntityPlayer(player, entityPlayer));
     	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    @Override
-    public Object getPropertyManager() {
-    	try {
-    		Object server = getMinecraftServer();
-    		if (!dedicatedServer.isInstance(server)) {
-    			throw new IllegalStateException("Server is not a DedicatedServer instance");
-    		}
-    		return dedicatedServer_propertyManager.get(server);
-    	} catch (Exception e) {
-    		throw new RuntimeException(e);
-    	}
-    }
-    
-    @Override
-    public void saveProperties() {
-        try {
-            Object propertyManager = getPropertyManager();
-            propertyManager_saveProperties.invoke(propertyManager);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    @Override
-    public void setProperty(@NonNull com.falchus.lib.minecraft.spigot.enums.Property property, @NonNull Object value) {
-        try {
-            Object propertyManager = getPropertyManager();
-            propertyManager_setProperty.invoke(propertyManager, property.getKey(), value);
-            saveProperties();
-        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

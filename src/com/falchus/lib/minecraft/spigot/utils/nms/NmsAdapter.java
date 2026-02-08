@@ -10,7 +10,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.falchus.lib.minecraft.spigot.enums.Property;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 import com.mojang.authlib.GameProfile;
@@ -142,21 +141,6 @@ public interface NmsAdapter {
 	 * Spawns a EntityPlayer.
 	 */
 	void spawnEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer);
-	
-	/**
-	 * @return PropertyManager
-	 */
-	Object getPropertyManager();
-	
-	/**
-	 * Saves the properties.
-	 */
-	void saveProperties();
-	
-	/**
-	 * Set a property value.
-	 */
-	void setProperty(@NonNull Property property, @NonNull Object value);
 
 	/**
 	 * @return MinecraftServer
