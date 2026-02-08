@@ -38,4 +38,11 @@ public class ServerUtils {
 	public static int getMinorVersion() {
 		return plugin.getNmsAdapter().getMinorVersion();
 	}
+	
+	/**
+	 * @return recent TPS
+	 */
+	public static double[] getRecentTps() {
+		return plugin.getNmsAdapter().getRecentTps();
+	}
 }

@@ -76,6 +76,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Class<?> bukkitServer;
     Class<?> minecraftServer;
     Method minecraftServer_getVersion;
+    Field minecraftServer_recentTps;
 	
     Class<?> biomeBase;
     Field biomeBase_biomes;
@@ -171,6 +172,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             bukkitServer = ReflectionUtils.getClass(packageOb + "Server");
             minecraftServer = ReflectionUtils.getClass(packageNms + "MinecraftServer");
             minecraftServer_getVersion = ReflectionUtils.getMethod(minecraftServer, "getVersion");
+            minecraftServer_recentTps = ReflectionUtils.getField(minecraftServer, "recentTps");
     		
     		biomeBase = ReflectionUtils.getFirstClass(
     			packageNms + "BiomeBase",
@@ -467,6 +469,16 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
 		
 		try {
 			return Integer.parseInt(mc.split("\\.")[1]);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public double[] getRecentTps() {
+		try {
+    		Object server = getMinecraftServer();
+    		return (double[]) minecraftServer_recentTps.get(server);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
         }

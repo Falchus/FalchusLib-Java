@@ -178,6 +178,11 @@ public interface NmsAdapter {
 	int getMinorVersion();
 	
 	/**
+	 * @return recent TPS
+	 */
+	double[] getRecentTps();
+	
+	/**
 	 * @return BiomeBase[] from a World
 	 */
 	Object[] getWorldBiomes(@NonNull World world);
