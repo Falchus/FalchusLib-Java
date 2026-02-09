@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Provides the {@link INmsAdapter} for the current server version.
- * By default, returns {@link NmsAdapterDefault}.
+ * By default, returns {@link NmsAdapter}.
  */
 @UtilityClass
 public class NmsProvider {
@@ -23,7 +23,7 @@ public class NmsProvider {
 		try {
             minor = Integer.parseInt(mc.split("\\.")[1]);
 		} catch (Exception e) {
-            return new NmsAdapterDefault();
+            return new NmsAdapter();
         }
 		
         if (minor >= 17) {
@@ -35,7 +35,7 @@ public class NmsProvider {
         String packageName = Bukkit.getServer().getClass().getPackageName();
         String[] parts = packageName.split("\\.");
         if (parts.length < 4) {
-        	return new NmsAdapterDefault();
+        	return new NmsAdapter();
         }
         
         String version = parts[3];
@@ -43,7 +43,7 @@ public class NmsProvider {
 			Class<?> clazz = Class.forName(NmsProvider.class.getPackageName() + "." + version + ".NmsAdapter_" + version);
 			return (INmsAdapter) clazz.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			return new NmsAdapterDefault();
+			return new NmsAdapter();
 		}
 	}
 	
