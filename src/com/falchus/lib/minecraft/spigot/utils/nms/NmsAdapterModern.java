@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.spigot.utils.nms.modern;
+package com.falchus.lib.minecraft.spigot.utils.nms;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -21,9 +21,9 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 
 /**
- * Adapter for all versions over 1.17. (tested with 1.21.11)
+ * Default adapter for all versions over 1.17. (tested with 1.21.11)
  */
-public class NmsAdapter_Modern extends NmsAdapter_v1_9_R1 {
+public class NmsAdapterModern extends NmsAdapter_v1_9_R1 {
 	
     private Class<?> itemMeta() {
     	return ReflectionUtils.getClass(packageOb + "inventory.meta.ItemMeta");

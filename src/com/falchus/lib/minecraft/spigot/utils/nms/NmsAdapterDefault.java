@@ -19,7 +19,6 @@ import lombok.SneakyThrows;
 
 /**
  * Default adapter for all versions. (tested with 1.8.8)
- * We override methods in newer versions only if needed.
  */
 public class NmsAdapterDefault extends AbstractNmsAdapter {
 	
