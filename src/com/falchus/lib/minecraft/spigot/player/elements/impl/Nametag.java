@@ -40,8 +40,8 @@ public class Nametag extends PlayerElement {
 			Set<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
 	
 	        create = new NmsPacketBuilder(
-	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	plugin.getVersionAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
 	        ReflectionUtils.setDeclaredField(create, nameField, player.getName());
 	        ReflectionUtils.setDeclaredField(create, displayNameField, player.getName());
@@ -49,8 +49,8 @@ public class Nametag extends PlayerElement {
 	        ReflectionUtils.setDeclaredField(create, modeField, 0);
 	
 	        update = new NmsPacketBuilder(
-	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	plugin.getVersionAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
 	        ReflectionUtils.setDeclaredField(update, nameField, player.getName());
 	        ReflectionUtils.setDeclaredField(update, displayNameField, player.getName());
@@ -58,8 +58,8 @@ public class Nametag extends PlayerElement {
 	        ReflectionUtils.setDeclaredField(update, modeField, 2);
 	        
 	        remove = new NmsPacketBuilder(
-	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	plugin.getVersionAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
 	        ReflectionUtils.setDeclaredField(remove, nameField, player.getName());
 	        ReflectionUtils.setDeclaredField(remove, playersField, entries);

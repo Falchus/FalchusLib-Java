@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.spigot.utils.nms;
+package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -37,7 +37,7 @@ import lombok.experimental.FieldDefaults;
  * Adapter for all versions. (tested with 1.8.8)
  */
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public class NmsAdapter implements INmsAdapter {
+public class VersionAdapter implements IVersionAdapter {
 	
 	final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	final Map<Player, Object> bossBars = new HashMap<>();
@@ -153,7 +153,7 @@ public class NmsAdapter implements INmsAdapter {
     	return ReflectionUtils.getClass(packageNms + "EntityWither");
     }
     
-	public NmsAdapter() {
+	public VersionAdapter() {
 		try {
     		String version;
             String packageName = Bukkit.getServer().getClass().getPackageName();
@@ -441,8 +441,8 @@ public class NmsAdapter implements INmsAdapter {
     @Override
     public void sendActionbar(@NonNull Player player, @NonNull String message) {
 		try {
-			Object chatMessage = plugin.getNmsAdapter().createChatComponentText(message);
-			Object packet = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
+			Object chatMessage = plugin.getVersionAdapter().createChatComponentText(message);
+			Object packet = new NmsPacketBuilder(plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutChat")
 					.withArgs(chatMessage, (byte) 2)
 					.build();
 			PlayerUtils.sendPacket(player, packet);

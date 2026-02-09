@@ -6,7 +6,7 @@ import com.falchus.lib.minecraft.spigot.listeners.*;
 import com.falchus.lib.minecraft.spigot.listeners.message.*;
 import com.falchus.lib.minecraft.spigot.manager.*;
 import com.falchus.lib.minecraft.spigot.utils.*;
-import com.falchus.lib.minecraft.spigot.utils.nms.*;
+import com.falchus.lib.minecraft.spigot.utils.version.*;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 	LobbyCancelListener lobbyCancelListener;
 	VanishListener vanishListener;
 	ClientManager clientManager;
-	INmsAdapter nmsAdapter;
+	IVersionAdapter versionAdapter;
 	
 	@Override
 	public void onEnable() {
@@ -45,7 +45,7 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		lobbyCancelListener = new LobbyCancelListener();
 		vanishListener = new VanishListener();
 		clientManager = new ClientManager();
-		nmsAdapter = NmsProvider.get();
+		versionAdapter = VersionProvider.get();
 	}
 	
 	public static FalchusLibMinecraftSpigot getInstance() {

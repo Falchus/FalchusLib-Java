@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.spigot.utils.nms;
+package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import com.mojang.authlib.GameProfile;
 
 import lombok.NonNull;
 
-public interface INmsAdapter {
+public interface IVersionAdapter {
 
 	String getPackageOb();
 	String getPackageObc();

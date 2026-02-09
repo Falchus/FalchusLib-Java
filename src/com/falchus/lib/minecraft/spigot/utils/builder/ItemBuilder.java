@@ -144,7 +144,7 @@ public class ItemBuilder {
 	 * Sets a custom UUID (stored in NBT).
 	 */
 	public ItemBuilder setUuid(@NonNull UUID uuid) {
-		plugin.getNmsAdapter().setUUID(item, uuid);
+		plugin.getVersionAdapter().setUUID(item, uuid);
 		return this;
 	}
 

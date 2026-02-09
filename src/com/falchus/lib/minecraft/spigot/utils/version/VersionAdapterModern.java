@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.spigot.utils.nms;
+package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.falchus.lib.minecraft.spigot.enums.Sound;
-import com.falchus.lib.minecraft.spigot.utils.nms.v1_9_R1.NmsAdapter_v1_9_R1;
+import com.falchus.lib.minecraft.spigot.utils.version.v1_9_R1.VersionAdapter_v1_9_R1;
 import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
@@ -23,7 +23,7 @@ import lombok.SneakyThrows;
 /**
  * Default adapter for all versions over 1.17. (tested with 1.21.11)
  */
-public class NmsAdapterModern extends NmsAdapter_v1_9_R1 {
+public class VersionAdapterModern extends VersionAdapter_v1_9_R1 {
 	
     private Class<?> itemMeta() {
     	return ReflectionUtils.getClass(packageOb + "inventory.meta.ItemMeta");
