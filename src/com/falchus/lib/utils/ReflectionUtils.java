@@ -46,6 +46,22 @@ public class ReflectionUtils {
         }
     }
     
+    public static Field getDeclaredField(@NonNull Object instance, @NonNull String name) {
+        return getDeclaredField(instance.getClass(), name);
+    }
+    
+    public static Field getDeclaredField(@NonNull Class<?> clazz, @NonNull String name) {
+        try {
+            Field field = clazz.getDeclaredField(name);
+            field.setAccessible(true);
+            return field;
+        } catch (NoSuchFieldException e) {
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public static Field getFirstField(@NonNull Object instance, @NonNull String... names) {
         return getFirstField(instance.getClass(), names);
     }
@@ -53,6 +69,20 @@ public class ReflectionUtils {
     public static Field getFirstField(@NonNull Class<?> clazz, @NonNull String... names) {
         for (String name : names) {
             Field found = getField(clazz, name);
+            if (found != null) {
+            	return found;
+            }
+        }
+        throw new RuntimeException("None of the fields exist: " + String.join(", ", names));
+    }
+    
+    public static Field getFirstDeclaredField(@NonNull Object instance, @NonNull String... names) {
+        return getFirstDeclaredField(instance.getClass(), names);
+    }
+    
+    public static Field getFirstDeclaredField(@NonNull Class<?> clazz, @NonNull String... names) {
+        for (String name : names) {
+            Field found = getDeclaredField(clazz, name);
             if (found != null) {
             	return found;
             }
@@ -69,9 +99,27 @@ public class ReflectionUtils {
         }
     }
     
+    public static void setDeclaredField(@NonNull Object instance, @NonNull String name, Object value) {
+        try {
+            Field field = getDeclaredField(instance, name);
+            field.set(instance, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public static void setField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
         try {
             Field field = getField(clazz, name);
+            field.set(null, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static void setDeclaredField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
+        try {
+            Field field = getDeclaredField(clazz, name);
             field.set(null, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -90,9 +138,31 @@ public class ReflectionUtils {
         }
     }
     
+    public static Method getDeclaredMethod(@NonNull Class<?> clazz, @NonNull String name, Class<?>... params) {
+        try {
+            Method method = clazz.getDeclaredMethod(name, params);
+            method.setAccessible(true);
+            return method;
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public static Method getFirstMethod(@NonNull Class<?> clazz, List<Class<?>> params, @NonNull String... names) {
         for (String name : names) {
             Method found = getMethod(clazz, name, params.toArray(new Class[0]));
+            if (found != null) {
+                return found;
+            }
+        }
+        throw new RuntimeException("None of the methods exist: " + String.join(", ", names));
+    }
+    
+    public static Method getFirstDeclaredMethod(@NonNull Class<?> clazz, List<Class<?>> params, @NonNull String... names) {
+        for (String name : names) {
+            Method found = getDeclaredMethod(clazz, name, params.toArray(new Class[0]));
             if (found != null) {
                 return found;
             }

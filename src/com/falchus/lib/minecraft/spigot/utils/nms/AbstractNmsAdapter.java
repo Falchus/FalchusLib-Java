@@ -64,7 +64,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Class<?> player$Spigot;
     Method player_spigot;
     Class<?> entityHuman;
-    Field entityPlayer_profile;
+    Field entityHuman_profile;
     Field entityPlayer_ping;
     Class<?> enumPlayerInfo$Action;
     Object enumPlayerInfo$Action_UPDATE_DISPLAY_NAME;
@@ -149,7 +149,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             player$Spigot = ReflectionUtils.getClass(packageOb + "entity.Player$Spigot");
             player_spigot = ReflectionUtils.getMethod(Player.class, "spigot");
             entityHuman = entityPlayer.getSuperclass();
-            entityPlayer_profile = ReflectionUtils.getFirstField(entityHuman,
+            entityHuman_profile = ReflectionUtils.getFirstDeclaredField(entityHuman,
             	"bH",
             	"gameProfile"
             );
@@ -276,7 +276,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     @Override
     public GameProfile getProfile(@NonNull Object entityPlayer) {
     	try {
-            return (GameProfile) entityPlayer_profile.get(entityPlayer);
+            return (GameProfile) entityHuman_profile.get(entityPlayer);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }
