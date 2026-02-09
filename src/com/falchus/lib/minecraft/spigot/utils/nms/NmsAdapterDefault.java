@@ -20,7 +20,7 @@ import lombok.SneakyThrows;
 /**
  * Default adapter for all versions. (tested with 1.8.8)
  */
-public class NmsAdapterDefault extends AbstractNmsAdapter {
+public class NmsAdapterDefault extends NmsAdapter {
 	
 	private Method nmsItemStack_getTag() {
 		return ReflectionUtils.getMethod(nmsItemStack, "getTag");

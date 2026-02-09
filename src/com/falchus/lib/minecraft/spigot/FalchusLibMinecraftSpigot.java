@@ -27,7 +27,7 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 	LobbyCancelListener lobbyCancelListener;
 	VanishListener vanishListener;
 	ClientManager clientManager;
-	NmsAdapter nmsAdapter;
+	INmsAdapter nmsAdapter;
 	
 	@Override
 	public void onEnable() {

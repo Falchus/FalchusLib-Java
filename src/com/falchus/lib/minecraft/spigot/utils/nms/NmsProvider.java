@@ -7,15 +7,15 @@ import com.falchus.lib.minecraft.spigot.utils.nms.v1_9_R1.NmsAdapter_v1_9_R1;
 import lombok.experimental.UtilityClass;
 
 /**
- * Provides the {@link NmsAdapter} for the current server version.
+ * Provides the {@link INmsAdapter} for the current server version.
  * By default, returns {@link NmsAdapterDefault}.
  */
 @UtilityClass
 public class NmsProvider {
 
-	private static NmsAdapter adapter;
+	private static INmsAdapter adapter;
 	
-	private static NmsAdapter load() {
+	private static INmsAdapter load() {
 		String bukkitVersion = Bukkit.getBukkitVersion();
 		String mc = bukkitVersion.split("-")[0];
 		
@@ -41,13 +41,13 @@ public class NmsProvider {
         String version = parts[3];
 		try {
 			Class<?> clazz = Class.forName(NmsProvider.class.getPackageName() + "." + version + ".NmsAdapter_" + version);
-			return (NmsAdapter) clazz.getDeclaredConstructor().newInstance();
+			return (INmsAdapter) clazz.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			return new NmsAdapterDefault();
 		}
 	}
 	
-	public static NmsAdapter get() {
+	public static INmsAdapter get() {
 		if (adapter == null) {
 			adapter = load();
 		}
