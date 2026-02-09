@@ -172,7 +172,7 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     			packageNms + "BiomeBase",
     			packageNm + "world.level.biome.BiomeBase"
     		);
-            biomeBase_biomes = ReflectionUtils.getField(biomeBase, "biomes");
+            biomeBase_biomes = ReflectionUtils.getDeclaredField(biomeBase, "biomes");
             biomeBase_getBiome = ReflectionUtils.getMethod(biomeBase, "getBiome", int.class);
 		} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);

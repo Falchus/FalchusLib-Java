@@ -43,27 +43,27 @@ public class Nametag extends PlayerElement {
 	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
 	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
-	        ReflectionUtils.setField(create, nameField, player.getName());
-	        ReflectionUtils.setField(create, displayNameField, player.getName());
-	        ReflectionUtils.setField(create, playersField, entries);
-	        ReflectionUtils.setField(create, modeField, 0);
+	        ReflectionUtils.setDeclaredField(create, nameField, player.getName());
+	        ReflectionUtils.setDeclaredField(create, displayNameField, player.getName());
+	        ReflectionUtils.setDeclaredField(create, playersField, entries);
+	        ReflectionUtils.setDeclaredField(create, modeField, 0);
 	
 	        update = new NmsPacketBuilder(
 	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
 	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
-	        ReflectionUtils.setField(update, nameField, player.getName());
-	        ReflectionUtils.setField(update, displayNameField, player.getName());
-	        ReflectionUtils.setField(update, playersField, entries);
-	        ReflectionUtils.setField(update, modeField, 2);
+	        ReflectionUtils.setDeclaredField(update, nameField, player.getName());
+	        ReflectionUtils.setDeclaredField(update, displayNameField, player.getName());
+	        ReflectionUtils.setDeclaredField(update, playersField, entries);
+	        ReflectionUtils.setDeclaredField(update, modeField, 2);
 	        
 	        remove = new NmsPacketBuilder(
 	        	plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
 	        	plugin.getNmsAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
-	        ReflectionUtils.setField(remove, nameField, player.getName());
-	        ReflectionUtils.setField(remove, playersField, entries);
-	        ReflectionUtils.setField(remove, modeField, 4);
+	        ReflectionUtils.setDeclaredField(remove, nameField, player.getName());
+	        ReflectionUtils.setDeclaredField(remove, playersField, entries);
+	        ReflectionUtils.setDeclaredField(remove, modeField, 4);
 		}
 	}
 
@@ -80,13 +80,13 @@ public class Nametag extends PlayerElement {
 			
 			if (ServerUtils.getMinorVersion() < 17) {
 				if (!newPrefix.equals(lastPrefix)) {
-			        ReflectionUtils.setField(create, prefixField, newPrefix);
-			        ReflectionUtils.setField(update, prefixField, newPrefix);
+			        ReflectionUtils.setDeclaredField(create, prefixField, newPrefix);
+			        ReflectionUtils.setDeclaredField(update, prefixField, newPrefix);
 			        lastPrefix = newPrefix;
 				}
 				if (!newSuffix.equals(lastSuffix)) {
-			        ReflectionUtils.setField(create, suffixField, newSuffix);
-			        ReflectionUtils.setField(update, suffixField, newSuffix);
+			        ReflectionUtils.setDeclaredField(create, suffixField, newSuffix);
+			        ReflectionUtils.setDeclaredField(update, suffixField, newSuffix);
 			        lastSuffix = newSuffix;
 				}
 				
