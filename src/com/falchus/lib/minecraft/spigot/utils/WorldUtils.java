@@ -31,21 +31,21 @@ public class WorldUtils {
 	/**
 	 * @return BiomeBase from a Biome
 	 */
-	public static Object getNmsBiome(Biome biome) {
+	public static Object getNmsBiome(@NonNull Biome biome) {
         return plugin.getNmsAdapter().getNmsBiome(biome);
     }
 	
 	/**
 	 * @return id from a Biome
 	 */
-	public static int getBiomeId(Biome biome) {
+	public static int getBiomeId(@NonNull Biome biome) {
 		return plugin.getNmsAdapter().getBiomeId(biome);
 	}
 	
 	/**
 	 * @return {@link Biome}
 	 */
-	public static Biome getBiome(com.falchus.lib.minecraft.spigot.enums.Biome biome) {
+	public static Biome getBiome(@NonNull com.falchus.lib.minecraft.spigot.enums.Biome biome) {
 		if (ServerUtils.getMinorVersion() < 17) {
 			return Biome.valueOf(biome.name());
 		}
