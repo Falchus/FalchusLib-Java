@@ -36,7 +36,7 @@ public class ReflectionUtils {
     
     public static Field getField(@NonNull Class<?> clazz, @NonNull String name) {
         try {
-            Field field = clazz.getDeclaredField(name);
+            Field field = clazz.getField(name);
             field.setAccessible(true);
             return field;
         } catch (NoSuchFieldException e) {
@@ -80,7 +80,7 @@ public class ReflectionUtils {
     
     public static Method getMethod(@NonNull Class<?> clazz, @NonNull String name, Class<?>... params) {
         try {
-            Method method = clazz.getDeclaredMethod(name, params);
+            Method method = clazz.getMethod(name, params);
             method.setAccessible(true);
             return method;
         } catch (NoSuchMethodException e) {
