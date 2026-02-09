@@ -74,6 +74,11 @@ public interface NmsAdapter {
 	void removeBossbar(@NonNull Player player);
 
 	/**
+	 * Sends a actionbar to a player.
+	 */
+	void sendActionbar(@NonNull Player player, @NonNull String message);
+	
+	/**
 	 * Plays a sound to a player.
 	 */
 	void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch);
@@ -92,6 +97,11 @@ public interface NmsAdapter {
 	 * @return EntityPlayer from Player
 	 */
 	Object getEntityPlayer(@NonNull Player player);
+	
+	/**
+	 * @return Player.Spigot from Player
+	 */
+	Object getPlayerSpigot(@NonNull Player player);
 	
 	/**
 	 * @return {@link GameProfile} from EntityPlayer

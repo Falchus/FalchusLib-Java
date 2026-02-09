@@ -10,71 +10,83 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 import com.falchus.lib.utils.ReflectionUtils;
 
-import lombok.AccessLevel;
 import lombok.NonNull;
-import lombok.experimental.FieldDefaults;
+import lombok.SneakyThrows;
 
 /**
  * Default adapter for all versions. (tested with 1.8.8)
  * We override methods in newer versions only if needed.
  */
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class NmsAdapterDefault extends AbstractNmsAdapter {
 	
-	Method nmsItemStack_getTag;
-	Method nmsItemStack_setTag;
-	Method nmsItemStack_hasTag;
-	
-    Object enumPlayerInfoAction_REMOVE_PLAYER;
-    Class<?> enumTitle$Action;
-    Object enumTitle$Action_TITLE;
-    Object enumTitle$Action_SUBTITLE;
-    Class<?> world;
-    Class<?> craftWorld;
-    Method craftWorld_getHandle;
-    Class<?> entity;
-    Method entity_setInvisible;
-    Method entity_setCustomName;
-    Method entity_setCustomNameVisible;
-    Method entity_setLocation;
-    Method entity_getId;
-    Class<?> entityLiving;
-    Method entityLiving_setHealth;
-    Method entityLiving_getMaxHealth;
-    Class<?> entityWither;
-    Method entity_getDataWatcher;
-	
-	public NmsAdapterDefault() {
-		try {
-            nmsItemStack_getTag = ReflectionUtils.getMethod(nmsItemStack, "getTag");
-            nmsItemStack_setTag = ReflectionUtils.getMethod(nmsItemStack, "setTag", nbtTagCompound);
-            nmsItemStack_hasTag = ReflectionUtils.getMethod(nmsItemStack, "hasTag");
-			
-            enumPlayerInfoAction_REMOVE_PLAYER = ReflectionUtils.getField(enumPlayerInfo$Action, "REMOVE_PLAYER").get(null);
-            enumTitle$Action = ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle$EnumTitleAction");
-            enumTitle$Action_TITLE = ReflectionUtils.getField(enumTitle$Action, "TITLE").get(null);
-            enumTitle$Action_SUBTITLE = ReflectionUtils.getField(enumTitle$Action, "SUBTITLE").get(null);
-            world = ReflectionUtils.getClass(packageNms + "World");
-            craftWorld = ReflectionUtils.getClass(packageObc + "CraftWorld");
-            craftWorld_getHandle = ReflectionUtils.getMethod(craftWorld, "getHandle");
-            entity = ReflectionUtils.getClass(packageNms + "Entity");
-            entity_setInvisible = ReflectionUtils.getMethod(entity, "setInvisible", boolean.class);
-            entity_setCustomName = ReflectionUtils.getMethod(entity, "setCustomName", String.class);
-            entity_setCustomNameVisible = ReflectionUtils.getMethod(entity, "setCustomNameVisible", boolean.class);
-            entity_setLocation = ReflectionUtils.getMethod(entity, "setLocation", double.class, double.class, double.class, float.class, float.class);
-            entity_getId = ReflectionUtils.getMethod(entity, "getId");
-            entity_getDataWatcher = ReflectionUtils.getMethod(entity, "getDataWatcher");
-            entityLiving = ReflectionUtils.getClass(packageNms + "EntityLiving");
-            entityLiving_setHealth = ReflectionUtils.getMethod(entityLiving, "setHealth", float.class);
-            entityLiving_getMaxHealth = ReflectionUtils.getMethod(entityLiving, "getMaxHealth");
-            entityWither = ReflectionUtils.getClass(packageNms + "EntityWither");
-		} catch (Exception e) {
-    		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
-    	}
+	private Method nmsItemStack_getTag() {
+		return ReflectionUtils.getMethod(nmsItemStack, "getTag");
 	}
+	private Method nmsItemStack_setTag() {
+		return ReflectionUtils.getMethod(nmsItemStack, "setTag", nbtTagCompound);
+	}
+	private Method nmsItemStack_hasTag() {
+		return ReflectionUtils.getMethod(nmsItemStack, "hasTag");
+	}
+	
+	@SneakyThrows private Object enumPlayerInfoAction_REMOVE_PLAYER() {
+		return ReflectionUtils.getField(enumPlayerInfo$Action, "REMOVE_PLAYER").get(null);
+	}
+	private Class<?> enumTitle$Action() {
+		return ReflectionUtils.getClass(packageNms + "PacketPlayOutTitle$EnumTitleAction");
+	}
+	@SneakyThrows private Object enumTitle$Action_TITLE() {
+		return ReflectionUtils.getField(enumTitle$Action(), "TITLE").get(null);
+	}
+	@SneakyThrows private Object enumTitle$Action_SUBTITLE() {
+    	return ReflectionUtils.getField(enumTitle$Action(), "SUBTITLE").get(null);
+    }
+    private Class<?> world() {
+    	return ReflectionUtils.getClass(packageNms + "World");
+    }
+    private Class<?> craftWorld() {
+    	return ReflectionUtils.getClass(packageObc + "CraftWorld");
+    }
+    private Method craftWorld_getHandle() {
+    	return ReflectionUtils.getMethod(craftWorld(), "getHandle");
+    }
+    private Class<?> entity() {
+    	return ReflectionUtils.getClass(packageNms + "Entity");
+    }
+    private Method entity_setInvisible() {
+    	return ReflectionUtils.getMethod(entity(), "setInvisible", boolean.class);
+    }
+    private Method entity_setCustomName() {
+    	return ReflectionUtils.getMethod(entity(), "setCustomName", String.class);
+    }
+    private Method entity_setCustomNameVisible() {
+    	return ReflectionUtils.getMethod(entity(), "setCustomNameVisible", boolean.class);
+    }
+    private Method entity_setLocation() {
+    	return ReflectionUtils.getMethod(entity(), "setLocation", double.class, double.class, double.class, float.class, float.class);
+    }
+    private Method entity_getId() {
+    	return ReflectionUtils.getMethod(entity(), "getId");
+    }
+    private Method entity_getDataWatcher() {
+    	return ReflectionUtils.getMethod(entity(), "getDataWatcher");
+    }
+    private Class<?> entityLiving() {
+    	return ReflectionUtils.getClass(packageNms + "EntityLiving");
+    }
+    private Method entityLiving_setHealth() {
+    	return ReflectionUtils.getMethod(entityLiving(), "setHealth", float.class);
+    }
+    private Method entityLiving_getMaxHealth() {
+    	return ReflectionUtils.getMethod(entityLiving(), "getMaxHealth");
+    }
+    private Class<?> entityWither() {
+    	return ReflectionUtils.getClass(packageNms + "EntityWither");
+    }
 	
 	@Override
 	public Object createChatComponentText(@NonNull String text) {
@@ -91,13 +103,13 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
     		if (nmsItem == null) return item;
     		
-    		Object tag = (boolean) nmsItemStack_hasTag.invoke(nmsItem) ? nmsItemStack_getTag.invoke(nmsItem) : nbtTagCompound.getConstructor().newInstance();
+    		Object tag = (boolean) nmsItemStack_hasTag().invoke(nmsItem) ? nmsItemStack_getTag().invoke(nmsItem) : nbtTagCompound.getConstructor().newInstance();
     		if (uuid == null) {
     			nbtTagCompound_remove.invoke(tag, "UUID");
     		} else {
     			nbtTagCompound_setString.invoke(tag, "UUID", uuid.toString());
     		}
-            nmsItemStack_setTag.invoke(nmsItem, tag);
+            nmsItemStack_setTag().invoke(nmsItem, tag);
             return (ItemStack) craftItemStack_asBukkitCopy.invoke(null, nmsItem);
     	} catch (Exception e) {
             throw new RuntimeException(e);
@@ -110,8 +122,8 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		Object nmsItem = craftItemStack_asNMSCopy.invoke(null, item);
     		if (nmsItem == null) return null;
     		
-    		if ((boolean) nmsItemStack_hasTag.invoke(nmsItem)) {
-    			Object tag = nmsItemStack_getTag.invoke(nmsItem);
+    		if ((boolean) nmsItemStack_hasTag().invoke(nmsItem)) {
+    			Object tag = nmsItemStack_getTag().invoke(nmsItem);
     			if ((boolean) nbtTagCompound_hasKey.invoke(tag, "UUID")) {
     				return UUID.fromString((String) nbtTagCompound_getString.invoke(tag, "UUID"));
     			}
@@ -129,7 +141,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		if (nmsItem == null) return item;
     		
     		Object tag = nbtTagCompound.getConstructor().newInstance();
-    		nmsItemStack_setTag.invoke(nmsItem, tag);
+    		nmsItemStack_setTag().invoke(nmsItem, tag);
     		
     		return (ItemStack) craftItemStack_asBukkitCopy.invoke(null, nmsItem);
     	} catch (Exception e) {
@@ -143,7 +155,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		if (title != null && !title.isEmpty()) {
     			Object component = chatComponentText.getConstructor(String.class).newInstance(title);
     			Object titlePacket = new NmsPacketBuilder(packageNms + "PacketPlayOutTitle")
-    					.withArgs(enumTitle$Action_TITLE, component)
+    					.withArgs(enumTitle$Action_TITLE(), component)
     					.build();
     			sendPacket(player, titlePacket);
     		}
@@ -151,7 +163,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     		if (subtitle != null && !subtitle.isEmpty()) {
     			Object component = chatComponentText.getConstructor(String.class).newInstance(subtitle);
     			Object subtitlePacket = new NmsPacketBuilder(packageNms + "PacketPlayOutTitle")
-    					.withArgs(enumTitle$Action_SUBTITLE, component)
+    					.withArgs(enumTitle$Action_SUBTITLE(), component)
     					.build();
     			sendPacket(player, subtitlePacket);
     		}
@@ -193,18 +205,18 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             float yaw = eye.getYaw();
             float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
             
-            Object worldServer = craftWorld_getHandle.invoke(player.getWorld());
-            Object wither = entityWither.getConstructor(world).newInstance(worldServer);
+            Object worldServer = craftWorld_getHandle().invoke(player.getWorld());
+            Object wither = entityWither().getConstructor(world()).newInstance(worldServer);
             
-            entity_setInvisible.invoke(wither, true);
-            entity_setCustomName.invoke(wither, title);
-            entity_setCustomNameVisible.invoke(wither, true);
+            entity_setInvisible().invoke(wither, true);
+            entity_setCustomName().invoke(wither, title);
+            entity_setCustomNameVisible().invoke(wither, true);
             
-            float maxHealth = (float) entityLiving_getMaxHealth.invoke(wither);
+            float maxHealth = (float) entityLiving_getMaxHealth().invoke(wither);
             float newHealth = (float) Math.max(1, Math.min(maxHealth, progress * maxHealth));
-            entityLiving_setHealth.invoke(wither, newHealth);
+            entityLiving_setHealth().invoke(wither, newHealth);
             
-            entity_setLocation.invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
+            entity_setLocation().invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
             
             Object spawnPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutSpawnEntityLiving")
             		.withArgs(wither)
@@ -212,7 +224,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
             sendPacket(player, spawnPacket);
             
             Object metadataPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityMetadata")
-            		.withArgs(entity_getId.invoke(wither), entity_getDataWatcher.invoke(wither), true)
+            		.withArgs(entity_getId().invoke(wither), entity_getDataWatcher().invoke(wither), true)
             		.build();
             sendPacket(player, metadataPacket);
             
@@ -227,7 +239,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     	try {
     		Object wither = bossBars.remove(player);
     		if (wither != null) {
-    			int id = (int) entity_getId.invoke(wither);
+    			int id = (int) entity_getId().invoke(wither);
     			Object destroyPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityDestroy")
     					.withArgs(new int[] { id })
     					.build();
@@ -239,6 +251,19 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     }
     
     @Override
+    public void sendActionbar(@NonNull Player player, @NonNull String message) {
+		try {
+			Object chatMessage = plugin.getNmsAdapter().createChatComponentText(message);
+			Object packet = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
+					.withArgs(chatMessage, (byte) 2)
+					.build();
+			PlayerUtils.sendPacket(player, packet);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+    }
+    
+    @Override
     public void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     	player.playSound(location, org.bukkit.Sound.valueOf(sound.name()), volume, pitch);
     }
@@ -246,7 +271,7 @@ public class NmsAdapterDefault extends AbstractNmsAdapter {
     @Override
     public void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
     	try {
-    		Object remove = enumPlayerInfoAction_REMOVE_PLAYER;
+    		Object remove = enumPlayerInfoAction_REMOVE_PLAYER();
     		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
     				.withArgs(remove, Collections.singletonList(entityPlayer))
     				.build();

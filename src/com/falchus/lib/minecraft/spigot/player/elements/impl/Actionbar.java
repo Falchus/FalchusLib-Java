@@ -6,8 +6,6 @@ import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
-import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
-import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
 
 import lombok.NonNull;
 
@@ -28,17 +26,7 @@ public class Actionbar extends PlayerElement {
 		updateRunnable = () -> {
 			String newMessage = messageSupplier.get();
 			
-			if (ServerUtils.getMinorVersion() < 12) {
-				try {
-					Object chatMessage = plugin.getNmsAdapter().createChatComponentText(newMessage);
-					Object packet = new NmsPacketBuilder(plugin.getNmsAdapter().getPackageNms() + "PacketPlayOutChat")
-							.withArgs(chatMessage, (byte) 2)
-							.build();
-					PlayerUtils.sendPacket(player, packet);
-				} catch (Exception e) {
-			        throw new RuntimeException(e);
-			    }
-			}
+			PlayerUtils.sendActionbar(player, newMessage);
 		};
 		update();
 	}

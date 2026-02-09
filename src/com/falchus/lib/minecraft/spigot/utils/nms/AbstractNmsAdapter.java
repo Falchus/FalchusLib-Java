@@ -61,6 +61,8 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     Method playerConnection_sendPacket;
     Class<?> craftPlayer;
     Method craftPlayer_getHandle;
+    Class<?> player$Spigot;
+    Method player_spigot;
     Class<?> entityHuman;
     Field entityPlayer_profile;
     Field entityPlayer_ping;
@@ -144,6 +146,8 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
             );
             craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = ReflectionUtils.getMethod(craftPlayer, "getHandle");
+            player$Spigot = ReflectionUtils.getClass(packageOb + "entity.Player$Spigot");
+            player_spigot = ReflectionUtils.getMethod(Player.class, "spigot");
             entityHuman = entityPlayer.getSuperclass();
             entityPlayer_profile = ReflectionUtils.getFirstField(entityHuman,
             	"bH",
@@ -255,6 +259,15 @@ public abstract class AbstractNmsAdapter implements NmsAdapter {
     	try {
     		Object craftPlayer = getCraftPlayer(player);
     		return craftPlayer_getHandle.invoke(craftPlayer);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public Object getPlayerSpigot(@NonNull Player player) {
+    	try {
+    		return player_spigot.invoke(player);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

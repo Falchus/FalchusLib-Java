@@ -70,6 +70,13 @@ public class PlayerUtils {
 	}
 	
 	/**
+	 * Sends a actionbar to a player.
+	 */
+	public static void sendActionbar(@NonNull Player player, @NonNull String message) {
+		plugin.getNmsAdapter().sendActionbar(player, message);
+	}
+	
+	/**
 	 * Plays a sound to a player.
 	 */
 	public static void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
