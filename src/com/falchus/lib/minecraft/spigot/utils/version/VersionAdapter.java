@@ -3,9 +3,7 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,7 +176,7 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "Entity",
             	packageNm + "world.entity.Entity"
             );
-            entity_setLocation = ReflectionUtils.getFirstMethod(entity, Arrays.asList(double.class, double.class, double.class, float.class, float.class),
+            entity_setLocation = ReflectionUtils.getFirstMethod(entity, List.of(double.class, double.class, double.class, float.class, float.class),
         		"setLocation",
         		"a"
             );
@@ -190,7 +188,7 @@ public class VersionAdapter implements IVersionAdapter {
             );
             
             entity_getBukkitEntity = ReflectionUtils.getDeclaredMethod(entity, "getBukkitEntity");
-            entity_setYawPitch = ReflectionUtils.getFirstDeclaredMethod(entity, Arrays.asList(float.class, float.class),
+            entity_setYawPitch = ReflectionUtils.getFirstDeclaredMethod(entity, List.of(float.class, float.class),
             	"setYawPitch",
             	"setRot"
             );
@@ -208,12 +206,12 @@ public class VersionAdapter implements IVersionAdapter {
             );
             craftItemStack_asNMSCopy = ReflectionUtils.getMethod(craftItemStack, "asNMSCopy", ItemStack.class);
             craftItemStack_asBukkitCopy = ReflectionUtils.getMethod(craftItemStack, "asBukkitCopy", nmsItemStack);
-            nbtTagCompound_setString = ReflectionUtils.getFirstMethod(nbtTagCompound, Arrays.asList(String.class, String.class),
+            nbtTagCompound_setString = ReflectionUtils.getFirstMethod(nbtTagCompound, List.of(String.class, String.class),
         		"setString",
         		"putString"
         	);
             nbtTagCompound_remove = ReflectionUtils.getMethod(nbtTagCompound, "remove", String.class);
-            nbtTagCompound_hasKey = ReflectionUtils.getFirstMethod(nbtTagCompound, Arrays.asList(String.class),
+            nbtTagCompound_hasKey = ReflectionUtils.getFirstMethod(nbtTagCompound, List.of(String.class),
             	"hasKey",
             	"contains"
             );
@@ -231,7 +229,7 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "PlayerConnection",
             	packageNms + "network.ServerPlayerConnection"
             );
-            playerConnection_sendPacket = ReflectionUtils.getFirstMethod(playerConnection, Arrays.asList(packet),
+            playerConnection_sendPacket = ReflectionUtils.getFirstMethod(playerConnection, List.of(packet),
             	"sendPacket",
             	"send"
             );
@@ -649,7 +647,7 @@ public class VersionAdapter implements IVersionAdapter {
     		Object packet = new NmsPacketBuilder(
 				packageNms + "PacketPlayOutPlayerInfo",
 				packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
-			).withArgs(update, Collections.singletonList(entityPlayer)).build();
+			).withArgs(update, List.of(entityPlayer)).build();
     	    for (Player online : Bukkit.getOnlinePlayers()) {
     	        sendPacket(online, packet);
     	    }
@@ -665,7 +663,7 @@ public class VersionAdapter implements IVersionAdapter {
     		Object packet = new NmsPacketBuilder(
 				packageNms + "PacketPlayOutPlayerInfo",
 				packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
-			).withArgs(add, Collections.singletonList(entityPlayer)).build();
+			).withArgs(add, List.of(entityPlayer)).build();
             sendPacket(player, packet);
     	} catch (Exception e) {
             throw new RuntimeException(e);
@@ -677,7 +675,7 @@ public class VersionAdapter implements IVersionAdapter {
     	try {
     		Object remove = enumPlayerInfoAction_REMOVE_PLAYER();
     		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
-    				.withArgs(remove, Collections.singletonList(entityPlayer))
+    				.withArgs(remove, List.of(entityPlayer))
     				.build();
             sendPacket(player, packet);
     	} catch (Exception e) {

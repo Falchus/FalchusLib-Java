@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -260,7 +259,7 @@ public class VersionAdapterModern extends VersionAdapter_v1_9_R1 {
 		try {
 			UUID uuid = getProfile(entityPlayer).getId();
 			Constructor<?> ctor = clientboundPlayerInfoRemovePacket().getConstructor(Collection.class);
-			Object packet = ctor.newInstance(Collections.singletonList(uuid));
+			Object packet = ctor.newInstance(List.of(uuid));
 			sendPacket(player, packet);
 		} catch (Exception e) {
             throw new RuntimeException(e);

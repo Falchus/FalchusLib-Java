@@ -1,7 +1,7 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -37,7 +37,7 @@ public class Nametag extends PlayerElement {
 	private Nametag(@NonNull Player player) {
 		super(player);
 		if (ServerUtils.getMinorVersion() < 17) {
-			Set<String> entries = new HashSet<>(Collections.singletonList(player.getName()));
+			Set<String> entries = new HashSet<>(List.of(player.getName()));
 	
 	        create = new NmsPacketBuilder(
 	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
