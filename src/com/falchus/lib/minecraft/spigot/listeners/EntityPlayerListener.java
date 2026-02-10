@@ -13,12 +13,10 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-
 public class EntityPlayerListener implements Listener {
 
 	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
-	public final Map<UUID, EntityPlayer> players = new HashMap<>();
+	public final Map<UUID, Object> players = new HashMap<>();
 	public final Map<UUID, Consumer<Player>> actions = new HashMap<>();
 	
 	public EntityPlayerListener() {
@@ -27,9 +25,8 @@ public class EntityPlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
-		if (!(event.getRightClicked() instanceof EntityPlayer player)) return;
-		
-		UUID uuid = player.getUniqueID();
+		if (!(event.getRightClicked() instanceof Player player)) return;
+		UUID uuid = player.getUniqueId();
 		
 		if (players.containsKey(uuid)) {
 			Consumer<Player> action = actions.get(uuid);

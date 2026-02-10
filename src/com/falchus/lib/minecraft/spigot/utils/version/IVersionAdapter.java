@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils.version;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,8 +26,22 @@ public interface IVersionAdapter {
 	String getPackageNms();
 	
 	Class<?> getBlockPosition();
+	Class<?> getEntityPlayer();
+	Class<?> getPlayerInteractManager();
+	Method getEntity_setLocation();
+	Method getEntity_setInvisible();
 	
 	Object createChatComponentText(@NonNull String text);
+	
+	/**
+	 * @return {@link Entity}
+	 */
+	Entity getBukkitEntity(@NonNull Object entity);
+	
+	/**
+	 * Sets yaw and pitch.
+	 */
+	void setYawPitch(@NonNull Object entity, float yaw, float pitch);
 	
     /**
      * Sets a UUID on the given item via NBT.
@@ -192,4 +208,9 @@ public interface IVersionAdapter {
 	 * @return id from a Biome
 	 */
 	int getBiomeId(Biome biome);
+	
+	/**
+	 * @return WorldServer from a World
+	 */
+	Object getWorldServer(World world);
 }

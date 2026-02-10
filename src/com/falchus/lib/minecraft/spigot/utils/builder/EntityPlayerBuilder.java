@@ -5,20 +5,19 @@ import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.utils.EntityUtils;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
+import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import lombok.Getter;
 import lombok.NonNull;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PlayerInteractManager;
-import net.minecraft.server.v1_8_R3.WorldServer;
 
 @Getter
 public class EntityPlayerBuilder {
@@ -76,66 +75,76 @@ public class EntityPlayerBuilder {
 	}
 	
 	/**
-	 * Builds and returns the final {@link EntityPlayer}.
+	 * Builds and returns the final EntityPlayer.
 	 */
-	public EntityPlayer build() {
-        WorldServer world = ((CraftWorld) (location != null ? location.getWorld() : Bukkit.getWorlds().get(0))).getHandle();
-		
-		GameProfile profile = new GameProfile(uuid, name);
-		if (skinValue != null && skinSignature != null) {
-			profile.getProperties().put("textures", new Property("textures", skinValue, skinSignature));
-		}
-		
-		EntityPlayer entityPlayer = new EntityPlayer(
-			((CraftServer) Bukkit.getServer()).getServer(), 
-			world, 
-			profile, 
-			new PlayerInteractManager(world)
-		);
-		
-		if (location != null) {
-			entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-		}
-		entityPlayer.setInvisible(invisible);
-		
-		plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
-		
-		if (lookAtPlayer) {
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					if (entityPlayer.dead) {
-						cancel();
-						return;
-					}
-					
-					Player nearest = null;
-					double nearestDist = Double.MAX_VALUE;
-					
-					for (Player player : entityPlayer.getBukkitEntity().getWorld().getPlayers()) {
-					    double dist = player.getLocation().distanceSquared(entityPlayer.getBukkitEntity().getLocation());
-					    if (dist < nearestDist) {
-					        nearestDist = dist;
-					        nearest = player;
-					    }
-					}
-					
-					if (nearest != null) {
-						Location from = entityPlayer.getBukkitEntity().getLocation().add(0, 1.6, 0);
-						Location to = nearest.getLocation().add(0, 1.6, 0);
+	public Object build() {
+		try {
+			Object server = ServerUtils.getMinecraftServer();
+			
+			Object world = WorldUtils.getWorldServer(location != null ? location.getWorld() : Bukkit.getWorlds().get(0));
+			
+			GameProfile profile = new GameProfile(uuid, name);
+			if (skinValue != null && skinSignature != null) {
+				profile.getProperties().put("textures", new Property("textures", skinValue, skinSignature));
+			}
+			
+			Object playerInteractManager = plugin.getVersionAdapter().getPlayerInteractManager().getConstructor(world.getClass()).newInstance(world);
+			
+			Object entityPlayer = plugin.getVersionAdapter().getEntityPlayer().getConstructor(
+				server.getClass(),
+				world.getClass(),
+				profile.getClass(),
+				playerInteractManager.getClass()
+			).newInstance(server, world, profile, playerInteractManager);
+			
+			if (location != null) {
+				plugin.getVersionAdapter().getEntity_setLocation().invoke(entityPlayer, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+			}
+			plugin.getVersionAdapter().getEntity_setInvisible().invoke(entityPlayer, invisible);
+			
+			plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
+			
+			if (lookAtPlayer) {
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						Entity entity = EntityUtils.getBukkitEntity(entityPlayer);
+						if (entity == null || !entity.isValid()) {
+							cancel();
+							return;
+						}
 						
-						double dx = to.getX() - from.getX();
-						double dy = to.getY() - from.getY();
-						double dz = to.getZ() - from.getZ();
+						Player nearest = null;
+						double nearestDist = Double.MAX_VALUE;
 						
-						double distanceXZ = Math.sqrt(dx * dx + dz * dz);
+						for (Player player : entity.getWorld().getPlayers()) {
+						    double dist = player.getLocation().distanceSquared(entity.getLocation());
+						    if (dist < nearestDist) {
+						        nearestDist = dist;
+						        nearest = player;
+						    }
+						}
 						
-						entityPlayer.yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
-						entityPlayer.pitch = (float) -Math.toDegrees(Math.atan2(dy, distanceXZ));
+						if (nearest != null) {
+							Location from = entity.getLocation().add(0, 1.6, 0);
+							Location to = nearest.getLocation().add(0, 1.6, 0);
+							
+							double dx = to.getX() - from.getX();
+							double dy = to.getY() - from.getY();
+							double dz = to.getZ() - from.getZ();
+							
+							double distanceXZ = Math.sqrt(dx * dx + dz * dz);
+							
+							float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
+							float pitch = (float) -Math.toDegrees(Math.atan2(dy, distanceXZ));
+							EntityUtils.setYawPitch(entityPlayer, yaw, pitch);
+						}
 					}
-				}
-			}.runTaskTimer(plugin, 0, 1);
+				}.runTaskTimer(plugin, 0, 1);
+			}
+			return entityPlayer;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		return entityPlayer;
 	}
 }

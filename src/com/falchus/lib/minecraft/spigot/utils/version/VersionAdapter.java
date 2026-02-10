@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -48,8 +49,16 @@ public class VersionAdapter implements IVersionAdapter {
 	@Getter String packageNms = packageNm + "server.";
 	
     @Getter Class<?> blockPosition;
+    @Getter Class<?> entityPlayer;
+    @Getter Class<?> playerInteractManager;
+    Class<?> entity;
+    @Getter Method entity_setLocation;
+    @Getter Method entity_setInvisible;
     
     Class<?> chatComponentText;
+    
+    Method entity_getBukkitEntity;
+    Method entity_setYawPitch;
 	
 	Class<?> craftItemStack;
 	Class<?> nmsItemStack;
@@ -62,7 +71,6 @@ public class VersionAdapter implements IVersionAdapter {
 	Method nbtTagCompound_getString;
 	
 	Class<?> packet;
-    Class<?> entityPlayer;
     Field entityPlayer_playerConnection;
     Class<?> playerConnection;
     Method playerConnection_sendPacket;
@@ -119,26 +127,17 @@ public class VersionAdapter implements IVersionAdapter {
     private Method craftWorld_getHandle() {
     	return ReflectionUtils.getMethod(craftWorld(), "getHandle");
     }
-    private Class<?> entity() {
-    	return ReflectionUtils.getClass(packageNms + "Entity");
-    }
-    private Method entity_setInvisible() {
-    	return ReflectionUtils.getMethod(entity(), "setInvisible", boolean.class);
-    }
     private Method entity_setCustomName() {
-    	return ReflectionUtils.getMethod(entity(), "setCustomName", String.class);
+    	return ReflectionUtils.getMethod(entity, "setCustomName", String.class);
     }
     private Method entity_setCustomNameVisible() {
-    	return ReflectionUtils.getMethod(entity(), "setCustomNameVisible", boolean.class);
-    }
-    private Method entity_setLocation() {
-    	return ReflectionUtils.getMethod(entity(), "setLocation", double.class, double.class, double.class, float.class, float.class);
+    	return ReflectionUtils.getMethod(entity, "setCustomNameVisible", boolean.class);
     }
     private Method entity_getId() {
-    	return ReflectionUtils.getMethod(entity(), "getId");
+    	return ReflectionUtils.getMethod(entity, "getId");
     }
     private Method entity_getDataWatcher() {
-    	return ReflectionUtils.getMethod(entity(), "getDataWatcher");
+    	return ReflectionUtils.getMethod(entity, "getDataWatcher");
     }
     private Class<?> entityLiving() {
     	return ReflectionUtils.getClass(packageNms + "EntityLiving");
@@ -163,15 +162,39 @@ public class VersionAdapter implements IVersionAdapter {
     		packageObc = packageObc + (!version.equals("Unknown") ? version + "." : "");
     		packageNms = packageNms + (!version.equals("Unknown") ? version + "." : "");
     		
-            chatComponentText = ReflectionUtils.getFirstClass(
-            	packageNms + "ChatComponentText",
-            	packageNm + "network.chat.IChatBaseComponent"
-            );
             blockPosition = ReflectionUtils.getFirstClass(
             	packageNms + "BlockPosition",
             	packageNm + "core.BlockPosition"
             );
+            entityPlayer = ReflectionUtils.getFirstClass(
+            	packageNms + "EntityPlayer",
+            	packageNms + "level.EntityPlayer"
+            );
+            playerInteractManager = ReflectionUtils.getFirstClass(
+            	packageNms + "PlayerInteractManager",
+            	packageNms + "level.PlayerInteractManager"
+            );
+            entity = ReflectionUtils.getFirstClass(
+            	packageNms + "Entity",
+            	packageNm + "world.entity.Entity"
+            );
+            entity_setLocation = ReflectionUtils.getFirstMethod(entity, Arrays.asList(double.class, double.class, double.class, float.class, float.class),
+        		"setLocation",
+        		"a"
+            );
+            entity_setInvisible = ReflectionUtils.getMethod(entity, "setLocation", boolean.class);
     		
+            chatComponentText = ReflectionUtils.getFirstClass(
+            	packageNms + "ChatComponentText",
+            	packageNm + "network.chat.IChatBaseComponent"
+            );
+            
+            entity_getBukkitEntity = ReflectionUtils.getDeclaredMethod(entity, "getBukkitEntity");
+            entity_setYawPitch = ReflectionUtils.getFirstDeclaredMethod(entity, Arrays.asList(float.class, float.class),
+            	"setYawPitch",
+            	"setRot"
+            );
+            
             craftItemStack = ReflectionUtils.getFirstClass(
             	packageObc + "inventory.CraftItemStack"
             );
@@ -199,10 +222,6 @@ public class VersionAdapter implements IVersionAdapter {
             packet = ReflectionUtils.getFirstClass(
             	packageNms + "Packet",
             	packageNm + "network.protocol.Packet"
-            );
-            entityPlayer = ReflectionUtils.getFirstClass(
-            	packageNms + "EntityPlayer",
-            	packageNms + "level.EntityPlayer"
             );
             entityPlayer_playerConnection = ReflectionUtils.getFirstField(entityPlayer,
             	"playerConnection",
@@ -258,6 +277,24 @@ public class VersionAdapter implements IVersionAdapter {
 		} catch (Exception e) {
             throw new RuntimeException(e);
         }
+	}
+	
+	@Override
+	public Entity getBukkitEntity(@NonNull Object entity) {
+		try {
+			return (Entity) entity_getBukkitEntity.invoke(entity);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Override
+	public void setYawPitch(@NonNull Object entity, float yaw, float pitch) {
+		try {
+			entity_setYawPitch.invoke(entity, yaw, pitch);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
 	}
 	
     @Override
@@ -393,10 +430,10 @@ public class VersionAdapter implements IVersionAdapter {
             float yaw = eye.getYaw();
             float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
             
-            Object worldServer = craftWorld_getHandle().invoke(player.getWorld());
+            Object worldServer = getWorldServer(player.getWorld());
             Object wither = entityWither().getConstructor(world()).newInstance(worldServer);
             
-            entity_setInvisible().invoke(wither, true);
+            entity_setInvisible.invoke(wither, true);
             entity_setCustomName().invoke(wither, title);
             entity_setCustomNameVisible().invoke(wither, true);
             
@@ -404,7 +441,7 @@ public class VersionAdapter implements IVersionAdapter {
             float newHealth = (float) Math.max(1, Math.min(maxHealth, progress * maxHealth));
             entityLiving_setHealth().invoke(wither, newHealth);
             
-            entity_setLocation().invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
+            entity_setLocation.invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
             
             Object spawnPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutSpawnEntityLiving")
             		.withArgs(wither)
@@ -442,7 +479,7 @@ public class VersionAdapter implements IVersionAdapter {
     public void sendActionbar(@NonNull Player player, @NonNull String message) {
 		try {
 			Object chatMessage = plugin.getVersionAdapter().createChatComponentText(message);
-			Object packet = new NmsPacketBuilder(plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutChat")
+			Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutChat")
 					.withArgs(chatMessage, (byte) 2)
 					.build();
 			PlayerUtils.sendPacket(player, packet);
@@ -877,6 +914,15 @@ public class VersionAdapter implements IVersionAdapter {
             }
             return 1;
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public Object getWorldServer(@NonNull World world) {
+    	try {
+    		return craftWorld_getHandle().invoke(world);
+    	} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

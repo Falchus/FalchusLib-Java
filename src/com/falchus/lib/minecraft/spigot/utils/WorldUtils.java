@@ -43,6 +43,13 @@ public class WorldUtils {
 	}
 	
 	/**
+	 * @return WorldServer from a World
+	 */
+	public static Object getWorldServer(World world) {
+		return plugin.getVersionAdapter().getWorldServer(world);
+	}
+	
+	/**
 	 * @return {@link Biome}
 	 */
 	public static Biome getBiome(com.falchus.lib.minecraft.spigot.enums.Biome biome) {
