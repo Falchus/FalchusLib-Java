@@ -180,7 +180,7 @@ public class VersionAdapter implements IVersionAdapter {
         		"setLocation",
         		"a"
             );
-            entity_setInvisible = ReflectionUtils.getMethod(entity, "setLocation", boolean.class);
+            entity_setInvisible = ReflectionUtils.getMethod(entity, "setInvisible", boolean.class);
     		
             chatComponentText = ReflectionUtils.getFirstClass(
             	packageNms + "ChatComponentText",
