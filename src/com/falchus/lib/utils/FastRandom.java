@@ -1,7 +1,8 @@
 package com.falchus.lib.utils;
 
-import java.io.Serial;
 import java.util.Random;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 import lombok.AllArgsConstructor;
 
@@ -11,9 +12,9 @@ import lombok.AllArgsConstructor;
  * http://www.javamex.com/tutorials/random_numbers/xorshift.shtml
  */
 @AllArgsConstructor
+@ThreadSafe // The fast random can be used with multiple threads
 public class FastRandom extends Random implements Cloneable {
 	
-	@Serial
     private static final long serialVersionUID = 1L;
 
 	protected long seed;
