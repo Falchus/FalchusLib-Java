@@ -16,17 +16,13 @@ import lombok.Getter;
 @Getter
 public class PlayerClientJoinEvent extends Event {
 
-	private static final HandlerList handlers = new HandlerList();
+	@Getter private static final HandlerList handlerList = new HandlerList();
 	
 	private final Player player;
 	private final Client client;
 	
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
-		return handlers;
+		return handlerList;
 	}
 }

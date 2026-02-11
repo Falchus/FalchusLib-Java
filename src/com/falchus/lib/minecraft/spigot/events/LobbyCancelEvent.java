@@ -15,17 +15,13 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class LobbyCancelEvent extends Event implements Cancellable {
 
-	private static final HandlerList handlers = new HandlerList();
+	@Getter private static final HandlerList handlerList = new HandlerList();
 	@Setter private boolean isCancelled;
 	
 	private final Event event;
 	
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
-		return handlers;
+		return handlerList;
 	}
 }
