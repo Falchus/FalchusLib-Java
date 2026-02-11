@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
-import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.builder.VersionPacketBuilder;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
@@ -38,7 +38,7 @@ public class Nametag extends PlayerElement {
 		if (ServerUtils.getMinorVersion() < 17) {
 			Set<String> entries = Set.of(player.getName());
 	
-	        create = new NmsPacketBuilder(
+	        create = new VersionPacketBuilder(
 	        	VersionProvider.get().getPackageNms() + "PacketPlayOutScoreboardTeam",
 	        	VersionProvider.get().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
@@ -47,7 +47,7 @@ public class Nametag extends PlayerElement {
 	        ReflectionUtils.setDeclaredField(create, playersField, entries);
 	        ReflectionUtils.setDeclaredField(create, modeField, 0);
 	
-	        update = new NmsPacketBuilder(
+	        update = new VersionPacketBuilder(
         		VersionProvider.get().getPackageNms() + "PacketPlayOutScoreboardTeam",
         		VersionProvider.get().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
@@ -56,7 +56,7 @@ public class Nametag extends PlayerElement {
 	        ReflectionUtils.setDeclaredField(update, playersField, entries);
 	        ReflectionUtils.setDeclaredField(update, modeField, 2);
 	        
-	        remove = new NmsPacketBuilder(
+	        remove = new VersionPacketBuilder(
         		VersionProvider.get().getPackageNms() + "PacketPlayOutScoreboardTeam",
         		VersionProvider.get().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();

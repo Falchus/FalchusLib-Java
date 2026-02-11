@@ -9,38 +9,38 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 
 @Getter
-public class NmsPacketBuilder {
+public class VersionPacketBuilder {
 
 	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	private Class<?> packet;
 	private Object[] args = new Object[0];
 	
 	/**
-	 * Creates a new {@link NmsPacketBuilder} for the given packet.
+	 * Creates a new {@link VersionPacketBuilder} for the given packet.
 	 */
-	public NmsPacketBuilder(@NonNull Class<?> packet) {
+	public VersionPacketBuilder(@NonNull Class<?> packet) {
 		this.packet = packet;
 	}
 	
 	/**
-	 * Creates a new {@link NmsPacketBuilder} for the given packet by class name (full package).
+	 * Creates a new {@link VersionPacketBuilder} for the given packet by class name (full package).
 	 */
 	@SneakyThrows
-	public NmsPacketBuilder(@NonNull String className) {
+	public VersionPacketBuilder(@NonNull String className) {
 		this.packet = Class.forName(className);
 	}
 	
 	/**
-	 * Creates a new {@link NmsPacketBuilder} for the given packet by trying class names (full packages).
+	 * Creates a new {@link VersionPacketBuilder} for the given packet by trying class names (full packages).
 	 */
-	public NmsPacketBuilder(@NonNull String... classNames) {
+	public VersionPacketBuilder(@NonNull String... classNames) {
 		this.packet = ReflectionUtils.getFirstClass(classNames);
 	}
 	
 	/**
 	 * Sets constructor arguments for the packet.
 	 */
-	public NmsPacketBuilder withArgs(Object... args) {
+	public VersionPacketBuilder withArgs(Object... args) {
         if (args != null) {
             this.args = args;
         }

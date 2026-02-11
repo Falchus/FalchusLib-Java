@@ -21,7 +21,7 @@ import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
-import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.builder.VersionPacketBuilder;
 import com.falchus.lib.utils.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -377,7 +377,7 @@ public class VersionAdapter implements IVersionAdapter {
     	try {
     		if (title != null && !title.isEmpty()) {
     			Object component = chatComponentText.getConstructor(String.class).newInstance(title);
-    			Object titlePacket = new NmsPacketBuilder(packageNms + "PacketPlayOutTitle")
+    			Object titlePacket = new VersionPacketBuilder(packageNms + "PacketPlayOutTitle")
     					.withArgs(enumTitle$Action_TITLE(), component)
     					.build();
     			sendPacket(player, titlePacket);
@@ -385,7 +385,7 @@ public class VersionAdapter implements IVersionAdapter {
     		
     		if (subtitle != null && !subtitle.isEmpty()) {
     			Object component = chatComponentText.getConstructor(String.class).newInstance(subtitle);
-    			Object subtitlePacket = new NmsPacketBuilder(packageNms + "PacketPlayOutTitle")
+    			Object subtitlePacket = new VersionPacketBuilder(packageNms + "PacketPlayOutTitle")
     					.withArgs(enumTitle$Action_SUBTITLE(), component)
     					.build();
     			sendPacket(player, subtitlePacket);
@@ -404,7 +404,7 @@ public class VersionAdapter implements IVersionAdapter {
     	    Object headerComponent = chatComponentText.getConstructor(String.class).newInstance(headerText);
             Object footerComponent = chatComponentText.getConstructor(String.class).newInstance(footerText);
             
-            Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerListHeaderFooter")
+            Object packet = new VersionPacketBuilder(packageNms + "PacketPlayOutPlayerListHeaderFooter")
             		.withArgs(headerComponent)
             		.build();
             
@@ -441,12 +441,12 @@ public class VersionAdapter implements IVersionAdapter {
             
             entity_setLocation.invoke(wither, location.getX(), location.getY(), location.getZ(), yaw, pitch);
             
-            Object spawnPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutSpawnEntityLiving")
+            Object spawnPacket = new VersionPacketBuilder(packageNms + "PacketPlayOutSpawnEntityLiving")
             		.withArgs(wither)
             		.build();
             sendPacket(player, spawnPacket);
             
-            Object metadataPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityMetadata")
+            Object metadataPacket = new VersionPacketBuilder(packageNms + "PacketPlayOutEntityMetadata")
             		.withArgs(entity_getId().invoke(wither), entity_getDataWatcher().invoke(wither), true)
             		.build();
             sendPacket(player, metadataPacket);
@@ -463,7 +463,7 @@ public class VersionAdapter implements IVersionAdapter {
     		Object wither = bossBars.remove(player);
     		if (wither != null) {
     			int id = (int) entity_getId().invoke(wither);
-    			Object destroyPacket = new NmsPacketBuilder(packageNms + "PacketPlayOutEntityDestroy")
+    			Object destroyPacket = new VersionPacketBuilder(packageNms + "PacketPlayOutEntityDestroy")
     					.withArgs(new int[] { id })
     					.build();
     			sendPacket(player, destroyPacket);
@@ -477,7 +477,7 @@ public class VersionAdapter implements IVersionAdapter {
     public void sendActionbar(@NonNull Player player, @NonNull String message) {
 		try {
 			Object chatMessage = VersionProvider.get().createChatComponentText(message);
-			Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutChat")
+			Object packet = new VersionPacketBuilder(packageNms + "PacketPlayOutChat")
 					.withArgs(chatMessage, (byte) 2)
 					.build();
 			PlayerUtils.sendPacket(player, packet);
@@ -494,7 +494,7 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public void sendEndCredits(@NonNull Player player) {
     	try {
-    		Object packet = new NmsPacketBuilder(
+    		Object packet = new VersionPacketBuilder(
     			packageNms + "PacketPlayOutGameStateChange",
     			packageNm + "network.protocol.game.ClientboundGameEventPacket"
     		).withArgs(4, 0.0F).build();
@@ -644,7 +644,7 @@ public class VersionAdapter implements IVersionAdapter {
     		Object entityPlayer = getEntityPlayer(player);
     		
     		Object update = enumPlayerInfo$Action_UPDATE_DISPLAY_NAME;
-    		Object packet = new NmsPacketBuilder(
+    		Object packet = new VersionPacketBuilder(
 				packageNms + "PacketPlayOutPlayerInfo",
 				packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
 			).withArgs(update, List.of(entityPlayer)).build();
@@ -660,7 +660,7 @@ public class VersionAdapter implements IVersionAdapter {
     public void addEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
     	try {
     		Object add = enumPlayerInfo$Action_ADD_PLAYER;
-    		Object packet = new NmsPacketBuilder(
+    		Object packet = new VersionPacketBuilder(
 				packageNms + "PacketPlayOutPlayerInfo",
 				packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
 			).withArgs(add, List.of(entityPlayer)).build();
@@ -674,7 +674,7 @@ public class VersionAdapter implements IVersionAdapter {
     public void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
     	try {
     		Object remove = enumPlayerInfoAction_REMOVE_PLAYER();
-    		Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
+    		Object packet = new VersionPacketBuilder(packageNms + "PacketPlayOutPlayerInfo")
     				.withArgs(remove, List.of(entityPlayer))
     				.build();
             sendPacket(player, packet);
@@ -688,13 +688,13 @@ public class VersionAdapter implements IVersionAdapter {
     	try {
     		addEntityPlayer(player, entityPlayer);
     		
-    		Object spawn = new NmsPacketBuilder(
+    		Object spawn = new VersionPacketBuilder(
     			packageNms + "PacketPlayOutNamedEntitySpawn",
     			packageNm + "network.protocol.game.ClientboundAddPlayerPacket"
     		).withArgs(entityPlayer).build();
     		sendPacket(player, spawn);
     		
-    		Object teleport = new NmsPacketBuilder(
+    		Object teleport = new VersionPacketBuilder(
     			packageNms + "PacketPlayOutEntityTeleport",
     			packageNm + "network.protocol.game.ClientboundPlayerPositionPacket"
     		).withArgs(entityPlayer).build();
