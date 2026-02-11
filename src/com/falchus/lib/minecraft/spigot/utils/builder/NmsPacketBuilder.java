@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.Getter;
@@ -53,6 +54,6 @@ public class NmsPacketBuilder {
 		if (packet == null) {
 			throw new IllegalStateException("Packet class must be set");
 		}
-		return plugin.getVersionAdapter().createPacket(packet, args);
+		return VersionProvider.get().createPacket(packet, args);
 	}
 }

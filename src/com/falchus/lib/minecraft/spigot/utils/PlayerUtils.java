@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mojang.authlib.GameProfile;
@@ -31,56 +32,56 @@ public class PlayerUtils {
 	 * Sends a raw NMS packet to a player.
 	 */
 	public static void sendPacket(@NonNull Player player, @NonNull Object packet) {
-		plugin.getVersionAdapter().sendPacket(player, packet);
+		VersionProvider.get().sendPacket(player, packet);
 	}
 	
 	/**
 	 * Creates an instance of a packet.
 	 */
 	public static Object createPacket(@NonNull Class<?> packetClass, Object... constructorArgs) {
-		return plugin.getVersionAdapter().createPacket(packetClass, constructorArgs);
+		return VersionProvider.get().createPacket(packetClass, constructorArgs);
 	}
 	
 	/**
 	 * Sends a title and/or subtitle to a player.
 	 */
 	public static void sendTitle(@NonNull Player player, String title, String subtitle) {
-		plugin.getVersionAdapter().sendTitle(player, title, subtitle);
+		VersionProvider.get().sendTitle(player, title, subtitle);
 	}
 	
 	/**
 	 * Sends a tablist to a player.
 	 */
 	public static void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {
-		plugin.getVersionAdapter().sendTablist(player, header, footer, name);
+		VersionProvider.get().sendTablist(player, header, footer, name);
 	}
 	
 	/**
 	 * Sends a bossbar to a player.
 	 */
 	public static void sendBossbar(@NonNull Player player, @NonNull String title, double progress) {
-		plugin.getVersionAdapter().sendBossbar(player, title, progress);
+		VersionProvider.get().sendBossbar(player, title, progress);
 	}
 	
 	/**
 	 * Removes a bossbar from a player.
 	 */
 	public static void removeBossbar(@NonNull Player player) {
-		plugin.getVersionAdapter().removeBossbar(player);
+		VersionProvider.get().removeBossbar(player);
 	}
 	
 	/**
 	 * Sends a actionbar to a player.
 	 */
 	public static void sendActionbar(@NonNull Player player, @NonNull String message) {
-		plugin.getVersionAdapter().sendActionbar(player, message);
+		VersionProvider.get().sendActionbar(player, message);
 	}
 	
 	/**
 	 * Plays a sound to a player.
 	 */
 	public static void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
-		plugin.getVersionAdapter().playSound(player, location, sound, volume, pitch);
+		VersionProvider.get().playSound(player, location, sound, volume, pitch);
 	}
 	
 	/**
@@ -114,7 +115,7 @@ public class PlayerUtils {
 	 * Sends the end credits screen to a player.
 	 */
 	public static void sendEndCredits(@NonNull Player player) {
-		plugin.getVersionAdapter().sendEndCredits(player);
+		VersionProvider.get().sendEndCredits(player);
 	}
 	
 	/**
@@ -143,77 +144,77 @@ public class PlayerUtils {
 	 * @return EntityPlayer from Player
 	 */
 	public Object getEntityPlayer(@NonNull Player player) {
-		return plugin.getVersionAdapter().getEntityPlayer(player);
+		return VersionProvider.get().getEntityPlayer(player);
 	}
 	
 	/**
 	 * @return GameProfile from EntityPlayer
 	 */
 	public GameProfile getProfile(@NonNull Object entityPlayer) {
-		return plugin.getVersionAdapter().getProfile(entityPlayer);
+		return VersionProvider.get().getProfile(entityPlayer);
 	}
 	
 	/**
 	 * @return ping from a player.
 	 */
 	public int getPing(@NonNull Player player) {
-		return plugin.getVersionAdapter().getPing(player);
+		return VersionProvider.get().getPing(player);
 	}
 	
 	/**
 	 * Sets a custom skin.
 	 */
 	public static void setSkin(@NonNull Player player, @NonNull UUID uuid) {
-		plugin.getVersionAdapter().setSkin(player, uuid);
+		VersionProvider.get().setSkin(player, uuid);
 	}
 	
 	/**
 	 * Resets the skin back to the original.
 	 */
 	public static void resetSkin(@NonNull Player player) {
-		plugin.getVersionAdapter().resetSkin(player);
+		VersionProvider.get().resetSkin(player);
 	}
 	
 	/**
 	 * Sets a custom name.
 	 */
 	public static void setName(@NonNull Player player, @NonNull String name) {
-		plugin.getVersionAdapter().setName(player, name);
+		VersionProvider.get().setName(player, name);
 	}
 	
 	/**
 	 * Resets the name back to the original.
 	 */
 	public static void resetName(@NonNull Player player) {
-		plugin.getVersionAdapter().resetName(player);
+		VersionProvider.get().resetName(player);
 	}
 	
 	/**
 	 * Forces clients to reload the player's GameProfile.
 	 */
 	public static void refresh(@NonNull Player player) {
-		plugin.getVersionAdapter().refresh(player);
+		VersionProvider.get().refresh(player);
 	}
 	
 	/**
 	 * Adds a EntityPlayer.
 	 */
 	public static void addEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		plugin.getVersionAdapter().addEntityPlayer(player, entityPlayer);
+		VersionProvider.get().addEntityPlayer(player, entityPlayer);
 	}
 	
 	/**
 	 * Removes a EntityPlayer.
 	 */
 	public static void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		plugin.getVersionAdapter().removeEntityPlayer(player, entityPlayer);
+		VersionProvider.get().removeEntityPlayer(player, entityPlayer);
 	}
 	
 	/**
 	 * Spawns a EntityPlayer.
 	 */
 	public static void spawnEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		plugin.getVersionAdapter().spawnEntityPlayer(player, entityPlayer);
+		VersionProvider.get().spawnEntityPlayer(player, entityPlayer);
 	}
 	
 	/**

@@ -15,8 +15,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
-import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
+import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -24,7 +24,6 @@ import lombok.NonNull;
 
 public class ItemBuilder {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	private ItemStack item;
 	
 	/**
@@ -144,7 +143,7 @@ public class ItemBuilder {
 	 * Sets a custom UUID (stored in NBT).
 	 */
 	public ItemBuilder setUuid(@NonNull UUID uuid) {
-		plugin.getVersionAdapter().setUUID(item, uuid);
+		VersionProvider.get().setUUID(item, uuid);
 		return this;
 	}
 

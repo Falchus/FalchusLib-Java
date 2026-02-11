@@ -476,7 +476,7 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public void sendActionbar(@NonNull Player player, @NonNull String message) {
 		try {
-			Object chatMessage = plugin.getVersionAdapter().createChatComponentText(message);
+			Object chatMessage = VersionProvider.get().createChatComponentText(message);
 			Object packet = new NmsPacketBuilder(packageNms + "PacketPlayOutChat")
 					.withArgs(chatMessage, (byte) 2)
 					.build();

@@ -10,6 +10,7 @@ import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.NmsPacketBuilder;
+import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.falchus.lib.utils.ReflectionUtils;
 
 import lombok.NonNull;
@@ -38,8 +39,8 @@ public class Nametag extends PlayerElement {
 			Set<String> entries = Set.of(player.getName());
 	
 	        create = new NmsPacketBuilder(
-	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-	        	plugin.getVersionAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+	        	VersionProvider.get().getPackageNms() + "PacketPlayOutScoreboardTeam",
+	        	VersionProvider.get().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
 	        ReflectionUtils.setDeclaredField(create, nameField, player.getName());
 	        ReflectionUtils.setDeclaredField(create, displayNameField, player.getName());
@@ -47,8 +48,8 @@ public class Nametag extends PlayerElement {
 	        ReflectionUtils.setDeclaredField(create, modeField, 0);
 	
 	        update = new NmsPacketBuilder(
-	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-	        	plugin.getVersionAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+        		VersionProvider.get().getPackageNms() + "PacketPlayOutScoreboardTeam",
+        		VersionProvider.get().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
 	        ReflectionUtils.setDeclaredField(update, nameField, player.getName());
 	        ReflectionUtils.setDeclaredField(update, displayNameField, player.getName());
@@ -56,8 +57,8 @@ public class Nametag extends PlayerElement {
 	        ReflectionUtils.setDeclaredField(update, modeField, 2);
 	        
 	        remove = new NmsPacketBuilder(
-	        	plugin.getVersionAdapter().getPackageNms() + "PacketPlayOutScoreboardTeam",
-	        	plugin.getVersionAdapter().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
+        		VersionProvider.get().getPackageNms() + "PacketPlayOutScoreboardTeam",
+        		VersionProvider.get().getPackageNm() + "network.protocol.game.PacketPlayOutScoreboardTeam"
 	        ).build();
 	        ReflectionUtils.setDeclaredField(remove, nameField, player.getName());
 	        ReflectionUtils.setDeclaredField(remove, playersField, entries);

@@ -13,6 +13,7 @@ import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.utils.EntityUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
+import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -88,9 +89,9 @@ public class EntityPlayerBuilder {
 				profile.getProperties().put("textures", new Property("textures", skinValue, skinSignature));
 			}
 			
-			Object playerInteractManager = plugin.getVersionAdapter().getPlayerInteractManager().getConstructor(world.getClass()).newInstance(world);
+			Object playerInteractManager = VersionProvider.get().getPlayerInteractManager().getConstructor(world.getClass()).newInstance(world);
 			
-			Object entityPlayer = plugin.getVersionAdapter().getEntityPlayer().getConstructor(
+			Object entityPlayer = VersionProvider.get().getEntityPlayer().getConstructor(
 				server.getClass(),
 				world.getClass(),
 				profile.getClass(),
@@ -98,9 +99,9 @@ public class EntityPlayerBuilder {
 			).newInstance(server, world, profile, playerInteractManager);
 			
 			if (location != null) {
-				plugin.getVersionAdapter().getEntity_setLocation().invoke(entityPlayer, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+				VersionProvider.get().getEntity_setLocation().invoke(entityPlayer, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 			}
-			plugin.getVersionAdapter().getEntity_setInvisible().invoke(entityPlayer, invisible);
+			VersionProvider.get().getEntity_setInvisible().invoke(entityPlayer, invisible);
 			
 			plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
 			
