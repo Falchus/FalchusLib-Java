@@ -40,7 +40,7 @@ public class FreezeListener implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		
@@ -48,7 +48,6 @@ public class FreezeListener implements Listener {
 			Location from = event.getFrom();
 			Location to = event.getTo();
 			if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
-				event.setCancelled(true);
 				event.setTo(from);
 			}
 		}
