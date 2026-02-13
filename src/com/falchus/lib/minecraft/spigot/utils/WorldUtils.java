@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
@@ -55,5 +56,15 @@ public class WorldUtils {
 			return Biome.valueOf(biome.name());
 		}
 		return Biome.valueOf(biome.getModernName());
+	}
+	
+	/**
+	 * @return {@link Material}
+	 */
+	public static Material getMaterial(com.falchus.lib.minecraft.spigot.enums.Material material) {
+		if (ServerUtils.getMinorVersion() < 13) {
+			return Material.valueOf(material.getLegacyName());
+		}
+		return Material.valueOf(material.name());
 	}
 }

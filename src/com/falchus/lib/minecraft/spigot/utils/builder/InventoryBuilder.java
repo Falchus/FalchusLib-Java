@@ -6,13 +6,13 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
+import com.falchus.lib.minecraft.spigot.enums.Material;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
 import com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.InventoryOpenAnimation;
 
@@ -129,7 +129,7 @@ public class InventoryBuilder {
      * Defines a default filler item that will be placed in all unused slots.
      */
     public InventoryBuilder fill() {
-        this.filler = new ItemBuilder(Material.STAINED_GLASS_PANE).setName("§r").setDurability((short) 7).build();
+        this.filler = new ItemBuilder(com.falchus.lib.minecraft.spigot.enums.Material.GRAY_STAINED_GLASS_PANE).setName("§r").build();
         return this;
     }
     
@@ -187,14 +187,14 @@ public class InventoryBuilder {
     		
     		final int currentPage = page;
     		
-			inv.setItem(size - 9, new ItemBuilder(Material.SKULL_ITEM).setName("§ePrevious page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWYxMzNlOTE5MTlkYjBhY2VmZGMyNzJkNjdmZDg3YjRiZTg4ZGM0NGE5NTg5NTg4MjQ0NzRlMjFlMDZkNTNlNiJ9fX0=").withInventoryClickListener(
+			inv.setItem(size - 9, new ItemBuilder(Material.PLAYER_HEAD).setName("§ePrevious page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWYxMzNlOTE5MTlkYjBhY2VmZGMyNzJkNjdmZDg3YjRiZTg4ZGM0NGE5NTg5NTg4MjQ0NzRlMjFlMDZkNTNlNiJ9fX0=").withInventoryClickListener(
 				(player, item, event) -> {
 					if (currentPage > 0) {
 						player.openInventory(pages.get(currentPage - 1));
 					}
 				})
 			.build());
-			inv.setItem(size - 1, new ItemBuilder(Material.SKULL_ITEM).setName("§eNext page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNmYzUyMjY0ZDhhZDllNjU0ZjQxNWJlZjAxYTIzOTQ3ZWRiY2NjY2Y2NDkzNzMyODliZWE0ZDE0OTU0MWY3MCJ9fX0=").withInventoryClickListener(
+			inv.setItem(size - 1, new ItemBuilder(Material.PLAYER_HEAD).setName("§eNext page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNmYzUyMjY0ZDhhZDllNjU0ZjQxNWJlZjAxYTIzOTQ3ZWRiY2NjY2Y2NDkzNzMyODliZWE0ZDE0OTU0MWY3MCJ9fX0=").withInventoryClickListener(
 				(player, item, event) -> {
 	                if (currentPage < totalPages - 1) {
 	                    player.openInventory(pages.get(currentPage + 1));

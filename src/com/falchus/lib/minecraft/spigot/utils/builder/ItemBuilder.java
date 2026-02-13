@@ -16,7 +16,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
-import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
+import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
+import com.falchus.lib.utils.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -27,17 +29,36 @@ public class ItemBuilder {
 	private ItemStack item;
 	
 	/**
+	 * Creates an ItemBuilder for the given material and amount.
+	 */
+	public ItemBuilder(@NonNull Material material, int amount) {
+		this.item = new ItemStack(material, amount);
+	}
+	
+	/**
 	 * Creates an ItemBuilder for the given material.
 	 */
 	public ItemBuilder(@NonNull Material material) {
-		this.item = new ItemStack(material);
+		this(material, 1);
 	}
 	
 	/**
 	 * Creates an ItemBuilder for the given material and amount.
 	 */
-	public ItemBuilder(@NonNull Material material, @NonNull Integer amount) {
-		this.item = new ItemStack(material, amount);
+	public ItemBuilder(@NonNull com.falchus.lib.minecraft.spigot.enums.Material material, int amount) {
+		Material mat = WorldUtils.getMaterial(material);
+		if (ServerUtils.getMinorVersion() < 13) {
+			this.item = new ItemStack(mat, amount, (short) material.getLegacyDurability());
+		} else {
+			this.item = new ItemStack(mat, amount);
+		}
+	}
+	
+	/**
+	 * Creates an ItemBuilder for the given material.
+	 */
+	public ItemBuilder(@NonNull com.falchus.lib.minecraft.spigot.enums.Material material) {
+		this(material, 1);
 	}
 	
 	/**
@@ -74,7 +95,7 @@ public class ItemBuilder {
 	/**
 	 * Adds an unsafe enchantment.
 	 */
-	public ItemBuilder addEnchantment(@NonNull Enchantment enchantment, @NonNull Integer level) {
+	public ItemBuilder addEnchantment(@NonNull Enchantment enchantment, int level) {
 		item.addUnsafeEnchantment(enchantment, level);
 		return this;
 	}
@@ -94,7 +115,7 @@ public class ItemBuilder {
 	/**
 	 * Sets the durability.
 	 */
-	public ItemBuilder setDurability(@NonNull Short durability) {
+	public ItemBuilder setDurability(short durability) {
 		item.setDurability(durability);
 		return this;
 	}
@@ -103,8 +124,7 @@ public class ItemBuilder {
 	 * Sets the skull owner.
 	 */
 	public ItemBuilder setSkullOwner(@NonNull String owner) {
-		if (item.getType() == Material.SKULL_ITEM) {
-			setDurability((short) 3);
+		if (item.getType() == WorldUtils.getMaterial(com.falchus.lib.minecraft.spigot.enums.Material.PLAYER_HEAD)) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if (meta != null) {
 				meta.setOwner(owner);
@@ -118,17 +138,15 @@ public class ItemBuilder {
 	 * Sets a custom skull texture using a Base64 texture string.
 	 */
 	public ItemBuilder setSkullTexture(@NonNull String texture) {
-		if (item.getType() == Material.SKULL_ITEM) {
-			setDurability((short) 3);
+		if (item.getType() == WorldUtils.getMaterial(com.falchus.lib.minecraft.spigot.enums.Material.PLAYER_HEAD)) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if (meta != null) {
 				try {
-					GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-					profile.getProperties().put("textures", new Property("textures", texture));
+					GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
+					gameProfile.getProperties().put("textures", new Property("textures", texture));
 					
-					Field profileField = meta.getClass().getDeclaredField("profile");
-					profileField.setAccessible(true);
-					profileField.set(meta, profile);
+					Field gameProfile_profile = ReflectionUtils.getDeclaredField(meta.getClass(), "profile");
+					gameProfile_profile.set(meta, gameProfile);
 					
 					item.setItemMeta(meta);
 				} catch (Exception e) {
@@ -142,8 +160,8 @@ public class ItemBuilder {
 	/**
 	 * Sets a custom UUID (stored in NBT).
 	 */
-	public ItemBuilder setUuid(@NonNull UUID uuid) {
-		VersionProvider.get().setUUID(item, uuid);
+	public ItemBuilder setUUID(@NonNull UUID uuid) {
+		ItemUtils.setUUID(item, uuid);
 		return this;
 	}
 
