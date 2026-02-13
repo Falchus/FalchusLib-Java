@@ -95,6 +95,16 @@ public interface IVersionAdapter {
 	void sendActionbar(@NonNull Player player, @NonNull String message);
 	
 	/**
+	 * Sends a nametag for a player.
+	 */
+	void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix);
+	
+	/**
+	 * Removes a nametag from a player.
+	 */
+	void removeNametag(@NonNull Player player);
+	
+	/**
 	 * Plays a sound to a player.
 	 */
 	void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch);

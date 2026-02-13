@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -148,6 +149,27 @@ public class VersionAdapter implements IVersionAdapter {
     }
     private Class<?> entityWither() {
     	return ReflectionUtils.getClass(packageNms + "EntityWither");
+    }
+	private Class<?> packetPlayOutScoreboardTeam() {
+		return ReflectionUtils.getClass(packageNms + "PacketPlayOutScoreboardTeam");
+	}
+    private Field packetPlayOutScoreboardTeam_name() {
+    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "a");
+    }
+    private Field packetPlayOutScoreboardTeam_displayName() {
+    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "b");
+    }
+    private Field packetPlayOutScoreboardTeam_prefix() {
+    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "c");
+    }
+    private Field packetPlayOutScoreboardTeam_suffix() {
+    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "d");
+    }
+    private Field packetPlayOutScoreboardTeam_entries() {
+    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "g");
+    }
+    private Field packetPlayOutScoreboardTeam_mode() {
+    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "h");
     }
     
 	public VersionAdapter() {
@@ -481,6 +503,59 @@ public class VersionAdapter implements IVersionAdapter {
 					.withArgs(chatMessage, (byte) 2)
 					.build();
 			PlayerUtils.sendPacket(player, packet);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+    }
+    
+    @Override
+    public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
+		try {
+			Set<String> entries = Set.of(player.getName());
+			
+	        Object createPacket = new VersionPacketBuilder(packetPlayOutScoreboardTeam())
+	        		.build();
+	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_name(), player.getName());
+	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_displayName(), player.getName());
+	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_entries(), entries);
+	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_mode(), 0);
+	
+	        Object updatePacket = new VersionPacketBuilder(packetPlayOutScoreboardTeam())
+	        		.build();
+	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_name(), player.getName());
+	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_displayName(), player.getName());
+	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_entries(), entries);
+	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_mode(), 2);
+	        
+	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_prefix(), prefix);
+	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_prefix(), prefix);
+	        
+	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_suffix(), suffix);
+	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_suffix(), suffix);
+	        
+	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+	        	PlayerUtils.sendPacket(onlinePlayer, createPacket);
+	        	PlayerUtils.sendPacket(onlinePlayer, updatePacket);
+	        }
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+    }
+    
+    @Override
+    public void removeNametag(@NonNull Player player) {
+		try {
+			Set<String> entries = Set.of(player.getName());
+			
+	        Object removePacket = new VersionPacketBuilder(packetPlayOutScoreboardTeam())
+	        		.build();
+	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_name(), player.getName());
+	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_entries(), entries);
+	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_mode(), 4);
+			
+	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+	        	PlayerUtils.sendPacket(onlinePlayer, removePacket);
+	        }
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }

@@ -250,6 +250,24 @@ public class VersionAdapterModern extends VersionAdapter_v1_9_R1 {
     }
     
     @Override
+    public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
+		try {
+			// TODO
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+    }
+    
+    @Override
+    public void removeNametag(@NonNull Player player) {
+		try {
+			// TODO
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+    }
+    
+    @Override
     public void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     	player.playSound(location, org.bukkit.Sound.valueOf(sound.getModernName()), volume, pitch);
     }

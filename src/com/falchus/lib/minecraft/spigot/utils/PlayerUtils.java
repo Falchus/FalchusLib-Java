@@ -78,6 +78,20 @@ public class PlayerUtils {
 	}
 	
 	/**
+	 * Sends a nametag for a player.
+	 */
+	public static void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
+		VersionProvider.get().sendNametag(player, prefix, suffix);
+	}
+	
+	/**
+	 * Removes a nametag from a player.
+	 */
+	public static void removeNametag(@NonNull Player player) {
+		VersionProvider.get().removeNametag(player);
+	}
+	
+	/**
 	 * Plays a sound to a player.
 	 */
 	public static void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {

@@ -90,10 +90,18 @@ public class ReflectionUtils {
         throw new RuntimeException("None of the fields exist: " + String.join(", ", names));
     }
     
+    public static void setField(@NonNull Object instance, @NonNull Field field, Object value) {
+        try {
+            field.set(instance, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public static void setField(@NonNull Object instance, @NonNull String name, Object value) {
         try {
             Field field = getField(instance, name);
-            field.set(instance, value);
+            setField(instance, field, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -102,7 +110,15 @@ public class ReflectionUtils {
     public static void setDeclaredField(@NonNull Object instance, @NonNull String name, Object value) {
         try {
             Field field = getDeclaredField(instance, name);
-            field.set(instance, value);
+            setField(instance, field, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static void setField(@NonNull Field field, Object value) {
+        try {
+            field.set(null, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +127,7 @@ public class ReflectionUtils {
     public static void setField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
         try {
             Field field = getField(clazz, name);
-            field.set(null, value);
+            setField(field, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -120,7 +136,7 @@ public class ReflectionUtils {
     public static void setDeclaredField(@NonNull Class<?> clazz, @NonNull String name, Object value) {
         try {
             Field field = getDeclaredField(clazz, name);
-            field.set(null, value);
+            setField(field, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
