@@ -1,8 +1,10 @@
 package com.falchus.lib.utils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -184,5 +186,49 @@ public class ReflectionUtils {
             }
         }
         throw new RuntimeException("None of the methods exist: " + String.join(", ", names));
+    }
+    
+    public static Constructor<?> getConstructor(@NonNull Class<?> clazz, Class<?>... params) {
+        try {
+            Constructor<?> ctor = clazz.getConstructor(params);
+            ctor.setAccessible(true);
+            return ctor;
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static Constructor<?> getDeclaredConstructor(@NonNull Class<?> clazz, Class<?>... params) {
+        try {
+        	Constructor<?> ctor = clazz.getDeclaredConstructor(params);
+            ctor.setAccessible(true);
+            return ctor;
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static Constructor<?> getFirstConstructor(@NonNull Class<?> clazz, Set<List<Class<?>>> params) {
+        for (List<Class<?>> list : params) {
+        	Constructor<?> found = getConstructor(clazz, list.toArray(new Class[0]));
+            if (found != null) {
+                return found;
+            }
+        }
+        throw new RuntimeException("No matching constructor found for class:" + clazz.getName());
+    }
+    
+    public static Constructor<?> getFirstDeclaredConstructor(@NonNull Class<?> clazz, Set<List<Class<?>>> params) {
+        for (List<Class<?>> list : params) {
+        	Constructor<?> found = getDeclaredConstructor(clazz, list.toArray(new Class[0]));
+            if (found != null) {
+                return found;
+            }
+        }
+        throw new RuntimeException("No matching constructor found for class:" + clazz.getName());
     }
 }

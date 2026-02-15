@@ -73,6 +73,8 @@ public class VersionAdapter implements IVersionAdapter {
     Field entityPlayer_playerConnection;
     Class<?> playerConnection;
     Method playerConnection_sendPacket;
+    Class<?> scoreboard;
+    Object scoreboardINST;
     Class<?> craftPlayer;
     Method craftPlayer_getHandle;
     Class<?> player$Spigot;
@@ -150,6 +152,15 @@ public class VersionAdapter implements IVersionAdapter {
     private Class<?> entityWither() {
     	return ReflectionUtils.getClass(packageNms + "EntityWither");
     }
+    private Class<?> scoreboardTeam() {
+    	return ReflectionUtils.getClass(packageNms + "ScoreboardTeam");
+    }
+    private Constructor<?> scoreboardTeamCTOR() {
+    	return ReflectionUtils.getDeclaredConstructor(scoreboardTeam(),
+    		scoreboard,
+    		String.class
+    	);
+    }
 	private Class<?> packetPlayOutScoreboardTeam() {
 		return ReflectionUtils.getClass(packageNms + "PacketPlayOutScoreboardTeam");
 	}
@@ -164,12 +175,6 @@ public class VersionAdapter implements IVersionAdapter {
     }
     private Field packetPlayOutScoreboardTeam_suffix() {
     	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "d");
-    }
-    private Field packetPlayOutScoreboardTeam_entries() {
-    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "g");
-    }
-    private Field packetPlayOutScoreboardTeam_mode() {
-    	return ReflectionUtils.getDeclaredField(packetPlayOutScoreboardTeam(), "h");
     }
     
 	public VersionAdapter() {
@@ -255,6 +260,11 @@ public class VersionAdapter implements IVersionAdapter {
             	"sendPacket",
             	"send"
             );
+            scoreboard = ReflectionUtils.getFirstClass(
+            	packageNms + "Scoreboard",
+            	packageNm + "world.scores.Scoreboard"
+            );
+            scoreboardINST = ReflectionUtils.getConstructor(scoreboard).newInstance();
             craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = ReflectionUtils.getMethod(craftPlayer, "getHandle");
             player$Spigot = ReflectionUtils.getClass(packageOb + "entity.Player$Spigot");
@@ -511,21 +521,24 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
 		try {
-			Set<String> entries = Set.of(player.getName());
+			Set<String> players = Set.of(player.getName());
+			
+			Object team = scoreboardTeamCTOR().newInstance(
+				scoreboard,
+				player.getName()
+			);
 			
 	        Object createPacket = new VersionPacketBuilder(packetPlayOutScoreboardTeam())
+	        		.withArgs(team, players, 0)
 	        		.build();
 	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_name(), player.getName());
 	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_displayName(), player.getName());
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_entries(), entries);
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_mode(), 0);
 	
 	        Object updatePacket = new VersionPacketBuilder(packetPlayOutScoreboardTeam())
+	        		.withArgs(team, players, 2)
 	        		.build();
 	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_name(), player.getName());
 	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_displayName(), player.getName());
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_entries(), entries);
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_mode(), 2);
 	        
 	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_prefix(), prefix);
 	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_prefix(), prefix);
@@ -545,13 +558,17 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public void removeNametag(@NonNull Player player) {
 		try {
-			Set<String> entries = Set.of(player.getName());
+			Set<String> players = Set.of(player.getName());
+			
+			Object team = scoreboardTeamCTOR().newInstance(
+				scoreboard,
+				player.getName()
+			);
 			
 	        Object removePacket = new VersionPacketBuilder(packetPlayOutScoreboardTeam())
+	        		.withArgs(team, players, 4)
 	        		.build();
 	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_name(), player.getName());
-	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_entries(), entries);
-	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_mode(), 4);
 			
 	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 	        	PlayerUtils.sendPacket(onlinePlayer, removePacket);
