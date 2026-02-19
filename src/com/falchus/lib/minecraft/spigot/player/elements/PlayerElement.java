@@ -1,8 +1,8 @@
 package com.falchus.lib.minecraft.spigot.player.elements;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,8 +23,8 @@ public abstract class PlayerElement {
 	protected final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	protected final Player player;
 	
-    private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new HashMap<>();
-    private static final Map<Class<? extends PlayerElement>, Map<UUID, BukkitTask>> tasks = new HashMap<>();
+    private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends PlayerElement>, Map<UUID, BukkitTask>> tasks = new ConcurrentHashMap<>();
     
     protected Runnable updateRunnable;
 	
@@ -55,7 +55,7 @@ public abstract class PlayerElement {
 	 * Sends the element to the player repeatedly with a fixed interval.
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
-	    Map<UUID, BukkitTask> map = tasks.computeIfAbsent(getClass(), c -> new HashMap<>());
+	    Map<UUID, BukkitTask> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
 	    
 		BukkitTask oldTask = map.get(player.getUniqueId());
 		if (oldTask != null) {
@@ -101,7 +101,7 @@ public abstract class PlayerElement {
 	@SuppressWarnings("unchecked")
 	public static <T extends PlayerElement> T get(@NonNull Class<T> clazz, @NonNull Player player) {
 		if (!PlayerElement.class.isAssignableFrom(clazz)) return null;
-		Map<UUID, PlayerElement> map = instances.computeIfAbsent(clazz, c -> new HashMap<>());
+		Map<UUID, PlayerElement> map = instances.computeIfAbsent(clazz, c -> new ConcurrentHashMap<>());
 		
 		return (T) map.computeIfAbsent(player.getUniqueId(), uuid -> {
 			try {
