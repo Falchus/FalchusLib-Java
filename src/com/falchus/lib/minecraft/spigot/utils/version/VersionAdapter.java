@@ -489,39 +489,38 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public void sendTitle(@NonNull Player player, String title, String subtitle) {
     	try {
-    		if (title != null && !title.isEmpty()) {
-    			Object component = createChatComponentText(title);
-    			Object titlePacket = new ClassInstanceBuilder(
-    				packageNms + "PacketPlayOutTitle"
-    			).withParams(
-					Map.of(
-						packetPlayOutTitle$enumTitleAction(),
-						packetPlayOutTitle$enumTitleAction_TITLE()
-					),
-					Map.of(
-						iChatBaseComponent,
-						component
-					)
-    			).build();
-    			sendPacket(player, titlePacket);
-    		}
+    		title = title != null ? title : "";
+    		subtitle = subtitle != null ? subtitle : "";
     		
-    		if (subtitle != null && !subtitle.isEmpty()) {
-    			Object component = createChatComponentText(subtitle);
-    			Object subtitlePacket = new ClassInstanceBuilder(
-    				packageNms + "PacketPlayOutTitle"
-    			).withParams(
-					Map.of(
-						packetPlayOutTitle$enumTitleAction(),
-						packetPlayOutTitle$enumTitleAction_SUBTITLE()
-					),
-					Map.of(
-						iChatBaseComponent,
-						component
-					)
-    			).build();
-    			sendPacket(player, subtitlePacket);
-    		}
+			Object titleComponent = createChatComponentText(title);
+			Object titlePacket = new ClassInstanceBuilder(
+				packageNms + "PacketPlayOutTitle"
+			).withParams(
+				Map.of(
+					packetPlayOutTitle$enumTitleAction(),
+					packetPlayOutTitle$enumTitleAction_TITLE()
+				),
+				Map.of(
+					iChatBaseComponent,
+					titleComponent
+				)
+			).build();
+			sendPacket(player, titlePacket);
+    		
+			Object subtitleComponent = createChatComponentText(subtitle);
+			Object subtitlePacket = new ClassInstanceBuilder(
+				packageNms + "PacketPlayOutTitle"
+			).withParams(
+				Map.of(
+					packetPlayOutTitle$enumTitleAction(),
+					packetPlayOutTitle$enumTitleAction_SUBTITLE()
+				),
+				Map.of(
+					iChatBaseComponent,
+					subtitleComponent
+				)
+			).build();
+			sendPacket(player, subtitlePacket);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }
