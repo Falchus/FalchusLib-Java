@@ -53,6 +53,8 @@ public class VersionAdapter implements IVersionAdapter {
     @Getter Method entity_setLocation;
     @Getter Method entity_setInvisible;
     @Getter Class<?> world;
+    @Getter Class<?> minecraftServer;
+    @Getter Class<?> worldServer;
     
     Class<?> chatComponentText;
     
@@ -92,7 +94,6 @@ public class VersionAdapter implements IVersionAdapter {
     Class<?> craftServer;
     Method craftServer_getServer;
     Class<?> bukkitServer;
-    Class<?> minecraftServer;
     Method minecraftServer_getVersion;
     Field minecraftServer_recentTps;
 	
@@ -229,7 +230,12 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "World",
             	packageNm + "world.level.World"
             );
-    		
+            minecraftServer = ReflectionUtils.getClass(packageNms + "MinecraftServer");
+    		worldServer = ReflectionUtils.getFirstClass(
+    			packageNms + "WorldServer",
+    			packageNms + "level.WorldServer"
+    		);
+            
             chatComponentText = ReflectionUtils.getFirstClass(
             	packageNms + "ChatComponentText",
             	packageNm + "network.chat.ChatComponentText"
@@ -340,7 +346,6 @@ public class VersionAdapter implements IVersionAdapter {
             craftServer = ReflectionUtils.getClass(packageObc + "CraftServer");
             craftServer_getServer = ReflectionUtils.getMethod(craftServer, "getServer");
             bukkitServer = ReflectionUtils.getClass(packageOb + "Server");
-            minecraftServer = ReflectionUtils.getClass(packageNms + "MinecraftServer");
             minecraftServer_getVersion = ReflectionUtils.getMethod(minecraftServer, "getVersion");
             minecraftServer_recentTps = ReflectionUtils.getField(minecraftServer, "recentTps");
     		
@@ -969,7 +974,7 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public Object getMinecraftServer() {
+    public Object getMcServer() {
     	try {
     		Object server = craftServer.cast(Bukkit.getServer());
     		return craftServer_getServer.invoke(server);
@@ -986,7 +991,7 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public String getVersion() {
     	try {
-    		Object server = getMinecraftServer();
+    		Object server = getMcServer();
     		return (String) minecraftServer_getVersion.invoke(server);
     	} catch (Exception e) {
     		throw new RuntimeException(e);
@@ -1008,7 +1013,7 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public double[] getRecentTps() {
 		try {
-    		Object server = getMinecraftServer();
+    		Object server = getMcServer();
     		return (double[]) minecraftServer_recentTps.get(server);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

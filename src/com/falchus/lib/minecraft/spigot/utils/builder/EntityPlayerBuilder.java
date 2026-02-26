@@ -82,7 +82,7 @@ public class EntityPlayerBuilder {
 	 */
 	public Object build() {
 		try {
-			Object server = ServerUtils.getMinecraftServer();
+			Object server = ServerUtils.getMcServer();
 			
 			Object world = WorldUtils.getWorldServer(location != null ? location.getWorld() : Bukkit.getWorlds().get(0));
 			
@@ -104,11 +104,11 @@ public class EntityPlayerBuilder {
 				VersionProvider.get().getEntityPlayer()
 			).withParams(
 				Map.of(
-					server.getClass(),
+					VersionProvider.get().getMinecraftServer(),
 					server
 				),
 				Map.of(
-					world.getClass(),
+					VersionProvider.get().getWorldServer(),
 					world
 				),
 				Map.of(

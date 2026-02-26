@@ -30,6 +30,8 @@ public interface IVersionAdapter {
 	Method getEntity_setLocation();
 	Method getEntity_setInvisible();
 	Class<?> getWorld();
+	Class<?> getMinecraftServer();
+	Class<?> getWorldServer();
 	
 	Object createChatComponentText(@NonNull String text);
 	
@@ -171,7 +173,7 @@ public interface IVersionAdapter {
 	/**
 	 * @return MinecraftServer
 	 */
-	Object getMinecraftServer();
+	Object getMcServer();
 	
 	/**
 	 * @return {@link Server}

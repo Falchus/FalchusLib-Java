@@ -12,8 +12,8 @@ public class ServerUtils {
 	/**
 	 * @return MinecraftServer
 	 */
-	public static Object getMinecraftServer() {
-		return VersionProvider.get().getMinecraftServer();
+	public static Object getMcServer() {
+		return VersionProvider.get().getMcServer();
 	}
 	
 	/**
