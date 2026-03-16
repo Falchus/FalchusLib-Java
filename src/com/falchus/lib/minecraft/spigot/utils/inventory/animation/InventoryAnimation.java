@@ -2,13 +2,14 @@ package com.falchus.lib.minecraft.spigot.utils.inventory.animation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.task.Task;
 
 import lombok.Getter;
 
@@ -26,7 +27,7 @@ public abstract class InventoryAnimation {
 	protected abstract void animate(Player player, Inventory inventory, ItemStack[] items, int tick);
 	
 	/**
-	 * Plays the animation with automatic scheduling using delayTicks.
+	 * Plays the animation with automatic scheduling using delayTicks (in {@link TimeUnit#MILLISECONDS}).
 	 */
 	public final void play(Player player, Inventory inventory) {
 		ItemStack[] items = inventory.getContents();
@@ -36,31 +37,27 @@ public abstract class InventoryAnimation {
 			}
 		}
 		
-		new BukkitRunnable() {
-			int tick = 0;
-			
+		new Task() {
 			@Override
-			public void run() {
+			public void onRun(int tick) {
 				if (!player.getOpenInventory().getTopInventory().equals(inventory)) {
-					cancel();
+					end();
 					return;
 				}
 				
 				if (tick >= items.length) {
-					cancel();
+					end();
 					return;
 				}
 				
 				ItemStack item = items[tick];
 				if (excludedItems.contains(item)) {
-					tick++;
 					run();
 					return;
 				}
 				
 				animate(player, inventory, items, tick);
-				tick++;
 			}
-		}.runTaskTimer(plugin, 0, delayTicks);
+		}.runTaskTimer(delayTicks, TimeUnit.MILLISECONDS);
     }
 }

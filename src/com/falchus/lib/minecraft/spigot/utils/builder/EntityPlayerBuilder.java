@@ -2,19 +2,20 @@ package com.falchus.lib.minecraft.spigot.utils.builder;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.utils.EntityUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.task.Task;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -137,12 +138,12 @@ public class EntityPlayerBuilder {
 			plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
 			
 			if (lookAtPlayer) {
-				new BukkitRunnable() {
+				new Task() {
 					@Override
-					public void run() {
+					public void onRun(int tick) {
 						Entity entity = EntityUtils.getBukkitEntity(entityPlayer);
 						if (entity == null || !entity.isValid()) {
-							cancel();
+							end();
 							return;
 						}
 						
@@ -172,7 +173,7 @@ public class EntityPlayerBuilder {
 							EntityUtils.setYawPitch(entityPlayer, yaw, pitch);
 						}
 					}
-				}.runTaskTimer(plugin, 0, 1);
+				}.runTaskTimer(100, TimeUnit.MILLISECONDS);
 			}
 			return entityPlayer;
 		} catch (Exception e) {

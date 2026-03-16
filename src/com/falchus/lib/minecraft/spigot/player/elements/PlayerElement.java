@@ -3,12 +3,12 @@ package com.falchus.lib.minecraft.spigot.player.elements;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.task.Task;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 
 import lombok.NonNull;
@@ -24,7 +24,7 @@ public abstract class PlayerElement {
 	protected final Player player;
 	
     private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new ConcurrentHashMap<>();
-    private static final Map<Class<? extends PlayerElement>, Map<UUID, BukkitTask>> tasks = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends PlayerElement>, Map<UUID, Task>> tasks = new ConcurrentHashMap<>();
     
     protected Runnable updateRunnable;
 	
@@ -52,26 +52,27 @@ public abstract class PlayerElement {
 	}
 	
 	/**
-	 * Sends the element to the player repeatedly with a fixed interval.
+	 * Sends the element to the player repeatedly with a fixed interval (in {@link TimeUnit#MILLISECONDS}).
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
-	    Map<UUID, BukkitTask> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
+	    Map<UUID, Task> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
 	    
-		BukkitTask oldTask = map.get(player.getUniqueId());
+	    Task oldTask = map.get(player.getUniqueId());
 		if (oldTask != null) {
 			remove();
 		}
 		
-		BukkitTask task = new BukkitRunnable() {
+		Task task = new Task() {
 			@Override
-			public void run() {
+			public void onRun(int tick) {
 				if (!player.isOnline()) {
 					remove();
 					return;
 				}
 				runnable.run();
 			}
-		}.runTaskTimer(plugin, 0, intervalTicks);
+		};
+		task.runTaskTimer(intervalTicks, TimeUnit.MILLISECONDS);
 		
 		map.put(player.getUniqueId(), task);
 	}
@@ -80,11 +81,11 @@ public abstract class PlayerElement {
 	 * Removes this element and cancels any schedules repeating tasks.
 	 */
 	public void remove() {
-		Map<UUID, BukkitTask> map = tasks.get(getClass());
+		Map<UUID, Task> map = tasks.get(getClass());
 		if (map != null) {
-	        BukkitTask task = map.remove(player.getUniqueId());
+			Task task = map.remove(player.getUniqueId());
 	        if (task != null) {
-	            task.cancel();
+	            task.end();
 	        }
 		}
 		
