@@ -16,7 +16,7 @@ import lombok.Setter;
 public class LobbyCancelEvent extends Event implements Cancellable {
 
 	@Getter private static final HandlerList handlerList = new HandlerList();
-	@Setter private boolean isCancelled;
+	@Setter private boolean cancelled;
 	
 	private final Event event;
 	

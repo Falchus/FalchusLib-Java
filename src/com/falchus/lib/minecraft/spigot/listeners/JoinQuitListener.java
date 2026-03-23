@@ -2,11 +2,13 @@ package com.falchus.lib.minecraft.spigot.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.packets.PacketInjector;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.player.elements.impl.Actionbar;
 import com.falchus.lib.minecraft.spigot.player.elements.impl.Bossbar;
@@ -21,6 +23,11 @@ public class JoinQuitListener implements Listener {
 	
 	public JoinQuitListener() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerJoin_LOWEST(PlayerJoinEvent event) {
+		PacketInjector.inject(event.getPlayer());
 	}
 	
 	@EventHandler
@@ -41,5 +48,10 @@ public class JoinQuitListener implements Listener {
     	PlayerElement.updateAll(Nametag.class);
 		PlayerElement.updateAll(Scoreboard.class);
     	PlayerElement.updateAll(Tablist.class);
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerQuit_HIGHEST(PlayerQuitEvent event) {
+		PacketInjector.uninject(event.getPlayer());
 	}
 }

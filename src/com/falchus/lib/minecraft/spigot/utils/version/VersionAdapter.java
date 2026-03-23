@@ -48,6 +48,11 @@ public class VersionAdapter implements IVersionAdapter {
 	
     @Getter Class<?> blockPosition;
     @Getter Class<?> entityPlayer;
+    @Getter Field entityPlayer_playerConnection;
+    Class<?> playerConnection;
+    @Getter Field playerConnection_networkManager;
+    Class<?> networkManager;
+    @Getter Field networkManager_channel;
     @Getter Class<?> playerInteractManager;
     Class<?> entity;
     @Getter Method entity_setLocation;
@@ -72,8 +77,6 @@ public class VersionAdapter implements IVersionAdapter {
 	Method nbtTagCompound_getString;
 	
 	Class<?> packet;
-    Field entityPlayer_playerConnection;
-    Class<?> playerConnection;
     Method playerConnection_sendPacket;
     Class<?> iChatBaseComponent;
     Class<?> scoreboardTeam;
@@ -204,6 +207,22 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "EntityPlayer",
             	packageNms + "level.EntityPlayer"
             );
+            entityPlayer_playerConnection = ReflectionUtils.getFirstField(entityPlayer,
+            	"playerConnection",
+            	"connection"
+            );
+            playerConnection = ReflectionUtils.getFirstClass(
+            	packageNms + "PlayerConnection",
+            	packageNms + "network.PlayerConnection"
+            );
+            playerConnection_networkManager = ReflectionUtils.getFirstField(playerConnection,
+            	"networkManager"
+            );
+            networkManager = ReflectionUtils.getFirstClass(
+            	packageNms + "NetworkManager",
+            	packageNm + "network.NetworkManager"
+            );
+            networkManager_channel = ReflectionUtils.getField(networkManager, "channel");
             playerInteractManager = ReflectionUtils.getFirstClass(
             	packageNms + "PlayerInteractManager",
             	packageNms + "level.PlayerInteractManager"
@@ -291,14 +310,6 @@ public class VersionAdapter implements IVersionAdapter {
             packet = ReflectionUtils.getFirstClass(
             	packageNms + "Packet",
             	packageNm + "network.protocol.Packet"
-            );
-            entityPlayer_playerConnection = ReflectionUtils.getFirstField(entityPlayer,
-            	"playerConnection",
-            	"connection"
-            );
-            playerConnection = ReflectionUtils.getFirstClass(
-            	packageNms + "PlayerConnection",
-            	packageNms + "network.ServerPlayerConnection"
             );
             playerConnection_sendPacket = ReflectionUtils.getFirstMethod(playerConnection,
             	List.of(

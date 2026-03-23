@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
+import com.falchus.lib.FalchusLib;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 
 import lombok.NonNull;
@@ -30,9 +31,9 @@ public class Scoreboard extends PlayerElement {
 			scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 		}
 		
-        Objective objective = scoreboard.getObjective("FalchusLib");
+        Objective objective = scoreboard.getObjective(FalchusLib.nameFull);
         if (objective == null) {
-        	objective = scoreboard.registerNewObjective("FalchusLib", "dummy");
+        	objective = scoreboard.registerNewObjective(FalchusLib.nameFull, "dummy");
         }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         

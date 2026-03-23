@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils.version;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,9 @@ public interface IVersionAdapter {
 	
 	Class<?> getBlockPosition();
 	Class<?> getEntityPlayer();
+	Field getEntityPlayer_playerConnection();
+	Field getPlayerConnection_networkManager();
+	Field getNetworkManager_channel();
 	Class<?> getPlayerInteractManager();
 	Method getEntity_setLocation();
 	Method getEntity_setInvisible();
