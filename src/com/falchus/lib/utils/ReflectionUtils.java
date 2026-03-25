@@ -40,13 +40,13 @@ public class ReflectionUtils {
     			Field field = current.getField(name);
     			field.setAccessible(true);
     			return field;
-    		} catch (NoSuchFieldException e) {}
+    		} catch (NoSuchFieldException ignored) {}
     		
     		try {
     			Field field = current.getDeclaredField(name);
     			field.setAccessible(true);
     			return field;
-    		} catch (NoSuchFieldException e) {}
+    		} catch (NoSuchFieldException ignored) {}
     		
     		current = current.getSuperclass();
     	}
@@ -109,13 +109,13 @@ public class ReflectionUtils {
                 Method method = current.getMethod(name, params);
                 method.setAccessible(true);
                 return method;
-            } catch (NoSuchMethodException e) {}
+            } catch (NoSuchMethodException ignored) {}
             
             try {
                 Method method = current.getDeclaredMethod(name, params);
                 method.setAccessible(true);
                 return method;
-            } catch (NoSuchMethodException e) {}
+            } catch (NoSuchMethodException ignored) {}
             
         	current = current.getSuperclass();
     	}
