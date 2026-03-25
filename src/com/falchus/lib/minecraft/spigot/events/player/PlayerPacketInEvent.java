@@ -8,9 +8,9 @@ import lombok.Getter;
  * Called when a player receives a packet.
  */
 @Getter
-public class PlayerPacketReceiveEvent extends PlayerPacketEvent {
+public class PlayerPacketInEvent extends PlayerPacketEvent {
 	
-	public PlayerPacketReceiveEvent(boolean async, Player player, Object packet) {
+	public PlayerPacketInEvent(boolean async, Player player, Object packet) {
 		super(async, player, packet);
 	}
 }
