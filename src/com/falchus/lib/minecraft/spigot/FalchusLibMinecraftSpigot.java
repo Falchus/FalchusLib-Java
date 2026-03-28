@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FalchusLibMinecraftSpigot extends JavaPlugin {
 
-	static FalchusLibMinecraftSpigot instance;
+	@Getter static FalchusLibMinecraftSpigot instance;
 	
 	LabyModMessageListener labyModMessageListener;
 	LunarMessageListener lunarMessageListener;
@@ -41,9 +41,5 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		joinQuitListener = new JoinQuitListener();
 		lobbyCancelListener = new LobbyCancelListener();
 		clientManager = new ClientManager();
-	}
-	
-	public static FalchusLibMinecraftSpigot getInstance() {
-		return instance;
 	}
 }

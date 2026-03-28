@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import com.falchus.lib.FalchusLib;
 import com.falchus.lib.minecraft.command.BaseCommand;
 
 import lombok.Getter;
@@ -23,8 +24,8 @@ public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecut
 	
 	public SpigotCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
         this.permission = permission;
-        this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";
-        this.usageMessage = usageMessage != null ? usageMessage : "§cWrong usage.";
+        this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : FalchusLib.noPermissionMessage;
+        this.usageMessage = usageMessage != null ? usageMessage : FalchusLib.prefix + "§cWrong usage.";
 	}
 	
 	@Override

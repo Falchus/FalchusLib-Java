@@ -25,7 +25,7 @@ abstract class PacketChatWrapper extends PacketWrapper {
 	public abstract void setMessage(String message);
 	
 	/**
-	 * In:	String
+	 * In:	{@link String}
 	 * Out:	IChatBaseComponent
 	 */
 	public Object getMessage() {

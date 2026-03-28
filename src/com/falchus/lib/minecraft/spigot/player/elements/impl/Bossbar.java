@@ -28,7 +28,7 @@ public class Bossbar extends PlayerElement {
         
         updateRunnable = () -> {
         	String newMessage = messageSupplier.get();
-        	Double newProgress = progressSupplier.get();
+        	double newProgress = progressSupplier.get();
         	
     		PlayerUtils.sendBossbar(player, newMessage, newProgress);
         };

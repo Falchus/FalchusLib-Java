@@ -39,6 +39,7 @@ import lombok.experimental.FieldDefaults;
 public class VersionAdapter implements IVersionAdapter {
 	
 	final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	
 	final Map<Player, Object> bossBars = new HashMap<>();
 	
 	@Getter String packageOb = "org.bukkit.";

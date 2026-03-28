@@ -21,7 +21,6 @@ import eu.cloudnetservice.modules.bridge.player.executor.ServerSelectorType;
 import eu.cloudnetservice.wrapper.holder.ServiceInfoHolder;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 @UtilityClass
 public class CloudNet {
@@ -38,7 +37,7 @@ public class CloudNet {
 	 */
 	public static void broadcastMessage(@NonNull List<String> messages) {
 		String message = String.join("\n", messages);
-        playerManager.globalPlayerExecutor().sendChatMessage(LegacyComponentSerializer.legacySection().deserialize(message));
+        playerManager.globalPlayerExecutor().sendChatMessage(AdventureUtils.legacy(message));
 	}
 	
 	/**

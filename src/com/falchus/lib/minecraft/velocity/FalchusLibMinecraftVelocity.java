@@ -14,7 +14,9 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 @Plugin(id = "falchuslib",
 		name = "FalchusLib",
@@ -23,15 +25,16 @@ import lombok.Getter;
 		authors = {"Falchus"},
 		url = "https://lib-java.falchus.com")
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FalchusLibMinecraftVelocity {
 
-	private final ProxyServer server;
-	private final Logger logger;
-	private final File dataFolder;
-	private final File file;
-	private final Metrics.Factory metricsFactory;
+	final ProxyServer server;
+	final Logger logger;
+	final File dataFolder;
+	final File file;
+	final Metrics.Factory metricsFactory;
 	
-	private static FalchusLibMinecraftVelocity instance;
+	@Getter static FalchusLibMinecraftVelocity instance;
 	
 	@Inject
 	public FalchusLibMinecraftVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataFolder, Metrics.Factory metricsFactory) {
@@ -51,9 +54,5 @@ public class FalchusLibMinecraftVelocity {
 	public void onProxyInitialize(ProxyInitializeEvent event) {
 		instance = this;
 		metricsFactory.make(this, 28136);
-	}
-	
-	public static FalchusLibMinecraftVelocity getInstance() {
-		return instance;
 	}
 }

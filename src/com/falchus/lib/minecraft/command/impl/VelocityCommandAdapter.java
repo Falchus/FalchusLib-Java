@@ -4,14 +4,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import com.falchus.lib.FalchusLib;
 import com.falchus.lib.minecraft.command.BaseCommand;
+import com.falchus.lib.minecraft.utils.AdventureUtils;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 
 import lombok.Getter;
 import lombok.NonNull;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 @Getter
 public abstract class VelocityCommandAdapter implements BaseCommand, SimpleCommand {
@@ -22,8 +23,8 @@ public abstract class VelocityCommandAdapter implements BaseCommand, SimpleComma
     
 	public VelocityCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
         this.permission = permission;
-        this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : "§cInsufficient permissions!";
-        this.usageMessage = usageMessage != null ? usageMessage : "§cWrong usage.";
+        this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : FalchusLib.noPermissionMessage;
+        this.usageMessage = usageMessage != null ? usageMessage : FalchusLib.prefix + "§cWrong usage.";
 	}
 	
 	@Override
@@ -64,7 +65,7 @@ public abstract class VelocityCommandAdapter implements BaseCommand, SimpleComma
 	@Override
 	public void sendMessage(@NonNull Object s, @NonNull String message) {
     	if (s instanceof CommandSource sender) {
-    		sender.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
+    		sender.sendMessage(AdventureUtils.legacy(message));
     	}
 	}
 }
