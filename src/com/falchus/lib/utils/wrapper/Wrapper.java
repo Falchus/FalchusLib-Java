@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public abstract class Wrapper<T> {
+public class Wrapper<T> {
 
 	@NonNull protected T handle;
 	
@@ -50,5 +50,18 @@ public abstract class Wrapper<T> {
 	
 	protected Constructor<?> getFirstConstructor(Set<List<Class<?>>> params) {
 		return ReflectionUtils.getFirstConstructor(handle, params);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <U extends Wrapper<?>> U as(@NonNull Class<U> clazz, Class<?>... params) {
+		if (clazz.isInstance(this)) {
+			return (U) this;
+		}
+		
+		try {
+			return (U) ReflectionUtils.getConstructor(clazz, params).newInstance(handle);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

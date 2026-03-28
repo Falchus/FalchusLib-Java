@@ -61,16 +61,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 		return new PacketWrapper(packet, Set.of(packet.getClass().getName()));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <T extends PacketWrapper> T as(@NonNull Class<T> clazz) {
-		if (clazz.isInstance(this)) {
-			return (T) this;
-		}
-		
-		try {
-			return (T) ReflectionUtils.getConstructor(clazz, Object.class).newInstance(handle);
-		} catch (Exception e) {
-			return null;
-		}
+		return as(clazz, Object.class);
 	}
 }
