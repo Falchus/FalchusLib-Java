@@ -146,21 +146,21 @@ public class PlayerUtils {
 	/**
 	 * @return EntityPlayer from Player
 	 */
-	public Object getEntityPlayer(@NonNull Player player) {
+	public static Object getEntityPlayer(@NonNull Player player) {
 		return VersionProvider.get().getEntityPlayer(player);
 	}
 	
 	/**
 	 * @return GameProfile from EntityPlayer
 	 */
-	public GameProfile getProfile(@NonNull Object entityPlayer) {
+	public static GameProfile getProfile(@NonNull Object entityPlayer) {
 		return VersionProvider.get().getProfile(entityPlayer);
 	}
 	
 	/**
 	 * @return ping from a player.
 	 */
-	public int getPing(@NonNull Player player) {
+	public static int getPing(@NonNull Player player) {
 		return VersionProvider.get().getPing(player);
 	}
 	

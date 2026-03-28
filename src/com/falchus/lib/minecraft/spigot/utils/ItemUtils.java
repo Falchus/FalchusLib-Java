@@ -100,7 +100,7 @@ public class ItemUtils {
         /**
          * Constructs a new InventoryItem.
          */
-        public InventoryItem(@NonNull Integer slot, @NonNull ItemStack item, Consumer<Player> onInventoryClick) {
+        public InventoryItem(int slot, @NonNull ItemStack item, Consumer<Player> onInventoryClick) {
             this.slot = slot;
             this.item = item;
             this.onInventoryClick = onInventoryClick;
