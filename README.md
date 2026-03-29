@@ -63,6 +63,44 @@ static void runAsync(Runnable task);
 static void shutdown();
 ```
 
+#### Builders
+`com.falchus.lib.utils.builder.ClassInstanceBuilder`
+```java
+ClassInstanceBuilder(Class clazz);
+
+ClassInstanceBuilder(String name);
+ClassInstanceBuilder(String... names);
+
+ClassInstanceBuilder withParams(Map<Class, Object>... params);
+
+Object build();
+```
+
+`com.falchus.lib.utils.builder.HTTPServerBuilder`
+```java
+HTTPServerBuilder port(int port);
+
+HTTPServerBuilder route(String path, BiConsumer<HttpExchange, Map<String, String>> handler);
+HTTPServerBuilder defaultHandler(BiConsumer<HttpExchange, Map<String, String>> handler);
+
+HTTPServer build(String ip);
+```
+
+#### HTTP
+`com.falchus.lib.utils.http.HTTPRequest`
+```java
+static String get(String url);
+```
+
+`com.falchus.lib.utils.http.HTTPServer`
+```java
+void start();
+void stop(int delay);
+
+static void sendText(HttpExchange exchange, String text, int statusCode);
+static void sendJson(HttpExchange exchange, String json, int statusCode);
+```
+
 #### Reflection & Wrapping
 `com.falchus.lib.utils.reflection.ReflectionUtils`
 ```java
