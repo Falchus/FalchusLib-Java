@@ -222,6 +222,7 @@ static Object getMcServer();
 static Object getBukkitServer();
 
 static String getVersion();
+static int getMajorVersion();
 static int getMinorVersion();
 
 static double[] getRecentTps();

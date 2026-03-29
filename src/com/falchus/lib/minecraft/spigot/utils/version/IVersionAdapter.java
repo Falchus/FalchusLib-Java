@@ -190,11 +190,6 @@ public interface IVersionAdapter {
 	String getVersion();
 	
 	/**
-	 * @return e.g. 8 for 1.8.8
-	 */
-	int getMinorVersion();
-	
-	/**
 	 * @return recent TPS
 	 */
 	double[] getRecentTps();

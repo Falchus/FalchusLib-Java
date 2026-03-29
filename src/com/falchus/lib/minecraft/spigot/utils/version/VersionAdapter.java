@@ -1011,18 +1011,6 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public int getMinorVersion() {
-		String bukkitVersion = Bukkit.getBukkitVersion();
-		String mc = bukkitVersion.split("-")[0];
-		
-		try {
-			return Integer.parseInt(mc.split("\\.")[1]);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-        }
-    }
-    
-    @Override
     public double[] getRecentTps() {
 		try {
     		Object server = getMcServer();

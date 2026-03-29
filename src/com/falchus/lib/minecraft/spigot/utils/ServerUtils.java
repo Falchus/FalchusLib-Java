@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
@@ -31,10 +32,31 @@ public class ServerUtils {
 	}
 	
 	/**
+	 * @return e.g. 26 for 26.1
+	 */
+	public static int getMajorVersion() {
+		String bukkitVersion = Bukkit.getBukkitVersion();
+		String mc = bukkitVersion.split("-")[0];
+		
+		try {
+			return Integer.parseInt(mc.split("\\.")[0]);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+        }
+	}
+	
+	/**
 	 * @return e.g. 8 for 1.8.8
 	 */
 	public static int getMinorVersion() {
-		return VersionProvider.get().getMinorVersion();
+		String bukkitVersion = Bukkit.getBukkitVersion();
+		String mc = bukkitVersion.split("-")[0];
+		
+		try {
+			return Integer.parseInt(mc.split("\\.")[1]);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+        }
 	}
 	
 	/**

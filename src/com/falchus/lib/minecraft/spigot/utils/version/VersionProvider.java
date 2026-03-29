@@ -2,6 +2,7 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 
 import org.bukkit.Bukkit;
 
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.version.v1_9_R1.VersionAdapter_v1_9_R1;
 import com.falchus.lib.minecraft.spigot.utils.version.v_1_13_R1.VersionAdapter_v_1_13_R1;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
@@ -18,19 +19,8 @@ public class VersionProvider {
 	private static IVersionAdapter adapter;
 	
 	private static IVersionAdapter load() {
-		String bukkitVersion = Bukkit.getBukkitVersion();
-		String mc = bukkitVersion.split("-")[0];
-		
-		int major;
-		int minor;
-		try {
-			String[] parts = mc.split("\\.");
-			major = Integer.parseInt(parts[0]);
-            minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
-		} catch (Exception e) {
-            return new VersionAdapter();
-        }
-		
+		int major = ServerUtils.getMajorVersion();
+		int minor = ServerUtils.getMinorVersion();
     	switch (major) {
     		case 1:
     			if (minor >= 17) {
@@ -45,7 +35,7 @@ public class VersionProvider {
     			return new VersionAdapterModern();
 
 			default:
-				break;
+				return new VersionAdapter();
     	}
 		
         String packageName = Bukkit.getServer().getClass().getPackageName();
