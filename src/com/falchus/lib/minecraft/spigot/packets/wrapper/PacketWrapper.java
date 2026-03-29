@@ -8,8 +8,8 @@ import java.util.function.Function;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.chat.*;
 import com.falchus.lib.minecraft.spigot.utils.version.IVersionAdapter;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.Dummy;
-import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.falchus.lib.utils.wrapper.impl.FirstClassWrapper;
 
 import lombok.NonNull;
@@ -35,11 +35,25 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 		
 		for (Class<T> wrapper : wrappers) {
 			try {
-				PacketWrapper dummy = (T) ReflectionUtils.getConstructor(wrapper, Object.class).newInstance(Dummy.instance);
+				PacketWrapper dummy = (T) new ClassInstanceBuilder(
+					wrapper
+				).withParams(
+					Map.of(
+						Object.class,
+						Dummy.instance
+					)
+				).build();
 				for (Class<?> clazz : dummy.getClasses()) {
 					registry.put(clazz, obj -> {
 						try {
-							return (T) ReflectionUtils.getConstructor(wrapper, Object.class).newInstance(obj);
+							return (T) new ClassInstanceBuilder(
+								wrapper
+							).withParams(
+								Map.of(
+									Object.class,
+									obj
+								)
+							).build();
 						} catch (Exception e) {
 							throw new RuntimeException(e);
 						}

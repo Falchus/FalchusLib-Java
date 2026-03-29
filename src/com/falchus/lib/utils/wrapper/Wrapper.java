@@ -4,8 +4,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.AllArgsConstructor;
@@ -59,7 +61,16 @@ public class Wrapper<T> {
 		}
 		
 		try {
-			return (U) ReflectionUtils.getConstructor(clazz, params).newInstance(handle);
+			Map<Class<?>, Object>[] paramMaps = new Map[params.length];
+			for (int i = 0; i < params.length; i++) {
+				paramMaps[i] = Map.of(params[i], handle);
+			}
+			
+			return (U) new ClassInstanceBuilder(
+				clazz
+			).withParams(
+				paramMaps
+			).build();
 		} catch (Exception e) {
 			return null;
 		}
