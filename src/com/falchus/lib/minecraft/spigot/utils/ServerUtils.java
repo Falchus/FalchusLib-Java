@@ -3,6 +3,7 @@ package com.falchus.lib.minecraft.spigot.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
+import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 
 import lombok.experimental.UtilityClass;
@@ -25,9 +26,30 @@ public class ServerUtils {
 	}
 	
 	/**
+	 * @return {@link Version}
+	 */
+	public static Version getVersion() {
+		int major = getMajorVersion();
+		int minor = getMinorVersion();
+		
+		Version version = null;
+		for (Version v : Version.values()) {
+			if (v.getMajor() < major || (v.getMajor() == major && v.getMinor() <= minor)) {
+	            if (version == null || v.isAfter(version)) {
+	            	version = v;
+	            }
+			}
+		}
+		if (version == null) {
+			throw new IllegalStateException("Unsupported server version: " + getVersionString());
+		}
+		return version;
+	}
+	
+	/**
 	 * @return e.g. "1.8.8"
 	 */
-	public static String getVersion() {
+	public static String getVersionString() {
 		return VersionProvider.get().getVersion();
 	}
 	

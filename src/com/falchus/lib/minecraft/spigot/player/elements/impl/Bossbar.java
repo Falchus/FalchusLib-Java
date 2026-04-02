@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
 
+import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
@@ -39,7 +40,7 @@ public class Bossbar extends PlayerElement {
 	 * Sends a Bossbar message repeatedly at a fixed interval.
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
-		if (ServerUtils.getMinorVersion() < 17) {
+		if (ServerUtils.getVersion().isBefore(Version.v1_17)) {
 			super.sendUpdating(intervalTicks, () ->
 				send(
 					message,

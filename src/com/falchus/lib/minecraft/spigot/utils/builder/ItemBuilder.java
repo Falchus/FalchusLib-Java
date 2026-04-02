@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
+import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
@@ -47,7 +48,7 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder(@NonNull com.falchus.lib.minecraft.spigot.enums.Material material, int amount) {
 		Material mat = WorldUtils.getMaterial(material);
-		if (ServerUtils.getMinorVersion() < 13) {
+		if (ServerUtils.getVersion().isBefore(Version.v1_13)) {
 			this.item = new ItemStack(mat, amount, (short) material.getLegacyDurability());
 		} else {
 			this.item = new ItemStack(mat, amount);
