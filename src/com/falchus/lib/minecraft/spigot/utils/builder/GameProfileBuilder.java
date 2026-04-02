@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
+import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.*;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -10,11 +11,7 @@ import lombok.AllArgsConstructor;
 
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +34,8 @@ public class GameProfileBuilder {
      * Fetches the GameProfile from the Mojang servers
      *
      * @param uuid The player uuid
-     * @return The GameProfile
-     * @see GameProfile
+     * @return The {@link GameProfile}
+     * @see {@link GameProfile}
      */
     public static GameProfile fetch(UUID uuid) {
         return fetch(uuid, false);
@@ -51,29 +48,20 @@ public class GameProfileBuilder {
      *
      * @param uuid     The player uuid
      * @param forceNew If true the cache is ignored
-     * @return The GameProfile
-     * @see GameProfile
+     * @return The {@link GameProfile}
+     * @see {@link GameProfile}
      */
     public static GameProfile fetch(UUID uuid, boolean forceNew) {
         if (!forceNew && cache.containsKey(uuid) && cache.get(uuid).isValid()) {
             return cache.get(uuid).profile;
-        } else {
-            String json = "";
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(String.format(url, UUIDTypeAdapter.fromUUID(uuid))).openStream()))) {
-                String line;
-                StringBuilder sb = new StringBuilder();
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                }
-                json = sb.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            GameProfile result = gson.fromJson(json, GameProfile.class);
-            cache.put(uuid, new CachedProfile(result));
-            return result;
         }
+        
+        String json = HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid)));
+        if (json == null) return null;
+        
+        GameProfile result = gson.fromJson(json, GameProfile.class);
+        cache.put(uuid, new CachedProfile(result));
+        return result;
     }
 
     /**
@@ -82,8 +70,8 @@ public class GameProfileBuilder {
      * @param uuid The uuid
      * @param name The name
      * @param skin The url from the skin image
-     * @return A GameProfile built from the arguments
-     * @see GameProfile
+     * @return A {@link GameProfile} built from the arguments
+     * @see {@link GameProfile}
      */
     public static GameProfile getProfile(UUID uuid, String name, String skin) {
         return getProfile(uuid, name, skin, null);
@@ -96,8 +84,8 @@ public class GameProfileBuilder {
      * @param name    The name
      * @param skinUrl Url from the skin image
      * @param capeUrl Url from the cape image
-     * @return A GameProfile built from the arguments
-     * @see GameProfile
+     * @return A {@link GameProfile} built from the arguments
+     * @see {@link GameProfile}
      */
     public static GameProfile getProfile(UUID uuid, String name, String skinUrl, String capeUrl) {
         GameProfile profile = new GameProfile(uuid, name);
