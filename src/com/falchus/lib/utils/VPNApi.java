@@ -25,7 +25,7 @@ public class VPNApi {
 		String body = HTTPRequest.get(url);
 		if (body == null) return false;
 		
-		JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+		JsonObject json = JsonParser.parseString(body).getAsJsonObject();
 		return json.has("security") &&
 				json.getAsJsonObject("security").has("vpn") &&
 				json.getAsJsonObject("security").get("vpn").getAsBoolean();

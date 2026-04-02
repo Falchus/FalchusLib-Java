@@ -21,7 +21,7 @@ public class APIUtils {
     	String body = HTTPRequest.get("https://api.mojang.com/users/profiles/minecraft/" + username);
         if (body == null) return null;
 
-    	JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+    	JsonObject json = JsonParser.parseString(body).getAsJsonObject();
     	String id = json.get("id").getAsString();
     	
         String uuid = id.replaceFirst(
@@ -40,7 +40,7 @@ public class APIUtils {
         String body = HTTPRequest.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", ""));
         if (body == null) return null;
 
-    	JsonObject json = new JsonParser().parse(body).getAsJsonObject();
+    	JsonObject json = JsonParser.parseString(body).getAsJsonObject();
     	return json.get("name").getAsString();
     }
 }
