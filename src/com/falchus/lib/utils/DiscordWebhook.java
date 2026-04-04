@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -16,7 +17,7 @@ import lombok.experimental.UtilityClass;
 public class DiscordWebhook {
 
 	public static void sendMessage(@NonNull String message, @NonNull String webhookUrl) {
-	    Thread.runAsync(() -> {
+	    CompletableFuture.runAsync(() -> {
 		    try {
 		        URL url = new URL(webhookUrl);
 		        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -45,7 +46,7 @@ public class DiscordWebhook {
 	}
 
     public static void sendEmbedMessage(String title, String description, int red, int green, int blue, String footerText, String footerImageUrl, String thumbnailUrl, @NonNull String webhookUrl) {
-	    Thread.runAsync(() -> {
+    	CompletableFuture.runAsync(() -> {
 	        try {
 	            URL url = new URL(webhookUrl);
 	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
