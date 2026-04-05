@@ -55,14 +55,6 @@ void onEnd() {}
   void onCountdown(int remaining) {}
   ```
 
-`com.falchus.lib.utils.Thread`
-```java
-static void run(Runnable task);
-static void runAsync(Runnable task);
-
-static void shutdown();
-```
-
 #### Builders
 `com.falchus.lib.utils.builder.ClassInstanceBuilder`
 ```java
@@ -86,6 +78,28 @@ HTTPServerBuilder defaultHandler(BiConsumer<HttpExchange, Map<String, String>> h
 HTTPServer build(String ip);
 ```
 
+#### Storage
+`com.falchus.lib.storage.Storage`
+```java
+<T> void save(T value);
+
+<T> T load();
+
+void delete();
+```
+- `com.falchus.lib.storage.impl.json.JsonStorage`
+  - `com.falchus.lib.storage.impl.json.JsonArrayStorage`
+  - `com.falchus.lib.storage.impl.json.JsonObjectStorage`
+
+`com.falchus.lib.storage.serializer.Serializer`
+```java
+String serialize(T value);
+T deserialize(String content);
+```
+- `com.falchus.lib.storage.serializer.json.JsonSerializer`
+  - `com.falchus.lib.storage.serializer.json.JsonArraySerializer`
+  - `com.falchus.lib.storage.serializer.json.JsonObjectSerializer`
+
 #### HTTP
 `com.falchus.lib.utils.http.HTTPRequest`
 ```java
@@ -99,6 +113,43 @@ void stop(int delay);
 
 static void sendText(HttpExchange exchange, String text, int statusCode);
 static void sendJson(HttpExchange exchange, String json, int statusCode);
+```
+
+#### Events
+`com.falchus.lib.events.Cancellable`
+```java
+void setCancelled(boolean cancelled);
+boolean isCancelled();
+```
+
+`com.falchus.lib.events.Event`
+```java
+Event(boolean async);
+
+boolean callEvent();
+```
+`com.falchus.lib.events.EventExecutor`
+```java
+void execute(Event event);
+```
+`com.falchus.lib.events.EventHandler`
+```java
+EventPriority priority();
+
+boolean ignoreCancelled();
+```
+`com.falchus.lib.manager.EventManager`
+```java
+static void registerListener(Listener listener);
+static void unregisterListener(Listener listener);
+
+static void callEvent(Event event);
+```
+
+`com.falchus.lib.events.listener.Listener`
+`com.falchus.lib.events.listener.RegisteredListener`
+```java
+void execute(Event event);
 ```
 
 #### Reflection & Wrapping
@@ -259,7 +310,8 @@ static void connectToServer(Player player, String server);
 static Object getMcServer();
 static Object getBukkitServer();
 
-static String getVersion();
+static Version getVersion();
+static String getVersionString();
 static int getMajorVersion();
 static int getMinorVersion();
 
