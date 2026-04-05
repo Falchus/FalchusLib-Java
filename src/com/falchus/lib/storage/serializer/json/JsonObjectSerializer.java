@@ -1,14 +1,8 @@
 package com.falchus.lib.storage.serializer.json;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import com.falchus.lib.interfaces.Mapper;
-import com.falchus.lib.storage.serializer.Serializer;
-
-public abstract class JsonObjectSerializer<T> implements Mapper<T, JSONObject>, Serializer<T> {
-	
-	private final JSONParser parser = new JSONParser();
+public abstract class JsonObjectSerializer<T> extends JsonSerializer<T, JSONObject> {
 	
 	@Override
 	public String serialize(T value) {
