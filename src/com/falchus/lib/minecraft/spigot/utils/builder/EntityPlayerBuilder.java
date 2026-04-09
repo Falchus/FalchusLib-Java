@@ -173,7 +173,7 @@ public class EntityPlayerBuilder {
 							EntityUtils.setYawPitch(entityPlayer, yaw, pitch);
 						}
 					}
-				}.runTaskTimer(100, TimeUnit.MILLISECONDS);
+				}.runTimer(100, TimeUnit.MILLISECONDS);
 			}
 			return entityPlayer;
 		} catch (Exception e) {

@@ -30,7 +30,7 @@ public abstract class Task implements Runnable {
 		onRun(tick++);
 	}
 	
-	public static final Task runTask(Runnable runnable) {
+	public static final Task run(Runnable runnable) {
 		Task task;
 		if (runnable instanceof Task t) {
 			task = t;
@@ -45,38 +45,38 @@ public abstract class Task implements Runnable {
 		return task;
 	}
 	
-	public static final Task runTaskAsync(Runnable runnable) {
-		Task task = runTask(runnable);
+	public static final Task runAsync(Runnable runnable) {
+		Task task = run(runnable);
 		worker.submit(task);
 		return task;
 	}
 	
-	public static final Task runTaskTimer(Runnable runnable, long period, TimeUnit unit) {
-		return runTaskTimer(runnable, 0, period, unit);
+	public static final Task runTimer(Runnable runnable, long period, TimeUnit unit) {
+		return runTimer(runnable, 0, period, unit);
 	}
 	
-	public static final Task runTaskTimerAsync(Runnable runnable, long period, TimeUnit unit) {
-		return runTaskTimerAsync(runnable, 0, period, unit);
+	public static final Task runTimerAsync(Runnable runnable, long period, TimeUnit unit) {
+		return runTimerAsync(runnable, 0, period, unit);
 	}
 	
-	public final <T extends Task> T runTaskTimer(long period, TimeUnit unit) {
-		return runTaskTimer(0, period, unit);
+	public final <T extends Task> T runTimer(long period, TimeUnit unit) {
+		return runTimer(0, period, unit);
 	}
 	
-	public final <T extends Task> T runTaskTimerAsync(long period, TimeUnit unit) {
-		return runTaskTimerAsync(0, period, unit);
+	public final <T extends Task> T runTimerAsync(long period, TimeUnit unit) {
+		return runTimerAsync(0, period, unit);
 	}
 	
-	public static final Task runTaskTimer(Runnable runnable, long delay, long period, TimeUnit unit) {
-		return runTask(runnable).runTaskTimer(delay, period, unit);
+	public static final Task runTimer(Runnable runnable, long delay, long period, TimeUnit unit) {
+		return run(runnable).runTimer(delay, period, unit);
 	}
 	
-	public static final Task runTaskTimerAsync(Runnable runnable, long delay, long period, TimeUnit unit) {
-		return runTask(runnable).runTaskTimerAsync(delay, period, unit);
+	public static final Task runTimerAsync(Runnable runnable, long delay, long period, TimeUnit unit) {
+		return run(runnable).runTimerAsync(delay, period, unit);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runTaskTimer(long delay, long period, TimeUnit unit) {
+	public final <T extends Task> T runTimer(long delay, long period, TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this, delay, period, unit);
 		tasks.put(id, this);
 		taskFutures.put(id, future);
@@ -84,23 +84,23 @@ public abstract class Task implements Runnable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runTaskTimerAsync(long delay, long period, TimeUnit unit) {
+	public final <T extends Task> T runTimerAsync(long delay, long period, TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> worker.submit(this), delay, period, unit);
 		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
 	}
 	
-	public static final Task runTaskLater(Runnable runnable, long delay, TimeUnit unit) {
-		return runTask(runnable).runTaskLater(delay, unit);
+	public static final Task runLater(Runnable runnable, long delay, TimeUnit unit) {
+		return run(runnable).runLater(delay, unit);
 	}
 	
-	public static final Task runTaskLaterAsync(Runnable runnable, long delay, TimeUnit unit) {
-		return runTask(runnable).runTaskLaterAsync(delay, unit);
+	public static final Task runLaterAsync(Runnable runnable, long delay, TimeUnit unit) {
+		return run(runnable).runLaterAsync(delay, unit);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runTaskLater(long delay, TimeUnit unit) {
+	public final <T extends Task> T runLater(long delay, TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.schedule(() -> {
 			run();
 			end();
@@ -111,7 +111,7 @@ public abstract class Task implements Runnable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runTaskLaterAsync(long delay, TimeUnit unit) {
+	public final <T extends Task> T runLaterAsync(long delay, TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.schedule(() -> worker.submit(() -> {
 			run();
 			end();

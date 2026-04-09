@@ -62,7 +62,7 @@ public abstract class PlayerElement {
 			remove();
 		}
 		
-		Task task = Task.runTaskTimer(() -> {
+		Task task = Task.runTimer(() -> {
 			if (!player.isOnline()) {
 				remove();
 				return;
