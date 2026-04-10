@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils.version;
 
 import com.falchus.lib.minecraft.FalchusLibMinecraft;
+import com.falchus.lib.minecraft.enums.Software;
 import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.version.v1_21_R1.VersionAdapter_v1_21_R1;
@@ -31,7 +32,7 @@ public class VersionProvider {
     private static IVersionAdapter adapter;
 
     private static IVersionAdapter load() {
-        if (FalchusLibMinecraft.isFolia()) {
+        if (FalchusLibMinecraft.getSoftware() == Software.FOLIA) {
             return new VersionAdapterFolia();
         }
 
