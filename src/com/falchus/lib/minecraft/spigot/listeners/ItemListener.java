@@ -20,16 +20,16 @@ import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
 public class ItemListener implements Listener {
 
 	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
-
+	
 	public ItemListener() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
-
+	
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
     	ItemStack item = event.getItem();
     	if (item == null) return;
-
+    	
         UUID uuid = ItemUtils.getUUID(item);
         if (uuid != null) {
             Consumer<Player> action = ItemUtils.itemActions.get(uuid);
@@ -46,7 +46,7 @@ public class ItemListener implements Listener {
 
         ItemStack item = event.getCurrentItem();
         if (item == null) return;
-
+        
         UUID uuid = ItemUtils.getUUID(item);
         if (uuid != null) {
             TriConsumer<Player, ItemStack, InventoryClickEvent> action = ItemUtils.itemActionsInventory.get(uuid);
@@ -63,7 +63,7 @@ public class ItemListener implements Listener {
             callback.accept(player, item, event);
         }
     }
-
+    
     // TODO: search for a better, more bulletproof solution
 //    @EventHandler
 //    public void onInventoryClose(InventoryCloseEvent event) {
