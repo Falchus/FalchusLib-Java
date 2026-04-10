@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Biome {
-    HELL("NETHER_WASTES");
-
-    private final String modernName;
+	HELL("NETHER_WASTES");
+	
+	private final String modernName;
 }
