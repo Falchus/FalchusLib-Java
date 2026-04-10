@@ -27,7 +27,7 @@ abstract class PacketSpectateWrapper extends PacketWrapper {
 		return getFieldValue(uuid);
 	}
 	
-	public void setUUID(int cameraId) {
-		setField(this.uuid, cameraId);
+	public void setUUID(int uuid) {
+		setField(this.uuid, uuid);
 	}
 }
