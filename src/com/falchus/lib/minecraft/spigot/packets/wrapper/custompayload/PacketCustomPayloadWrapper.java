@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 abstract class PacketCustomPayloadWrapper extends PacketWrapper {
 
-    PacketCustomPayloadWrapper(@NonNull Object handle, @NonNull Set<String> names) {
-        super(handle, names);
-    }
+	PacketCustomPayloadWrapper(@NonNull Object handle, @NonNull Set<String> names) {
+		super(handle, names);
+	}
 }
