@@ -1,11 +1,13 @@
 package com.falchus.lib.minecraft.spigot.events.player;
 
-import com.falchus.lib.minecraft.spigot.enums.Client;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import com.falchus.lib.minecraft.spigot.enums.Client;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Called when a player's client has been identified after joining.
