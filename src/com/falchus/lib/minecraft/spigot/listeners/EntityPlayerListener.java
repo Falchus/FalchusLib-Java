@@ -18,16 +18,16 @@ public class EntityPlayerListener implements Listener {
 	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	public final Map<UUID, Object> players = new HashMap<>();
 	public final Map<UUID, Consumer<Player>> actions = new HashMap<>();
-
+	
 	public EntityPlayerListener() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
-
+	
 	@EventHandler
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
 		if (!(event.getRightClicked() instanceof Player player)) return;
 		UUID uuid = player.getUniqueId();
-
+		
 		if (players.containsKey(uuid)) {
 			Consumer<Player> action = actions.get(uuid);
 			if (action != null) {
