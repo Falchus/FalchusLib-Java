@@ -1,14 +1,13 @@
 package com.falchus.lib.storage.impl.json;
 
-import java.nio.file.Path;
-
+import com.falchus.lib.storage.serializer.Serializer;
 import org.json.simple.JSONArray;
 
-import com.falchus.lib.storage.serializer.Serializer;
+import java.nio.file.Path;
 
 public class JsonArrayStorage extends JsonStorage {
 
-	public JsonArrayStorage(Serializer<?> serializer, Path folder, String fileName) {
-		super(serializer, folder, fileName, new JSONArray().toJSONString());
-	}
+    public JsonArrayStorage(Serializer<?> serializer, Path folder, String fileName) {
+        super(serializer, folder, fileName, new JSONArray().toJSONString());
+    }
 }

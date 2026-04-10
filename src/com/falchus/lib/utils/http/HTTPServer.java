@@ -1,44 +1,37 @@
 package com.falchus.lib.utils.http;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-
 @AllArgsConstructor
 public class HTTPServer {
 
-	@NonNull private final HttpServer server;
-	@NonNull private final Map<String, BiConsumer<HttpExchange, Map<String, String>>> routes;
-	
-	public void start() {
-		server.start();
-	}
-	
-	public void stop(int delay) {
-		server.stop(delay);
-	}
+    @NonNull
+    private final HttpServer server;
+    @NonNull
+    private final Map<String, BiConsumer<HttpExchange, Map<String, String>>> routes;
 
-	/**
-	 * Sends a plain text response to the client.
-	 */
+    /**
+     * Sends a plain text response to the client.
+     */
     public static void sendText(@NonNull HttpExchange exchange, @NonNull String text, int statusCode) {
         sendResponse(exchange, text, statusCode, "text/plain; charset=UTF-8");
     }
-    
+
     /**
      * Sends a JSON response to the client.
      */
     public static void sendJson(@NonNull HttpExchange exchange, @NonNull String json, int statusCode) {
         sendResponse(exchange, json, statusCode, "application/json; charset=UTF-8");
     }
-    
+
     private static void sendResponse(@NonNull HttpExchange exchange, @NonNull String content, int statusCode, @NonNull String contentType) {
         try {
             byte[] bytes = content.getBytes("UTF-8");
@@ -51,5 +44,13 @@ public class HTTPServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void start() {
+        server.start();
+    }
+
+    public void stop(int delay) {
+        server.stop(delay);
     }
 }

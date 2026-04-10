@@ -1,12 +1,11 @@
 package com.falchus.lib.minecraft.spigot.events;
 
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 /**
  * Called when there's a event that should be cancelled in a Lobby.
@@ -15,13 +14,14 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class LobbyCancelEvent extends Event implements Cancellable {
 
-	@Getter private static final HandlerList handlerList = new HandlerList();
-	@Setter private boolean cancelled;
-	
-	private final Event event;
-	
-	@Override
-	public HandlerList getHandlers() {
-		return handlerList;
-	}
+    @Getter
+    private static final HandlerList handlerList = new HandlerList();
+    private final Event event;
+    @Setter
+    private boolean cancelled;
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlerList;
+    }
 }

@@ -33,23 +33,23 @@ public class FalchusLibMinecraftVelocity {
 	final File dataFolder;
 	final File file;
 	final Metrics.Factory metricsFactory;
-	
+
 	@Getter static FalchusLibMinecraftVelocity instance;
-	
+
 	@Inject
 	public FalchusLibMinecraftVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataFolder, Metrics.Factory metricsFactory) {
 		this.server = server;
 		this.logger = logger;
 		this.dataFolder = new File(dataFolder.toFile().getParentFile(), this.getClass().getAnnotation(Plugin.class).name());
 		this.metricsFactory = metricsFactory;
-		
+
 		try {
 			file = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Subscribe
 	public void onProxyInitialize(ProxyInitializeEvent event) {
 		instance = this;

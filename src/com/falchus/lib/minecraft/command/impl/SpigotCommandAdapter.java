@@ -21,13 +21,13 @@ public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecut
     private final String permission;
     private final String noPermissionMessage;
     private final String usageMessage;
-	
+
 	public SpigotCommandAdapter(String permission, String noPermissionMessage, String usageMessage) {
         this.permission = permission;
         this.noPermissionMessage = noPermissionMessage != null ? noPermissionMessage : FalchusLib.noPermissionMessage;
         this.usageMessage = usageMessage != null ? usageMessage : FalchusLib.prefix + "§cWrong usage.";
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!hasPermission(sender)) {
@@ -37,14 +37,14 @@ public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecut
 		executeCommand(sender, args);
 		return true;
 	}
-	
+
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		if (!hasPermission(sender)) return Collections.emptyList();
 		List<String> list = tabComplete(sender, args);
 		return list != null ? list : Collections.emptyList();
 	}
-	
+
 	@Override
 	public boolean hasPermission(@NonNull Object sender) {
         if (permission != null) {
@@ -54,7 +54,7 @@ public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecut
         }
         return true;
 	}
-	
+
 	@Override
 	public void sendMessage(@NonNull Object s, @NonNull String message) {
         if (s instanceof CommandSender sender) {

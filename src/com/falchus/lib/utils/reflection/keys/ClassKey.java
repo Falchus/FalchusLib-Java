@@ -1,12 +1,12 @@
 package com.falchus.lib.utils.reflection.keys;
 
-import java.util.Set;
-
 import lombok.NonNull;
 
+import java.util.Set;
+
 public record ClassKey(@NonNull Set<String> names) {
-	
-	public ClassKey(@NonNull String... names) {
-		this(Set.of(names));
-	}
+
+    public ClassKey(@NonNull String... names) {
+        this(Set.of(names));
+    }
 }

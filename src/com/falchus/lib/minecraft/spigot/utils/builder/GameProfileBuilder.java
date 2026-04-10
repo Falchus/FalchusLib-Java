@@ -6,9 +6,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.util.UUIDTypeAdapter;
-
 import lombok.AllArgsConstructor;
-
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.lang.reflect.Type;
@@ -55,10 +53,10 @@ public class GameProfileBuilder {
         if (!forceNew && cache.containsKey(uuid) && cache.get(uuid).isValid()) {
             return cache.get(uuid).profile;
         }
-        
+
         String json = HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid)));
         if (json == null) return null;
-        
+
         GameProfile result = gson.fromJson(json, GameProfile.class);
         cache.put(uuid, new CachedProfile(result));
         return result;
@@ -97,7 +95,7 @@ public class GameProfileBuilder {
         args.add(name);
         args.add(skinUrl);
         if (cape) {
-        	args.add(capeUrl);
+            args.add(capeUrl);
         }
 
         profile.getProperties().put("textures", new Property("textures", Base64Coder.encodeString(String.format(cape ? jsonCape : jsonSkin, args.toArray(new Object[0])))));

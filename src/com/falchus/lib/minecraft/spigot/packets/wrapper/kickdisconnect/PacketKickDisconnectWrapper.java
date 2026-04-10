@@ -10,29 +10,29 @@ import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
 abstract class PacketKickDisconnectWrapper extends PacketWrapper {
-	
-	Field reason;
 
-	PacketKickDisconnectWrapper(@NonNull Object handle, @NonNull Set<String> names) {
-		super(handle, names);
-		
-		reason = getFirstField(
-			"reason",
-			"a"
-		);
-	}
-	
-	/**
-	 * @param reason: IChatBaseComponent
-	 */
-	public void setReason(Object reason) {
-		setField(this.reason, reason);
-	}
-	
-	/**
-	 * @return IChatBaseComponent
-	 */
-	public Object getReason() {
-		return getFieldValue(reason);
-	}
+    Field reason;
+
+    PacketKickDisconnectWrapper(@NonNull Object handle, @NonNull Set<String> names) {
+        super(handle, names);
+
+        reason = getFirstField(
+                "reason",
+                "a"
+        );
+    }
+
+    /**
+     * @return IChatBaseComponent
+     */
+    public Object getReason() {
+        return getFieldValue(reason);
+    }
+
+    /**
+     * @param reason: IChatBaseComponent
+     */
+    public void setReason(Object reason) {
+        setField(this.reason, reason);
+    }
 }

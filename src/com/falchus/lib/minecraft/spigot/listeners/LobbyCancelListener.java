@@ -38,188 +38,188 @@ import com.falchus.lib.minecraft.spigot.events.LobbyCancelEvent;
 public class LobbyCancelListener implements Listener {
 
 	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
-	
+
 	public LobbyCancelListener() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onInventoryClick(InventoryClickEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFade(BlockFadeEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockForm(BlockFormEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onHangingBreak(HangingBreakEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntitySpawn(EntitySpawnEvent event) {
 		if (event.getEntityType() == EntityType.ARMOR_STAND) return;
-		
+
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onItemSpawn(ItemSpawnEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerShearEntity(PlayerShearEntityEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityTarget(EntityTargetEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onVehicleDamage(VehicleDamageEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
 		event.setCancelled(e.isCancelled());
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
 		LobbyCancelEvent e = new LobbyCancelEvent(event);

@@ -6,27 +6,27 @@ import java.util.List;
 import lombok.NonNull;
 
 public interface BaseCommand {
-    
+
     /**
      * Returns the permission required.
      */
     String getPermission();
-    
+
     /**
      * Returns the message to send when a sender does not have permission.
      */
     String getNoPermissionMessage();
-    
+
     /**
      * Returns the usage message for the command.
      */
     String getUsageMessage();
-	
+
     /**
      * Executes the command logic.
      */
     void executeCommand(@NonNull Object sender, @NonNull String[] args);
-    
+
     /**
      * Tab completion.
      */

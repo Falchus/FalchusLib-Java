@@ -1,28 +1,27 @@
 package com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.impl;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.InventoryOpenAnimation;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Fills the items in order.
  */
 public class ItemFillAnimation extends InventoryOpenAnimation {
-	
-	public ItemFillAnimation(int delayTicks) {
-		this.delayTicks = delayTicks;
-	}
-	
-	@Override
-	protected void animate(Player player, Inventory inventory, ItemStack[] items, int tick) {
-		ItemStack item = items[tick];
-		if (item != null) {
-			inventory.setItem(tick, item);
-			PlayerUtils.playSound(player, player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 2);
-		}
-	}
+
+    public ItemFillAnimation(int delayTicks) {
+        this.delayTicks = delayTicks;
+    }
+
+    @Override
+    protected void animate(Player player, Inventory inventory, ItemStack[] items, int tick) {
+        ItemStack item = items[tick];
+        if (item != null) {
+            inventory.setItem(tick, item);
+            PlayerUtils.playSound(player, player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 2);
+        }
+    }
 }

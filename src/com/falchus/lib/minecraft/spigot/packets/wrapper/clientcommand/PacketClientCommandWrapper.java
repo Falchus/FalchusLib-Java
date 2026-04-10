@@ -10,29 +10,29 @@ import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
 abstract class PacketClientCommandWrapper extends PacketWrapper {
-	
-	Field action;
 
-	PacketClientCommandWrapper(@NonNull Object handle, @NonNull Set<String> names) {
-		super(handle, names);
-		
-		action = getFirstField(
-			"action",
-			"a"
-		);
-	}
-	
-	/**
-	 * @param action: PacketPlayInClientCommand$EnumClientCommand
-	 */
-	public void setAction(Object action) {
-		setField(this.action, action);
-	}
-	
-	/**
-	 * @return PacketPlayInClientCommand$EnumClientCommand
-	 */
-	public Object getAction() {
-		return getFieldValue(action);
-	}
+    Field action;
+
+    PacketClientCommandWrapper(@NonNull Object handle, @NonNull Set<String> names) {
+        super(handle, names);
+
+        action = getFirstField(
+                "action",
+                "a"
+        );
+    }
+
+    /**
+     * @return PacketPlayInClientCommand$EnumClientCommand
+     */
+    public Object getAction() {
+        return getFieldValue(action);
+    }
+
+    /**
+     * @param action: PacketPlayInClientCommand$EnumClientCommand
+     */
+    public void setAction(Object action) {
+        setField(this.action, action);
+    }
 }

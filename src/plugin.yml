@@ -3,9 +3,10 @@ version: ${project.version}
 api-version: 1.13
 description: A library designed to simplify & speed up software development.
 main: com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot
+folia-supported: true
 author: Falchus
-authors: [Kalibrier]
+authors: [Kalibrier, sun-dev]
 website: lib-java.falchus.com
 
-load: startup
+load: STARTUP
 softdepend: [LuckPerms]

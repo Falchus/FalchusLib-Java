@@ -1,16 +1,16 @@
 package com.falchus.lib.minecraft.spigot.packets.wrapper.multiblockchange;
 
-import java.util.Set;
-
 import lombok.NonNull;
+
+import java.util.Set;
 
 public class WrappedPacketOutMultiBlockChange extends PacketMultiBlockChangeWrapper {
 
-	public WrappedPacketOutMultiBlockChange(@NonNull Object handle) {
-		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutMultiBlockChange",
-				networkProtocolGame + "PacketPlayOutMultiBlockChange"
-			)
-		);
-	}
+    public WrappedPacketOutMultiBlockChange(@NonNull Object handle) {
+        super(handle, Set.of(
+                        version.getPackageNms() + "PacketPlayOutMultiBlockChange",
+                        networkProtocolGame + "PacketPlayOutMultiBlockChange"
+                )
+        );
+    }
 }

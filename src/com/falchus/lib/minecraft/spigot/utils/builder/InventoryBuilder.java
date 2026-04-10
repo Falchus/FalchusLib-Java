@@ -1,31 +1,29 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-
+import com.falchus.lib.interfaces.consumer.TriConsumer;
+import com.falchus.lib.minecraft.spigot.enums.Material;
+import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
+import com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.InventoryOpenAnimation;
+import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.falchus.lib.interfaces.consumer.TriConsumer;
-import com.falchus.lib.minecraft.spigot.enums.Material;
-import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
-import com.falchus.lib.minecraft.spigot.utils.inventory.animation.open.InventoryOpenAnimation;
-
-import lombok.Getter;
-import lombok.NonNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 @Getter
 public class InventoryBuilder {
 
     private final String title;
     private final int size;
-    private boolean dynamicSize = false;
     private final List<ItemUtils.InventoryItem> items = new ArrayList<>();
+    private boolean dynamicSize = false;
     private TriConsumer<Player, ItemStack, InventoryClickEvent> globalClickListener;
     private ItemStack filler;
     private InventoryOpenAnimation openAnimation;
@@ -37,14 +35,14 @@ public class InventoryBuilder {
         this.title = title;
         this.size = size;
     }
-    
+
     /**
      * When enabled, the inventory size auto-adjusts to the number of items
      * but never exceeds the initially set size.
      */
     public InventoryBuilder dynamicSize(boolean dynamicSize) {
-    	this.dynamicSize = dynamicSize;
-    	return this;
+        this.dynamicSize = dynamicSize;
+        return this;
     }
 
     /**
@@ -73,15 +71,15 @@ public class InventoryBuilder {
         items.add(new ItemUtils.InventoryItem(slot, itemWithUUID, null));
         return this;
     }
-    
+
     /**
      * Sets the animation to play when opening the inventory.
      */
     public InventoryBuilder setOpenAnimation(@NonNull InventoryOpenAnimation openAnimation) {
-    	this.openAnimation = openAnimation;
+        this.openAnimation = openAnimation;
         return this;
     }
-    
+
     /**
      * Adds an item without a click listener.
      */
@@ -116,7 +114,7 @@ public class InventoryBuilder {
         this.globalClickListener = onClick;
         return this;
     }
-    
+
     /**
      * Defines a filler item that will be placed in all unused slots.
      */
@@ -124,7 +122,7 @@ public class InventoryBuilder {
         this.filler = filler;
         return this;
     }
-    
+
     /**
      * Defines a default filler item that will be placed in all unused slots.
      */
@@ -132,117 +130,117 @@ public class InventoryBuilder {
         this.filler = new ItemBuilder(com.falchus.lib.minecraft.spigot.enums.Material.GRAY_STAINED_GLASS_PANE).setName("§r").build();
         return this;
     }
-    
+
     /**
      * Opens the inventory for the given player.
      */
     public void open(Player player) {
-    	Inventory inventory = build();
-    	player.openInventory(inventory);
-    	
-    	if (openAnimation != null) {
-    		openAnimation.play(player, inventory);
-    	}
+        Inventory inventory = build();
+        player.openInventory(inventory);
+
+        if (openAnimation != null) {
+            openAnimation.play(player, inventory);
+        }
     }
-    
+
     /**
      * Opens the inventory pages for the given player.
      */
     public void openPage(Player player, int page) {
-    	List<Inventory> pages = buildPages();
-    	if (pages.isEmpty()) return;
-    	
-    	Inventory inventory = pages.get(page);
-    	player.openInventory(inventory);
-    	
-    	if (openAnimation != null) {
-    		openAnimation.play(player, inventory);
-    	}
+        List<Inventory> pages = buildPages();
+        if (pages.isEmpty()) return;
+
+        Inventory inventory = pages.get(page);
+        player.openInventory(inventory);
+
+        if (openAnimation != null) {
+            openAnimation.play(player, inventory);
+        }
     }
 
     /**
      * Builds and returns the final {@link Inventory}.
      */
     public Inventory build() {
-    	return buildInventory(items, title, size);
+        return buildInventory(items, title, size);
     }
-    
+
     /**
      * Builds multiple pages if items exceed inventory size.
      * The last row is reserved.
      */
     public List<Inventory> buildPages() {
-    	List<Inventory> pages = new ArrayList<>();
-    	int pageSize = size - 9;
-    	
-    	int calcPages = (int) Math.ceil(items.size() / (double) pageSize);
-    	final int totalPages = calcPages == 0 ? 1 : calcPages;
-    	
-    	for (int page = 0; page < totalPages; page++) {
+        List<Inventory> pages = new ArrayList<>();
+        int pageSize = size - 9;
+
+        int calcPages = (int) Math.ceil(items.size() / (double) pageSize);
+        final int totalPages = calcPages == 0 ? 1 : calcPages;
+
+        for (int page = 0; page < totalPages; page++) {
             int start = page * pageSize;
             int end = Math.min(start + pageSize, items.size());
             List<ItemUtils.InventoryItem> pageItems = items.subList(start, end);
-    		
-    		Inventory inv = buildInventory(pageItems, title, size);
-    		
-    		final int currentPage = page;
-    		
-			inv.setItem(size - 9, new ItemBuilder(Material.PLAYER_HEAD).setName("§ePrevious page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWYxMzNlOTE5MTlkYjBhY2VmZGMyNzJkNjdmZDg3YjRiZTg4ZGM0NGE5NTg5NTg4MjQ0NzRlMjFlMDZkNTNlNiJ9fX0=").withInventoryClickListener(
-				(player, item, event) -> {
-					if (currentPage > 0) {
-						player.openInventory(pages.get(currentPage - 1));
-					}
-				})
-			.build());
-			inv.setItem(size - 1, new ItemBuilder(Material.PLAYER_HEAD).setName("§eNext page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNmYzUyMjY0ZDhhZDllNjU0ZjQxNWJlZjAxYTIzOTQ3ZWRiY2NjY2Y2NDkzNzMyODliZWE0ZDE0OTU0MWY3MCJ9fX0=").withInventoryClickListener(
-				(player, item, event) -> {
-	                if (currentPage < totalPages - 1) {
-	                    player.openInventory(pages.get(currentPage + 1));
-	                }
-				})
-			.build());
-			
-    		pages.add(inv);
-    	}
-    	
-    	return pages;
+
+            Inventory inv = buildInventory(pageItems, title, size);
+
+            final int currentPage = page;
+
+            inv.setItem(size - 9, new ItemBuilder(Material.PLAYER_HEAD).setName("§ePrevious page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWYxMzNlOTE5MTlkYjBhY2VmZGMyNzJkNjdmZDg3YjRiZTg4ZGM0NGE5NTg5NTg4MjQ0NzRlMjFlMDZkNTNlNiJ9fX0=").withInventoryClickListener(
+                            (player, item, event) -> {
+                                if (currentPage > 0) {
+                                    player.openInventory(pages.get(currentPage - 1));
+                                }
+                            })
+                    .build());
+            inv.setItem(size - 1, new ItemBuilder(Material.PLAYER_HEAD).setName("§eNext page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNmYzUyMjY0ZDhhZDllNjU0ZjQxNWJlZjAxYTIzOTQ3ZWRiY2NjY2Y2NDkzNzMyODliZWE0ZDE0OTU0MWY3MCJ9fX0=").withInventoryClickListener(
+                            (player, item, event) -> {
+                                if (currentPage < totalPages - 1) {
+                                    player.openInventory(pages.get(currentPage + 1));
+                                }
+                            })
+                    .build());
+
+            pages.add(inv);
+        }
+
+        return pages;
     }
-    
+
     private Inventory buildInventory(List<ItemUtils.InventoryItem> items, String inventoryTitle, int inventorySize) {
         int itemCount = items.size();
         int size = inventorySize;
-        
+
         if (dynamicSize) {
             size = ((itemCount + 8) / 9) * 9;
             if (filler != null) {
-            	size += 9;
+                size += 9;
             }
             if (size > inventorySize) {
-            	size = inventorySize;
+                size = inventorySize;
             }
         }
 
         Inventory inventory = Bukkit.createInventory(null, size, inventoryTitle);
-    	
-    	int autoSlot = 0;
-    	for (ItemUtils.InventoryItem item : items) {
-    		int targetSlot = item.slot == -1 ? autoSlot++ : item.slot;
-    		
-    	    UUID uuid = ItemUtils.getUUID(item.item);
-    	    if (uuid == null) {
-    	    	uuid = UUID.randomUUID();
-    	    }
-    	    ItemStack itemWithUUID = ItemUtils.setUUID(item.item, uuid);
-    	    
-    	    inventory.setItem(targetSlot, itemWithUUID);
 
-    	    if (item.onInventoryClick != null) {
-    	        ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> item.onInventoryClick.accept(pl));
-    	    } else if (globalClickListener != null) {
-    	        ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> globalClickListener.accept(pl, clickedItem, event));
-    	    }
-    	}
-    	
+        int autoSlot = 0;
+        for (ItemUtils.InventoryItem item : items) {
+            int targetSlot = item.slot == -1 ? autoSlot++ : item.slot;
+
+            UUID uuid = ItemUtils.getUUID(item.item);
+            if (uuid == null) {
+                uuid = UUID.randomUUID();
+            }
+            ItemStack itemWithUUID = ItemUtils.setUUID(item.item, uuid);
+
+            inventory.setItem(targetSlot, itemWithUUID);
+
+            if (item.onInventoryClick != null) {
+                ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> item.onInventoryClick.accept(pl));
+            } else if (globalClickListener != null) {
+                ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> globalClickListener.accept(pl, clickedItem, event));
+            }
+        }
+
         if (filler != null) {
             for (int i = 0; i < inventorySize; i++) {
                 if (inventory.getItem(i) == null) {
@@ -250,7 +248,7 @@ public class InventoryBuilder {
                 }
             }
         }
-        
+
         if (globalClickListener != null) {
             ItemUtils.inventoryCallbacks.put(inventory, globalClickListener);
         }
