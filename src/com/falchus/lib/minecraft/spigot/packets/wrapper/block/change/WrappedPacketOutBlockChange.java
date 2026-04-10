@@ -6,11 +6,11 @@ import lombok.NonNull;
 
 public class WrappedPacketOutBlockChange extends PacketBlockChangeWrapper {
 
-    public WrappedPacketOutBlockChange(@NonNull Object handle) {
-        super(handle, Set.of(
-                        version.getPackageNms() + "PacketPlayOutBlockChange",
-                        networkProtocolGame + "PacketPlayOutBlockChange"
-                )
-        );
-    }
+	public WrappedPacketOutBlockChange(@NonNull Object handle) {
+		super(handle, Set.of(
+				version.getPackageNms() + "PacketPlayOutBlockChange",
+				networkProtocolGame + "PacketPlayOutBlockChange"
+			)
+		);
+	}
 }
