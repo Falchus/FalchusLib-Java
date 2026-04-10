@@ -1,10 +1,5 @@
 package com.falchus.lib.utils.builder;
 
-import com.falchus.lib.utils.http.HTTPServer;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-import lombok.NonNull;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -13,17 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import com.falchus.lib.utils.http.HTTPServer;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
+import lombok.NonNull;
+
 public class HTTPServerBuilder {
-
+	
+	private int port = 8080;
     private final Map<@NonNull String, @NonNull BiConsumer<@NonNull HttpExchange, @NonNull Map<String, String>>> routes = new HashMap<>();
-    private int port = 8080;
     private BiConsumer<@NonNull HttpExchange, @NonNull Map<String, String>> defaultHandler;
-
+    
     public HTTPServerBuilder port(int port) {
-        this.port = port;
-        return this;
+    	this.port = port;
+    	return this;
     }
-
+    
     /**
      * Adds a route.
      */
@@ -31,7 +32,7 @@ public class HTTPServerBuilder {
         routes.put(path, handler);
         return this;
     }
-
+    
     /**
      * Sets a default handler (used if no routes match).
      */
@@ -40,9 +41,9 @@ public class HTTPServerBuilder {
         this.defaultHandler = handler;
         return this;
     }
-
+    
     /**
-     * @param ip usually 127.0.0.1
+     * @param ip	usually 127.0.0.1
      */
     @NonNull
     public HTTPServer build(@NonNull String ip) {
@@ -73,7 +74,7 @@ public class HTTPServerBuilder {
             throw new RuntimeException("Failed to start HTTP server", e);
         }
     }
-
+    
     @NonNull
     private Map<String, String> parseQuery(String query) {
         Map<String, String> map = new HashMap<>();
