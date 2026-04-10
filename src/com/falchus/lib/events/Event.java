@@ -1,6 +1,7 @@
 package com.falchus.lib.events;
 
 import com.falchus.lib.manager.EventManager;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
