@@ -1,5 +1,9 @@
 package com.falchus.lib.minecraft.utils;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 import eu.cloudnetservice.driver.document.property.DocProperty;
 import eu.cloudnetservice.driver.event.EventManager;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
@@ -18,97 +22,86 @@ import eu.cloudnetservice.wrapper.holder.ServiceInfoHolder;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 @UtilityClass
 public class CloudNet {
 
-    public static final BridgeServiceHelper bridgeServiceHelper = InjectionLayer.ext().instance(BridgeServiceHelper.class);
-    public static final PlayerManager playerManager = InjectionLayer.ext().instance(ServiceRegistry.class).defaultInstance(PlayerManager.class);
-    public static final CloudServiceFactory cloudServiceFactory = InjectionLayer.ext().instance(CloudServiceFactory.class);
-    public static final CloudServiceProvider cloudServiceProvider = InjectionLayer.ext().instance(CloudServiceProvider.class);
-    public static final ServiceInfoHolder serviceInfoHolder = InjectionLayer.ext().instance(ServiceInfoHolder.class);
-    public static final EventManager eventManager = InjectionLayer.ext().instance(EventManager.class);
+	public static final BridgeServiceHelper bridgeServiceHelper = InjectionLayer.ext().instance(BridgeServiceHelper.class);
+	public static final PlayerManager playerManager = InjectionLayer.ext().instance(ServiceRegistry.class).defaultInstance(PlayerManager.class);
+	public static final CloudServiceFactory cloudServiceFactory = InjectionLayer.ext().instance(CloudServiceFactory.class);
+	public static final CloudServiceProvider cloudServiceProvider = InjectionLayer.ext().instance(CloudServiceProvider.class);
+	public static final ServiceInfoHolder serviceInfoHolder = InjectionLayer.ext().instance(ServiceInfoHolder.class);
+	public static final EventManager eventManager = InjectionLayer.ext().instance(EventManager.class);
 
-    /**
-     * Broadcasts a message to all players globally.
-     */
-    public static void broadcastMessage(@NonNull List<String> messages) {
-        String message = String.join("\n", messages);
+	/**
+	 * Broadcasts a message to all players globally.
+	 */
+	public static void broadcastMessage(@NonNull List<String> messages) {
+		String message = String.join("\n", messages);
         playerManager.globalPlayerExecutor().sendChatMessage(AdventureUtils.legacy(message));
-    }
-
-    /**
-     * Publishes an update for the current service.
-     */
-    public static void publishServiceInfoUpdate() {
+	}
+	
+	/**
+	 * Publishes an update for the current service.
+	 */
+	public static void publishServiceInfoUpdate() {
         serviceInfoHolder.publishServiceInfoUpdate();
-    }
-
-    /**
-     * Creates and starts a new service.
-     */
-    public static void createAndStartService(@NonNull ServiceConfiguration serviceConfig) {
-        cloudServiceFactory.createCloudServiceAsync(serviceConfig)
-                .thenAccept(result -> {
-                    if (result.state() == ServiceCreateResult.State.CREATED) {
-                        UUID uuid = result.serviceInfo().serviceId().uniqueId();
-                        ServiceInfoSnapshot service = cloudServiceProvider.service(uuid);
-                        service.provider().startAsync();
-                    }
-                });
-    }
-
-    /**
-     * @return player count for the group
-     */
-    public static int getPlayerCountFromGroup(@NonNull String group) {
-        return playerManager.groupOnlinePlayers(group).count();
-    }
-
-    /**
-     * @return player count for the task
-     */
-    public static int getPlayerCountFromTask(@NonNull String task) {
-        return playerManager.taskOnlinePlayers(task).count();
-    }
-
-    /**
-     * @return player count for the service
-     */
-    public static int getPlayerCountFromService(@NonNull String service) {
-        return getService(service).readProperty(BridgeDocProperties.ONLINE_COUNT);
-    }
-
-    /**
-     * @return service by name
-     */
-    public static ServiceInfoSnapshot getService(@NonNull String service) {
-        return cloudServiceProvider.serviceByName(service);
-    }
-
-    /**
-     * @return services by group
-     */
-    public static Collection<ServiceInfoSnapshot> getServicesByGroup(@NonNull String group) {
-        return cloudServiceProvider.servicesByGroup(group);
-    }
-
-    /**
-     * @return services by task
-     */
-    public static Collection<ServiceInfoSnapshot> getServicesByTask(@NonNull String task) {
-        return cloudServiceProvider.servicesByTask(task);
-    }
-
-    /**
-     * @return the "extra" of the current service
-     */
-    public static String getExtra() {
-        return bridgeServiceHelper.extra().get();
-    }
+	}
+	
+	/**
+	 * Creates and starts a new service.
+	 */
+	public static void createAndStartService(@NonNull ServiceConfiguration serviceConfig) {
+		cloudServiceFactory.createCloudServiceAsync(serviceConfig)
+			.thenAccept(result -> {
+				if (result.state() == ServiceCreateResult.State.CREATED) {
+					UUID uuid = result.serviceInfo().serviceId().uniqueId();
+					ServiceInfoSnapshot service = cloudServiceProvider.service(uuid);
+					service.provider().startAsync();
+				}
+			});
+	}
+	
+	/**
+	 * @return player count for the group
+	 */
+	public static int getPlayerCountFromGroup(@NonNull String group) {
+		return playerManager.groupOnlinePlayers(group).count();
+	}
+	
+	/**
+	 * @return player count for the task
+	 */
+	public static int getPlayerCountFromTask(@NonNull String task) {
+		return playerManager.taskOnlinePlayers(task).count();
+	}
+	
+	/**
+	 * @return player count for the service
+	 */
+	public static int getPlayerCountFromService(@NonNull String service) {
+		return getService(service).readProperty(BridgeDocProperties.ONLINE_COUNT);
+	}
+	
+	/**
+	 * @return service by name
+	 */
+	public static ServiceInfoSnapshot getService(@NonNull String service) {
+		return cloudServiceProvider.serviceByName(service);
+	}
+	
+	/**
+	 * @return services by group
+	 */
+	public static Collection<ServiceInfoSnapshot> getServicesByGroup(@NonNull String group) {
+		return cloudServiceProvider.servicesByGroup(group);
+	}
+	
+	/**
+	 * @return services by task
+	 */
+	public static Collection<ServiceInfoSnapshot> getServicesByTask(@NonNull String task) {
+		return cloudServiceProvider.servicesByTask(task);
+	}
 
     /**
      * Sets the "extra" field for the current service.
@@ -118,54 +111,61 @@ public class CloudNet {
     }
 
     /**
+     * Sets the MOTD for the current service.
+     */
+    public static void setMotd(@NonNull String newMotd) {
+        bridgeServiceHelper.motd().set(newMotd);
+    }
+    
+    /**
+     * @return the "extra" of the current service
+     */
+    public static String getExtra() {
+    	return bridgeServiceHelper.extra().get();
+    }
+    
+    /**
      * @return the "extra" of the given service
      */
     public static String getExtra(@NonNull String service) {
-        return getService(service).readProperty(BridgeDocProperties.EXTRA);
+    	return getService(service).readProperty(BridgeDocProperties.EXTRA);
     }
-
+    
     /**
      * @return the MOTD of the current service
      */
     public static String getMotd() {
         return bridgeServiceHelper.motd().get();
     }
-
-    /**
-     * Sets the MOTD for the current service.
-     */
-    public static void setMotd(@NonNull String newMotd) {
-        bridgeServiceHelper.motd().set(newMotd);
-    }
-
+    
     /**
      * @return the MOTD of the given service
      */
     public static String getMotd(@NonNull String service) {
-        return getService(service).readProperty(BridgeDocProperties.MOTD);
+    	return getService(service).readProperty(BridgeDocProperties.MOTD);
     }
-
+    
     /**
      * @return the state of the current service
      */
     public static String getState() {
-        return bridgeServiceHelper.state().get();
+    	return bridgeServiceHelper.state().get();
     }
-
+    
     /**
      * @return the state of the given service
      */
     public static String getState(@NonNull String service) {
-        return getService(service).readProperty(BridgeDocProperties.STATE);
+    	return getService(service).readProperty(BridgeDocProperties.STATE);
     }
-
+    
     /**
      * @return the property of the given service
      */
     public static Object getProperty(@NonNull String service, @NonNull DocProperty<?> property) {
-        return getService(service).readProperty(property);
+    	return getService(service).readProperty(property);
     }
-
+    
     /**
      * Changes the service state to "ingame" and publishes the update.
      */
@@ -178,7 +178,7 @@ public class CloudNet {
      * Changes the service state to "ingame" and publishes the update.
      */
     public static void changeToIngame() {
-        changeToIngame(true);
+    	changeToIngame(true);
     }
 
     /**
@@ -194,32 +194,32 @@ public class CloudNet {
     public static void connectPlayerToService(@NonNull UUID uuid, @NonNull String service) {
         playerManager.playerExecutor(uuid).connect(service);
     }
-
+    
     /**
      * @return {@link PlayerExecutor} by UUID
      */
     public static PlayerExecutor getPlayerExecutor(@NonNull UUID uuid) {
-        return playerManager.playerExecutor(uuid);
+    	return playerManager.playerExecutor(uuid);
     }
-
+    
     /**
      * Registers a listener.
      */
     public static void registerListener(@NonNull Class<?> listenerClass) {
-        eventManager.registerListener(listenerClass);
+    	eventManager.registerListener(listenerClass);
     }
-
+    
     /**
      * Registers a listener.
      */
     public static void registerListener(@NonNull Object listener) {
-        eventManager.registerListener(listener);
+    	eventManager.registerListener(listener);
     }
-
+    
     /**
      * Registers listeners.
      */
     public static void registerListeners(@NonNull Object... listeners) {
-        eventManager.registerListeners(listeners);
+    	eventManager.registerListeners(listeners);
     }
 }
