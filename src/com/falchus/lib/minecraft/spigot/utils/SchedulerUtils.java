@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
 import com.falchus.lib.minecraft.FalchusLibMinecraft;
+import com.falchus.lib.minecraft.enums.Software;
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -27,7 +28,7 @@ public class SchedulerUtils {
      * Runs a task on the main thread (Bukkit) or the global region thread (Folia).
      */
     public static void runTask(@NonNull Runnable runnable) {
-        if (FalchusLibMinecraft.isFolia()) {
+        if (FalchusLibMinecraft.getSoftware() == Software.FOLIA) {
             Bukkit.getGlobalRegionScheduler().run(plugin, task -> runnable.run());
         } else {
             Bukkit.getScheduler().runTask(plugin, runnable);
@@ -38,7 +39,7 @@ public class SchedulerUtils {
      * Runs a task asynchronously on both Bukkit and Folia.
      */
     public static void runTaskAsync(@NonNull Runnable runnable) {
-        if (FalchusLibMinecraft.isFolia()) {
+        if (FalchusLibMinecraft.getSoftware() == Software.FOLIA) {
             Bukkit.getAsyncScheduler().runNow(plugin, task -> runnable.run());
         } else {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
@@ -57,7 +58,7 @@ public class SchedulerUtils {
      * @param runnable the task to execute
      */
     public static void runTaskForEntity(@NonNull Entity entity, @NonNull Runnable runnable) {
-        if (FalchusLibMinecraft.isFolia()) {
+        if (FalchusLibMinecraft.getSoftware() == Software.FOLIA) {
             // Returns null if the entity is no longer valid — safe to ignore.
             entity.getScheduler().run(plugin, task -> runnable.run(), null);
         } else {
@@ -72,7 +73,7 @@ public class SchedulerUtils {
      * @param delayTicks delay in server ticks (1 tick ≈ 50 ms)
      */
     public static void runTaskLater(@NonNull Runnable runnable, long delayTicks) {
-        if (FalchusLibMinecraft.isFolia()) {
+        if (FalchusLibMinecraft.getSoftware() == Software.FOLIA) {
             Bukkit.getGlobalRegionScheduler().runDelayed(plugin, task -> runnable.run(), Math.max(1, delayTicks));
         } else {
             Bukkit.getScheduler().runTaskLater(plugin, runnable, Math.max(1, delayTicks));
