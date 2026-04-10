@@ -1,8 +1,5 @@
 package com.falchus.lib.minecraft.spigot.events.player;
 
-import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
