@@ -1,9 +1,10 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
-import com.falchus.lib.interfaces.consumer.TriConsumer;
-import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
+import java.util.function.Consumer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -13,17 +14,16 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Consumer;
+import com.falchus.lib.interfaces.consumer.TriConsumer;
+import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ItemUtils {
-
-    public static final Map<UUID, Consumer<Player>> itemActions = new HashMap<>();
+	
+	public static final Map<UUID, Consumer<Player>> itemActions = new HashMap<>();
     public static final Map<UUID, TriConsumer<Player, ItemStack, InventoryClickEvent>> itemActionsInventory = new HashMap<>();
     public static final Map<Inventory, TriConsumer<Player, ItemStack, InventoryClickEvent>> inventoryCallbacks = new HashMap<>();
 
@@ -33,60 +33,60 @@ public class ItemUtils {
     /**
      * Sets a UUID on the given item via NBT.
      */
-    public static ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
-        return VersionProvider.get().setUUID(item, uuid);
+	public static ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
+    	return VersionProvider.get().setUUID(item, uuid);
     }
 
     /**
      * Retrieves the UUID stores on the given item.
      */
     public static UUID getUUID(@NonNull ItemStack item) {
-        return VersionProvider.get().getUUID(item);
+    	return VersionProvider.get().getUUID(item);
     }
-
+    
     /**
      * Removes all NBT tags from the item.
      */
     public static ItemStack clearNBT(@NonNull ItemStack item) {
-        return VersionProvider.get().clearNBT(item);
+    	return VersionProvider.get().clearNBT(item);
     }
-
+    
     /**
      * Gets an array of ItemStacks from a Base64 String.
      */
     public static ItemStack[] itemStackArrayFromBase64(String base64) {
-        try {
-            ByteArrayInputStream stream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
-            BukkitObjectInputStream input = new BukkitObjectInputStream(stream);
-
-            ItemStack[] items = new ItemStack[input.readInt()];
-            for (int i = 0; i < items.length; i++) {
-                items[i] = (ItemStack) input.readObject();
-            }
-            return items;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ItemStack[0];
+    	try {
+        	ByteArrayInputStream stream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
+        	BukkitObjectInputStream input = new BukkitObjectInputStream(stream);
+        	
+        	ItemStack[] items = new ItemStack[input.readInt()];
+        	for (int i = 0; i < items.length; i++) {
+        		items[i] = (ItemStack) input.readObject();
+        	}
+        	return items;
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return new ItemStack[0];
     }
-
+    
     /**
      * Converts an array of ItemStacks to a Base64 String.
      */
     public static String itemStackArrayToBase64(ItemStack[] items) {
-        try {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            BukkitObjectOutputStream output = new BukkitObjectOutputStream(stream);
-
-            output.writeInt(items.length);
-            for (ItemStack item : items) {
-                output.writeObject(item);
+    	try {
+    		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    		BukkitObjectOutputStream output = new BukkitObjectOutputStream(stream);
+        	
+    		output.writeInt(items.length);
+    		for (ItemStack item : items) {
+    			output.writeObject(item);
             }
-            return Base64Coder.encodeLines(stream.toByteArray());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        	return Base64Coder.encodeLines(stream.toByteArray());
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return null;
     }
 
     /**
