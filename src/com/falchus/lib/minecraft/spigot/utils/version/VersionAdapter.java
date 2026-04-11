@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
@@ -359,7 +360,10 @@ public class VersionAdapter implements IVersionAdapter {
             craftServer_getServer = ReflectionUtils.getMethod(craftServer, "getServer");
             bukkitServer = ReflectionUtils.getClass(packageOb + "Server");
             minecraftServer_getVersion = ReflectionUtils.getMethod(minecraftServer, "getVersion");
-            minecraftServer_recentTps = ReflectionUtils.getField(minecraftServer, "recentTps");
+            minecraftServer_recentTps = ReflectionUtils.getFirstField(minecraftServer,
+            	"recentTps",
+            	"tickTimes"
+        	);
     		
     		biomeBase = ReflectionUtils.getFirstClass(
     			packageNms + "BiomeBase",
@@ -979,7 +983,7 @@ public class VersionAdapter implements IVersionAdapter {
     		).build();
     		sendPacket(player, teleport);
     		
-    		Bukkit.getScheduler().runTask(FalchusLibMinecraftSpigot.getInstance(), () -> removeEntityPlayer(player, entityPlayer));
+    		SchedulerUtils.runTask(() -> removeEntityPlayer(player, entityPlayer));
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

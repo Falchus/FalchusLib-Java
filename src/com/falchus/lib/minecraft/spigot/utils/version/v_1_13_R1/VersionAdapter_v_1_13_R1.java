@@ -9,13 +9,13 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.falchus.lib.minecraft.spigot.utils.version.VersionAdapter;
+import com.falchus.lib.minecraft.spigot.utils.version.v1_9_R1.VersionAdapter_v1_9_R1;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.NonNull;
 
-public class VersionAdapter_v_1_13_R1 extends VersionAdapter {
+public class VersionAdapter_v_1_13_R1 extends VersionAdapter_v1_9_R1 {
 
 	private Method player_setPlayerListHeaderFooter() {
 		return ReflectionUtils.getMethod(Player.class, "setPlayerListHeaderFooter",

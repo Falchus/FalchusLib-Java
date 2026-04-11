@@ -10,9 +10,9 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public abstract class CountdownTask extends Task {
+public class CountdownTask extends Task {
 	
-	private int remaining;
+	private volatile int remaining;
 	
 	@Override
 	public final void onRun(int tick) {		

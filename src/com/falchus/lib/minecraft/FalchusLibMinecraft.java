@@ -16,7 +16,6 @@ public class FalchusLibMinecraft {
 	 */
     public static Software getSoftware() {
         if (software != null) return software;
-
 		String[] classNames = {
             "io.papermc.paper.threadedregions.RegionizedServer",
             "org.bukkit.plugin.java.JavaPlugin",

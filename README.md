@@ -3,21 +3,18 @@
 A library designed to simplify & speed up software development.
 
 ### Features
-
 - Reusable utilities for common tasks
 - Abstraction layers for easier integration
 - Productivity helpers to speed up development
 - Cross-platform and maintainable design
 
 ### Installation
-
 ```xml
 <repository>
   <id>falchus.com</id>
   <url>https://repo.falchus.com/releases</url>
 </repository>
 ```
-
 ```xml
 <dependency>
   <groupId>com.falchus</groupId>
@@ -27,41 +24,31 @@ A library designed to simplify & speed up software development.
 ```
 
 ### Usage
-
 #### Tasks
-
 `com.falchus.lib.task.Task`
-
 ```java
 static Task runTask(Runnable runnable);
 
 static Task runTaskTimer(Runnable runnable, long period, TimeUnit unit);
-
 void runTaskTimer(long period, TimeUnit unit);
 
 static Task runTaskTimer(Runnable runnable, long delay, long period, TimeUnit unit);
-
 void runTaskTimer(long delay, long period, TimeUnit unit);
 
 static Task runTaskLater(Runnable runnable, long delay, TimeUnit unit);
-
 void runTaskLater(long delay, TimeUnit unit);
 
 static void end(int id);
-
 void end();
 
 int getId();
 
 @Override
-void onRun(int tick) {
-}
+void onRun(int tick) {}
 
 @Override
-void onEnd() {
-}
+void onEnd() {}
 ```
-
 - `com.falchus.lib.task.impl.CountdownTask`
   ```java
   CountdownTask(int remaining);
@@ -71,9 +58,7 @@ void onEnd() {
   ```
 
 #### Builders
-
 `com.falchus.lib.utils.builder.ClassInstanceBuilder`
-
 ```java
 ClassInstanceBuilder(Class clazz);
 
@@ -86,7 +71,6 @@ Object build();
 ```
 
 `com.falchus.lib.utils.builder.HTTPServerBuilder`
-
 ```java
 HTTPServerBuilder port(int port);
 
@@ -97,9 +81,7 @@ HTTPServer build(String ip);
 ```
 
 #### Storage
-
 `com.falchus.lib.storage.Storage`
-
 ```java
 <T> void save(T value);
 
@@ -107,32 +89,26 @@ HTTPServer build(String ip);
 
 void delete();
 ```
-
 - `com.falchus.lib.storage.impl.json.JsonStorage`
-    - `com.falchus.lib.storage.impl.json.JsonArrayStorage`
-    - `com.falchus.lib.storage.impl.json.JsonObjectStorage`
+  - `com.falchus.lib.storage.impl.json.JsonArrayStorage`
+  - `com.falchus.lib.storage.impl.json.JsonObjectStorage`
 
 `com.falchus.lib.storage.serializer.Serializer`
-
 ```java
 String serialize(T value);
 T deserialize(String content);
 ```
-
 - `com.falchus.lib.storage.serializer.json.JsonSerializer`
-    - `com.falchus.lib.storage.serializer.json.JsonArraySerializer`
-    - `com.falchus.lib.storage.serializer.json.JsonObjectSerializer`
+  - `com.falchus.lib.storage.serializer.json.JsonArraySerializer`
+  - `com.falchus.lib.storage.serializer.json.JsonObjectSerializer`
 
 #### HTTP
-
 `com.falchus.lib.utils.http.HTTPRequest`
-
 ```java
 static String get(String url);
 ```
 
 `com.falchus.lib.utils.http.HTTPServer`
-
 ```java
 void start();
 void stop(int delay);
@@ -142,38 +118,29 @@ static void sendJson(HttpExchange exchange, String json, int statusCode);
 ```
 
 #### Events
-
 `com.falchus.lib.events.Cancellable`
-
 ```java
-void setCancelled(boolean cancelled);
 boolean isCancelled();
+void setCancelled(boolean cancelled);
 ```
 
 `com.falchus.lib.events.Event`
-
 ```java
 Event(boolean async);
 
 boolean callEvent();
 ```
-
 `com.falchus.lib.events.EventExecutor`
-
 ```java
 void execute(Event event);
 ```
-
 `com.falchus.lib.events.EventHandler`
-
 ```java
 EventPriority priority();
 
 boolean ignoreCancelled();
 ```
-
 `com.falchus.lib.manager.EventManager`
-
 ```java
 static void registerListener(Listener listener);
 static void unregisterListener(Listener listener);
@@ -183,15 +150,12 @@ static void callEvent(Event event);
 
 `com.falchus.lib.events.listener.Listener`
 `com.falchus.lib.events.listener.RegisteredListener`
-
 ```java
 void execute(Event event);
 ```
 
 #### Reflection & Wrapping
-
 `com.falchus.lib.utils.reflection.ReflectionUtils`
-
 ```java
 static Class getClass(String name);
 static Class getFirstClass(String... names);
@@ -224,7 +188,6 @@ static Constructor getFirstConstructor(Set<Class> classes, Set<List<Class>> para
 ```
 
 `com.falchus.lib.utils.wrapper.Wrapper`
-
 ```java
 Wrapper(T handle);
 
@@ -242,17 +205,16 @@ Constructor getFirstConstructor(Set<List<Class>> params);
 
 <U extends Wrapper<?>> U as(Class<U> clazz, Class... params);
 ```
-
 - `com.falchus.lib.utils.wrapper.impl.ClassWrapper`
   ```java
   ClassWrapper(T handle, Set<Class> classes);
   
   Set<Class> getClasses();
   ```
-    - `com.falchus.lib.utils.wrapper.impl.FirstClassWrapper`
-      ```java
-      FirstClassWrapper(T handle, Set<String> names);
-      ```
+  - `com.falchus.lib.utils.wrapper.impl.FirstClassWrapper`
+    ```java
+    FirstClassWrapper(T handle, Set<String> names);
+    ```
 
 <details>
 <summary>Minecraft</summary>
@@ -272,7 +234,6 @@ author: Example
 
 depend: [FalchusLib]
 ```
-
 </details>
 <details>
 <summary>velocity-plugin.json</summary>
@@ -287,15 +248,11 @@ depend: [FalchusLib]
   "dependencies": [{"id": "falchuslib", "optional": false}]
 }
 ```
-
 </details>
 
 #### Usage
-
 ##### Utils
-
 `com.falchus.lib.minecraft.spigot.utils.EntityUtils`
-
 ```java
 static Entity getBukkitEntity(Object entity);
 
@@ -303,7 +260,6 @@ static void setYawPitch(Object entity, float yaw, float pitch);
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.ItemUtils`
-
 ```java
 static ItemStack setUUID(ItemStack item, UUID uuid);
 static UUID getUUID(ItemStack item);
@@ -315,7 +271,6 @@ static String itemStackArrayToBase64(ItemStack[] items);
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.PlayerUtils`
-
 ```java
 static void sendPacket(Player player, Object packet);
 
@@ -324,13 +279,11 @@ static void sendTitle(Player player, String title, String subtitle);
 static void playSound(Player player, Location location, Sound sound, float volume, float pitch);
 
 static void freeze(Player player);
-
 static void unfreeze(Player player);
 
 static String getLuckPermsRankPrefix(Player player);
 
 static void vanish(Player player);
-
 static void unvanish(Player player);
 
 static Object getEntityPlayer(Player player);
@@ -340,26 +293,32 @@ static GameProfile getProfile(Object entityPlayer);
 static int getPing(Player player);
 
 static void setSkin(Player player, UUID uuid);
-
 static void resetSkin(Player player);
 
 static void setName(Player player, String name);
-
 static void resetName(Player player);
 
 static void refresh(Player player);
 
 static void addEntityPlayer(Player player, Object entityPlayer);
-
 static void removeEntityPlayer(Player player, Object entityPlayer);
-
 static void spawnEntityPlayer(Player player, Object entityPlayer);
 
 static void connectToServer(Player player, String server);
 ```
 
-`com.falchus.lib.minecraft.spigot.utils.ServerUtils`
+`com.falchus.lib.minecraft.spigot.utils.SchedulerUtils`
+```java
+static void runTask(Runnable runnable);
 
+static void runTaskAsync(Runnable runnable);
+
+static void runTaskForEntity(Entity entity, Runnable runnable);
+
+static void runTaskLater(Runnable runnable, long delayTicks);
+```
+
+`com.falchus.lib.minecraft.spigot.utils.ServerUtils`
 ```java
 static Object getMcServer();
 static Object getBukkitServer();
@@ -373,14 +332,11 @@ static double[] getRecentTps();
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.WorldUtils`
-
 ```java
 static void setGameRule(World world, com.falchus.lib.minecraft.spigot.enums.GameRule gameRule, String value);
 
 static Object[] getWorldBiomes(World world);
-
 static Object getNmsBiome(Biome biome);
-
 static int getBiomeId(Biome biome);
 
 static Object getWorldServer(World world);
@@ -391,9 +347,7 @@ static Material getMaterial(com.falchus.lib.minecraft.spigot.enums.Material mate
 ```
 
 ##### Commands
-
 `com.falchus.lib.minecraft.command.BaseCommand`
-
 ```java
 String getPermission();
 String getNoPermissionMessage();
@@ -408,14 +362,11 @@ boolean hasPermission(Object sender);
 
 void sendMessage(Object s, String message);
 ```
-
 - `com.falchus.lib.minecraft.command.impl.SpigotCommandAdapter`
 - `com.falchus.lib.minecraft.command.impl.VelocityCommandAdapter`
 
 ##### Events
-
 `com.falchus.lib.minecraft.spigot.events.LobbyCancelEvent`
-
 ```java
 boolean isCancelled();
 
@@ -425,7 +376,6 @@ Event getEvent();
 ```
 
 `com.falchus.lib.minecraft.spigot.events.player.PlayerClientJoinEvent`
-
 ```java
 Player getPlayer();
 
@@ -433,7 +383,6 @@ Client getClient();
 ```
 
 `com.falchus.lib.minecraft.spigot.events.player.PlayerPacketEvent`
-
 ```java
 boolean isAsynchronous();
 
@@ -445,14 +394,11 @@ Player getPlayer();
 
 PacketWrapper getPacket();
 ```
-
 - `com.falchus.lib.minecraft.spigot.events.player.PlayerPacketInEvent`
 - `com.falchus.lib.minecraft.spigot.events.player.PlayerPacketOutEvent`
 
 ##### Player Elements
-
 `com.falchus.lib.minecraft.spigot.player.elements.PlayerElement`
-
 ```java
 void update();
 static <T extends PlayerElement> void updateAll(Class<T> clazz);
@@ -463,7 +409,6 @@ void remove();
 
 static <T extends PlayerElement> T get(Class<T> clazz, Player player);
 ```
-
 - `com.falchus.lib.minecraft.spigot.player.elements.impl.Actionbar`
   ```java
   void send(Supplier<String> message);
@@ -500,26 +445,13 @@ static <T extends PlayerElement> T get(Class<T> clazz, Player player);
   ```
 
 ##### Packets
-
 `com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper`
-
 ```java
 <T extends PacketWrapper> T as(Class<T> clazz);
 ```
 
-- `com.falchus.lib.minecraft.spigot.packets.wrapper.chat.PacketChatWrapper`
-  ```java
-  void setMessage(String message);
-  
-  Object getMessage();
-  ```
-    - `com.falchus.lib.minecraft.spigot.packets.wrapper.chat.WrappedPacketInChat`
-    - `com.falchus.lib.minecraft.spigot.packets.wrapper.chat.WrappedPacketOutChat`
-
 ##### Builders
-
 `com.falchus.lib.minecraft.spigot.utils.builder.EntityPlayerBuilder`
-
 ```java
 EntityPlayerBuilder setName(String name);
 
@@ -539,7 +471,6 @@ Object build();
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.builder.InventoryBuilder`
-
 ```java
 InventoryBuilder(String title, Integer size);
 
@@ -568,14 +499,11 @@ List<Inventory> buildPages();
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.builder.ItemBuilder`
-
 ```java
 ItemBuilder(Material material, int amount);
-
 ItemBuilder(Material material);
 
 ItemBuilder(com.falchus.lib.minecraft.spigot.enums.Material material, int amount);
-
 ItemBuilder(com.falchus.lib.minecraft.spigot.enums.Material material);
 
 ItemBuilder(ItemStack item);
@@ -591,13 +519,11 @@ ItemBuilder addItemFlag(ItemFlag itemFlag);
 ItemBuilder setDurability(short durability);
 
 ItemBuilder setSkullOwner(String owner);
-
 ItemBuilder setSkullTexture(String texture);
 
 ItemBuilder setUUID(UUID uuid);
 
 ItemBuilder withInteractListener(Consumer<Player> onPlayerInteract);
-
 ItemBuilder withInventoryClickListener(TriConsumer<Player, ItemStack, InventoryClickEvent> onInventoryClick);
 
 ItemStack build();

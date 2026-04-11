@@ -58,6 +58,6 @@ public abstract class InventoryAnimation {
 				
 				animate(player, inventory, items, tick);
 			}
-		}.runTaskTimer(delayTicks, TimeUnit.MILLISECONDS);
+		}.runTimer(delayTicks, TimeUnit.MILLISECONDS);
     }
 }
