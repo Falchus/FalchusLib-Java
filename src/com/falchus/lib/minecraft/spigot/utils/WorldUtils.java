@@ -17,9 +17,8 @@ public class WorldUtils {
 	/**
 	 * Sets a game rule for the given world.
 	 */
-	// TODO: implement 26.x support from PR-19
 	public static void setGameRule(@NonNull World world, @NonNull GameRule gameRule, @NonNull String value) {
-        world.setGameRuleValue(gameRule.getKey(), value);
+        VersionProvider.get().setGameRule(world, gameRule, value);
 	}
 	
 	/**

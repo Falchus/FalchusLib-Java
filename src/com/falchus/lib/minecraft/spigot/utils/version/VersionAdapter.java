@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
@@ -1022,6 +1023,11 @@ public class VersionAdapter implements IVersionAdapter {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
         }
+    }
+    
+    @Override
+    public void setGameRule(@NonNull World world, @NonNull GameRule gameRule, @NonNull String value) {
+    	world.setGameRuleValue(gameRule.getKey(), value);
     }
 	
     @Override

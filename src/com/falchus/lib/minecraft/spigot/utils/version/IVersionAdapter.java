@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.mojang.authlib.GameProfile;
 
@@ -193,6 +194,11 @@ public interface IVersionAdapter {
 	 * @return recent TPS
 	 */
 	double[] getRecentTps();
+	
+	/**
+	 * Sets a game rule for the given world.
+	 */
+	void setGameRule(@NonNull World world, @NonNull GameRule gameRule, @NonNull String value);
 	
 	/**
 	 * @return BiomeBase[] from a World
