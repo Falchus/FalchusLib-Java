@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.command.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -7,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import com.falchus.lib.FalchusLib;
 import com.falchus.lib.minecraft.command.BaseCommand;
 import com.falchus.lib.minecraft.utils.AdventureUtils;
+import com.falchus.lib.utils.StringUtils;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -41,10 +43,15 @@ public abstract class VelocityCommandAdapter implements BaseCommand, SimpleComma
 	@Override
 	public List<String> suggest(Invocation invocation) {
 		CommandSource sender = invocation.source();
-		String[] args = invocation.arguments();
 		if (!hasPermission(sender)) return Collections.emptyList();
+		
+		String[] args = invocation.arguments();
+		if (args.length == 0) return Collections.emptyList();
+		
 		List<String> list = tabComplete(sender, args);
-		return list != null ? list : Collections.emptyList();
+		if (list == null) return Collections.emptyList();
+		
+		return StringUtils.copyPartialMatches(args[args.length - 1], list, new ArrayList<>());
 	}
 	
 	@Override

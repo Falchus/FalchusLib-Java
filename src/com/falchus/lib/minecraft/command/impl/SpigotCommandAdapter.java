@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.command.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.falchus.lib.FalchusLib;
 import com.falchus.lib.minecraft.command.BaseCommand;
+import com.falchus.lib.utils.StringUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,8 +43,13 @@ public abstract class SpigotCommandAdapter implements BaseCommand, CommandExecut
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		if (!hasPermission(sender)) return Collections.emptyList();
+		
+		if (args.length == 0) return Collections.emptyList();
+		
 		List<String> list = tabComplete(sender, args);
-		return list != null ? list : Collections.emptyList();
+		if (list == null) return Collections.emptyList();
+		
+		return StringUtils.copyPartialMatches(args[args.length - 1], list, new ArrayList<>());
 	}
 	
 	@Override
