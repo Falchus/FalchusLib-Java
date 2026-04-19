@@ -28,12 +28,19 @@ import lombok.NonNull;
 public class ItemBuilder {
 
 	private ItemStack item;
+	private final UUID uuid;
 	
 	/**
 	 * Creates an ItemBuilder for the given material and amount.
 	 */
 	public ItemBuilder(@NonNull Material material, int amount) {
-		this.item = new ItemStack(material, amount);
+		item = new ItemStack(material, amount);
+		if (ItemUtils.getUUID(item) != null) {
+			uuid = ItemUtils.getUUID(item);
+		} else {
+			item = ItemUtils.setUUID(item, UUID.randomUUID());
+			uuid = ItemUtils.getUUID(item);
+		}
 	}
 	
 	/**
@@ -53,6 +60,12 @@ public class ItemBuilder {
 		} else {
 			this.item = new ItemStack(mat, amount);
 		}
+		if (ItemUtils.getUUID(item) != null) {
+			uuid = ItemUtils.getUUID(item);
+		} else {
+			item = ItemUtils.setUUID(item, UUID.randomUUID());
+			uuid = ItemUtils.getUUID(item);
+		}
 	}
 	
 	/**
@@ -67,6 +80,12 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder(@NonNull ItemStack item) {
 		this.item = item.clone();
+		if (ItemUtils.getUUID(item) != null) {
+			uuid = ItemUtils.getUUID(item);
+		} else {
+			item = ItemUtils.setUUID(item, UUID.randomUUID());
+			uuid = ItemUtils.getUUID(item);
+		}
 	}
 	
 	/**
@@ -170,11 +189,6 @@ public class ItemBuilder {
 	 * Registers a callback to be executed when a player interacts.
 	 */
 	public ItemBuilder withInteractListener(@NonNull Consumer<Player> onPlayerInteract) {
-	    UUID uuid = ItemUtils.getUUID(item);
-	    if (uuid == null) {
-	        uuid = UUID.randomUUID();
-	        item = ItemUtils.setUUID(item, uuid);
-	    }
 	    ItemUtils.itemActions.put(uuid, onPlayerInteract);
 	    return this;
 	}
@@ -183,11 +197,6 @@ public class ItemBuilder {
 	 * Registers a callback to be executed when a player clicks in an inventory.
 	 */
 	public ItemBuilder withInventoryClickListener(@NonNull TriConsumer<Player, ItemStack, InventoryClickEvent> onInventoryClick) {
-	    UUID uuid = ItemUtils.getUUID(item);
-	    if (uuid == null) {
-	        uuid = UUID.randomUUID();
-	        item = ItemUtils.setUUID(item, uuid);
-	    }
 	    ItemUtils.itemActionsInventory.put(uuid, onInventoryClick);
 	    return this;
 	}
