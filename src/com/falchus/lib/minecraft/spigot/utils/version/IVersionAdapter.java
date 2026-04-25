@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,9 +42,24 @@ public interface IVersionAdapter {
 	Object createChatComponentText(@NonNull String text);
 	
 	/**
+	 * @return Entity
+	 */
+	Object getEntity(@NonNull Entity entity);
+	
+	/**
 	 * @return {@link Entity}
 	 */
 	Entity getBukkitEntity(@NonNull Object entity);
+	
+	/**
+	 * @return absorption from a {@link Damageable} entity.
+	 */
+	double getAbsorption(@NonNull Damageable entity);
+	
+	/**
+	 * Sets absorption.
+	 */
+	void setAbsorption(@NonNull Damageable entity, double absorption);
 	
 	/**
 	 * Sets yaw and pitch.

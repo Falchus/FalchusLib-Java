@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.falchus.lib.minecraft.spigot.enums.Sound;
-import com.falchus.lib.minecraft.spigot.utils.version.v_1_13_R1.VersionAdapter_v_1_13_R1;
+import com.falchus.lib.minecraft.spigot.utils.version.v1_15_R1.VersionAdapter_v_1_15_R1;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
@@ -23,7 +23,7 @@ import lombok.SneakyThrows;
 /**
  * Default adapter for all versions over 1.17. (tested with 1.21.11)
  */
-public class VersionAdapterModern extends VersionAdapter_v_1_13_R1 {
+public class VersionAdapterModern extends VersionAdapter_v_1_15_R1 {
 	
     private Class<?> itemMeta() {
     	return ReflectionUtils.getClass(packageOb + "inventory.meta.ItemMeta");

@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -66,6 +67,7 @@ public class VersionAdapter implements IVersionAdapter {
     
     Class<?> chatComponentText;
     
+    Method entity_getHandle;
     Method entity_getBukkitEntity;
     Method entity_setYawPitch;
 	
@@ -155,6 +157,17 @@ public class VersionAdapter implements IVersionAdapter {
     }
     private Class<?> dataWatcher() {
     	return ReflectionUtils.getClass(packageNms + "DataWatcher");
+    }
+    private Method dataWatcher_getFloat() {
+    	return ReflectionUtils.getMethod(dataWatcher(), "getFloat",
+    		int.class
+    	);
+    }
+    private Method dataWatcher_watch() {
+    	return ReflectionUtils.getMethod(dataWatcher(), "watch",
+    		int.class,
+    		Object.class
+    	);
     }
     private Method entity_getDataWatcher() {
     	return ReflectionUtils.getMethod(entity, "getDataWatcher");
@@ -263,6 +276,7 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNm + "network.chat.ChatComponentText"
             );
             
+            entity_getHandle = ReflectionUtils.getMethod(entity, "getHandle");
             entity_getBukkitEntity = ReflectionUtils.getMethod(entity, "getBukkitEntity");
             entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
             	List.of(
@@ -396,6 +410,15 @@ public class VersionAdapter implements IVersionAdapter {
 	}
 	
 	@Override
+	public Object getEntity(@NonNull Entity entity) {
+		try {
+			return entity_getHandle.invoke(entity);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Override
 	public Entity getBukkitEntity(@NonNull Object entity) {
 		try {
 			return (Entity) entity_getBukkitEntity.invoke(entity);
@@ -403,6 +426,29 @@ public class VersionAdapter implements IVersionAdapter {
 	        throw new RuntimeException(e);
 	    }
 	}
+	
+    @Override
+    public double getAbsorption(@NonNull Damageable entity) {
+    	try {
+    		Object dataWatcher = entity_getDataWatcher().invoke(getEntity(entity));
+    		return (float) dataWatcher_getFloat().invoke(dataWatcher, 17);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public void setAbsorption(@NonNull Damageable entity, double absorption) {
+    	try {
+    		Object dataWatcher = entity_getDataWatcher().invoke(getEntity(entity));
+    		dataWatcher_watch().invoke(dataWatcher,
+    			17,
+    			(float) absorption
+    		);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
 	@Override
 	public void setYawPitch(@NonNull Object entity, float yaw, float pitch) {
