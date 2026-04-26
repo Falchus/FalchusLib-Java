@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -17,12 +18,13 @@ import lombok.NonNull;
 
 public class Scoreboard extends PlayerElement {
 
-	private Supplier<List<String>> linesSupplier;
+	private BiFunction<Integer, Player, String> titleSupplier;
+	private BiFunction<Integer, Player, List<String>> linesSupplier;
+	
 	private List<String> lastLines;
 	
 	public final org.bukkit.scoreboard.Scoreboard scoreboard;
 	private final Objective objective;
-    private int frame = 0;
 	
 	private Scoreboard(@NonNull Player player) {
 		super(player);
@@ -43,14 +45,18 @@ public class Scoreboard extends PlayerElement {
         this.objective = objective;
 	}
 	
-	/**
-	 * Updates the scoreboard immediately.
-	 */
-	public void send(@NonNull Supplier<List<String>> lines) {
+	public void send(@NonNull BiFunction<Integer, Player, String> title, @NonNull BiFunction<Integer, Player, List<String>> lines) {
+		titleSupplier = title;
 		linesSupplier = lines;
 		
 		updateRunnable = () -> {
-			List<String> newLines = linesSupplier.get();
+			String newTitle = titleSupplier.apply(frame, player);
+			if (newTitle.length() > 32) {
+				newTitle = newTitle.substring(0, 32);
+			}
+			objective.setDisplayName(newTitle);
+			
+			List<String> newLines = linesSupplier.apply(frame, player);
 			
 			if (lastLines == null || lastLines.size() != newLines.size()) {
 				for (Team team : scoreboard.getTeams()) {
@@ -108,15 +114,27 @@ public class Scoreboard extends PlayerElement {
 		};
 		update();
 	}
+	
+	public void send(@NonNull Supplier<String> title, @NonNull Supplier<List<String>> lines) {
+		send(
+			(frame, player) -> title.get(),
+			(frame, player) -> lines.get()
+		);
+	}
 
-	/**
-	 * Updates the scoreboard periodically with dynamic content.
-	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> title, @NonNull Supplier<String> titleColor, Supplier<String> titleSecondColor, @NonNull Supplier<List<String>> lines) {
+	public void sendUpdating(long intervalTicks, @NonNull BiFunction<Integer, Player, String> title, @NonNull BiFunction<Integer, Player, List<String>> lines) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
+				title,
 				lines
 			)
+		);
+	}
+	
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> title, @NonNull Supplier<List<String>> lines) {
+		sendUpdating(intervalTicks,
+			(frame, player) -> title.get(),
+			(frame, player) -> lines.get()
 		);
 	}
 	
@@ -125,44 +143,4 @@ public class Scoreboard extends PlayerElement {
 		
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
-
-	/**
-	 * Sets the title of the Scoreboard.
-	 */
-	public void setTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
-		objective.setDisplayName(getTitle(title, titleColor, titleSecondColor));
-	}
-	
-    private String getTitle(@NonNull String title, @NonNull String titleColor, String titleSecondColor) {
-    	title = ChatColor.stripColor(title);
-    	if (title.isEmpty()) return "";
-    	
-        if (titleSecondColor == null) return titleColor + title;
-
-        int length = title.length();
-        int cycleLength = length * 2;
-        int pos = frame % length;
-        
-        StringBuilder sb = new StringBuilder();
-
-        if (frame < length) {
-            sb.append(titleSecondColor)
-            	.append(title.substring(0, pos + 1))
-            	.append(titleColor)
-            	.append(title.substring(pos + 1));
-        } else {
-            sb.append(titleColor)
-            	.append(title.substring(0, pos + 1))
-            	.append(titleSecondColor)
-            	.append(title.substring(pos + 1));
-        }
-
-        frame = (frame + 1) % cycleLength;
-
-        title = sb.toString();
-    	if (title.length() > 32) {
-    		title = title.substring(0, 32);
-    	}
-        return title;
-    }
 }

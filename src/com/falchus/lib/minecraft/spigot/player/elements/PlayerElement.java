@@ -27,6 +27,7 @@ public abstract class PlayerElement {
     private static final Map<Class<? extends PlayerElement>, Map<UUID, Task>> tasks = new ConcurrentHashMap<>();
     
     protected Runnable updateRunnable;
+    protected int frame = 0;
 	
 	/**
 	 * Updates the element manually.
@@ -61,12 +62,14 @@ public abstract class PlayerElement {
 		if (oldTask != null) {
 			remove();
 		}
+		frame = 0;
 		
 		Task task = Task.runTimer(() -> {
 			if (!player.isOnline()) {
 				remove();
 				return;
 			}
+			frame++;
 			runnable.run();
 		}, intervalTicks, TimeUnit.MILLISECONDS);
 		
@@ -101,19 +104,14 @@ public abstract class PlayerElement {
 		Map<UUID, PlayerElement> map = instances.computeIfAbsent(clazz, c -> new ConcurrentHashMap<>());
 		
 		return (T) map.computeIfAbsent(player.getUniqueId(), uuid -> {
-			try {
-				return (T) new ClassInstanceBuilder(clazz)
-						.withParams(
-							Map.of(
-								Player.class,
-								player
-							)
-						)
-						.build();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+			return (T) new ClassInstanceBuilder(
+				clazz
+			).withParams(
+				Map.of(
+					Player.class,
+					player
+				)
+			).build();
 		});
 	}
 }

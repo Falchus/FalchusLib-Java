@@ -18,9 +18,6 @@ public class Nametag extends PlayerElement {
 		super(player);
 	}
 
-	/**
-	 * Sets a one-time prefix and suffix.
-	 */
 	public void send(@NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
 		prefixSupplier = prefix;
 		suffixSupplier = suffix;
@@ -34,9 +31,6 @@ public class Nametag extends PlayerElement {
 		update();
 	}
 	
-	/**
-	 * Updates prefix and suffiy periodically.
-	 */
 	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
 		super.sendUpdating(intervalTicks, () ->
 			send(

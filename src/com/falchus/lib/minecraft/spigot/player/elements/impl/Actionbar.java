@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
@@ -11,34 +12,40 @@ import lombok.NonNull;
 
 public class Actionbar extends PlayerElement {
 	
-	private Supplier<String> messageSupplier;
+	private BiFunction<Integer, Player, String> messageSupplier;
 
 	private Actionbar(@NonNull Player player) {
 		super(player);
 	}
 	
-	/**
-	 * Sends a one-time action bar message.
-	 */
-	public void send(@NonNull Supplier<String> message) {
+	public void send(@NonNull BiFunction<Integer, Player, String> message) {
 		messageSupplier = message;
 		
 		updateRunnable = () -> {
-			String newMessage = messageSupplier.get();
+			String newMessage = messageSupplier.apply(frame, player);
 			
 			PlayerUtils.sendActionbar(player, newMessage);
 		};
 		update();
 	}
 	
-	/**
-	 * Sends an action bar message repeatedly at a fixed interval.
-	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message) {
+	public void send(@NonNull Supplier<String> message) {
+		send(
+			(frame, player) -> message.get()
+		);
+	}
+	
+	public void sendUpdating(long intervalTicks, @NonNull BiFunction<Integer, Player, String> message) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
 				message
 			)
+		);
+	}
+	
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message) {
+		sendUpdating(intervalTicks,
+			(frame, player) -> message.get()
 		);
 	}
 }

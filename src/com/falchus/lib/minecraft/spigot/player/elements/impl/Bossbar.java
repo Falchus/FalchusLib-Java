@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.player.elements.impl;
 
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
@@ -13,33 +14,34 @@ import lombok.NonNull;
 
 public class Bossbar extends PlayerElement {
 
-	private Supplier<String> messageSupplier;
-	private Supplier<Double> progressSupplier;
+	private BiFunction<Integer, Player, String> messageSupplier;
+	private BiFunction<Integer, Player, Double> progressSupplier;
 	
 	private Bossbar(@NonNull Player player) {
     	super(player);
     }
 	
-	/**
-	 * Sends a one-time Bossbar message.
-	 */
-	public void send(@NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
+	public void send(@NonNull BiFunction<Integer, Player, String> message, @NonNull BiFunction<Integer, Player, Double> progress) {
         messageSupplier = message;
         progressSupplier = progress;
         
         updateRunnable = () -> {
-        	String newMessage = messageSupplier.get();
-        	double newProgress = progressSupplier.get();
+        	String newMessage = messageSupplier.apply(frame, player);
+        	double newProgress = progressSupplier.apply(frame, player);
         	
     		PlayerUtils.sendBossbar(player, newMessage, newProgress);
         };
         update();
 	}
 	
-	/**
-	 * Sends a Bossbar message repeatedly at a fixed interval.
-	 */
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
+	public void send(@NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
+		send(
+			(frame, player) -> message.get(),
+			(frame, player) -> progress.get()
+		);
+	}
+	
+	public void sendUpdating(long intervalTicks, @NonNull BiFunction<Integer, Player, String> message, @NonNull BiFunction<Integer, Player, Double> progress) {
 		if (ServerUtils.getVersion().isBefore(Version.v1_17)) {
 			super.sendUpdating(intervalTicks, () ->
 				send(
@@ -55,23 +57,17 @@ public class Bossbar extends PlayerElement {
 		}
 	}
 	
-	/**
-	 * Removes the Bossbar, cancelling any ongoing update tasks.
-	 */
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> message, @NonNull Supplier<Double> progress) {
+		sendUpdating(intervalTicks,
+			(frame, player) -> message.get(),
+			(frame, player) -> progress.get()
+		);
+	}
+	
 	@Override
 	public void remove() {
 		super.remove();
 		
 		PlayerUtils.removeBossbar(player);
-	}
-	
-	/**
-	 * Sets the health/progress of the Bossbar.
-	 */
-	public void setProgress(double progress) {
-		send(
-			messageSupplier,
-			() -> progress
-		);
 	}
 }
