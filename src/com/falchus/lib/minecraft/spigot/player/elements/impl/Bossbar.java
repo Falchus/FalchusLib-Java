@@ -70,4 +70,11 @@ public class Bossbar extends PlayerElement {
 		
 		PlayerUtils.removeBossbar(player);
 	}
+	
+	public void setProgress(double progress) {
+		send(
+			messageSupplier,
+			(frame, player) -> progress
+		);
+	}
 }

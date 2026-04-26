@@ -18,7 +18,6 @@ import lombok.NonNull;
 
 public class Scoreboard extends PlayerElement {
 
-	private BiFunction<Integer, Player, String> titleSupplier;
 	private BiFunction<Integer, Player, List<String>> linesSupplier;
 	
 	private List<String> lastLines;
@@ -45,17 +44,10 @@ public class Scoreboard extends PlayerElement {
         this.objective = objective;
 	}
 	
-	public void send(@NonNull BiFunction<Integer, Player, String> title, @NonNull BiFunction<Integer, Player, List<String>> lines) {
-		titleSupplier = title;
+	public void send(@NonNull BiFunction<Integer, Player, List<String>> lines) {
 		linesSupplier = lines;
 		
 		updateRunnable = () -> {
-			String newTitle = titleSupplier.apply(frame, player);
-			if (newTitle.length() > 32) {
-				newTitle = newTitle.substring(0, 32);
-			}
-			objective.setDisplayName(newTitle);
-			
 			List<String> newLines = linesSupplier.apply(frame, player);
 			
 			if (lastLines == null || lastLines.size() != newLines.size()) {
@@ -115,9 +107,8 @@ public class Scoreboard extends PlayerElement {
 		update();
 	}
 	
-	public void send(@NonNull Supplier<String> title, @NonNull Supplier<List<String>> lines) {
+	public void send(@NonNull Supplier<List<String>> lines) {
 		send(
-			(frame, player) -> title.get(),
 			(frame, player) -> lines.get()
 		);
 	}
@@ -125,7 +116,6 @@ public class Scoreboard extends PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull BiFunction<Integer, Player, String> title, @NonNull BiFunction<Integer, Player, List<String>> lines) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
-				title,
 				lines
 			)
 		);
@@ -142,5 +132,12 @@ public class Scoreboard extends PlayerElement {
 		super.remove();
 		
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+	}
+	
+	public void setTitle(@NonNull String title) {
+		if (title.length() > 32) {
+			title = title.substring(0, 32);
+		}
+		objective.setDisplayName(title);
 	}
 }
