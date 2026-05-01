@@ -45,4 +45,18 @@ public class Nametag extends PlayerElement {
 		
 		PlayerUtils.removeNametag(player);
 	}
+	
+	public void setPrefix(String prefix) {
+		send(
+			() -> prefix,
+			suffixSupplier
+		);
+	}
+	
+	public void setSuffix(String suffix) {
+		send(
+			prefixSupplier,
+			() -> suffix
+		);
+	}
 }

@@ -71,4 +71,28 @@ public class Tablist extends PlayerElement {
 			(Supplier<String>) null
 		);
 	}
+	
+	public void setHeader(@NonNull List<String> header) {
+		send(
+			(frame, player) -> header,
+			footerSupplier,
+			nameSupplier
+		);
+	}
+	
+	public void setFooter(@NonNull List<String> footer) {
+		send(
+			headerSupplier,
+			(frame, player) -> footer,
+			nameSupplier
+		);
+	}
+	
+	public void setName(@NonNull String name) {
+		send(
+			headerSupplier,
+			footerSupplier,
+			() -> name
+		);
+	}
 }
