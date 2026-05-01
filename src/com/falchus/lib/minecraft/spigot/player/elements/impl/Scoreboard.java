@@ -131,6 +131,8 @@ public class Scoreboard extends PlayerElement {
 	public void remove() {
 		super.remove();
 		
+		lastLines.clear();
+		
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
 	
