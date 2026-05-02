@@ -256,17 +256,14 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 		}
 	}
 	
-	public static PacketWrapper wrap(Object packet) {
+	@SuppressWarnings("unchecked")
+	public static <T extends PacketWrapper> T wrap(Object packet) {
 		register();
 		
 		Function<Object, PacketWrapper> wrapper = registry.get(packet.getClass());
 		if (wrapper != null) {
-			return wrapper.apply(packet);
+			return (T) wrapper.apply(packet);
 		}
-		return new PacketWrapper(packet, Set.of(packet.getClass().getName()));
-	}
-	
-	public <T extends PacketWrapper> T as(@NonNull Class<T> clazz) {
-		return as(clazz, Object.class);
+		return (T) new PacketWrapper(packet, Set.of(packet.getClass().getName()));
 	}
 }
