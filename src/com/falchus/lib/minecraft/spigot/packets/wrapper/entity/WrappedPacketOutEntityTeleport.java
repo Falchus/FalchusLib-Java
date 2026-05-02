@@ -12,7 +12,7 @@ public class WrappedPacketOutEntityTeleport extends PacketEntityWrapper {
 	Field id;
 	Field onGround;
 	
-	WrappedPacketOutEntityTeleport(@NonNull Object handle) {
+	private WrappedPacketOutEntityTeleport(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntityTeleport",
 				networkProtocolGame + "PacketPlayOutEntityTeleport"

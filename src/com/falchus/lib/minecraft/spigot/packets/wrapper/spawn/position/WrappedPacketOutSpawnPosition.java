@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutSpawnPosition extends PacketSpawnPositionWrapper {
 
-	public WrappedPacketOutSpawnPosition(@NonNull Object handle) {
+	private WrappedPacketOutSpawnPosition(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutSpawnPosition",
 				networkProtocolGame + "PacketPlayOutSpawnPosition"

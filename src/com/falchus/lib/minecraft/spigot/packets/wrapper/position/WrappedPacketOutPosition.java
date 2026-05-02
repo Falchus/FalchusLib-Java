@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutPosition extends PacketPositionWrapper {
 
-	WrappedPacketOutPosition(@NonNull Object handle) {
+	private WrappedPacketOutPosition(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutPosition",
 				networkProtocolCommon + "PacketPlayOutPosition"

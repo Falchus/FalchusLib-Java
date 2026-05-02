@@ -13,7 +13,7 @@ public class WrappedPacketOutAbilities extends PacketAbilitiesWrapper {
 	Field flyingSpeed;
 	Field walkingSpeed;
 	
-	public WrappedPacketOutAbilities(@NonNull Object handle) {
+	private WrappedPacketOutAbilities(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutAbilities",
 				networkProtocolGame + "PacketPlayOutAbilities"

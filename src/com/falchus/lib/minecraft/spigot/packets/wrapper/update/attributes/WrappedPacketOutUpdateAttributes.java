@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutUpdateAttributes extends PacketUpdateAttributesWrapper {
 
-	public WrappedPacketOutUpdateAttributes(@NonNull Object handle) {
+	private WrappedPacketOutUpdateAttributes(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutUpdateAttributes",
 				networkProtocolGame + "PacketPlayOutUpdateAttributes"

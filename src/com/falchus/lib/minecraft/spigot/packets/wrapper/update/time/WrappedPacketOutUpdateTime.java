@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutUpdateTime extends PacketUpdateTimeWrapper {
 
-	public WrappedPacketOutUpdateTime(@NonNull Object handle) {
+	private WrappedPacketOutUpdateTime(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutUpdateTime",
 				networkProtocolGame + "PacketPlayOutUpdateTime"

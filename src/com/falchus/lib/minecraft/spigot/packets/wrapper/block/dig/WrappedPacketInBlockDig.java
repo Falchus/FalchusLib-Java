@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInBlockDig extends PacketBlockDigWrapper {
 
-	public WrappedPacketInBlockDig(@NonNull Object handle) {
+	private WrappedPacketInBlockDig(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInBlockDig",
 				networkProtocolGame + "PacketPlayInBlockDig"

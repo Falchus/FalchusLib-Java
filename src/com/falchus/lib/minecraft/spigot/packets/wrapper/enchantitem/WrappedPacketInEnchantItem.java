@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInEnchantItem extends PacketEnchantItemWrapper {
 
-	public WrappedPacketInEnchantItem(@NonNull Object handle) {
+	private WrappedPacketInEnchantItem(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInEnchantItem",
 				networkProtocolGame + "PacketPlayInEnchantItem"

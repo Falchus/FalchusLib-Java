@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutScoreboardScore extends PacketScoreboardScoreWrapper {
 
-	WrappedPacketOutScoreboardScore(@NonNull Object handle) {
+	private WrappedPacketOutScoreboardScore(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutScoreboardScore",
 				networkProtocolGame + "PacketPlayOutScoreboardScore"

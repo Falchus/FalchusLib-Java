@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInSpectate extends PacketSpectateWrapper {
 
-	public WrappedPacketInSpectate(@NonNull Object handle) {
+	private WrappedPacketInSpectate(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInSpectate",
 				networkProtocolGame + "PacketPlayInSpectate"

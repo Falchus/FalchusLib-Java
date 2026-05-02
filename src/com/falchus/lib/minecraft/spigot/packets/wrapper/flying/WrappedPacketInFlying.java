@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInFlying extends PacketFlyingWrapper {
 
-	WrappedPacketInFlying(@NonNull Object handle) {
+	private WrappedPacketInFlying(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInFlying",
 				networkProtocolGame + "PacketPlayInFlying"

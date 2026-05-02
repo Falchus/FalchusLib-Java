@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutKickDisconnect extends PacketKickDisconnectWrapper {
 
-	WrappedPacketOutKickDisconnect(@NonNull Object handle) {
+	private WrappedPacketOutKickDisconnect(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutKickDisconnect",
 				networkProtocolCommon + "ClientboundDisconnectPacket"

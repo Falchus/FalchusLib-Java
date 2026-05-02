@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInHeldItemSlot extends PacketHeldItemSlotWrapper {
 
-	public WrappedPacketInHeldItemSlot(@NonNull Object handle) {
+	private WrappedPacketInHeldItemSlot(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInHeldItemSlot",
 				networkProtocolGame + "PacketPlayInHeldItemSlot"

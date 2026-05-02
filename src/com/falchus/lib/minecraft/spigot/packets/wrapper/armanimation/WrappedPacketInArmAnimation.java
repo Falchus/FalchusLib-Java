@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInArmAnimation extends PacketArmAnimationWrapper {
 
-	public WrappedPacketInArmAnimation(@NonNull Object handle) {
+	private WrappedPacketInArmAnimation(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInArmAnimation",
 				networkProtocolGame + "PacketPlayInArmAnimation"

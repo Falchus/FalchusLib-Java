@@ -13,7 +13,7 @@ public class WrappedPacketOutEntityEffect extends PacketEntityWrapper {
 	Field effectDurationTicks;
 	Field flags;
 	
-	WrappedPacketOutEntityEffect(@NonNull Object handle) {
+	private WrappedPacketOutEntityEffect(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntityEffect",
 				networkProtocolGame + "PacketPlayOutEntityEffect"

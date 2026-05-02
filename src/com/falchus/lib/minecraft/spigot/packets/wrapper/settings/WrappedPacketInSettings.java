@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInSettings extends PacketSettingsWrapper {
 
-	public WrappedPacketInSettings(@NonNull Object handle) {
+	private WrappedPacketInSettings(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInSettings",
 				networkProtocolCommon + "ServerboundClientInformationPacket"

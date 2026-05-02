@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutRespawn extends PacketRespawnWrapper {
 
-	WrappedPacketOutRespawn(@NonNull Object handle) {
+	private WrappedPacketOutRespawn(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutRespawn",
 				networkProtocolGame + "PacketPlayOutRespawn"

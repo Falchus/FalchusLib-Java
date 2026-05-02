@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutCamera extends PacketCameraWrapper {
 
-	public WrappedPacketOutCamera(@NonNull Object handle) {
+	private WrappedPacketOutCamera(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutCamera",
 				networkProtocolGame + "PacketPlayOutCamera"

@@ -12,7 +12,7 @@ public class WrappedPacketInEntityAction extends PacketEntityWrapper {
 	Field action;
 	Field data;
 	
-	WrappedPacketInEntityAction(@NonNull Object handle) {
+	private WrappedPacketInEntityAction(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInEntityAction",
 				networkProtocolGame + "PacketPlayInEntityAction"

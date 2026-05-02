@@ -11,7 +11,7 @@ public class WrappedPacketOutSubtitleTitle extends PacketTitleWrapper {
 	
 	Field text;
 	
-	WrappedPacketOutSubtitleTitle(@NonNull Object handle) {
+	private WrappedPacketOutSubtitleTitle(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutTitle",
 				networkProtocolGame + "ClientboundSetSubtitleTextPacket"

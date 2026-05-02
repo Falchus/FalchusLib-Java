@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutServerDifficulty extends PacketServerDifficultyWrapper {
 
-	WrappedPacketOutServerDifficulty(@NonNull Object handle) {
+	private WrappedPacketOutServerDifficulty(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutServerDifficulty",
 				networkProtocolGame + "PacketPlayOutServerDifficulty"

@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInChat extends PacketChatWrapper {
 
-	public WrappedPacketInChat(@NonNull Object handle) {
+	private WrappedPacketInChat(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInChat",
 				networkProtocolGame + "ServerboundChatPacket"

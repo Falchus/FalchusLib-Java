@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutWorldEvent extends PacketWorldEventWrapper {
 
-	public WrappedPacketOutWorldEvent(@NonNull Object handle) {
+	private WrappedPacketOutWorldEvent(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutWorldEvent",
 				networkProtocolGame + "PacketPlayOutWorldEvent"

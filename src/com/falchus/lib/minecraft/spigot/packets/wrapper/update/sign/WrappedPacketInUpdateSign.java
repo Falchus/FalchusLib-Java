@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInUpdateSign extends PacketUpdateSignWrapper {
 
-	public WrappedPacketInUpdateSign(@NonNull Object handle) {
+	private WrappedPacketInUpdateSign(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInUpdateSign",
 				networkProtocolGame + "PacketPlayInUpdateSign"

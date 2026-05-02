@@ -1,4 +1,4 @@
-package com.falchus.lib.minecraft.spigot.packets.wrapper.update.window;
+package com.falchus.lib.minecraft.spigot.packets.wrapper.window;
 
 import java.lang.reflect.Field;
 import java.util.Set;

@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutOpenSignEditor extends PacketOpenSignEditorWrapper {
 
-	public WrappedPacketOutOpenSignEditor(@NonNull Object handle) {
+	private WrappedPacketOutOpenSignEditor(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutOpenSignEditor",
 				networkProtocolGame + "PacketPlayOutOpenSignEditor"

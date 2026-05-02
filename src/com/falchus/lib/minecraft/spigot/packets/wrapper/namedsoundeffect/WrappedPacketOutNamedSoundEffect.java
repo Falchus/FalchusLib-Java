@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutNamedSoundEffect extends PacketNamedSoundEffectWrapper {
 
-	public WrappedPacketOutNamedSoundEffect(@NonNull Object handle) {
+	private WrappedPacketOutNamedSoundEffect(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutNamedSoundEffect",
 				networkProtocolGame + "PacketPlayOutNamedSoundEffect"

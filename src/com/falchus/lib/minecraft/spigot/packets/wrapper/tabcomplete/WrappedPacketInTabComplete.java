@@ -11,7 +11,7 @@ public class WrappedPacketInTabComplete extends PacketTabCompleteWrapper {
 
 	Field command;
 	
-	public WrappedPacketInTabComplete(@NonNull Object handle) {
+	private WrappedPacketInTabComplete(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInTabComplete",
 				networkProtocolGame + "PacketPlayInTabComplete"

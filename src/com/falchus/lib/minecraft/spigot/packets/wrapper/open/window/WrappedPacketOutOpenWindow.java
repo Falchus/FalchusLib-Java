@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutOpenWindow extends PacketOpenWindowWrapper {
 
-	public WrappedPacketOutOpenWindow(@NonNull Object handle) {
+	private WrappedPacketOutOpenWindow(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutOpenWindow",
 				networkProtocolGame + "PacketPlayOutOpenWindow"

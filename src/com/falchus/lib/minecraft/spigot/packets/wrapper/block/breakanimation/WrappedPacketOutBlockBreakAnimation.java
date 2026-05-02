@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutBlockBreakAnimation extends PacketBlockBreakAnimationWrapper {
 
-	public WrappedPacketOutBlockBreakAnimation(@NonNull Object handle) {
+	private WrappedPacketOutBlockBreakAnimation(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutBlockBreakAnimation",
 				networkProtocolGame + "PacketPlayOutBlockBreakAnimation"

@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutUpdateHealth extends PacketUpdateHealthWrapper {
 
-	public WrappedPacketOutUpdateHealth(@NonNull Object handle) {
+	private WrappedPacketOutUpdateHealth(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutUpdateHealth",
 				networkProtocolGame + "PacketPlayOutUpdateHealth"

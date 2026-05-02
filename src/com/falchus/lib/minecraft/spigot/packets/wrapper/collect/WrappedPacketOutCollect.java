@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutCollect extends PacketCollectWrapper {
 
-	public WrappedPacketOutCollect(@NonNull Object handle) {
+	private WrappedPacketOutCollect(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutCollect",
 				networkProtocolGame + "PacketPlayOutCollect"

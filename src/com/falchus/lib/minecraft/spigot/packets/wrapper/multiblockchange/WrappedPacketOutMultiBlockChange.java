@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutMultiBlockChange extends PacketMultiBlockChangeWrapper {
 
-	public WrappedPacketOutMultiBlockChange(@NonNull Object handle) {
+	private WrappedPacketOutMultiBlockChange(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutMultiBlockChange",
 				networkProtocolGame + "PacketPlayOutMultiBlockChange"

@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutTabComplete extends PacketTabCompleteWrapper {
 	
-	public WrappedPacketOutTabComplete(@NonNull Object handle) {
+	private WrappedPacketOutTabComplete(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutTabComplete",
 				networkProtocolGame + "PacketPlayOutTabComplete"

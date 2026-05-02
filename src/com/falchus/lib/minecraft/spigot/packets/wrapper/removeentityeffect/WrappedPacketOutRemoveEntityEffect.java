@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutRemoveEntityEffect extends PacketRemoveEntityEffectWrapper {
 
-	WrappedPacketOutRemoveEntityEffect(@NonNull Object handle) {
+	private WrappedPacketOutRemoveEntityEffect(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutRemoveEntityEffect",
 				networkProtocolCommon + "PacketPlayOutRemoveEntityEffect"

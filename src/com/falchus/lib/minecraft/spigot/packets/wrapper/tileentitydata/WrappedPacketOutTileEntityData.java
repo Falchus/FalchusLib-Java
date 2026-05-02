@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutTileEntityData extends PacketTileEntityDataWrapper {
 
-	public WrappedPacketOutTileEntityData(@NonNull Object handle) {
+	private WrappedPacketOutTileEntityData(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutTileEntityData",
 				networkProtocolGame + "PacketPlayOutTileEntityData"

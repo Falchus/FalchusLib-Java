@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutEntityVelocity extends PacketEntityWrapper {
 	
-	WrappedPacketOutEntityVelocity(@NonNull Object handle) {
+	private WrappedPacketOutEntityVelocity(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntityVelocity",
 				networkProtocolGame + "PacketPlayOutEntityVelocity"

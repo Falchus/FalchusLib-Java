@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInUseEntity extends PacketUseEntityWrapper {
 
-	public WrappedPacketInUseEntity(@NonNull Object handle) {
+	private WrappedPacketInUseEntity(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInUseEntity",
 				networkProtocolGame + "PacketPlayInUseEntity"

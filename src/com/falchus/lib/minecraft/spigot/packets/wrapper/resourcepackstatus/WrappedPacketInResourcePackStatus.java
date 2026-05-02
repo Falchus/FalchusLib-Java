@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInResourcePackStatus extends PacketResourcePackStatusWrapper {
 
-	WrappedPacketInResourcePackStatus(@NonNull Object handle) {
+	private WrappedPacketInResourcePackStatus(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInResourcePackStatus",
 				networkProtocolCommon + "ServerboundResourcePackPacket"

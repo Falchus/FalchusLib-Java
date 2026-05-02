@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutCustomPayload extends PacketCustomPayloadWrapper {
 
-	public WrappedPacketOutCustomPayload(@NonNull Object handle) {
+	private WrappedPacketOutCustomPayload(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutCustomPayload",
 				networkProtocolCommon + "ClientboundCustomPayloadPacket"

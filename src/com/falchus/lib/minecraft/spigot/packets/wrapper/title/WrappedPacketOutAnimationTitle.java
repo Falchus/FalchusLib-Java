@@ -13,7 +13,7 @@ public class WrappedPacketOutAnimationTitle extends PacketTitleWrapper {
 	Field stayTime;
 	Field fadeOutTime;
 	
-	WrappedPacketOutAnimationTitle(@NonNull Object handle) {
+	private WrappedPacketOutAnimationTitle(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutTitle",
 				networkProtocolGame + "ClientboundSetTitlesAnimationPacket"

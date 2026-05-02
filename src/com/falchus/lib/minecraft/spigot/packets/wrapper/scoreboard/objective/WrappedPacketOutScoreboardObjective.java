@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutScoreboardObjective extends PacketScoreboardObjectiveWrapper {
 
-	WrappedPacketOutScoreboardObjective(@NonNull Object handle) {
+	private WrappedPacketOutScoreboardObjective(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutScoreboardObjective",
 				networkProtocolGame + "PacketPlayOutScoreboardObjective"

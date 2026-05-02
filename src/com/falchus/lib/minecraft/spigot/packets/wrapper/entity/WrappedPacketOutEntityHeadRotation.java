@@ -11,7 +11,7 @@ public class WrappedPacketOutEntityHeadRotation extends PacketEntityWrapper {
 	
 	Field yHeadRot;
 	
-	WrappedPacketOutEntityHeadRotation(@NonNull Object handle) {
+	private WrappedPacketOutEntityHeadRotation(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntityHeadRotation",
 				networkProtocolGame + "PacketPlayOutEntityHeadRotation"

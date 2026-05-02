@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInCloseWindow extends PacketCloseWindowWrapper {
 
-	public WrappedPacketInCloseWindow(@NonNull Object handle) {
+	private WrappedPacketInCloseWindow(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInCloseWindow",
 				networkProtocolGame + "PacketPlayInCloseWindow"

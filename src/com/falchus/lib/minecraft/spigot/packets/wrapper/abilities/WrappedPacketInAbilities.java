@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketInAbilities extends PacketAbilitiesWrapper {
 
-	public WrappedPacketInAbilities(@NonNull Object handle) {
+	private WrappedPacketInAbilities(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayInAbilities",
 				networkProtocolGame + "PacketPlayInAbilities"

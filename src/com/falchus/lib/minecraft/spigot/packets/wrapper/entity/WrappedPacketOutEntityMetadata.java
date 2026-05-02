@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedPacketOutEntityMetadata extends PacketEntityWrapper {
 	
-	WrappedPacketOutEntityMetadata(@NonNull Object handle) {
+	private WrappedPacketOutEntityMetadata(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntityMetadata",
 				networkProtocolGame + "PacketPlayOutEntityMetadata"

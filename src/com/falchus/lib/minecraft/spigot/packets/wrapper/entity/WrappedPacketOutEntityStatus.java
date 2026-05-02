@@ -11,7 +11,7 @@ public class WrappedPacketOutEntityStatus extends PacketEntityWrapper {
 
 	Field eventId;
 	
-	WrappedPacketOutEntityStatus(@NonNull Object handle) {
+	private WrappedPacketOutEntityStatus(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntityStatus",
 				networkProtocolGame + "PacketPlayOutEntityStatus"

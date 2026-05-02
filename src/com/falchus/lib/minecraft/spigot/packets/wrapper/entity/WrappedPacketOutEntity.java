@@ -14,7 +14,7 @@ public class WrappedPacketOutEntity extends PacketEntityWrapper {
 	Field onGround;
 	Field hasRot;
 	
-	WrappedPacketOutEntity(@NonNull Object handle) {
+	private WrappedPacketOutEntity(@NonNull Object handle) {
 		super(handle, Set.of(
 				version.getPackageNms() + "PacketPlayOutEntity",
 				networkProtocolGame + "PacketPlayOutEntity"
