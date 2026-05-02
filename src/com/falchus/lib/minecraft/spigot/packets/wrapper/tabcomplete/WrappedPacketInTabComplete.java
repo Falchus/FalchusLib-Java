@@ -28,7 +28,7 @@ public class WrappedPacketInTabComplete extends PacketTabCompleteWrapper {
 		return getFieldValue(command);
 	}
 	
-	public void setCommand(int command) {
+	public void setCommand(String command) {
 		setField(this.command, command);
 	}
 }
