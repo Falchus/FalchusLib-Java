@@ -140,7 +140,7 @@ public class EntityPlayerBuilder {
 			if (lookAtPlayer) {
 				new Task() {
 					@Override
-					public void onRun(int tick) {
+					protected void onRun(int tick) {
 						Entity entity = EntityUtils.getBukkitEntity(entityPlayer);
 						if (entity == null || !entity.isValid()) {
 							end();

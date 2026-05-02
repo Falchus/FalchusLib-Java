@@ -64,14 +64,17 @@ public abstract class PlayerElement {
 		}
 		frame = 0;
 		
-		Task task = Task.runTimer(() -> {
-			if (!player.isOnline()) {
-				remove();
-				return;
+		Task task = new Task() {
+			@Override
+			protected void onRun(int tick) {
+				if (!player.isOnline()) {
+					remove();
+					return;
+				}
+				frame = tick;
+				runnable.run();
 			}
-			frame++;
-			runnable.run();
-		}, intervalTicks, TimeUnit.MILLISECONDS);
+		}.runTimer(intervalTicks, TimeUnit.MILLISECONDS);
 		
 		map.put(player.getUniqueId(), task);
 	}

@@ -39,7 +39,7 @@ public abstract class InventoryAnimation {
 		
 		new Task() {
 			@Override
-			public void onRun(int tick) {
+			protected void onRun(int tick) {
 				if (!player.getOpenInventory().getTopInventory().equals(inventory)) {
 					end();
 					return;

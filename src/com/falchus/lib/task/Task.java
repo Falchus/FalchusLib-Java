@@ -38,7 +38,7 @@ public class Task implements Runnable {
 		} else {
 			task = new Task() {
 				@Override
-				public void onRun(int tick) {
+				protected void onRun(int tick) {
 					runnable.run();
 				}
 			};
