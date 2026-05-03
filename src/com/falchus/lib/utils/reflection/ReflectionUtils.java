@@ -39,9 +39,7 @@ public class ReflectionUtils {
             } catch (ClassNotFoundException e) {
             	return Optional.empty();
             }
-    	}).orElseThrow(() ->
-    		new RuntimeException()
-    	);
+    	}).orElse(null);
     }
     
     public static Class<?> getFirstClass(@NonNull String... names) {
@@ -242,9 +240,7 @@ public class ReflectionUtils {
             } catch (NoSuchMethodException e) {
             	return Optional.empty();
             }
-    	}).orElseThrow(() ->
-    		new RuntimeException()
-    	);
+    	}).orElse(null);
     }
     
     public static Constructor<?> getConstructor(@NonNull Object instance, Class<?>... params) {
