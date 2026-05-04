@@ -69,6 +69,7 @@ public class VersionAdapter implements IVersionAdapter {
     
     Method entity_getHandle;
     Method entity_getBukkitEntity;
+    Method entity_getBoundingBox;
     Method entity_setYawPitch;
 	
 	Class<?> craftItemStack;
@@ -278,6 +279,7 @@ public class VersionAdapter implements IVersionAdapter {
             
             entity_getHandle = ReflectionUtils.getMethod(entity, "getHandle");
             entity_getBukkitEntity = ReflectionUtils.getMethod(entity, "getBukkitEntity");
+            entity_getBoundingBox = ReflectionUtils.getMethod(entity, "getBoundingBox");
             entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
             	List.of(
             		float.class,
@@ -422,6 +424,15 @@ public class VersionAdapter implements IVersionAdapter {
 	public Entity getBukkitEntity(@NonNull Object entity) {
 		try {
 			return (Entity) entity_getBukkitEntity.invoke(entity);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Override
+	public Object getBoundingBox(@NonNull Entity entity) {
+		try {
+			return entity_getBoundingBox.invoke(entity);
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }

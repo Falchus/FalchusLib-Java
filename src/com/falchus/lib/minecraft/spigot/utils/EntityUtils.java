@@ -26,6 +26,13 @@ public class EntityUtils {
 	}
 	
 	/**
+	 * @return AxisAlignedBB
+	 */
+	public static Object getBoundingBox(@NonNull Entity entity) {
+		return VersionProvider.get().getBoundingBox(entity);
+	}
+	
+	/**
 	 * @return absorption from a {@link Damageable} entity.
 	 */
 	public static double getAbsorption(@NonNull Damageable entity) {

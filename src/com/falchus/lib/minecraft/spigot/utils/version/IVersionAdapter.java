@@ -52,6 +52,11 @@ public interface IVersionAdapter {
 	Entity getBukkitEntity(@NonNull Object entity);
 	
 	/**
+	 * @return AxisAlignedBB
+	 */
+	Object getBoundingBox(@NonNull Entity entity);
+	
+	/**
 	 * @return absorption from a {@link Damageable} entity.
 	 */
 	double getAbsorption(@NonNull Damageable entity);
