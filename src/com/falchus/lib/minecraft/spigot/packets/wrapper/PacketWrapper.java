@@ -107,7 +107,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 			
 			WrappedPacketInBlockPlace.class,
 			
-			WrappedPacketOutBlockUpdate.class,
+//			WrappedPacketOutBlockUpdate.class,
 			
 			WrappedPacketOutCamera.class,
 			
@@ -116,7 +116,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 			
 			WrappedPacketInClientCommand.class,
 			
-			WrappedPacketInCloseWindow.class,
+//			WrappedPacketInCloseWindow.class,
 			WrappedPacketOutCloseWindow.class,
 			
 			WrappedPacketOutCollect.class,
@@ -145,7 +145,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 			
 			WrappedPacketOutGameStateChange.class,
 			
-			WrappedPacketInHeldItemSlot.class,
+//			WrappedPacketInHeldItemSlot.class,
 			WrappedPacketOutHeldItemSlot.class,
 			
 			WrappedPacketOutKickDisconnect.class,
@@ -217,7 +217,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 			
 			WrappedPacketInUseEntity.class,
 			
-			WrappedPacketInWindowClick.class,
+//			WrappedPacketInWindowClick.class,
 			WrappedPacketOutWindowData.class,
 			WrappedPacketOutWindowItems.class,
 			
@@ -225,33 +225,25 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 		};
 		
 		for (Class<T> wrapper : wrappers) {
-			try {
-				PacketWrapper dummy = (T) new ClassInstanceBuilder(
-					wrapper
-				).withParams(
-					Map.of(
-						Object.class,
-						Dummy.instance
-					)
-				).build();
-				for (Class<?> clazz : dummy.getClasses()) {
-					registry.put(clazz, obj -> {
-						try {
-							return (T) new ClassInstanceBuilder(
-								wrapper
-							).withParams(
-								Map.of(
-									Object.class,
-									obj
-								)
-							).build();
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
-					});
-				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			PacketWrapper dummy = (T) new ClassInstanceBuilder(
+				wrapper
+			).withParams(
+				Map.of(
+					Object.class,
+					Dummy.instance
+				)
+			).build(); // TODO: fix "Failed to create class instance"
+			for (Class<?> clazz : dummy.getClasses()) {
+				registry.put(clazz, obj -> {
+					return (T) new ClassInstanceBuilder(
+						wrapper
+					).withParams(
+						Map.of(
+							Object.class,
+							obj
+						)
+					).build();
+				});
 			}
 		}
 	}
