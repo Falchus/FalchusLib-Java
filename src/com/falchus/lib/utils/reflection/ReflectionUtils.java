@@ -233,13 +233,24 @@ public class ReflectionUtils {
     
     public static Constructor<?> getConstructor(@NonNull Class<?> clazz, Class<?>... params) {
     	return constructors.computeIfAbsent(new ConstructorKey(clazz, params), k -> {
-            try {
-                Constructor<?> ctor = clazz.getDeclaredConstructor(params);
-                ctor.setAccessible(true);
-                return Optional.of(ctor);
-            } catch (NoSuchMethodException e) {
-            	return Optional.empty();
-            }
+        	Class<?> current = clazz;
+        	
+        	while (current != null) {
+                try {
+                	Constructor<?> ctor = current.getConstructor(params);
+                	ctor.setAccessible(true);
+                    return Optional.of(ctor);
+                } catch (NoSuchMethodException ignored) {}
+                
+                try {
+                	Constructor<?> ctor = current.getDeclaredConstructor(params);
+                	ctor.setAccessible(true);
+                    return Optional.of(ctor);
+                } catch (NoSuchMethodException ignored) {}
+                
+            	current = current.getSuperclass();
+        	}
+        	return Optional.empty();
     	}).orElse(null);
     }
     
