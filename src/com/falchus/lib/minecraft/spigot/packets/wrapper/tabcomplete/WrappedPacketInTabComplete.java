@@ -20,7 +20,7 @@ public class WrappedPacketInTabComplete extends PacketTabCompleteWrapper {
 		
 		command = getFirstField(
 			"command",
-			"b"
+			"a"
 		);
 	}
 
