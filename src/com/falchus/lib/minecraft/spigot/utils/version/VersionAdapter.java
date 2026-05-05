@@ -116,6 +116,7 @@ public class VersionAdapter implements IVersionAdapter {
     Class<?> biomeBase;
     Field biomeBase_biomes;
     Method biomeBase_getBiome;
+    Method world_getCubes;
 	
 	private Method nmsItemStack_getTag() {
 		return ReflectionUtils.getMethod(nmsItemStack, "getTag");
@@ -424,6 +425,10 @@ public class VersionAdapter implements IVersionAdapter {
             biomeBase_biomes = ReflectionUtils.getField(biomeBase, "biomes");
             biomeBase_getBiome = ReflectionUtils.getMethod(biomeBase, "getBiome",
             	int.class
+            );
+            world_getCubes = ReflectionUtils.getMethod(world, "getCubes",
+            	entity,
+            	axisAlignedBB
             );
 		} catch (Exception e) {
     		throw new IllegalStateException("Failed to initialize " + getClass().getSimpleName(), e);
@@ -1327,6 +1332,18 @@ public class VersionAdapter implements IVersionAdapter {
     public Object getWorldServer(@NonNull World world) {
     	try {
     		return craftWorld_getHandle().invoke(world);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+    	try {
+    		return (Collection<?>) world_getCubes.invoke(getWorldServer(world),
+    			null,
+    			axisAlignedBB
+    		);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import java.util.Collection;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -47,6 +49,13 @@ public class WorldUtils {
 	 */
 	public static Object getWorldServer(World world) {
 		return VersionProvider.get().getWorldServer(world);
+	}
+	
+	/**
+	 * @return {@link Collection}
+	 */
+	public static Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+		return VersionProvider.get().getCollidingBlocks(world, axisAlignedBB);
 	}
 	
 	/**

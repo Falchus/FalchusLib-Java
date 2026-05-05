@@ -2,6 +2,7 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -245,4 +246,9 @@ public interface IVersionAdapter {
 	 * @return WorldServer from a World
 	 */
 	Object getWorldServer(World world);
+	
+	/**
+	 * @return {@link Collection}
+	 */
+	Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB);
 }
