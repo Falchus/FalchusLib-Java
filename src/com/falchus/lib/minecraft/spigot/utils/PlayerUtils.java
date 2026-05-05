@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
@@ -162,6 +164,18 @@ public class PlayerUtils {
 	 */
 	public static int getPing(@NonNull Player player) {
 		return VersionProvider.get().getPing(player);
+	}
+	
+	/**
+	 * @return potion effect level from a player.
+	 */
+	public static int getPotionEffectLevel(@NonNull Player player, @NonNull PotionEffectType type) {
+		for (PotionEffect effect : player.getActivePotionEffects()) {
+			if (effect.getType().getName().equals(type.getName())) {
+				return effect.getAmplifier() + 1;
+			}
+		}
+		return 0;
 	}
 	
 	/**
