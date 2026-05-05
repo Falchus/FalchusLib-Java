@@ -33,6 +33,13 @@ public class EntityUtils {
 	}
 	
 	/**
+	 * @return AxisAlignedBB
+	 */
+	public static Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		return VersionProvider.get().modifyBoundingBox(axisAlignedBB, minX, minY, minZ, maxX, maxY, maxZ);
+	}
+	
+	/**
 	 * @return absorption from a {@link Damageable} entity.
 	 */
 	public static double getAbsorption(@NonNull Damageable entity) {

@@ -57,6 +57,11 @@ public interface IVersionAdapter {
 	Object getBoundingBox(@NonNull Entity entity);
 	
 	/**
+	 * @return AxisAlignedBB
+	 */
+	Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+	
+	/**
 	 * @return absorption from a {@link Damageable} entity.
 	 */
 	double getAbsorption(@NonNull Damageable entity);

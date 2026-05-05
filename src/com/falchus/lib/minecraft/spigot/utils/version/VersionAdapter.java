@@ -70,6 +70,13 @@ public class VersionAdapter implements IVersionAdapter {
     Method entity_getHandle;
     Method entity_getBukkitEntity;
     Method entity_getBoundingBox;
+    Class<?> axisAlignedBB;
+    Field axisAlignedBB_minX;
+    Field axisAlignedBB_minY;
+    Field axisAlignedBB_minZ;
+    Field axisAlignedBB_maxX;
+    Field axisAlignedBB_maxY;
+    Field axisAlignedBB_maxZ;
     Method entity_setYawPitch;
 	
 	Class<?> craftItemStack;
@@ -280,6 +287,34 @@ public class VersionAdapter implements IVersionAdapter {
             entity_getHandle = ReflectionUtils.getMethod(entity, "getHandle");
             entity_getBukkitEntity = ReflectionUtils.getMethod(entity, "getBukkitEntity");
             entity_getBoundingBox = ReflectionUtils.getMethod(entity, "getBoundingBox");
+            axisAlignedBB = ReflectionUtils.getFirstClass(
+            	packageNms + "AxisAlignedBB",
+            	packageNm + "world.phys.AxisAlignedBB"
+            );
+            axisAlignedBB_minX = ReflectionUtils.getFirstField(axisAlignedBB,
+        		"minX",
+            	"a"
+            );
+            axisAlignedBB_minY = ReflectionUtils.getFirstField(axisAlignedBB,
+        		"minY",
+            	"b"
+            );
+            axisAlignedBB_minZ = ReflectionUtils.getFirstField(axisAlignedBB,
+        		"minZ",
+            	"c"
+            );
+            axisAlignedBB_maxX = ReflectionUtils.getFirstField(axisAlignedBB,
+        		"maxX",
+            	"d"
+            );
+            axisAlignedBB_maxY = ReflectionUtils.getFirstField(axisAlignedBB,
+        		"maxY",
+            	"e"
+            );
+            axisAlignedBB_maxZ = ReflectionUtils.getFirstField(axisAlignedBB,
+        		"maxZ",
+            	"f"
+            );
             entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
             	List.of(
             		float.class,
@@ -433,6 +468,42 @@ public class VersionAdapter implements IVersionAdapter {
 	public Object getBoundingBox(@NonNull Entity entity) {
 		try {
 			return entity_getBoundingBox.invoke(entity);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Override
+	public Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		try {
+			return new ClassInstanceBuilder(
+				this.axisAlignedBB
+			).withParams(
+				Map.of(
+					double.class,
+					(double) axisAlignedBB_minX.get(axisAlignedBB) + minX
+				),
+				Map.of(
+					double.class,
+					(double) axisAlignedBB_minY.get(axisAlignedBB) + minY
+				),
+				Map.of(
+					double.class,
+					(double) axisAlignedBB_minZ.get(axisAlignedBB) + minZ
+				),
+				Map.of(
+					double.class,
+					(double) axisAlignedBB_maxX.get(axisAlignedBB) + maxX
+				),
+				Map.of(
+					double.class,
+					(double) axisAlignedBB_maxY.get(axisAlignedBB) + maxY
+				),
+				Map.of(
+					double.class,
+					(double) axisAlignedBB_maxZ.get(axisAlignedBB) + maxZ
+				)
+			).build();
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
