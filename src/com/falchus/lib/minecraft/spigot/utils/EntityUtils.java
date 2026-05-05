@@ -40,6 +40,20 @@ public class EntityUtils {
 	}
 	
 	/**
+	 * @return {@code true} if on ground, {@code false} otherwise.
+	 */
+	public static boolean isOnGround(@NonNull Entity entity, double yExpand) {
+		return !WorldUtils.getCollidingBlocks(entity.getWorld(), modifyBoundingBox(getBoundingBox(entity), 0, -yExpand, 0, 0, 0, 0)).isEmpty();
+	}
+	
+	/**
+	 * @return {@code true} if on ground, {@code false} otherwise.
+	 */
+	public static boolean isOnGround(@NonNull Entity entity) {
+		return isOnGround(entity, 0.25);
+	}
+	
+	/**
 	 * @return absorption from a {@link Damageable} entity.
 	 */
 	public static double getAbsorption(@NonNull Damageable entity) {
