@@ -40,7 +40,9 @@ public class EventManager {
 				listener,
 				event -> {
 					try {
-						method.invoke(listener, event);
+						method.invoke(listener,
+							event
+						);
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}

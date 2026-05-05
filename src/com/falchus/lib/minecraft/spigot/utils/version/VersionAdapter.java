@@ -518,7 +518,9 @@ public class VersionAdapter implements IVersionAdapter {
     public double getAbsorption(@NonNull Damageable entity) {
     	try {
     		Object dataWatcher = entity_getDataWatcher().invoke(getEntity(entity));
-    		return (float) dataWatcher_getFloat().invoke(dataWatcher, 17);
+    		return (float) dataWatcher_getFloat().invoke(dataWatcher,
+    			17
+    		);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

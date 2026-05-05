@@ -202,7 +202,9 @@ public class VersionAdapter_v_1_13_R1 extends VersionAdapter_v1_9_R1 {
     @Override
     public void setGameRule(@NonNull World world, @NonNull GameRule gameRule, @NonNull String value) {
     	try {
-    		Object rule = gameRule_getByName().invoke(null, gameRule.getKey());
+    		Object rule = gameRule_getByName().invoke(null,
+    			gameRule.getKey()
+    		);
     		if (rule == null) return;
     		
     		Class<?> type = (Class<?>) gameRule_getType().invoke(rule);
