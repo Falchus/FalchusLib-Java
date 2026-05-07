@@ -126,6 +126,19 @@ public class ReflectionUtils {
 	public static <T> T getFieldValue(@NonNull Field field) {
 		return getFieldValue(null, field);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T getFieldValue(Object instance, @NonNull Field field, @NonNull Class<T> type) {
+    	try {
+    		return (T) getFieldValue(instance, field);
+    	} catch (Exception e) {
+    		throw new RuntimeException(e);
+    	}
+    }
+    
+	public static <T> T getFieldValue(@NonNull Field field, @NonNull Class<T> type) {
+		return getFieldValue(null, field, type);
+	}
     
     public static void setField(Object instance, @NonNull Field field, Object value) {
         try {
