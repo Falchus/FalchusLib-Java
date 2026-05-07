@@ -34,6 +34,10 @@ public class Wrapper<T> {
 		return ReflectionUtils.getFieldValue(handle, field);
 	}
 	
+	protected <U> U getFieldValue(@NonNull Field field, @NonNull Class<U> type) {
+		return ReflectionUtils.getFieldValue(handle, field, type);
+	}
+	
 	protected void setField(@NonNull Field field, Object value) {
 		ReflectionUtils.setField(handle, field, value);
 	}
