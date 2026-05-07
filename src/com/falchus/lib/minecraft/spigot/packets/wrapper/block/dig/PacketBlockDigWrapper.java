@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketBlockDigWrapper extends PacketWrapper {
+class PacketBlockDigWrapper extends PacketWrapper {
 	
 	Field pos;
 	Field direction;

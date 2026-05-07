@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketUpdateTimeWrapper extends PacketWrapper {
+class PacketUpdateTimeWrapper extends PacketWrapper {
 	
 	Field gameTime;
 	Field dayTime;

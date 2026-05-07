@@ -10,7 +10,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketSpectateWrapper extends PacketWrapper {
+class PacketSpectateWrapper extends PacketWrapper {
 	
 	Field uuid;
 

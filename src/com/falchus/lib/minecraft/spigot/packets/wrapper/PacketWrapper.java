@@ -67,7 +67,7 @@ import com.falchus.lib.utils.wrapper.impl.FirstClassWrapper;
 
 import lombok.NonNull;
 
-public abstract class PacketWrapper extends SpigotWrapper {
+public class PacketWrapper extends SpigotWrapper {
 	
 	protected static final IVersionAdapter version = VersionProvider.get();
 	private static final String networkProtocol = version.getPackageNm() + "network.protocol.";

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketNamedSoundEffectWrapper extends PacketWrapper {
+class PacketNamedSoundEffectWrapper extends PacketWrapper {
 	
 	Field x;
 	Field y;
