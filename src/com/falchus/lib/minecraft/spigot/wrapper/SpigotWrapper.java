@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.utils.version.IVersionAdapter;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.minecraft.spigot.wrapper.core.blockposition.*;
 import com.falchus.lib.minecraft.spigot.wrapper.world.*;
 import com.falchus.lib.utils.wrapper.impl.FirstClassWrapper;
 import com.falchus.lib.utils.wrapper.impl.RegistryFirstClassWrapper;
@@ -21,6 +22,8 @@ public class SpigotWrapper extends RegistryFirstClassWrapper<Object> {
 	private static final String world = version.getPackageNm() + "world.";
 	protected static final String worldPhys = world + "phys.";
 	
+	protected static final String core = version.getPackageNm() + "core.";
+	
 	public SpigotWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);
 	}
@@ -28,6 +31,9 @@ public class SpigotWrapper extends RegistryFirstClassWrapper<Object> {
 	@SuppressWarnings("unchecked")
 	protected Class<? extends FirstClassWrapper<?>>[] getWrappers() {
 		return new Class[] {
+			WrappedBaseBlockPosition.class,
+			WrappedBlockPosition.class,
+
 			WrappedAxisAlignedBB.class
 		};
 	}
