@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
-import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -25,27 +24,27 @@ public class WrappedAxisAlignedBB extends SpigotWrapper {
 			worldPhys + "AxisAlignedBB"
 		));
 		
-		minX = ReflectionUtils.getField(
+		minX = getFirstField(
 			"minX",
 			"a"
 		);
-		minY = ReflectionUtils.getField(
+		minY = getFirstField(
 			"minY",
 			"b"
 		);
-		minZ = ReflectionUtils.getField(
+		minZ = getFirstField(
 			"minZ",
 			"c"
 		);
-		maxX = ReflectionUtils.getField(
+		maxX = getFirstField(
 			"maxX",
 			"d"
 		);
-		maxY = ReflectionUtils.getField(
+		maxY = getFirstField(
 			"maxY",
 			"e"
 		);
-		maxZ = ReflectionUtils.getField(
+		maxZ = getFirstField(
 			"maxZ",
 			"f"
 		);
