@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
@@ -51,6 +52,15 @@ public class EntityUtils {
 	 */
 	public static boolean isOnGround(@NonNull Entity entity) {
 		return isOnGround(entity, 0.25);
+	}
+	
+	/**
+	 * @return {@code true} if on climbable, {@code false} otherwise.
+	 */
+	public static boolean isOnClimbable(@NonNull Entity entity) {
+		Location location = entity.getLocation();
+		return BlockUtils.isClimbable(location.getBlock()) ||
+				BlockUtils.isClimbable(location.add(0, 1, 0).getBlock());
 	}
 	
 	/**
