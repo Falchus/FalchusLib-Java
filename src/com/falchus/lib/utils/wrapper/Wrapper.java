@@ -4,10 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.AllArgsConstructor;
@@ -56,27 +54,5 @@ public class Wrapper<T> {
 	
 	protected Constructor<?> getFirstConstructor(Set<List<Class<?>>> params) {
 		return ReflectionUtils.getFirstConstructor(handle, params);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <U extends Wrapper<?>> U as(@NonNull Class<U> clazz, Class<?>... params) {
-		if (clazz.isInstance(this)) {
-			return (U) this;
-		}
-		
-		try {
-			Map<Class<?>, Object>[] paramMaps = new Map[params.length];
-			for (int i = 0; i < params.length; i++) {
-				paramMaps[i] = Map.of(params[i], handle);
-			}
-			
-			return (U) new ClassInstanceBuilder(
-				clazz
-			).withParams(
-				paramMaps
-			).build();
-		} catch (Exception e) {
-			return null;
-		}
 	}
 }
