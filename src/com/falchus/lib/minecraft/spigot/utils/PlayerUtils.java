@@ -247,4 +247,11 @@ public class PlayerUtils {
 		
 		player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
 	}
+	
+	/**
+	 * @return {@code true} if holding sword, {@code false} otherwise.
+	 */
+	public static boolean isHoldingSword(@NonNull Player player) {
+		return player.getItemInHand().getType().name().endsWith("SWORD");
+	}
 }
