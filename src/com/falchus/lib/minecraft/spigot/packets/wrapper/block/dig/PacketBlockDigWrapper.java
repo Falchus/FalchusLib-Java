@@ -3,9 +3,13 @@ package com.falchus.lib.minecraft.spigot.packets.wrapper.block.dig;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
+import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
@@ -59,12 +63,25 @@ abstract class PacketBlockDigWrapper extends PacketWrapper {
 	public void setDirection(Object direction) {
 		setField(this.direction, direction);
 	}
+	
+	public enum Action {
+		START_DESTROY_BLOCK,
+		ABORT_DESTROY_BLOCK,
+		STOP_DESTROY_BLOCK,
+		DROP_ALL_ITEMS,
+		DROP_ITEM,
+		RELEASE_USE_ITEM
+	}
 
-	/**
-	 * @return EnumPlayerDigType
-	 */
-	public Object getAction() {
-		return getFieldValue(action);
+	@SneakyThrows
+	public Action getAction() {
+		String name;
+		if (ServerUtils.getVersion().isBefore(Version.v1_17)) {
+			name = ((Enum<?>) ReflectionUtils.getMethod(getFieldValue(action), "getType").invoke(getFieldValue(action))).name();
+		} else {
+			name = getFieldValue(action, Enum.class).name();
+		}
+		return Action.valueOf(name);
 	}
 	
 	/**
