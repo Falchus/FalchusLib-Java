@@ -1,11 +1,14 @@
 package com.falchus.lib.minecraft.spigot;
 
+import java.util.Set;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.falchus.lib.minecraft.spigot.listeners.*;
 import com.falchus.lib.minecraft.spigot.listeners.message.*;
 import com.falchus.lib.minecraft.spigot.manager.*;
 import com.falchus.lib.minecraft.spigot.utils.*;
+import com.falchus.lib.minecraft.spigot.wrapper.*;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,6 +33,10 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		new Metrics(this, 28050);
+		
+		new SpigotWrapper(this, Set.of(
+			getClass().getPackageName()
+		));
 		
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		

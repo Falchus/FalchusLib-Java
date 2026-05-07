@@ -2,6 +2,7 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
@@ -71,12 +74,6 @@ public class VersionAdapter implements IVersionAdapter {
     Method entity_getBukkitEntity;
     Method entity_getBoundingBox;
     Class<?> axisAlignedBB;
-    Field axisAlignedBB_minX;
-    Field axisAlignedBB_minY;
-    Field axisAlignedBB_minZ;
-    Field axisAlignedBB_maxX;
-    Field axisAlignedBB_maxY;
-    Field axisAlignedBB_maxZ;
     Method entity_setYawPitch;
 	
 	Class<?> craftItemStack;
@@ -292,30 +289,6 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "AxisAlignedBB",
             	packageNm + "world.phys.AxisAlignedBB"
             );
-            axisAlignedBB_minX = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"minX",
-            	"a"
-            );
-            axisAlignedBB_minY = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"minY",
-            	"b"
-            );
-            axisAlignedBB_minZ = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"minZ",
-            	"c"
-            );
-            axisAlignedBB_maxX = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"maxX",
-            	"d"
-            );
-            axisAlignedBB_maxY = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"maxY",
-            	"e"
-            );
-            axisAlignedBB_maxZ = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"maxZ",
-            	"f"
-            );
             entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
             	List.of(
             		float.class,
@@ -470,45 +443,25 @@ public class VersionAdapter implements IVersionAdapter {
 	}
 	
 	@Override
-	public Object getBoundingBox(@NonNull Entity entity) {
+	public WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity) {
 		try {
-			return entity_getBoundingBox.invoke(entity);
+			return SpigotWrapper.wrap(entity_getBoundingBox.invoke(entity));
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
 	}
 	
 	@Override
-	public Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	public WrappedAxisAlignedBB modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		try {
-			return new ClassInstanceBuilder(
-				this.axisAlignedBB
-			).withParams(
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_minX.get(axisAlignedBB) + minX
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_minY.get(axisAlignedBB) + minY
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_minZ.get(axisAlignedBB) + minZ
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_maxX.get(axisAlignedBB) + maxX
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_maxY.get(axisAlignedBB) + maxY
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_maxZ.get(axisAlignedBB) + maxZ
-				)
-			).build();
+			WrappedAxisAlignedBB wrapper = SpigotWrapper.wrap(axisAlignedBB);
+			wrapper.setMinX(wrapper.getMinX() + minX);
+			wrapper.setMinY(wrapper.getMinY() + minY);
+			wrapper.setMinZ(wrapper.getMinZ() + minZ);
+			wrapper.setMaxX(wrapper.getMaxX() + maxX);
+			wrapper.setMaxY(wrapper.getMaxY() + maxY);
+			wrapper.setMaxZ(wrapper.getMaxZ() + maxZ);
+			return wrapper;
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
@@ -1340,12 +1293,16 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+    public List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
     	try {
-    		return (Collection<?>) world_getCubes.invoke(getWorldServer(world),
+    		List<WrappedAxisAlignedBB> list = new ArrayList<>();
+    		for (Object obj : (List<?>) world_getCubes.invoke(getWorldServer(world),
     			null,
     			axisAlignedBB
-    		);
+    		)) {
+    			list.add(SpigotWrapper.wrap(obj));
+    		}
+    		return list;
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }
