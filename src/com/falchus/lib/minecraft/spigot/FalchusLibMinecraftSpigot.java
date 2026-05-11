@@ -9,6 +9,7 @@ import com.falchus.lib.minecraft.spigot.listeners.message.*;
 import com.falchus.lib.minecraft.spigot.manager.*;
 import com.falchus.lib.minecraft.spigot.utils.*;
 import com.falchus.lib.minecraft.spigot.wrapper.*;
+import com.falchus.lib.utils.reflection.Dummy;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		instance = this;
 		new Metrics(this, 28050);
 		
-		new SpigotWrapper(this, Set.of(
+		new SpigotWrapper(Dummy.instance, Set.of(
 			getClass().getPackageName()
 		));
 		
