@@ -65,7 +65,13 @@ public class HTTPServerBuilder {
             			String routePart = routeParts[i];
             			String pathPart = pathParts[i];
             			if (routePart.startsWith("{") && routePart.endsWith("}")) {
-            				params.put(routePart.substring(1, routePart.length() - 1), pathPart);
+            				String param = routePart.substring(1, routePart.length() - 1);
+            				if (pathPart == null || pathPart.isEmpty()) {
+            					matched = false;
+            					break;
+            				}
+            				
+            				params.put(param, pathPart);
             				continue;
             			}
             			
