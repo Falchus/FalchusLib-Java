@@ -3,6 +3,7 @@ package com.falchus.lib.utils.builder;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -50,7 +51,7 @@ public class HTTPServerBuilder {
             HttpServer server = HttpServer.create(new InetSocketAddress(ip, port), 0);
 
             server.createContext("/", exchange -> {
-            	String path = exchange.getRequestURI().getPath();
+            	String path = URLDecoder.decode(exchange.getRequestURI().getPath(), StandardCharsets.UTF_8);
             	for (Map.Entry<String, BiConsumer<HttpExchange, Map<String, String>>> entry : routes.entrySet()) {
             		String key = entry.getKey();
             		
@@ -86,9 +87,9 @@ public class HTTPServerBuilder {
             		if (query != null && !query.isEmpty()) {
             			for (String pair : query.split("&")) {
             				String[] kv = pair.split("=", 2);
-            				String k = URLDecoder.decode(kv[0], "UTF-8");
+            				String k = URLDecoder.decode(kv[0], StandardCharsets.UTF_8);
             				String v = kv.length > 1
-            						? URLDecoder.decode(kv[1], "UTF-8")
+            						? URLDecoder.decode(kv[1], StandardCharsets.UTF_8)
     								: "";
             				params.put(k, v);
             			}
