@@ -39,6 +39,20 @@ public class HTTPServer {
         sendResponse(exchange, json, statusCode, "application/json; charset=UTF-8");
     }
     
+    /**
+     * Redirects the client to another URL.
+     */
+    public static void redirect(@NonNull HttpExchange exchange, @NonNull String location, int statusCode) {
+    	try {
+    		exchange.getResponseHeaders().set("Location", location);
+    		exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+    		exchange.sendResponseHeaders(statusCode, -1);
+    		exchange.close();
+    	} catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private static void sendResponse(@NonNull HttpExchange exchange, @NonNull String content, int statusCode, @NonNull String contentType) {
         try {
             byte[] bytes = content.getBytes("UTF-8");
