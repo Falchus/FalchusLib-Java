@@ -1,5 +1,8 @@
 package com.falchus.lib.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,20 +13,30 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JsonUtils {
 	
+	private static final Pattern bracketPattern = Pattern.compile("\\[(\\d+)\\]");
+	
 	public static JsonElement get(@NonNull String json, @NonNull String path) {
 		JsonElement current = JsonParser.parseString(json);
 		for (String key : path.split("\\.")) {
 			if (current == null || current.isJsonNull()) return null;
 			
-			if (key.endsWith("]")) {
+			if (key.contains("[")) {
 				int bracket = key.indexOf('[');
-				current = current.getAsJsonObject().get(key.substring(0, bracket));
-				if (current == null || current.isJsonNull()) return null;
+				String base = key.substring(0, bracket);
+				if (!base.isEmpty()) {
+					if (!current.isJsonObject()) return null;
+					current = current.getAsJsonObject().get(base);
+				}
 				
-				current = current.getAsJsonArray().get(Integer.parseInt(key.substring(bracket + 1, key.length() - 1)));
+				Matcher matcher = bracketPattern.matcher(key.substring(bracket));
+				while (matcher.find()) {
+					if (current == null || current.isJsonNull() || !current.isJsonArray()) return null;
+					int i = Integer.parseInt(matcher.group(1));
+					current = current.getAsJsonArray().get(i);
+				}
 				continue;
 			}
-			
+			if (!current.isJsonObject()) return null;
 			JsonObject object = current.getAsJsonObject();
 			current = object.get(key);
 		}
