@@ -15,7 +15,7 @@ import lombok.NonNull;
 public class Task implements Runnable {
 	
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
-	private static final ExecutorService worker = Executors.newCachedThreadPool();
+	private static final ExecutorService worker = Executors.newVirtualThreadPerTaskExecutor();
 	
 	private static final Map<Integer, Task> tasks = new ConcurrentHashMap<>();
 	private static final Map<Integer, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
