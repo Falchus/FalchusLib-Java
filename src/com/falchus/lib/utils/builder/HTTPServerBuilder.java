@@ -6,6 +6,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import com.falchus.lib.utils.http.HTTPServer;
@@ -18,7 +20,7 @@ public class HTTPServerBuilder {
 	
 	private int port = 8080;
 	
-    private final Map<String, BiConsumer<HttpExchange, Map<String, String>>> routes = new HashMap<>();
+    private final Map<String, BiConsumer<HttpExchange, Map<String, String>>> routes = new ConcurrentHashMap<>();
     private BiConsumer<HttpExchange, Map<String, String>> defaultHandler;
     
     public HTTPServerBuilder port(int port) {
@@ -52,11 +54,9 @@ public class HTTPServerBuilder {
 
             server.createContext("/", exchange -> {
             	String path = URLDecoder.decode(exchange.getRequestURI().getPath(), StandardCharsets.UTF_8);
+        		String[] pathParts = path.split("/");
             	for (Map.Entry<String, BiConsumer<HttpExchange, Map<String, String>>> entry : routes.entrySet()) {
-            		String key = entry.getKey();
-            		
-            		String[] routeParts = key.split("/");
-            		String[] pathParts = path.split("/");
+            		String[] routeParts = entry.getKey().split("/");
             		if (routeParts.length != pathParts.length) continue;
             		
             		Map<String, String> params = new HashMap<>();
@@ -105,8 +105,8 @@ public class HTTPServerBuilder {
                 }
             });
 
-            server.setExecutor(null);
-            return new HTTPServer(server, routes);
+            server.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+            return new HTTPServer(server);
         } catch (IOException e) {
             throw new RuntimeException("Failed to start HTTP server", e);
         }

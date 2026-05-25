@@ -8,8 +8,8 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -19,8 +19,8 @@ public class HTTPRequest {
 
 	private static final HttpClient client = HttpClient.newHttpClient();
 	
-	private static final Map<String, String> etags = new HashMap<>();
-	private static final Map<String, String> cache = new HashMap<>();
+	private static final Map<String, String> etags = new ConcurrentHashMap<>();
+	private static final Map<String, String> cache = new ConcurrentHashMap<>();
 	
 	public static String get(@NonNull String url, Map<String, String> headers) {
 		return request("GET", url, headers, null);
@@ -72,6 +72,7 @@ public class HTTPRequest {
 			}
 			
 			method = method.toUpperCase();
+			String activeEtag = etags.get(url);
 			
 			BodyPublisher publisher = body == null
 					? BodyPublishers.noBody()
@@ -81,11 +82,11 @@ public class HTTPRequest {
 					builder.POST(publisher);
 					break;
 				case "PUT":
-					if (etags.containsKey(url)) builder.header("If-Match", etags.get(url));
+					if (activeEtag != null) builder.header("If-Match", activeEtag);
 					builder.PUT(publisher);
 					break;
 				case "DELETE":
-					if (etags.containsKey(url)) builder.header("If-Match", etags.get(url));
+					if (activeEtag != null) builder.header("If-Match", activeEtag);
 					builder.method("DELETE", publisher);
 					break;
 				case "HEAD":
@@ -94,13 +95,12 @@ public class HTTPRequest {
 					
 				case "GET":
 				default:
-					if (etags.containsKey(url)) builder.header("If-None-Match", etags.get(url));
+					if (activeEtag != null) builder.header("If-None-Match", activeEtag);
 					builder.GET();
 					break;
 			}
 			
 			HttpRequest request = builder.build();
-			
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 			int code = response.statusCode();
 			if (code == 304) {
