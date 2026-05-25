@@ -2,8 +2,7 @@ package com.falchus.lib.utils.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.nio.charset.StandardCharsets;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -15,7 +14,6 @@ import lombok.NonNull;
 public class HTTPServer {
 
 	@NonNull private final HttpServer server;
-	@NonNull private final Map<String, BiConsumer<HttpExchange, Map<String, String>>> routes;
 	
 	public void start() {
 		server.start();
@@ -43,19 +41,18 @@ public class HTTPServer {
      * Redirects the client to another URL.
      */
     public static void redirect(@NonNull HttpExchange exchange, @NonNull String location, int statusCode) {
-    	try {
+    	try (exchange) {
     		exchange.getResponseHeaders().set("Location", location);
     		exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
     		exchange.sendResponseHeaders(statusCode, -1);
-    		exchange.close();
     	} catch (IOException e) {
             e.printStackTrace();
         }
     }
     
     private static void sendResponse(@NonNull HttpExchange exchange, @NonNull String content, int statusCode, @NonNull String contentType) {
-        try {
-            byte[] bytes = content.getBytes("UTF-8");
+        try (exchange) {
+            byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
             exchange.getResponseHeaders().set("Content-Type", contentType);
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
             exchange.sendResponseHeaders(statusCode, bytes.length);
