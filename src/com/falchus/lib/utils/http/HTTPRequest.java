@@ -8,6 +8,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.NonNull;
@@ -17,6 +18,9 @@ import lombok.experimental.UtilityClass;
 public class HTTPRequest {
 
 	private static final HttpClient client = HttpClient.newHttpClient();
+	
+	private static final Map<String, String> etags = new HashMap<>();
+	private static final Map<String, String> cache = new HashMap<>();
 	
 	public static String get(@NonNull String url, Map<String, String> headers) {
 		return request("GET", url, headers, null);
@@ -67,17 +71,21 @@ public class HTTPRequest {
 				headers.forEach(builder::header);
 			}
 			
+			method = method.toUpperCase();
+			
 			BodyPublisher publisher = body == null
-				? BodyPublishers.noBody()
-				: BodyPublishers.ofString(body);
-			switch (method.toUpperCase()) {
+					? BodyPublishers.noBody()
+					: BodyPublishers.ofString(body);
+			switch (method) {
 				case "POST":
 					builder.POST(publisher);
 					break;
 				case "PUT":
+					if (etags.containsKey(url)) builder.header("If-Match", etags.get(url));
 					builder.PUT(publisher);
 					break;
 				case "DELETE":
+					if (etags.containsKey(url)) builder.header("If-Match", etags.get(url));
 					builder.method("DELETE", publisher);
 					break;
 				case "HEAD":
@@ -86,6 +94,7 @@ public class HTTPRequest {
 					
 				case "GET":
 				default:
+					if (etags.containsKey(url)) builder.header("If-None-Match", etags.get(url));
 					builder.GET();
 					break;
 			}
@@ -94,9 +103,27 @@ public class HTTPRequest {
 			
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 			int code = response.statusCode();
+			if (code == 304) {
+				return cache.getOrDefault(url, "{}");
+			}
 			if (code < 200 || code >= 300) return null;
 			
-            return response.body();
+			String responseBody = response.body();
+			if (method.equals("GET") || method.equals("PUT")) {
+				response.headers().map().entrySet().stream()
+					.filter(entry -> entry.getKey().equalsIgnoreCase("etag"))
+					.map(entry -> entry.getValue().getFirst())
+					.findFirst()
+					.ifPresent(etag -> {
+						etags.put(url, etag);
+						cache.put(url, responseBody);
+					});
+			} else if (method.equals("DELETE")) {
+				etags.remove(url);
+				cache.remove(url);
+			}
+			
+            return responseBody;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
