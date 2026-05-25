@@ -10,6 +10,8 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -21,6 +23,8 @@ public class HTTPRequest {
 	
 	private static final Map<String, String> etags = new ConcurrentHashMap<>();
 	private static final Map<String, String> cache = new ConcurrentHashMap<>();
+	
+	private static final Pattern etagJsonPattern = Pattern.compile("\"etag\"\\s*:\\s*\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
 	
 	public static String get(@NonNull String url, Map<String, String> headers) {
 		return request("GET", url, headers, null);
@@ -110,14 +114,22 @@ public class HTTPRequest {
 			
 			String responseBody = response.body();
 			if (method.equals("GET") || method.equals("PUT")) {
-				response.headers().map().entrySet().stream()
+				String etag = response.headers().map().entrySet().stream()
 					.filter(entry -> entry.getKey().equalsIgnoreCase("etag"))
 					.map(entry -> entry.getValue().getFirst())
 					.findFirst()
-					.ifPresent(etag -> {
-						etags.put(url, etag);
-						cache.put(url, responseBody);
-					});
+					.orElse(null);
+				if (etag == null && responseBody != null) {
+					Matcher matcher = etagJsonPattern.matcher(responseBody);
+					if (matcher.find()) {
+						etag = matcher.group(1);
+					}
+				}
+				
+				if (etag != null) {
+					etags.put(url, etag);
+					cache.put(url, responseBody);
+				}
 			} else if (method.equals("DELETE")) {
 				etags.remove(url);
 				cache.remove(url);
