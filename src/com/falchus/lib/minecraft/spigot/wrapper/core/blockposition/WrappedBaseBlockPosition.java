@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 public class WrappedBaseBlockPosition extends BaseBlockPositionWrapper {
 
-	WrappedBaseBlockPosition(@NonNull Object handle, @NonNull Set<String> names) {
+	WrappedBaseBlockPosition(@NonNull Object handle) {
 		super(handle, Set.of(
 			version.getPackageNms() + "BaseBlockPosition",
 			core + "BaseBlockPosition"
