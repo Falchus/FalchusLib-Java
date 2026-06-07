@@ -233,14 +233,14 @@ public interface IVersionAdapter {
 	Object[] getBiomes();
 	
 	/**
-	 * @return BiomeBase from a Biome
-	 */
-	Object getNmsBiome(Biome biome);
-	
-	/**
 	 * @return id from a Biome
 	 */
 	int getBiomeId(Biome biome);
+	
+	/**
+	 * @return BiomeBase from a Biome
+	 */
+	Object getNmsBiome(Biome biome);
 	
 	/**
 	 * @return WorldServer from a World

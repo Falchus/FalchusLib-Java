@@ -31,18 +31,18 @@ public class WorldUtils {
 	}
 	
 	/**
-	 * @return BiomeBase from a Biome
-	 */
-	public static Object getNmsBiome(Biome biome) {
-        return VersionProvider.get().getNmsBiome(biome);
-    }
-	
-	/**
 	 * @return id from a Biome
 	 */
 	public static int getBiomeId(Biome biome) {
 		return VersionProvider.get().getBiomeId(biome);
 	}
+	
+	/**
+	 * @return BiomeBase from a Biome
+	 */
+	public static Object getNmsBiome(Biome biome) {
+        return VersionProvider.get().getNmsBiome(biome);
+    }
 	
 	/**
 	 * @return WorldServer from a World

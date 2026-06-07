@@ -1175,7 +1175,7 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public Object getNmsBiome(Biome biome) {
+    public int getBiomeId(Biome biome) {
     	try {
     		int id;
     		if (biome == null) {
@@ -1184,46 +1184,32 @@ public class VersionAdapter implements IVersionAdapter {
     			switch (biome.name()) {
 					case "BEACH": id = 16; break;
 					
-					case "BIRCH_FOREST":
-					case "BIRCH_FOREST_MOUNTAINS":
-						id = 27;
-						break;
+					case "BIRCH_FOREST": id = 27; break;
+					case "BIRCH_FOREST_MOUNTAINS": id = 155; break;
 						
-	    			case "BIRCH_FOREST_HILLS":
-	    			case "BIRCH_FOREST_HILLS_MOUNTAINS":
-	    				id = 28;
-	    				break;
+	    			case "BIRCH_FOREST_HILLS": id = 28; break;
+	    			case "BIRCH_FOREST_HILLS_MOUNTAINS": id = 156; break;
 	    				
 	    			case "COLD_BEACH": id = 26; break;
 	    			case "COLD_TAIGA": id = 30; break;
 	    			
-	    			case "COLD_TAIGA_HILLS":
-	    			case "COLD_TAIGA_MOUNTAINS":
-	    				id = 31;
-	    				break;
+	    			case "COLD_TAIGA_HILLS": id = 31; break;
+	    			case "COLD_TAIGA_MOUNTAINS": id = 158; break;
 	    				
 	    			case "DEEP_OCEAN": id = 24; break;
 	    			case "DESERT": id = 2; break;
 	    			
-	    			case "DESERT_HILLS":
-	    			case "DESERT_MOUNTAINS":
-	    				id = 17;
-	    				break;
+	    			case "DESERT_HILLS": id = 17; break;
+	    			case "DESERT_MOUNTAINS": id = 145; break;
 	    				
-	    			case "EXTREME_HILLS":
-	    			case "EXTREME_HILLS_MOUNTAINS":
-	    				id = 3;
-	    				break;
+	    			case "EXTREME_HILLS": id = 3; break;
+	    			case "EXTREME_HILLS_MOUNTAINS": id = 131; break;
 	    				
-	    			case "EXTREME_HILLS_PLUS":
-	    			case "EXTREME_HILLS_PLUS_MOUNTAINS":
-	    				id = 20;
-	    				break;
+	    			case "EXTREME_HILLS_PLUS": id = 20; break;
+	    			case "EXTREME_HILLS_PLUS_MOUNTAINS": id = 148; break;
 	    				
-	    			case "FOREST":
-	    			case "FLOWER_FOREST":
-	    				id = 4;
-	    				break;
+	    			case "FOREST": id = 4; break;
+	    			case "FLOWER_FOREST": id = 132; break;
 	    				
 	    			case "FOREST_HILLS": id = 18; break;
 	    			case "FROZEN_OCEAN": id = 10; break;
@@ -1231,100 +1217,74 @@ public class VersionAdapter implements IVersionAdapter {
 	    			case "HELL": id = 8; break;
 	    			case "ICE_MOUNTAINS": id = 13; break;
 	    			
-	    			case "ICE_PLAINS":
-	    			case "ICE_PLAINS_SPIKES":
-	    				id = 12;
-	    				break;
+	    			case "ICE_PLAINS": id = 12; break;
+	    			case "ICE_PLAINS_SPIKES": id = 140; break;
 	    				
 	    			case "JUNGLE": id = 21; break;
 	    			
-	    			case "JUNGLE_EDGE":
-	    			case "JUNGLE_EDGE_MOUNTAINS":
-	    				id = 23;
-	    				break;
+	    			case "JUNGLE_EDGE": id = 23; break;
+	    			case "JUNGLE_EDGE_MOUNTAINS": id = 151; break;
 	    				
-	    			case "JUNGLE_HILLS":
-	    			case "JUNGLE_MOUNTAINS":
-	    				id = 22;
-	    				break;
+	    			case "JUNGLE_HILLS": id = 22; break;
+	    			case "JUNGLE_MOUNTAINS": id = 149; break;
 	    				
 	    			case "MEGA_TAIGA": id = 32; break;
 	    			case "MEGA_TAIGA_HILLS": id = 33; break;
 	    			
-	    			case "MESA":
-	    			case "MESA_BRYCE":
-	    			case "MESA_PLATEAU":
-	    			case "MESA_PLATEAU_FOREST":
-	    			case "MESA_PLATEAU_FOREST_MOUNTAINS":
-	    			case "MESA_PLATEAU_MOUNTAINS":
-	    				id = 37;
-	    				break;
+	    			case "MESA": id = 37; break;
+	    			case "MESA_BRYCE": id = 165; break;
+	    			case "MESA_PLATEAU": id = 39; break;
+	    			case "MESA_PLATEAU_FOREST": id = 38; break;
+	    			case "MESA_PLATEAU_FOREST_MOUNTAINS": id = 166; break;
+	    			case "MESA_PLATEAU_MOUNTAINS": id = 167; break;
 	    				
 	    			case "MUSHROOM_ISLAND": id = 14; break;
 	    			case "MUSHROOM_SHORE": id = 15; break;
 	    			case "OCEAN": id = 0; break;
 	    			
-	    			case "PLAINS":
-	    			case "SUNFLOWER_PLAINS":
-	    				id = 1;
-	    				break;
+	    			case "PLAINS": id = 1; break;
+	    			case "SUNFLOWER_PLAINS": id = 129; break;
 	    				
 	    			case "RIVER": id = 7; break;
 	    			
-	    			case "ROOFED_FOREST":
-	    			case "ROOFED_FOREST_MOUNTAINS":
-	    				id = 29;
-	    				break;
+	    			case "ROOFED_FOREST": id = 29; break;
+	    			case "ROOFED_FOREST_MOUNTAINS": id = 157; break;
 	    				
-	    			case "SAVANNA":
-	    			case "SAVANNA_MOUNTAINS":
-	    				id = 35;
-	    				break;
+	    			case "SAVANNA": id = 35; break;
+	    			case "SAVANNA_MOUNTAINS": id = 163; break;
 	    				
-	    			case "SAVANNA_PLATEAU":
-	    			case "SAVANNA_PLATEAU_MOUNTAINS":
-	    				id = 36;
-	    				break;
+	    			case "SAVANNA_PLATEAU": id = 36; break;
+	    			case "SAVANNA_PLATEAU_MOUNTAINS": id = 164; break;
 	    				
 	    			case "SKY": id = 9; break;
 	    			case "SMALL_MOUNTAINS": id = 34; break;
 	    			case "STONE_BEACH": id = 25; break;
 	    			
-	    			case "SWAMPLAND":
-	    			case "SWAMPLAND_MOUNTAINS":
-	    				id = 6; break;
+	    			case "SWAMPLAND": id = 6; break;
+	    			case "SWAMPLAND_MOUNTAINS": id = 134; break;
 	    				
-	    			case "TAIGA":
-	    			case "MEGA_SPRUCE_TAIGA":
-	    			case "MEGA_SPRUCE_TAIGA_HILLS":
-	    				id = 5; break;
+	    			case "TAIGA": id = 5; break;
+	    			case "MEGA_SPRUCE_TAIGA": id = 160; break;
+	    			case "MEGA_SPRUCE_TAIGA_HILLS": id = 161; break;
 	    				
-	    			case "TAIGA_HILLS":
-	    			case "TAIGA_MOUNTAINS":
-	    				id = 19; break;
+	    			case "TAIGA_HILLS": id = 19; break;
+	    			case "TAIGA_MOUNTAINS": id = 133; break;
 	    				
 	    			default: id = 1; break;
     			}
     		}
-    		return biomeBase_getBiome.invoke(null,
-    			id
-    		);
+    		return id;
     	} catch (Exception e) {
     		throw new RuntimeException(e);
 		}
     }
     
     @Override
-    public int getBiomeId(Biome biome) {
-        Object target = getNmsBiome(biome);
+    public Object getNmsBiome(Biome biome) {
         try {
-            Object[] biomes = getBiomes();
-            for (int i = 0; i < biomes.length; i++) {
-                if (biomes[i] == target) {
-                	return i;
-                }
-            }
-            return 1;
+    		return biomeBase_getBiome.invoke(null,
+    			getNmsBiome(biome)
+    		);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
