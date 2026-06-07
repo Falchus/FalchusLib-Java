@@ -24,10 +24,10 @@ public class WorldUtils {
 	}
 	
 	/**
-	 * @return World Biomes
+	 * @return BiomeBase[]
 	 */
-	public static Object[] getWorldBiomes(@NonNull World world) {
-		return VersionProvider.get().getWorldBiomes(world);
+	public static Object[] getBiomes() {
+		return VersionProvider.get().getBiomes();
 	}
 	
 	/**

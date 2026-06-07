@@ -1166,7 +1166,7 @@ public class VersionAdapter implements IVersionAdapter {
     }
 	
     @Override
-    public Object[] getWorldBiomes(@NonNull World world) {
+    public Object[] getBiomes() {
     	try {
             return (Object[]) biomeBase_biomes.get(null);
     	} catch (Exception e) {

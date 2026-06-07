@@ -228,9 +228,9 @@ public interface IVersionAdapter {
 	void setGameRule(@NonNull World world, @NonNull GameRule gameRule, @NonNull String value);
 	
 	/**
-	 * @return BiomeBase[] from a World
+	 * @return BiomeBase[]
 	 */
-	Object[] getWorldBiomes(@NonNull World world);
+	Object[] getBiomes();
 	
 	/**
 	 * @return BiomeBase from a Biome
