@@ -2,18 +2,22 @@ package com.falchus.lib.storage;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.Comparator;
 
 import com.falchus.lib.storage.serializer.Serializer;
 
 public class Storage {
 
 	private final Serializer<?> serializer;
+	private final Path folder;
 	private final File file;
 	private final String defaultContent;
 	
 	public Storage(Serializer<?> serializer, Path folder, String fileName, String defaultContent) {
 		this.serializer = serializer;
+		this.folder = folder;
 		this.defaultContent = defaultContent;
 		
 		try {
@@ -58,6 +62,23 @@ public class Storage {
 	public void delete() {
 		try {
 			Files.deleteIfExists(file.toPath());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public void deleteFolder() {
+		try {
+			Files.walk(folder)
+				.sorted(Comparator.reverseOrder())
+				.forEach(path -> {
+					try {
+						Files.deleteIfExists(path);
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				});
+		} catch (NoSuchFileException ignored) {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
