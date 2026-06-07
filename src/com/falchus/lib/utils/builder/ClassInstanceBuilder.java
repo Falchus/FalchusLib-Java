@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.Getter;
@@ -14,7 +13,6 @@ import lombok.NonNull;
 @Getter
 public class ClassInstanceBuilder {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	private Class<?> clazz;
 	private Class<?>[] parents = new Class<?>[0];
 	private Object[] children = new Object[0];
