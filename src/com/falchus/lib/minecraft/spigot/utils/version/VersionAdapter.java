@@ -1318,7 +1318,7 @@ public class VersionAdapter implements IVersionAdapter {
     public int getBiomeId(Biome biome) {
         Object target = getNmsBiome(biome);
         try {
-            Object[] biomes = (Object[]) biomeBase_biomes.get(null);
+            Object[] biomes = getBiomes();
             for (int i = 0; i < biomes.length; i++) {
                 if (biomes[i] == target) {
                 	return i;
