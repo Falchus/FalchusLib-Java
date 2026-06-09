@@ -11,11 +11,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.task.SpigotTask;
 import com.falchus.lib.minecraft.spigot.utils.EntityUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
-import com.falchus.lib.task.Task;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -138,7 +138,7 @@ public class EntityPlayerBuilder {
 			plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
 			
 			if (lookAtPlayer) {
-				new Task() {
+				new SpigotTask() {
 					@Override
 					protected void onRun(int tick) {
 						Entity entity = EntityUtils.getBukkitEntity(entityPlayer);

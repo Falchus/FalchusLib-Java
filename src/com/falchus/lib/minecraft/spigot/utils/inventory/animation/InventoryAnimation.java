@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
-import com.falchus.lib.task.Task;
+import com.falchus.lib.minecraft.spigot.task.SpigotTask;
 
 import lombok.Getter;
 
@@ -37,7 +37,7 @@ public abstract class InventoryAnimation {
 			}
 		}
 		
-		new Task() {
+		new SpigotTask() {
 			@Override
 			protected void onRun(int tick) {
 				if (!player.getOpenInventory().getTopInventory().equals(inventory)) {

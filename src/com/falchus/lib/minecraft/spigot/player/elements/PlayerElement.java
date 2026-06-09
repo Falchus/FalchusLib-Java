@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
-import com.falchus.lib.task.Task;
+import com.falchus.lib.minecraft.spigot.task.SpigotTask;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 
 import lombok.NonNull;
@@ -24,7 +24,7 @@ public abstract class PlayerElement {
 	protected final Player player;
 	
     private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new ConcurrentHashMap<>();
-    private static final Map<Class<? extends PlayerElement>, Map<UUID, Task>> tasks = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends PlayerElement>, Map<UUID, SpigotTask>> tasks = new ConcurrentHashMap<>();
     
     protected Runnable updateRunnable;
     protected int frame = 0;
@@ -56,15 +56,15 @@ public abstract class PlayerElement {
 	 * Sends the element to the player repeatedly with a fixed interval (in {@link TimeUnit#MILLISECONDS}).
 	 */
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
-	    Map<UUID, Task> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
+	    Map<UUID, SpigotTask> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
 	    
-	    Task oldTask = map.get(player.getUniqueId());
+	    SpigotTask oldTask = map.get(player.getUniqueId());
 		if (oldTask != null) {
 			remove();
 		}
 		frame = 0;
 		
-		Task task = new Task() {
+		SpigotTask task = new SpigotTask() {
 			@Override
 			protected void onRun(int tick) {
 				if (!player.isOnline()) {
@@ -83,9 +83,9 @@ public abstract class PlayerElement {
 	 * Removes this element and cancels any schedules repeating tasks.
 	 */
 	public void remove() {
-		Map<UUID, Task> map = tasks.get(getClass());
+		Map<UUID, SpigotTask> map = tasks.get(getClass());
 		if (map != null) {
-			Task task = map.remove(player.getUniqueId());
+			SpigotTask task = map.remove(player.getUniqueId());
 	        if (task != null) {
 	            task.end();
 	        }

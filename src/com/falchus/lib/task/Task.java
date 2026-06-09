@@ -25,39 +25,43 @@ public class Task implements Runnable {
 	@Getter private volatile boolean ended;
 	@Getter private volatile int tick;
 	
+	public static Task of(@NonNull Runnable runnable) {
+		return new Task() {
+			@Override
+			protected void onRun(int tick) {
+				execute(runnable);
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends Task> T execute(@NonNull Runnable runnable) {
+		runnable.run();
+		return (T) this;
+	}
+	
+	private final <T extends Task> T execute() {
+		return execute(this);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends Task> T executeAsync(@NonNull Runnable runnable) {
+		worker.submit(runnable);
+		return (T) this;
+	}
+	
+	private final <T extends Task> T executeAsync() {
+		return executeAsync(this);
+	}
+	
 	@Override
 	public final void run() {
 		if (ended) return;
 		onRun(tick++);
 	}
 	
-	public static final Task run(@NonNull Runnable runnable) {
-		Task task;
-		if (runnable instanceof Task t) {
-			task = t;
-		} else {
-			task = new Task() {
-				@Override
-				protected void onRun(int tick) {
-					runnable.run();
-				}
-			};
-		}
-		return task;
-	}
-	
-	public static final Task runAsync(@NonNull Runnable runnable) {
-		Task task = run(runnable);
-		worker.submit(task);
-		return task;
-	}
-	
-	public static final Task runTimer(@NonNull Runnable runnable, long period, @NonNull TimeUnit unit) {
-		return runTimer(runnable, 0, period, unit);
-	}
-	
-	public static final Task runTimerAsync(@NonNull Runnable runnable, long period, @NonNull TimeUnit unit) {
-		return runTimerAsync(runnable, 0, period, unit);
+	public final <T extends Task> T runAsync() {
+		return executeAsync();
 	}
 	
 	public final <T extends Task> T runTimer(long period, @NonNull TimeUnit unit) {
@@ -68,17 +72,9 @@ public class Task implements Runnable {
 		return runTimerAsync(0, period, unit);
 	}
 	
-	public static final Task runTimer(@NonNull Runnable runnable, long delay, long period, @NonNull TimeUnit unit) {
-		return run(runnable).runTimer(delay, period, unit);
-	}
-	
-	public static final Task runTimerAsync(@NonNull Runnable runnable, long delay, long period, @NonNull TimeUnit unit) {
-		return run(runnable).runTimerAsync(delay, period, unit);
-	}
-	
 	@SuppressWarnings("unchecked")
 	public final <T extends Task> T runTimer(long delay, long period, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this, delay, period, unit);
+		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this::execute, delay, period, unit);
 		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
@@ -86,26 +82,18 @@ public class Task implements Runnable {
 	
 	@SuppressWarnings("unchecked")
 	public final <T extends Task> T runTimerAsync(long delay, long period, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(() -> worker.submit(this), delay, period, unit);
+		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this::executeAsync, delay, period, unit);
 		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
 	}
 	
-	public static final Task runLater(@NonNull Runnable runnable, long delay, @NonNull TimeUnit unit) {
-		return run(runnable).runLater(delay, unit);
-	}
-	
-	public static final Task runLaterAsync(@NonNull Runnable runnable, long delay, @NonNull TimeUnit unit) {
-		return run(runnable).runLaterAsync(delay, unit);
-	}
-	
 	@SuppressWarnings("unchecked")
 	public final <T extends Task> T runLater(long delay, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.schedule(() -> {
+		ScheduledFuture<?> future = scheduler.schedule(() -> execute(() -> {
 			run();
 			end();
-		}, delay, unit);
+		}), delay, unit);
 		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
@@ -113,7 +101,7 @@ public class Task implements Runnable {
 	
 	@SuppressWarnings("unchecked")
 	public final <T extends Task> T runLaterAsync(long delay, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.schedule(() -> worker.submit(() -> {
+		ScheduledFuture<?> future = scheduler.schedule(() -> executeAsync(() -> {
 			run();
 			end();
 		}), delay, unit);
@@ -133,7 +121,7 @@ public class Task implements Runnable {
 		task.end();
 	}
 	
-	public final void end() {
+	public void end() {
 		if (ended) return;
 		ended = true;
 		
