@@ -1,7 +1,9 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
@@ -69,12 +71,110 @@ public class EntityUtils {
 	}
 	
 	/**
+	 * @return {@code true} if in liquid, {@code false} otherwise.
+	 */
+	public static boolean isInLiquid(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (BlockUtils.isLiquid(block)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return {@code true} if on slime, {@code false} otherwise.
+	 */
+	public static boolean isOnSlime(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (block.getType() == Material.SLIME_BLOCK) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return {@code true} if on stairs, {@code false} otherwise.
+	 */
+	public static boolean isOnStairs(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (BlockUtils.isStair(block) ||
+						BlockUtils.isSlab(block) ||
+						block.getType() == Material.SKULL ||
+						block.getType() == Material.CAKE_BLOCK) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return {@code true} if on ice, {@code false} otherwise.
+	 */
+	public static boolean isOnIce(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (block.getType().name().endsWith("ICE")) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * @return {@code true} if on climbable, {@code false} otherwise.
 	 */
 	public static boolean isOnClimbable(@NonNull Entity entity) {
 		Location location = entity.getLocation();
 		return BlockUtils.isClimbable(location.getBlock()) ||
 				BlockUtils.isClimbable(location.add(0, 1, 0).getBlock());
+	}
+	
+	/**
+	 * @return {@code true} if under block, {@code false} otherwise.
+	 */
+	public static boolean isUnderBlock(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (block.getType().isSolid()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
