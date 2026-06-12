@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
@@ -24,6 +25,18 @@ public class EntityUtils {
 	 */
 	public static Entity getBukkitEntity(@NonNull Object entity) {
 		return VersionProvider.get().getBukkitEntity(entity);
+	}
+	
+	/**
+	 * @return {@link Entity}
+	 */
+	public static Entity getEntityById(@NonNull World world, int id) {
+		for (Entity entity : world.getEntities()) {
+			if (entity.getEntityId() == id) {
+				return entity;
+			}
+		}
+		return null;
 	}
 	
 	/**
