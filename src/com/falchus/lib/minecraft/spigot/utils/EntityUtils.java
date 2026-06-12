@@ -6,6 +6,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -40,9 +41,9 @@ public class EntityUtils {
 	}
 	
 	/**
-	 * @return AxisAlignedBB
+	 * @return {@link WrappedAxisAlignedBB}
 	 */
-	public static Object getBoundingBox(@NonNull Entity entity) {
+	public static WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity) {
 		return VersionProvider.get().getBoundingBox(entity);
 	}
 	

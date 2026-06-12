@@ -53,9 +53,9 @@ public interface IVersionAdapter {
 	Entity getBukkitEntity(@NonNull Object entity);
 	
 	/**
-	 * @return AxisAlignedBB
+	 * @return {@link WrappedAxisAlignedBB}
 	 */
-	Object getBoundingBox(@NonNull Entity entity);
+	WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity);
 	
 	/**
 	 * @return AxisAlignedBB
