@@ -58,9 +58,9 @@ public interface IVersionAdapter {
 	WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity);
 	
 	/**
-	 * @return AxisAlignedBB
+	 * @return {@link WrappedAxisAlignedBB}
 	 */
-	Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+	WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
 	
 	/**
 	 * @return absorption from a {@link Damageable} entity.
@@ -250,5 +250,5 @@ public interface IVersionAdapter {
 	/**
 	 * @return {@link List}
 	 */
-	List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB);
+	List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB);
 }

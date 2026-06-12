@@ -55,7 +55,7 @@ public class WorldUtils {
 	/**
 	 * @return {@link List}
 	 */
-	public static List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+	public static List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB) {
 		return VersionProvider.get().getCollidingBlocks(world, axisAlignedBB);
 	}
 	

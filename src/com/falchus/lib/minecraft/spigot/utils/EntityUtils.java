@@ -48,9 +48,9 @@ public class EntityUtils {
 	}
 	
 	/**
-	 * @return AxisAlignedBB
+	 * @return {@link WrappedAxisAlignedBB}
 	 */
-	public static Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	public static WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		return VersionProvider.get().modifyBoundingBox(axisAlignedBB, minX, minY, minZ, maxX, maxY, maxZ);
 	}
 	
