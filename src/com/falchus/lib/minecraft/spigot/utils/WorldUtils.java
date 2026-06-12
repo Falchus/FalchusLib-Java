@@ -1,6 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -9,6 +9,7 @@ import org.bukkit.block.Biome;
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -52,9 +53,9 @@ public class WorldUtils {
 	}
 	
 	/**
-	 * @return {@link Collection}
+	 * @return {@link List}
 	 */
-	public static Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+	public static List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
 		return VersionProvider.get().getCollidingBlocks(world, axisAlignedBB);
 	}
 	

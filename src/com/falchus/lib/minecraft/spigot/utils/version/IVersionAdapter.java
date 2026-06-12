@@ -2,7 +2,6 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
 import com.mojang.authlib.GameProfile;
 
 import lombok.NonNull;
@@ -248,7 +248,7 @@ public interface IVersionAdapter {
 	Object getWorldServer(World world);
 	
 	/**
-	 * @return {@link Collection}
+	 * @return {@link List}
 	 */
-	Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB);
+	List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB);
 }
