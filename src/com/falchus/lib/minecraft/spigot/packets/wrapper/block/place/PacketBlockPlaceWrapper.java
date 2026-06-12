@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.WrappedBlockPosition;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -38,10 +40,10 @@ abstract class PacketBlockPlaceWrapper extends PacketWrapper {
 	}
 
 	/**
-	 * @return BlockPosition
+	 * @return {@link WrappedBlockPosition}
 	 */
-	public Object getPos() {
-		return getFieldValue(pos);
+	public WrappedBlockPosition getPos() {
+		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
 	/**
