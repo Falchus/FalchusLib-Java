@@ -473,9 +473,9 @@ public class VersionAdapter implements IVersionAdapter {
 	}
 	
 	@Override
-	public Object getBoundingBox(@NonNull Entity entity) {
+	public WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity) {
 		try {
-			return entity_getBoundingBox.invoke(entity);
+			return SpigotWrapper.wrap(entity_getBoundingBox.invoke(getEntity(entity)));
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
