@@ -2,6 +2,7 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ import com.falchus.lib.minecraft.spigot.enums.Sound;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
@@ -1300,12 +1303,16 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public Collection<?> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+    public List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
     	try {
-    		return (Collection<?>) world_getCubes.invoke(getWorldServer(world),
+    		List<WrappedAxisAlignedBB> list = new ArrayList<>();
+    		for (Object obj : (List<?>) world_getCubes.invoke(getWorldServer(world),
     			null,
     			axisAlignedBB
-    		);
+    		)) {
+    			list.add(SpigotWrapper.wrap(obj));
+    		}
+    		return list;
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }
