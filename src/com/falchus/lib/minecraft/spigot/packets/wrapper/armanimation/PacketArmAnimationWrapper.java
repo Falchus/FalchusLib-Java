@@ -6,7 +6,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 
 import lombok.NonNull;
 
-abstract class PacketArmAnimationWrapper extends PacketWrapper {
+class PacketArmAnimationWrapper extends PacketWrapper {
 
 	PacketArmAnimationWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);

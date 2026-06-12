@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketExplosionWrapper extends PacketWrapper {
+class PacketExplosionWrapper extends PacketWrapper {
 	
 	Field radius;
 

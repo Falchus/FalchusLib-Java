@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketCollectWrapper extends PacketWrapper {
+class PacketCollectWrapper extends PacketWrapper {
 	
 	Field itemId;
 	Field playerId;

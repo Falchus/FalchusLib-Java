@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketRespawnWrapper extends PacketWrapper {
+class PacketRespawnWrapper extends PacketWrapper {
 	
 	Field levelType;
 

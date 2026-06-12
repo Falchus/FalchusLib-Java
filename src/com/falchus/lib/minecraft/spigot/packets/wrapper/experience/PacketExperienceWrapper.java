@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketExperienceWrapper extends PacketWrapper {
+class PacketExperienceWrapper extends PacketWrapper {
 	
 	Field experienceProgress;
 	Field totalExperience;

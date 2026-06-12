@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
  * Abstract base class for player-related elements.
  */
 @RequiredArgsConstructor
-public abstract class PlayerElement {
+public class PlayerElement {
 
 	protected final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	protected final Player player;

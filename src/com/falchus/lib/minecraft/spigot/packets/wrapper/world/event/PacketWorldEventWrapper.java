@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 // TODO: add PacketPlayOutWorldParticles wrapper
 @FieldDefaults(makeFinal = true)
-abstract class PacketWorldEventWrapper extends PacketWrapper {
+class PacketWorldEventWrapper extends PacketWrapper {
 	
 	Field type;
 	Field pos;

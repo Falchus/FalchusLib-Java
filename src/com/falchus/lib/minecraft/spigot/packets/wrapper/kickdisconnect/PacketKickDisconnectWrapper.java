@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketKickDisconnectWrapper extends PacketWrapper {
+class PacketKickDisconnectWrapper extends PacketWrapper {
 	
 	Field reason;
 

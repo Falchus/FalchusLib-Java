@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketBlockUpdateWrapper extends PacketWrapper {
+class PacketBlockUpdateWrapper extends PacketWrapper {
 	
 	Field pos;
 	Field blockState;

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketRemoveEntityEffectWrapper extends PacketWrapper {
+class PacketRemoveEntityEffectWrapper extends PacketWrapper {
 	
 	Field entityId;
 

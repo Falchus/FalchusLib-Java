@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketBlockBreakAnimationWrapper extends PacketWrapper {
+class PacketBlockBreakAnimationWrapper extends PacketWrapper {
 	
 	Field id;
 	Field pos;

@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketUpdateWindowData extends PacketUpdateWindow {
+class PacketUpdateWindowData extends PacketUpdateWindow {
 	
 	Field id;
 	Field value;

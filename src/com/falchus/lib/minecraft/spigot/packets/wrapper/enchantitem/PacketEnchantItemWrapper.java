@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketEnchantItemWrapper extends PacketWrapper {
+class PacketEnchantItemWrapper extends PacketWrapper {
 	
 	Field containerId;
 	Field buttonId;
