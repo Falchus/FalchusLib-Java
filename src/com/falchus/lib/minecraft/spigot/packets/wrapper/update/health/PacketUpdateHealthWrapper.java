@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketUpdateHealthWrapper extends PacketWrapper {
+class PacketUpdateHealthWrapper extends PacketWrapper {
 	
 	Field health;
 	Field food;

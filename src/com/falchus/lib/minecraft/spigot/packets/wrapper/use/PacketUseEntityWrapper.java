@@ -13,7 +13,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketUseEntityWrapper extends PacketWrapper {
+class PacketUseEntityWrapper extends PacketWrapper {
 	
 	Field entityId;
 	Field action;

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketScoreboardDisplayObjectiveWrapper extends PacketWrapper {
+class PacketScoreboardDisplayObjectiveWrapper extends PacketWrapper {
 	
 	Field objectiveName;
 

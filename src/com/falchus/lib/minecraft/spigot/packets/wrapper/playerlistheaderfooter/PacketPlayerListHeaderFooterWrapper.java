@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketPlayerListHeaderFooterWrapper extends PacketWrapper {
+class PacketPlayerListHeaderFooterWrapper extends PacketWrapper {
 	
 	Field header;
 	Field footer;
