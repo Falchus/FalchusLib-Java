@@ -74,12 +74,6 @@ public class VersionAdapter implements IVersionAdapter {
     Method entity_getBukkitEntity;
     Method entity_getBoundingBox;
     Class<?> axisAlignedBB;
-    Field axisAlignedBB_minX;
-    Field axisAlignedBB_minY;
-    Field axisAlignedBB_minZ;
-    Field axisAlignedBB_maxX;
-    Field axisAlignedBB_maxY;
-    Field axisAlignedBB_maxZ;
     Method entity_setYawPitch;
 	
 	Class<?> craftItemStack;
@@ -295,30 +289,6 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "AxisAlignedBB",
             	packageNm + "world.phys.AxisAlignedBB"
             );
-            axisAlignedBB_minX = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"minX",
-            	"a"
-            );
-            axisAlignedBB_minY = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"minY",
-            	"b"
-            );
-            axisAlignedBB_minZ = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"minZ",
-            	"c"
-            );
-            axisAlignedBB_maxX = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"maxX",
-            	"d"
-            );
-            axisAlignedBB_maxY = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"maxY",
-            	"e"
-            );
-            axisAlignedBB_maxZ = ReflectionUtils.getFirstField(axisAlignedBB,
-        		"maxZ",
-            	"f"
-            );
             entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
             	List.of(
             		float.class,
@@ -482,36 +452,15 @@ public class VersionAdapter implements IVersionAdapter {
 	}
 	
 	@Override
-	public Object modifyBoundingBox(@NonNull Object axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	public WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		try {
-			return new ClassInstanceBuilder(
-				this.axisAlignedBB
-			).withParams(
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_minX.get(axisAlignedBB) + minX
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_minY.get(axisAlignedBB) + minY
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_minZ.get(axisAlignedBB) + minZ
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_maxX.get(axisAlignedBB) + maxX
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_maxY.get(axisAlignedBB) + maxY
-				),
-				Map.of(
-					double.class,
-					(double) axisAlignedBB_maxZ.get(axisAlignedBB) + maxZ
-				)
-			).build();
+			axisAlignedBB.setMinX(axisAlignedBB.getMinX() + minX);
+			axisAlignedBB.setMinY(axisAlignedBB.getMinY() + minY);
+			axisAlignedBB.setMinZ(axisAlignedBB.getMinZ() + minZ);
+			axisAlignedBB.setMaxX(axisAlignedBB.getMaxX() + maxX);
+			axisAlignedBB.setMaxY(axisAlignedBB.getMaxY() + maxY);
+			axisAlignedBB.setMaxZ(axisAlignedBB.getMaxZ() + maxZ);
+			return axisAlignedBB;
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
@@ -1303,12 +1252,12 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull Object axisAlignedBB) {
+    public List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB) {
     	try {
     		List<WrappedAxisAlignedBB> list = new ArrayList<>();
     		for (Object obj : (List<?>) world_getCubes.invoke(getWorldServer(world),
     			null,
-    			axisAlignedBB
+    			axisAlignedBB.getHandle()
     		)) {
     			list.add(SpigotWrapper.wrap(obj));
     		}
