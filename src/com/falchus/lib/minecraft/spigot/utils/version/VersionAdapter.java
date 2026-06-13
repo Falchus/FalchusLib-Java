@@ -401,8 +401,7 @@ public class VersionAdapter implements IVersionAdapter {
             biomeBase_getBiome = ReflectionUtils.getMethod(biomeBase, "getBiome",
             	int.class
             );
-            world_getCubes = ReflectionUtils.getMethod(world, "getCubes",
-            	entity,
+            world_getCubes = ReflectionUtils.getMethod(world, "a",
             	axisAlignedBB
             );
 		} catch (Exception e) {
@@ -1258,7 +1257,6 @@ public class VersionAdapter implements IVersionAdapter {
     	try {
     		List<WrappedAxisAlignedBB> list = new ArrayList<>();
     		for (Object obj : (List<?>) world_getCubes.invoke(getWorldServer(world),
-    			null,
     			axisAlignedBB.getHandle()
     		)) {
     			list.add(SpigotWrapper.wrap(obj));
