@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.NonNull;
+
 public class MathUtils {
 
 	/**
@@ -28,7 +30,7 @@ public class MathUtils {
 		return gcd(previous, (float) (current - Math.floor(current / previous) * previous));
 	}
 	
-	public static <T extends Number> T getMode(Collection<T> collection) {
+	public static <T extends Number> T getMode(@NonNull Collection<T> collection) {
 		Map<T, Integer> freq = new HashMap<>();
 		collection.forEach(val -> {
 			int number = freq.getOrDefault(val, 0) + 1;
