@@ -51,7 +51,7 @@ public class BlockUtils {
 	/**
 	 * @return {@code true} if soft landing, {@code false} otherwise.
 	 */
-	public static boolean isSoftLanding(Block block) {
+	public static boolean isSoftLanding(@NonNull Block block) {
 		switch (block.getType()) {
 			case WATER:
 			case STATIONARY_WATER:
