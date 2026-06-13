@@ -72,6 +72,11 @@ public class SpigotWrapper extends FirstClassWrapper<Object> {
 		if (wrapper != null) {
 			return (T) wrapper.apply(packet);
 		}
+		for (Map.Entry<Class<?>, Function<Object, SpigotWrapper>> entry : registry.entrySet()) {
+			if (entry.getKey().isAssignableFrom(packet.getClass())) {
+				return (T) entry.getValue().apply(packet);
+			}
+		}
 		return (T) new SpigotWrapper(packet, Set.of(packet.getClass().getName()));
 	}
 }
