@@ -44,7 +44,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class VersionAdapter implements IVersionAdapter {
 	
-	final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	protected static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	final Map<Player, Object> bossBars = new HashMap<>();
 	

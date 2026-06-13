@@ -33,7 +33,8 @@ import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
 public class FreezeListener implements Listener {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	
 	public final Set<UUID> players = new HashSet<>();
 	
 	public FreezeListener() {

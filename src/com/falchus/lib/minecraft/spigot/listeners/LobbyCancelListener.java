@@ -21,7 +21,7 @@ import com.falchus.lib.minecraft.spigot.events.LobbyCancelEvent;
 
 public class LobbyCancelListener implements Listener {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public LobbyCancelListener() {
 		List<Class<? extends Event>> events = List.of(

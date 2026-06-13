@@ -29,6 +29,7 @@ import lombok.experimental.UtilityClass;
 public class PlayerUtils {
 	
 	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	
 	public static final Set<UUID> vanished = new HashSet<>();
 	public static final Map<UUID, Property> skins = new HashMap<>();
 	public static final Map<UUID, String> names = new HashMap<>();

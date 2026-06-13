@@ -13,7 +13,7 @@ import lombok.NonNull;
 
 public class SpigotTask extends Task {
 	
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	private static final Map<Integer, BukkitTask> tasks = new ConcurrentHashMap<>();
 	

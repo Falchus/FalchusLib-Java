@@ -20,7 +20,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlayerElement {
 
-	protected final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	protected static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	
 	protected final Player player;
 	
     private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new ConcurrentHashMap<>();

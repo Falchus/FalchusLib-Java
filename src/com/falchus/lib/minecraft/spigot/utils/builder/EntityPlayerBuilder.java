@@ -26,7 +26,7 @@ import lombok.NonNull;
 @Getter
 public class EntityPlayerBuilder {
 	
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	private String name = "";
 	private UUID uuid = UUID.randomUUID();

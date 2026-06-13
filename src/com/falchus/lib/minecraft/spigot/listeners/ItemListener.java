@@ -19,7 +19,7 @@ import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
 
 public class ItemListener implements Listener {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public ItemListener() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);

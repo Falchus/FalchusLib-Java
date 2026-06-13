@@ -14,7 +14,7 @@ import io.netty.buffer.Unpooled;
 
 public class LabyModMessageListener implements PluginMessageListener {
 	
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public LabyModMessageListener() {
 		plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "labymod3:main", this);

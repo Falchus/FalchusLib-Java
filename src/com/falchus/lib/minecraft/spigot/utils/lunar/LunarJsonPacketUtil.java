@@ -20,7 +20,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LunarJsonPacketUtil {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public static void sendPacket(Player player, JsonObject message) {
 	    player.sendPluginMessage(plugin, "apollo:json", message.toString().getBytes());

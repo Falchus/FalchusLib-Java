@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 
 public class LunarMessageListener implements Listener {
 	
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public LunarMessageListener() {
 		Messenger messenger = Bukkit.getServer().getMessenger();

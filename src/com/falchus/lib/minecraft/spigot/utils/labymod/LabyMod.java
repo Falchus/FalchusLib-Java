@@ -17,7 +17,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LabyMod {
 	
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	@AllArgsConstructor
 	@Getter

@@ -21,7 +21,7 @@ import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 
 public class JoinQuitListener implements Listener {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public JoinQuitListener() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);

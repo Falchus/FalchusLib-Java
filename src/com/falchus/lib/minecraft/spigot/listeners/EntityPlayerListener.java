@@ -15,7 +15,8 @@ import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 
 public class EntityPlayerListener implements Listener {
 
-	private final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
+	
 	public final Map<UUID, Object> players = new HashMap<>();
 	public final Map<UUID, Consumer<Player>> actions = new HashMap<>();
 	
