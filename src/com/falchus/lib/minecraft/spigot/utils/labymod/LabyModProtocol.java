@@ -19,9 +19,10 @@ public class LabyModProtocol {
 	
     /**
      * Send a message to LabyMod
-     * @param player Minecraft Client
-     * @param key LabyMod message key
-     * @param messageContent json object content
+     * 
+     * @param player 			Minecraft Client
+     * @param key 				LabyMod message key
+     * @param messageContent 	json object content
      */
 	public static void sendMessage(@NonNull Plugin plugin, @NonNull Player player, String key, JsonElement messageContent) {
 		byte[] data = LabyModProtocol.getBytesToSend(key, messageContent.toString());
@@ -32,8 +33,8 @@ public class LabyModProtocol {
     /**
      * Gets the bytes that are required to send the given message
      *
-     * @param messageKey      the message's key
-     * @param messageContents the message's contents
+     * @param messageKey		the message's key
+     * @param messageContents	the message's contents
      * @return the byte array that should be the payload
      */
 	public static byte[] getBytesToSend(String messageKey, String messageContents) {
@@ -60,8 +61,8 @@ public class LabyModProtocol {
     /**
      * Writes a varint to the given byte buffer
      *
-     * @param buf   the byte buffer the int should be written to
-     * @param input the int that should be written to the buffer
+     * @param buf	the byte buffer the int should be written to
+     * @param input	the int that should be written to the buffer
      */
 	private static void writeVarIntToBuffer(ByteBuf buf, int input) {
 		while ((input & -128) != 0) {
@@ -74,8 +75,8 @@ public class LabyModProtocol {
     /**
      * Writes a string to the given byte buffer
      *
-     * @param buf    the byte buffer the string should be written to
-     * @param string the string that should be written to the buffer
+     * @param buf		the byte buffer the string should be written to
+     * @param string	the string that should be written to the buffer
      */
 	private static void writeString(ByteBuf buf, String string) {
 		byte[] abyte = string.getBytes(Charset.forName("UTF-8"));
@@ -91,7 +92,7 @@ public class LabyModProtocol {
     /**
      * Reads a varint from the given byte buffer
      *
-     * @param buf the byte buffer the varint should be read from
+     * @param buf	the byte buffer the varint should be read from
      * @return the int read
      */
 	public static int readVarIntFromBuffer(ByteBuf buf) {
@@ -112,8 +113,8 @@ public class LabyModProtocol {
     /**
      * Reads a string from the given byte buffer
      *
-     * @param buf       the byte buffer the string should be read from
-     * @param maxLength the string's max-length
+     * @param buf		the byte buffer the string should be read from
+     * @param maxLength	the string's max-length
      * @return the string read
      */
 	public static String readString(ByteBuf buf, int maxLength) {

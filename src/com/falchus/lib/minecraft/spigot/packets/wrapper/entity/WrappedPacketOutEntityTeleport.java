@@ -14,10 +14,9 @@ public class WrappedPacketOutEntityTeleport extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntityTeleport(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntityTeleport",
-				networkProtocolGame + "PacketPlayOutEntityTeleport"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntityTeleport",
+			networkProtocolGame + "PacketPlayOutEntityTeleport"
+		));
 		
 		id = getFirstField(
 			"id",

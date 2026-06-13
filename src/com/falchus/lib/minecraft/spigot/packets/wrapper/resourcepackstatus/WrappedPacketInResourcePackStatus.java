@@ -8,9 +8,8 @@ public class WrappedPacketInResourcePackStatus extends PacketResourcePackStatusW
 
 	private WrappedPacketInResourcePackStatus(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInResourcePackStatus",
-				networkProtocolCommon + "ServerboundResourcePackPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInResourcePackStatus",
+			networkProtocolCommon + "ServerboundResourcePackPacket"
+		));
 	}
 }

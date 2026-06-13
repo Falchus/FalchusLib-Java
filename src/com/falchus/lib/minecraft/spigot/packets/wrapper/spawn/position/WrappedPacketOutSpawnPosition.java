@@ -8,9 +8,8 @@ public class WrappedPacketOutSpawnPosition extends PacketSpawnPositionWrapper {
 
 	private WrappedPacketOutSpawnPosition(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutSpawnPosition",
-				networkProtocolGame + "PacketPlayOutSpawnPosition"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutSpawnPosition",
+			networkProtocolGame + "PacketPlayOutSpawnPosition"
+		));
 	}
 }

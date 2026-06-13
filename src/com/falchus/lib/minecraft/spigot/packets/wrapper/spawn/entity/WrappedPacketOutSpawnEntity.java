@@ -9,9 +9,8 @@ public class WrappedPacketOutSpawnEntity extends PacketSpawnEntityWrapper {
 
 	private WrappedPacketOutSpawnEntity(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutSpawnEntity",
-				networkProtocolGame + "PacketPlayOutSpawnEntity"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutSpawnEntity",
+			networkProtocolGame + "PacketPlayOutSpawnEntity"
+		));
 	}
 }

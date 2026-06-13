@@ -30,7 +30,7 @@ class PacketRespawnWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param levelType: WorldType
+	 * @param levelType	WorldType
 	 */
 	public void setLevelType(Object levelType) {
 		setField(this.levelType, levelType);

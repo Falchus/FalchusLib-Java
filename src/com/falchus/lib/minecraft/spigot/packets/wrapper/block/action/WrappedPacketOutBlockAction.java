@@ -8,9 +8,8 @@ public class WrappedPacketOutBlockAction extends PacketBlockActionWrapper {
 
 	private WrappedPacketOutBlockAction(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutBlockAction",
-				networkProtocolGame + "PacketPlayOutBlockAction"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutBlockAction",
+			networkProtocolGame + "PacketPlayOutBlockAction"
+		));
 	}
 }

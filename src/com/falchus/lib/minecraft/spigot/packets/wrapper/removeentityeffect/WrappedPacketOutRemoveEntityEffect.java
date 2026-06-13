@@ -8,9 +8,8 @@ public class WrappedPacketOutRemoveEntityEffect extends PacketRemoveEntityEffect
 
 	private WrappedPacketOutRemoveEntityEffect(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutRemoveEntityEffect",
-				networkProtocolCommon + "PacketPlayOutRemoveEntityEffect"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutRemoveEntityEffect",
+			networkProtocolCommon + "PacketPlayOutRemoveEntityEffect"
+		));
 	}
 }

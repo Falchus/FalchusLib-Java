@@ -48,7 +48,7 @@ class PacketScoreboardObjectiveWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param renderType: IScoreboardCriteria$EnumScoreboardHealthDisplay
+	 * @param renderType	IScoreboardCriteria$EnumScoreboardHealthDisplay
 	 */
 	public void setRenderType(Object renderType) {
 		setField(this.renderType, renderType);

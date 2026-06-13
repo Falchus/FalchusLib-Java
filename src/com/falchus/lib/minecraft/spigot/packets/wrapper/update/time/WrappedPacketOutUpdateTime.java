@@ -8,9 +8,8 @@ public class WrappedPacketOutUpdateTime extends PacketUpdateTimeWrapper {
 
 	private WrappedPacketOutUpdateTime(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutUpdateTime",
-				networkProtocolGame + "PacketPlayOutUpdateTime"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutUpdateTime",
+			networkProtocolGame + "PacketPlayOutUpdateTime"
+		));
 	}
 }

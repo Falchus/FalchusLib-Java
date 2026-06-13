@@ -134,12 +134,12 @@ public class LabyMod {
 	}
 	
 	/**
-	 * @param player The input prompt receiver
-	 * @param promptSessionId A unique id for each packet, use a static number and increase it for each prompt request
-	 * @param message The message above the text field
-	 * @param value The value inside of the text field
-	 * @param placeholder A placeholder text inside of the text field if there is no value given
-	 * @param maxLength Max amount of characters of the text field value
+	 * @param player 			The input prompt receiver
+	 * @param promptSessionId 	A unique id for each packet, use a static number and increase it for each prompt request
+	 * @param message 			The message above the text field
+	 * @param value 			The value inside of the text field
+	 * @param placeholder 		A placeholder text inside of the text field if there is no value given
+	 * @param maxLength 		Max amount of characters of the text field value
 	 */
 	public static void sendInputPrompt(@NonNull Player player, int promptSessionId, String message, String value, String placeholder, int maxLength) {
 	    JsonObject object = new JsonObject();
@@ -167,7 +167,7 @@ public class LabyMod {
 	
 	/**
 	 * Just send this packet to set the cinescope coverage
-	 *  0% - Disabled
+	 * 	0% - Disabled
 	 * 50% - Fully blind
 	 */
 	public static void sendCineScope(@NonNull Player player, int coveragePercent, long duration) {

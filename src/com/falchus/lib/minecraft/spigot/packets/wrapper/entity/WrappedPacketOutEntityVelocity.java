@@ -8,9 +8,8 @@ public class WrappedPacketOutEntityVelocity extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntityVelocity(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntityVelocity",
-				networkProtocolGame + "PacketPlayOutEntityVelocity"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntityVelocity",
+			networkProtocolGame + "PacketPlayOutEntityVelocity"
+		));
 	}
 }

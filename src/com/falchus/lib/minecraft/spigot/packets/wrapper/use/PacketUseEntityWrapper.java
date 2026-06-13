@@ -53,7 +53,7 @@ class PacketUseEntityWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param action: PacketPlayInUseEntity$EnumEntityUseAction
+	 * @param action	PacketPlayInUseEntity$EnumEntityUseAction
 	 */
 	public void setAction(Object action) {
 		setField(this.action, action);

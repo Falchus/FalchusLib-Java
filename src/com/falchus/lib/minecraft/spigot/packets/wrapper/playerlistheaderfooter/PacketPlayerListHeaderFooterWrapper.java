@@ -35,7 +35,7 @@ class PacketPlayerListHeaderFooterWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param header: IChatBaseComponent
+	 * @param header	IChatBaseComponent
 	 */
 	public void setHeader(Object header) {
 		setField(this.header, header);
@@ -49,7 +49,7 @@ class PacketPlayerListHeaderFooterWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param footer: IChatBaseComponent
+	 * @param footer	IChatBaseComponent
 	 */
 	public void setFooter(Object footer) {
 		setField(this.footer, footer);

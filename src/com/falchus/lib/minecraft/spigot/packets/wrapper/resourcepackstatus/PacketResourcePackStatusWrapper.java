@@ -31,7 +31,7 @@ class PacketResourcePackStatusWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param status: PacketPlayInResourcePackStatus$EnumResourcePackStatus
+	 * @param status	PacketPlayInResourcePackStatus$EnumResourcePackStatus
 	 */
 	public void setStatus(Object status) {
 		setField(this.status, status);

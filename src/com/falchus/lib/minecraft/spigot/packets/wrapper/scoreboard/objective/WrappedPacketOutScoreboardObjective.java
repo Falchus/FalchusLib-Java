@@ -8,9 +8,8 @@ public class WrappedPacketOutScoreboardObjective extends PacketScoreboardObjecti
 
 	private WrappedPacketOutScoreboardObjective(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutScoreboardObjective",
-				networkProtocolGame + "PacketPlayOutScoreboardObjective"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutScoreboardObjective",
+			networkProtocolGame + "PacketPlayOutScoreboardObjective"
+		));
 	}
 }

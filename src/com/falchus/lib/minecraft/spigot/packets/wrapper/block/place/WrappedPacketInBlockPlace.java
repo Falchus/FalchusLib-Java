@@ -8,9 +8,8 @@ public class WrappedPacketInBlockPlace extends PacketBlockPlaceWrapper {
 
 	private WrappedPacketInBlockPlace(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInBlockPlace",
-				networkProtocolGame + "PacketPlayInBlockPlace"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInBlockPlace",
+			networkProtocolGame + "PacketPlayInBlockPlace"
+		));
 	}
 }

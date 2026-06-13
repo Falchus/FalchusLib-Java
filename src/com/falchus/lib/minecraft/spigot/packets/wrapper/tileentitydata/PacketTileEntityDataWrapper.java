@@ -40,7 +40,7 @@ class PacketTileEntityDataWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param pos: BlockPosition
+	 * @param pos	BlockPosition
 	 */
 	public void setPos(Object pos) {
 		setField(this.pos, pos);
@@ -62,7 +62,7 @@ class PacketTileEntityDataWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param tag: NBTTagCompound
+	 * @param tag	NBTTagCompound
 	 */
 	public void setTag(Object tag) {
 		setField(this.tag, tag);

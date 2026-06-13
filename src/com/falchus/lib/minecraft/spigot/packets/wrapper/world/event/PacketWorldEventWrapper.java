@@ -54,7 +54,7 @@ class PacketWorldEventWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param pos: BlockPosition
+	 * @param pos	BlockPosition
 	 */
 	public void setPos(Object pos) {
 		setField(this.pos, pos);

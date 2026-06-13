@@ -8,9 +8,8 @@ public class WrappedPacketInArmAnimation extends PacketArmAnimationWrapper {
 
 	private WrappedPacketInArmAnimation(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInArmAnimation",
-				networkProtocolGame + "PacketPlayInArmAnimation"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInArmAnimation",
+			networkProtocolGame + "PacketPlayInArmAnimation"
+		));
 	}
 }

@@ -35,7 +35,7 @@ class PacketServerDifficultyWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param difficulty: EnumDifficulty
+	 * @param difficulty	EnumDifficulty
 	 */
 	public void setDifficulty(Object difficulty) {
 		setField(this.difficulty, difficulty);

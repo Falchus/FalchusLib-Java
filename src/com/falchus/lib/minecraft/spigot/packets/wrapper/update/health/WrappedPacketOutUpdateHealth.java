@@ -8,9 +8,8 @@ public class WrappedPacketOutUpdateHealth extends PacketUpdateHealthWrapper {
 
 	private WrappedPacketOutUpdateHealth(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutUpdateHealth",
-				networkProtocolGame + "PacketPlayOutUpdateHealth"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutUpdateHealth",
+			networkProtocolGame + "PacketPlayOutUpdateHealth"
+		));
 	}
 }

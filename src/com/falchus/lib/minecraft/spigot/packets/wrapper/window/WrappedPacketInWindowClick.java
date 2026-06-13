@@ -8,9 +8,8 @@ public class WrappedPacketInWindowClick extends PacketWindowClickWrapper {
 
 	private WrappedPacketInWindowClick(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInWindowClick",
-				networkProtocolGame + "PacketPlayInWindowClick"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInWindowClick",
+			networkProtocolGame + "PacketPlayInWindowClick"
+		));
 	}
 }

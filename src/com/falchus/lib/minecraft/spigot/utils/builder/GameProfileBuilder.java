@@ -33,9 +33,8 @@ public class GameProfileBuilder {
      * <p>
      * Fetches the GameProfile from the Mojang servers
      *
-     * @param uuid The player uuid
-     * @return The {@link GameProfile}
-     * @see {@link GameProfile}
+     * @param uuid	The player uuid
+     * @return {@link GameProfile}
      */
     public static GameProfile fetch(UUID uuid) {
         return fetch(uuid, false);
@@ -46,10 +45,9 @@ public class GameProfileBuilder {
      * <p>
      * Fetches the GameProfile from the Mojang servers
      *
-     * @param uuid     The player uuid
-     * @param forceNew If true the cache is ignored
-     * @return The {@link GameProfile}
-     * @see {@link GameProfile}
+     * @param uuid		The player uuid
+     * @param forceNew	If true the cache is ignored
+     * @return {@link GameProfile}
      */
     public static GameProfile fetch(UUID uuid, boolean forceNew) {
         if (!forceNew && cache.containsKey(uuid) && cache.get(uuid).isValid()) {
@@ -67,11 +65,10 @@ public class GameProfileBuilder {
     /**
      * Builds a GameProfile for the specified args
      *
-     * @param uuid The uuid
-     * @param name The name
-     * @param skin The url from the skin image
+     * @param uuid 	The uuid
+     * @param name 	The name
+     * @param skin 	The url from the skin image
      * @return A {@link GameProfile} built from the arguments
-     * @see {@link GameProfile}
      */
     public static GameProfile getProfile(UUID uuid, String name, String skin) {
         return getProfile(uuid, name, skin, null);
@@ -80,12 +77,11 @@ public class GameProfileBuilder {
     /**
      * Builds a GameProfile for the specified args
      *
-     * @param uuid    The uuid
-     * @param name    The name
-     * @param skinUrl Url from the skin image
-     * @param capeUrl Url from the cape image
+     * @param uuid		The uuid
+     * @param name		The name
+     * @param skinUrl	Url from the skin image
+     * @param capeUrl	Url from the cape image
      * @return A {@link GameProfile} built from the arguments
-     * @see {@link GameProfile}
      */
     public static GameProfile getProfile(UUID uuid, String name, String skinUrl, String capeUrl) {
         GameProfile profile = new GameProfile(uuid, name);
@@ -107,7 +103,7 @@ public class GameProfileBuilder {
     /**
      * Sets the time as long as you want to keep the gameprofiles in cache (-1 = never remove it)
      *
-     * @param time cache time (default = -1)
+     * @param	time cache time (default = -1)
      */
     public static void setCacheTime(long time) {
         cacheTime = time;

@@ -8,9 +8,8 @@ public class WrappedPacketOutWindowData extends PacketUpdateWindowData {
 
 	private WrappedPacketOutWindowData(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutWindowData",
-				networkProtocolGame + "PacketPlayOutWindowData"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutWindowData",
+			networkProtocolGame + "PacketPlayOutWindowData"
+		));
 	}
 }

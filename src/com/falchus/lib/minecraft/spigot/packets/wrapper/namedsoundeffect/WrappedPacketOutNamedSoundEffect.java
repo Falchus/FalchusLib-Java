@@ -8,9 +8,8 @@ public class WrappedPacketOutNamedSoundEffect extends PacketNamedSoundEffectWrap
 
 	private WrappedPacketOutNamedSoundEffect(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutNamedSoundEffect",
-				networkProtocolGame + "PacketPlayOutNamedSoundEffect"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutNamedSoundEffect",
+			networkProtocolGame + "PacketPlayOutNamedSoundEffect"
+		));
 	}
 }

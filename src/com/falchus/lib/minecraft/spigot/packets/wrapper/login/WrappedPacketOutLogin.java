@@ -8,9 +8,8 @@ public class WrappedPacketOutLogin extends PacketLoginWrapper {
 
 	private WrappedPacketOutLogin(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutLogin",
-				networkProtocolGame + "PacketPlayOutLogin"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutLogin",
+			networkProtocolGame + "PacketPlayOutLogin"
+		));
 	}
 }

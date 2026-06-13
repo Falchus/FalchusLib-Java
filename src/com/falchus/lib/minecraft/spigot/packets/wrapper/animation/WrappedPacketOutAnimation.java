@@ -8,9 +8,8 @@ public class WrappedPacketOutAnimation extends PacketAnimationWrapper {
 
 	private WrappedPacketOutAnimation(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutAnimation",
-				networkProtocolGame + "PacketPlayOutAnimation"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutAnimation",
+			networkProtocolGame + "PacketPlayOutAnimation"
+		));
 	}
 }

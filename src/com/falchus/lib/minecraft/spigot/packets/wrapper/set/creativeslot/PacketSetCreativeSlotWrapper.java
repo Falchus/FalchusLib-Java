@@ -30,7 +30,7 @@ class PacketSetCreativeSlotWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param itemStack: ItemStack
+	 * @param itemStack	ItemStack
 	 */
 	public void setItemStack(Object itemStack) {
 		setField(this.itemStack, itemStack);

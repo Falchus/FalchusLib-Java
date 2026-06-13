@@ -43,7 +43,7 @@ class PacketBlockDigWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param pos: BlockPosition
+	 * @param pos	BlockPosition
 	 */
 	public void setPos(Object pos) {
 		setField(this.pos, pos);
@@ -57,7 +57,7 @@ class PacketBlockDigWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param pos: EnumDirection
+	 * @param direction	EnumDirection
 	 */
 	public void setDirection(Object direction) {
 		setField(this.direction, direction);
@@ -84,7 +84,7 @@ class PacketBlockDigWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param pos: EnumPlayerDigType
+	 * @param action	EnumPlayerDigType
 	 */
 	public void setAction(Object action) {
 		setField(this.action, action);

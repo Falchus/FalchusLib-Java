@@ -8,9 +8,8 @@ public class WrappedPacketOutGameStateChange extends PacketGameStateChangeWrappe
 
 	private WrappedPacketOutGameStateChange(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutGameStateChange",
-				networkProtocolGame + "PacketPlayOutGameStateChange"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutGameStateChange",
+			networkProtocolGame + "PacketPlayOutGameStateChange"
+		));
 	}
 }

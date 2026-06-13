@@ -8,9 +8,8 @@ public class WrappedPacketOutHeldItemSlot extends PacketHeldItemSlotWrapper {
 
 	private WrappedPacketOutHeldItemSlot(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutHeldItemSlot",
-				networkProtocolGame + "PacketPlayOutHeldItemSlot"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutHeldItemSlot",
+			networkProtocolGame + "PacketPlayOutHeldItemSlot"
+		));
 	}
 }

@@ -8,9 +8,8 @@ public class WrappedPacketInSpectate extends PacketSpectateWrapper {
 
 	private WrappedPacketInSpectate(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInSpectate",
-				networkProtocolGame + "PacketPlayInSpectate"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInSpectate",
+			networkProtocolGame + "PacketPlayInSpectate"
+		));
 	}
 }

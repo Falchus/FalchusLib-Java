@@ -8,9 +8,8 @@ public class WrappedPacketOutOpenWindow extends PacketOpenWindowWrapper {
 
 	private WrappedPacketOutOpenWindow(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutOpenWindow",
-				networkProtocolGame + "PacketPlayOutOpenWindow"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutOpenWindow",
+			networkProtocolGame + "PacketPlayOutOpenWindow"
+		));
 	}
 }

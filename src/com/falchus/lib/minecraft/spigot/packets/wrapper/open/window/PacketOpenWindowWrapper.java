@@ -43,7 +43,7 @@ class PacketOpenWindowWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param title: IChatBaseComponent
+	 * @param title	IChatBaseComponent
 	 */
 	public void setTitle(Object title) {
 		setField(this.title, title);

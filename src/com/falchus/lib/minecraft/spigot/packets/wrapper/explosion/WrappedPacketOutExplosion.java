@@ -8,9 +8,8 @@ public class WrappedPacketOutExplosion extends PacketExplosionWrapper {
 
 	private WrappedPacketOutExplosion(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutExplosion",
-				networkProtocolGame + "PacketPlayOutExplosion"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutExplosion",
+			networkProtocolGame + "PacketPlayOutExplosion"
+		));
 	}
 }
