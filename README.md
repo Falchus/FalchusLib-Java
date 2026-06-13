@@ -27,16 +27,17 @@ A library designed to simplify & speed up software development.
 #### Tasks
 `com.falchus.lib.task.Task`
 ```java
-static Task runTask(Runnable runnable);
+void run();
+static Task run(Runnable runnable);
 
-static Task runTaskTimer(Runnable runnable, long period, TimeUnit unit);
-void runTaskTimer(long period, TimeUnit unit);
+static Task runTimer(Runnable runnable, long period, TimeUnit unit);
+void runTimer(long period, TimeUnit unit);
 
-static Task runTaskTimer(Runnable runnable, long delay, long period, TimeUnit unit);
-void runTaskTimer(long delay, long period, TimeUnit unit);
+static Task runTimer(Runnable runnable, long delay, long period, TimeUnit unit);
+void runTimer(long delay, long period, TimeUnit unit);
 
-static Task runTaskLater(Runnable runnable, long delay, TimeUnit unit);
-void runTaskLater(long delay, TimeUnit unit);
+static Task runLater(Runnable runnable, long delay, TimeUnit unit);
+void runLater(long delay, TimeUnit unit);
 
 static void end(int id);
 void end();
@@ -88,6 +89,7 @@ HTTPServer build(String ip);
 <T> T load();
 
 void delete();
+void deleteFolder();
 ```
 - `com.falchus.lib.storage.impl.json.JsonStorage`
   - `com.falchus.lib.storage.impl.json.JsonArrayStorage`
@@ -105,7 +107,22 @@ T deserialize(String content);
 #### HTTP
 `com.falchus.lib.utils.http.HTTPRequest`
 ```java
+static String get(String url, Map<String, String> headers);
 static String get(String url);
+
+static String post(String url, Map<String, String> headers, String body);
+static String post(String url, String body);
+
+static String put(String url, Map<String, String> headers, String body);
+static String put(String url, String body);
+
+static String delete(String url, Map<String, String> headers);
+static String delete(String url);
+
+static String head(String url, Map<String, String> headers);
+static String head(String url);
+
+static String request(String method, String url, Map<String, String> headers, String body);
 ```
 
 `com.falchus.lib.utils.http.HTTPServer`
@@ -115,6 +132,8 @@ void stop(int delay);
 
 static void sendText(HttpExchange exchange, String text, int statusCode);
 static void sendJson(HttpExchange exchange, String json, int statusCode);
+
+static void redirect(HttpExchange exchange, String location, int statusCode);
 ```
 
 #### Events
@@ -166,6 +185,11 @@ static Field getFirstField(Class clazz, String... names);
 static Field getFirstField(Object instance, String... names);
 static Field getFirstField(Set<Class> classes, String... names);
 
+static <T> T getFieldValue(Object instance, Field field);
+static <T> T getFieldValue(Field field);
+static <T> T getFieldValue(Object instance, Field field, Class<T> type);
+static <T> T getFieldValue(Field field, Class<T> type);
+
 static void setField(Object instance, Field field, Object value);
 static void setField(Object instance, String name, Object value);
 static void setField(Field field, Object value);
@@ -194,6 +218,9 @@ Wrapper(T handle);
 Field getField(String name);
 Field getFirstField(String... names);
 
+<U> U getFieldValue(Field field);
+<U> U getFieldValue(Field field, Class<U> type);
+
 void setField(Field field, Object value);
 void setFirstField(Object value, String... names);
 
@@ -215,6 +242,39 @@ Constructor getFirstConstructor(Set<List<Class>> params);
     ```java
     FirstClassWrapper(T handle, Set<String> names);
     ```
+
+#### Utils
+`com.falchus.lib.utils.JsonUtils`
+```java
+static JsonElement get(String json, String path);
+
+static String getString(String json, String path);
+
+static long getLong(String json, String path);
+
+static boolean getBoolean(String json, String path);
+```
+
+`com.falchus.lib.utils.JsoupUtils`
+```java
+static String getScriptDataById(String html, String id);
+```
+
+`com.falchus.lib.utils.MathUtils`
+```java
+static float angleDiff(float angle1, float angle2);
+
+static float gcd(float current, float previous);
+
+static <T extends Number> T getMode(Collection<T> collection);
+```
+
+`com.falchus.lib.utils.StringUtils`
+```java
+static <T extends Collection<? super String>> T copyPartialMatches(String token, Iterable<String> originals, T collection);
+
+static boolean startsWithIgnoreCase(String string, String prefix);
+```
 
 <details>
 <summary>Minecraft</summary>
@@ -252,9 +312,46 @@ depend: [FalchusLib]
 
 #### Usage
 ##### Utils
+`com.falchus.lib.minecraft.spigot.utils.BlockUtils`
+```java
+static boolean isLiquid(Block block);
+
+static boolean isSlab(Block block);
+
+static boolean isStair(Block block);
+
+static boolean isClimbable(Block block);
+
+static boolean isSoftLanding(Block block);
+```
 `com.falchus.lib.minecraft.spigot.utils.EntityUtils`
 ```java
+static Object getEntity(Entity entity);
+
 static Entity getBukkitEntity(Object entity);
+
+static Entity getEntityById(World world, int id);
+
+static WrappedAxisAlignedBB getBoundingBox(Entity entity);
+static WrappedAxisAlignedBB modifyBoundingBox(WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+
+static boolean isOnGround(Entity entity, double yExpand);
+static boolean isOnGround(Entity entity);
+
+static boolean isInLiquid(Entity entity);
+
+static boolean isOnSlime(Entity entity);
+
+static boolean isOnStairs(Entity entity);
+
+static boolean isOnIce(Entity entity);
+
+static boolean isOnClimbable(Entity entity);
+
+static boolean isUnderBlock(Entity entity);
+
+static double getAbsorption(Damageable entity);
+static void setAbsorption(Damageable entity, double absorption);
 
 static void setYawPitch(Object entity, float yaw, float pitch);
 ```
@@ -292,6 +389,8 @@ static GameProfile getProfile(Object entityPlayer);
 
 static int getPing(Player player);
 
+static int getPotionEffectLevel(Player player, PotionEffectType type);
+
 static void setSkin(Player player, UUID uuid);
 static void resetSkin(Player player);
 
@@ -305,6 +404,8 @@ static void removeEntityPlayer(Player player, Object entityPlayer);
 static void spawnEntityPlayer(Player player, Object entityPlayer);
 
 static void connectToServer(Player player, String server);
+
+static boolean isHoldingSword(Player player);
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.SchedulerUtils`
@@ -335,11 +436,13 @@ static double[] getRecentTps();
 ```java
 static void setGameRule(World world, com.falchus.lib.minecraft.spigot.enums.GameRule gameRule, String value);
 
-static Object[] getWorldBiomes(World world);
-static Object getNmsBiome(Biome biome);
+static Object[] getBiomes(World world);
 static int getBiomeId(Biome biome);
+static Object getNmsBiome(Biome biome);
 
 static Object getWorldServer(World world);
+
+static List<WrappedAxisAlignedBB> getCollidingBlocks(World world, WrappedAxisAlignedBB axisAlignedBB);
 
 static Biome getBiome(com.falchus.lib.minecraft.spigot.enums.Biome biome);
 
@@ -411,14 +514,19 @@ static <T extends PlayerElement> T get(Class<T> clazz, Player player);
 ```
 - `com.falchus.lib.minecraft.spigot.player.elements.impl.Actionbar`
   ```java
+  void send(BiFunction<Integer, Player, String> message);
   void send(Supplier<String> message);
+  void sendUpdating(long intervalTicks, BiFunction<Integer, Player, String> message);
   void sendUpdating(long intervalTicks, Supplier<String> message);
   ```
 - `com.falchus.lib.minecraft.spigot.player.elements.impl.Bossbar`
   ```java
+  void send(BiFunction<Integer, Player, String> message, BiFunction<Integer, Player, Double> progress);
   void send(Supplier<String> message, Supplier<Double> progress);
+  void sendUpdating(long intervalTicks, BiFunction<Integer, Player, String> message, BiFunction<Integer, Player, Double> progress);
   void sendUpdating(long intervalTicks, Supplier<String> message, Supplier<Double> progress);
   
+  void setMessage(String message);
   void setProgress(double progress);
   ```
 - `com.falchus.lib.minecraft.spigot.player.elements.impl.Chat`
@@ -430,25 +538,31 @@ static <T extends PlayerElement> T get(Class<T> clazz, Player player);
   ```java
   void send(Supplier<String> prefix, Supplier<String> suffix);
   void sendUpdating(long intervalTicks, Supplier<String> prefix, Supplier<String> suffix);
+  
+  void setPrefix(String prefix);
+  void setSuffix(String suffix);
   ```
 - `com.falchus.lib.minecraft.spigot.player.elements.impl.Scoreboard`
   ```java
-  void send(Supplier<List<String>> lines);
-  void sendUpdating(long intervalTicks, Supplier<String> title, Supplier<String> titleColor, Supplier<String> titleSecondColor, Supplier<List<String>> lines);
+  void send(BiFunction<Integer, Player, String> title, BiFunction<Integer, Player, List<String>> lines);
+  void send(Supplier<String> title, Supplier<List<String>> lines);
+  void sendUpdating(long intervalTicks, BiFunction<Integer, Player, String> title, BiFunction<Integer, Player, List<String>> lines);
+  void sendUpdating(long intervalTicks, Supplier<String> title, Supplier<List<String>> lines);
   
-  void setTitle(String title, String titleColor, String titleSecondColor);
+  void setTitle(String title);
+  void setLines(List<String> lines);
   ```
 - `com.falchus.lib.minecraft.spigot.player.elements.impl.Tablist`
   ```java
+  void send(BiFunction<Integer, Player, List<String>> header, BiFunction<Integer, Player, List<String>> footer, Supplier<String> name);
   void send(Supplier<List<String>> header, Supplier<List<String>> footer, Supplier<String> name);
+  void sendUpdating(long intervalTicks, BiFunction<Integer, Player, List<String>> header, BiFunction<Integer, Player, List<String>> footer, Supplier<String> name);
   void sendUpdating(long intervalTicks, Supplier<List<String>> header, Supplier<List<String>> footer, Supplier<String> name);
+  
+  void setHeader(List<String> header);
+  void setFooter(List<String> footer);
+  void setName(String name);
   ```
-
-##### Packets
-`com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper`
-```java
-<T extends PacketWrapper> T as(Class<T> clazz);
-```
 
 ##### Builders
 `com.falchus.lib.minecraft.spigot.utils.builder.EntityPlayerBuilder`
