@@ -70,6 +70,7 @@ public class VersionAdapter implements IVersionAdapter {
     
     Class<?> chatComponentText;
     
+    Class<?> craftEntity;
     Method entity_getHandle;
     Method entity_getBukkitEntity;
     Method entity_getBoundingBox;
@@ -282,7 +283,8 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNm + "network.chat.ChatComponentText"
             );
             
-            entity_getHandle = ReflectionUtils.getMethod(entity, "getHandle");
+            craftEntity = ReflectionUtils.getClass(packageObc + "entity.CraftEntity");
+            entity_getHandle = ReflectionUtils.getMethod(craftEntity, "getHandle");
             entity_getBukkitEntity = ReflectionUtils.getMethod(entity, "getBukkitEntity");
             entity_getBoundingBox = ReflectionUtils.getMethod(entity, "getBoundingBox");
             axisAlignedBB = ReflectionUtils.getFirstClass(
