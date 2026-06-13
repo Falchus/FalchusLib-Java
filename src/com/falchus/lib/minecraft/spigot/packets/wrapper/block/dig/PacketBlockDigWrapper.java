@@ -6,7 +6,6 @@ import java.util.Set;
 import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
-import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -77,7 +76,7 @@ class PacketBlockDigWrapper extends PacketWrapper {
 	public Action getAction() {
 		String name;
 		if (ServerUtils.getVersion().isBefore(Version.v1_17)) {
-			name = ((Enum<?>) ReflectionUtils.getMethod(getFieldValue(action), "getType").invoke(getFieldValue(action))).name();
+			name = ((Enum<?>) getFieldValue(action)).name();
 		} else {
 			name = getFieldValue(action, Enum.class).name();
 		}
