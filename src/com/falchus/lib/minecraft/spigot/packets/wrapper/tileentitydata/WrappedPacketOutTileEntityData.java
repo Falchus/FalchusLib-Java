@@ -8,9 +8,8 @@ public class WrappedPacketOutTileEntityData extends PacketTileEntityDataWrapper 
 
 	private WrappedPacketOutTileEntityData(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutTileEntityData",
-				networkProtocolGame + "PacketPlayOutTileEntityData"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutTileEntityData",
+			networkProtocolGame + "PacketPlayOutTileEntityData"
+		));
 	}
 }

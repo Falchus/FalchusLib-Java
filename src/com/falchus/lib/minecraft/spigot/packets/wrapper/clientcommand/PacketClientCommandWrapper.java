@@ -30,7 +30,7 @@ class PacketClientCommandWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param action: PacketPlayInClientCommand$EnumClientCommand
+	 * @param action	PacketPlayInClientCommand$EnumClientCommand
 	 */
 	public void setAction(Object action) {
 		setField(this.action, action);

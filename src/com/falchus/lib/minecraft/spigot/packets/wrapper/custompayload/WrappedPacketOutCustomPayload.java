@@ -8,9 +8,8 @@ public class WrappedPacketOutCustomPayload extends PacketCustomPayloadWrapper {
 
 	private WrappedPacketOutCustomPayload(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutCustomPayload",
-				networkProtocolCommon + "ClientboundCustomPayloadPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutCustomPayload",
+			networkProtocolCommon + "ClientboundCustomPayloadPacket"
+		));
 	}
 }

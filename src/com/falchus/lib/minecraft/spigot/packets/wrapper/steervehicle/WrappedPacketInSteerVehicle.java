@@ -8,9 +8,8 @@ public class WrappedPacketInSteerVehicle extends PacketSteerVehicleWrapper {
 
 	private WrappedPacketInSteerVehicle(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInSteerVehicle",
-				networkProtocolGame + "PacketPlayInSteerVehicle"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInSteerVehicle",
+			networkProtocolGame + "PacketPlayInSteerVehicle"
+		));
 	}
 }

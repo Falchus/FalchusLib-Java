@@ -8,9 +8,8 @@ public class WrappedPacketOutKickDisconnect extends PacketKickDisconnectWrapper 
 
 	private WrappedPacketOutKickDisconnect(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutKickDisconnect",
-				networkProtocolCommon + "ClientboundDisconnectPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutKickDisconnect",
+			networkProtocolCommon + "ClientboundDisconnectPacket"
+		));
 	}
 }

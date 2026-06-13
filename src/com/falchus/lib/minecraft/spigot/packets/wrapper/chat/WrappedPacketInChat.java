@@ -8,10 +8,9 @@ public class WrappedPacketInChat extends PacketChatWrapper {
 
 	private WrappedPacketInChat(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInChat",
-				networkProtocolGame + "ServerboundChatPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInChat",
+			networkProtocolGame + "ServerboundChatPacket"
+		));
 	}
 
 	@Override

@@ -8,9 +8,8 @@ public class WrappedPacketInUseEntity extends PacketUseEntityWrapper {
 
 	private WrappedPacketInUseEntity(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInUseEntity",
-				networkProtocolGame + "PacketPlayInUseEntity"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInUseEntity",
+			networkProtocolGame + "PacketPlayInUseEntity"
+		));
 	}
 }

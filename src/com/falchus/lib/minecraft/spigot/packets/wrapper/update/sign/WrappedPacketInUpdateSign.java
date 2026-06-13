@@ -8,9 +8,8 @@ public class WrappedPacketInUpdateSign extends PacketUpdateSignWrapper {
 
 	private WrappedPacketInUpdateSign(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInUpdateSign",
-				networkProtocolGame + "PacketPlayInUpdateSign"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInUpdateSign",
+			networkProtocolGame + "PacketPlayInUpdateSign"
+		));
 	}
 }

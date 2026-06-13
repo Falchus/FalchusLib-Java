@@ -8,9 +8,8 @@ public class WrappedPacketInAbilities extends PacketAbilitiesWrapper {
 
 	private WrappedPacketInAbilities(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInAbilities",
-				networkProtocolGame + "PacketPlayInAbilities"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInAbilities",
+			networkProtocolGame + "PacketPlayInAbilities"
+		));
 	}
 }

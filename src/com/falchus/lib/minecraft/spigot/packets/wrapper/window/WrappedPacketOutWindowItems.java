@@ -8,9 +8,8 @@ public class WrappedPacketOutWindowItems extends PacketUpdateWindowItems {
 
 	private WrappedPacketOutWindowItems(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutWindowItems",
-				networkProtocolGame + "PacketPlayOutWindowItems"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutWindowItems",
+			networkProtocolGame + "PacketPlayOutWindowItems"
+		));
 	}
 }

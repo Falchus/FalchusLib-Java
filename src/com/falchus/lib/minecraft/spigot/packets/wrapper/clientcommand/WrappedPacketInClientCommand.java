@@ -8,9 +8,8 @@ public class WrappedPacketInClientCommand extends PacketClientCommandWrapper {
 
 	private WrappedPacketInClientCommand(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInClientCommand",
-				networkProtocolGame + "PacketPlayInClientCommand"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInClientCommand",
+			networkProtocolGame + "PacketPlayInClientCommand"
+		));
 	}
 }

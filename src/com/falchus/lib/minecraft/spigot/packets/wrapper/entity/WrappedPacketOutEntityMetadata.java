@@ -8,9 +8,8 @@ public class WrappedPacketOutEntityMetadata extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntityMetadata(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntityMetadata",
-				networkProtocolGame + "PacketPlayOutEntityMetadata"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntityMetadata",
+			networkProtocolGame + "PacketPlayOutEntityMetadata"
+		));
 	}
 }

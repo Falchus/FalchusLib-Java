@@ -8,9 +8,8 @@ public class WrappedPacketInSetCreativeSlot extends PacketSetCreativeSlotWrapper
 
 	private WrappedPacketInSetCreativeSlot(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInSetCreativeSlot",
-				networkProtocolGame + "PacketPlayInSetCreativeSlot"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInSetCreativeSlot",
+			networkProtocolGame + "PacketPlayInSetCreativeSlot"
+		));
 	}
 }

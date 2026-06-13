@@ -8,9 +8,8 @@ public class WrappedPacketOutCamera extends PacketCameraWrapper {
 
 	private WrappedPacketOutCamera(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutCamera",
-				networkProtocolGame + "PacketPlayOutCamera"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutCamera",
+			networkProtocolGame + "PacketPlayOutCamera"
+		));
 	}
 }

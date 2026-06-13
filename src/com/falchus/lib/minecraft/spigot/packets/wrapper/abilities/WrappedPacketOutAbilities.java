@@ -15,10 +15,9 @@ public class WrappedPacketOutAbilities extends PacketAbilitiesWrapper {
 	
 	private WrappedPacketOutAbilities(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutAbilities",
-				networkProtocolGame + "PacketPlayOutAbilities"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutAbilities",
+			networkProtocolGame + "PacketPlayOutAbilities"
+		));
 		
 		invulnerable = getFirstField(
 			"invulnerable",

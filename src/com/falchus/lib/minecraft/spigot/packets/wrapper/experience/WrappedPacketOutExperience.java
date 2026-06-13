@@ -8,9 +8,8 @@ public class WrappedPacketOutExperience extends PacketExperienceWrapper {
 
 	private WrappedPacketOutExperience(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutExperience",
-				networkProtocolGame + "PacketPlayOutExperience"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutExperience",
+			networkProtocolGame + "PacketPlayOutExperience"
+		));
 	}
 }

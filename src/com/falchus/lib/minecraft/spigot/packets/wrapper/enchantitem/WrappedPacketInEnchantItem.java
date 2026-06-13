@@ -8,9 +8,8 @@ public class WrappedPacketInEnchantItem extends PacketEnchantItemWrapper {
 
 	private WrappedPacketInEnchantItem(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInEnchantItem",
-				networkProtocolGame + "PacketPlayInEnchantItem"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInEnchantItem",
+			networkProtocolGame + "PacketPlayInEnchantItem"
+		));
 	}
 }

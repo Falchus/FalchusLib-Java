@@ -15,10 +15,9 @@ public class WrappedPacketOutEntityEffect extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntityEffect(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntityEffect",
-				networkProtocolGame + "PacketPlayOutEntityEffect"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntityEffect",
+			networkProtocolGame + "PacketPlayOutEntityEffect"
+		));
 		
 		effectAmplifier = getFirstField(
 			"effectAmplifier",

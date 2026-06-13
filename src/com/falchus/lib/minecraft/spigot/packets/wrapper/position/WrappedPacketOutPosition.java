@@ -8,9 +8,8 @@ public class WrappedPacketOutPosition extends PacketPositionWrapper {
 
 	private WrappedPacketOutPosition(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutPosition",
-				networkProtocolCommon + "PacketPlayOutPosition"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutPosition",
+			networkProtocolCommon + "PacketPlayOutPosition"
+		));
 	}
 }

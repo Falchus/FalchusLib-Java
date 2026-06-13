@@ -16,10 +16,9 @@ public class WrappedPacketOutEntity extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntity(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntity",
-				networkProtocolGame + "PacketPlayOutEntity"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntity",
+			networkProtocolGame + "PacketPlayOutEntity"
+		));
 		
 		yRot = getFirstField(
 			"yRot",

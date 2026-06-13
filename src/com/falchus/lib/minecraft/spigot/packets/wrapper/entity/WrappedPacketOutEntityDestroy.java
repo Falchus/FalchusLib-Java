@@ -8,9 +8,8 @@ public class WrappedPacketOutEntityDestroy extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntityDestroy(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntityDestroy",
-				networkProtocolGame + "PacketPlayOutEntityDestroy"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntityDestroy",
+			networkProtocolGame + "PacketPlayOutEntityDestroy"
+		));
 	}
 }

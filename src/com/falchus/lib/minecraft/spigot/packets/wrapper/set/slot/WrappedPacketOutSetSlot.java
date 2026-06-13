@@ -8,9 +8,8 @@ public class WrappedPacketOutSetSlot extends PacketSetSlotWrapper {
 
 	private WrappedPacketOutSetSlot(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutSetSlot",
-				networkProtocolGame + "PacketPlayOutSetSlot"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutSetSlot",
+			networkProtocolGame + "PacketPlayOutSetSlot"
+		));
 	}
 }

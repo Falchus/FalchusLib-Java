@@ -8,9 +8,8 @@ public class WrappedPacketOutWorldEvent extends PacketWorldEventWrapper {
 
 	private WrappedPacketOutWorldEvent(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutWorldEvent",
-				networkProtocolGame + "PacketPlayOutWorldEvent"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutWorldEvent",
+			networkProtocolGame + "PacketPlayOutWorldEvent"
+		));
 	}
 }

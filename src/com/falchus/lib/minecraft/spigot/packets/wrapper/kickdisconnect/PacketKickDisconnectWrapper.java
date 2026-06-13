@@ -30,7 +30,7 @@ class PacketKickDisconnectWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param reason: IChatBaseComponent
+	 * @param reason	IChatBaseComponent
 	 */
 	public void setReason(Object reason) {
 		setField(this.reason, reason);

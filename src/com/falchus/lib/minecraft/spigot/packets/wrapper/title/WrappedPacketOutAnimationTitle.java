@@ -15,10 +15,9 @@ public class WrappedPacketOutAnimationTitle extends PacketTitleWrapper {
 	
 	private WrappedPacketOutAnimationTitle(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutTitle",
-				networkProtocolGame + "ClientboundSetTitlesAnimationPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutTitle",
+			networkProtocolGame + "ClientboundSetTitlesAnimationPacket"
+		));
 		
 		fadeInTime = getFirstField(
 			"fadeInTime",

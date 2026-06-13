@@ -8,9 +8,8 @@ public class WrappedPacketOutEntityEquipment extends PacketEntityWrapper {
 	
 	private WrappedPacketOutEntityEquipment(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutEntityEquipment",
-				networkProtocolGame + "PacketPlayOutEntityEquipment"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutEntityEquipment",
+			networkProtocolGame + "PacketPlayOutEntityEquipment"
+		));
 	}
 }

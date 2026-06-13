@@ -8,9 +8,8 @@ public class WrappedPacketOutPlayerListHeaderFooter extends PacketPlayerListHead
 
 	private WrappedPacketOutPlayerListHeaderFooter(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutPlayerListHeaderFooter",
-				networkProtocolGame + "PacketPlayOutPlayerListHeaderFooter"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutPlayerListHeaderFooter",
+			networkProtocolGame + "PacketPlayOutPlayerListHeaderFooter"
+		));
 	}
 }

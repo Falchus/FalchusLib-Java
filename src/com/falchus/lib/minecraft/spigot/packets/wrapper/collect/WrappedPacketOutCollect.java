@@ -8,9 +8,8 @@ public class WrappedPacketOutCollect extends PacketCollectWrapper {
 
 	private WrappedPacketOutCollect(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutCollect",
-				networkProtocolGame + "PacketPlayOutCollect"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutCollect",
+			networkProtocolGame + "PacketPlayOutCollect"
+		));
 	}
 }

@@ -8,9 +8,8 @@ public class WrappedPacketOutBlockBreakAnimation extends PacketBlockBreakAnimati
 
 	private WrappedPacketOutBlockBreakAnimation(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutBlockBreakAnimation",
-				networkProtocolGame + "PacketPlayOutBlockBreakAnimation"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutBlockBreakAnimation",
+			networkProtocolGame + "PacketPlayOutBlockBreakAnimation"
+		));
 	}
 }

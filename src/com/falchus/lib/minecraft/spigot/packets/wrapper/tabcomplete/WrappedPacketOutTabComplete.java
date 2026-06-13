@@ -8,9 +8,8 @@ public class WrappedPacketOutTabComplete extends PacketTabCompleteWrapper {
 	
 	private WrappedPacketOutTabComplete(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutTabComplete",
-				networkProtocolGame + "PacketPlayOutTabComplete"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutTabComplete",
+			networkProtocolGame + "PacketPlayOutTabComplete"
+		));
 	}
 }

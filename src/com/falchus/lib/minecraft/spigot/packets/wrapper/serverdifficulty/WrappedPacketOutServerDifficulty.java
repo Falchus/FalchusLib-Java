@@ -8,9 +8,8 @@ public class WrappedPacketOutServerDifficulty extends PacketServerDifficultyWrap
 
 	private WrappedPacketOutServerDifficulty(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutServerDifficulty",
-				networkProtocolGame + "PacketPlayOutServerDifficulty"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutServerDifficulty",
+			networkProtocolGame + "PacketPlayOutServerDifficulty"
+		));
 	}
 }

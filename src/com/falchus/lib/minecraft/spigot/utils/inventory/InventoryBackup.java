@@ -101,7 +101,7 @@ public class InventoryBackup {
      * Returns all backups for a player.
      */
     public static Map<Integer, BackupData> getBackups(@NonNull Player player) {
-    	return playerInventories.getOrDefault(player.getUniqueId(), Map.of());
+    	return playerInventories.getOrDefault(player.getUniqueId(), new HashMap<>());
     }
     
     /**

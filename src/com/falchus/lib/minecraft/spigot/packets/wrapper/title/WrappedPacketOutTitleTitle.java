@@ -13,10 +13,9 @@ public class WrappedPacketOutTitleTitle extends PacketTitleWrapper {
 	
 	private WrappedPacketOutTitleTitle(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutTitle",
-				networkProtocolGame + "ClientboundSetTitleTextPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutTitle",
+			networkProtocolGame + "ClientboundSetTitleTextPacket"
+		));
 		
 		text = getFirstField(
 			"text",
@@ -32,7 +31,7 @@ public class WrappedPacketOutTitleTitle extends PacketTitleWrapper {
 	}
 	
 	/**
-	 * @param text: IChatBaseComponent
+	 * @param text	IChatBaseComponent
 	 */
 	public void setText(Object text) {
 		setField(this.text, text);

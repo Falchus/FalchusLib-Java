@@ -8,9 +8,8 @@ public class WrappedPacketOutUpdateAttributes extends PacketUpdateAttributesWrap
 
 	private WrappedPacketOutUpdateAttributes(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutUpdateAttributes",
-				networkProtocolGame + "PacketPlayOutUpdateAttributes"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutUpdateAttributes",
+			networkProtocolGame + "PacketPlayOutUpdateAttributes"
+		));
 	}
 }

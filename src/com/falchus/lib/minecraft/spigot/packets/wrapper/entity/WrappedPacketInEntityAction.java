@@ -14,10 +14,9 @@ public class WrappedPacketInEntityAction extends PacketEntityWrapper {
 	
 	private WrappedPacketInEntityAction(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInEntityAction",
-				networkProtocolGame + "PacketPlayInEntityAction"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInEntityAction",
+			networkProtocolGame + "PacketPlayInEntityAction"
+		));
 		
 		action = getFirstField(
 			"action",
@@ -37,7 +36,7 @@ public class WrappedPacketInEntityAction extends PacketEntityWrapper {
 	}
 	
 	/**
-	 * @param action: PacketPlayInEntityAction$EnumPlayerAction
+	 * @param action	PacketPlayInEntityAction$EnumPlayerAction
 	 */
 	public void setAction(Object action) {
 		setField(this.action, action);

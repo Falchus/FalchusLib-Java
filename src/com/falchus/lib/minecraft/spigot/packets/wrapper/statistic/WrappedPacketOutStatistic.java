@@ -8,9 +8,8 @@ public class WrappedPacketOutStatistic extends PacketStatisticWrapper {
 
 	private WrappedPacketOutStatistic(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutStatistic",
-				networkProtocolGame + "PacketPlayOutStatistic"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutStatistic",
+			networkProtocolGame + "PacketPlayOutStatistic"
+		));
 	}
 }

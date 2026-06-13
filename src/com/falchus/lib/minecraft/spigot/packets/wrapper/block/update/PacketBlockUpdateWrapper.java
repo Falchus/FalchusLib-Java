@@ -35,7 +35,7 @@ class PacketBlockUpdateWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param pos: BlockPosition
+	 * @param pos	BlockPosition
 	 */
 	public void setPos(Object pos) {
 		setField(this.pos, pos);
@@ -49,7 +49,7 @@ class PacketBlockUpdateWrapper extends PacketWrapper {
 	}
 	
 	/**
-	 * @param block: BlockState
+	 * @param block	BlockState
 	 */
 	public void setBlockState(Object blockState) {
 		setField(this.blockState, blockState);

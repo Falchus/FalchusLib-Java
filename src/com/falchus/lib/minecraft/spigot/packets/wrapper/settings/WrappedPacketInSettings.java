@@ -8,9 +8,8 @@ public class WrappedPacketInSettings extends PacketSettingsWrapper {
 
 	private WrappedPacketInSettings(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInSettings",
-				networkProtocolCommon + "ServerboundClientInformationPacket"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInSettings",
+			networkProtocolCommon + "ServerboundClientInformationPacket"
+		));
 	}
 }

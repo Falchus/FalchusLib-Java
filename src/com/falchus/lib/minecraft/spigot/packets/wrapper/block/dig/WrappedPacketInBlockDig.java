@@ -8,9 +8,8 @@ public class WrappedPacketInBlockDig extends PacketBlockDigWrapper {
 
 	private WrappedPacketInBlockDig(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInBlockDig",
-				networkProtocolGame + "PacketPlayInBlockDig"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInBlockDig",
+			networkProtocolGame + "PacketPlayInBlockDig"
+		));
 	}
 }

@@ -13,10 +13,9 @@ public class WrappedPacketInTabComplete extends PacketTabCompleteWrapper {
 	
 	private WrappedPacketInTabComplete(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayInTabComplete",
-				networkProtocolGame + "PacketPlayInTabComplete"
-			)
-		);
+			version.getPackageNms() + "PacketPlayInTabComplete",
+			networkProtocolGame + "PacketPlayInTabComplete"
+		));
 		
 		command = getFirstField(
 			"command",

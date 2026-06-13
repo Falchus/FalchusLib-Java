@@ -8,9 +8,8 @@ public class WrappedPacketOutBlockChange extends PacketBlockChangeWrapper {
 
 	private WrappedPacketOutBlockChange(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutBlockChange",
-				networkProtocolGame + "PacketPlayOutBlockChange"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutBlockChange",
+			networkProtocolGame + "PacketPlayOutBlockChange"
+		));
 	}
 }

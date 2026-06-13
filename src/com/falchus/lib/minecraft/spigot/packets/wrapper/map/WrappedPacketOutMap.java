@@ -8,9 +8,8 @@ public class WrappedPacketOutMap extends PacketMapWrapper {
 
 	private WrappedPacketOutMap(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutMap",
-				networkProtocolGame + "PacketPlayOutMap"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutMap",
+			networkProtocolGame + "PacketPlayOutMap"
+		));
 	}
 }

@@ -8,9 +8,8 @@ public class WrappedPacketOutRespawn extends PacketRespawnWrapper {
 
 	private WrappedPacketOutRespawn(@NonNull Object handle) {
 		super(handle, Set.of(
-				version.getPackageNms() + "PacketPlayOutRespawn",
-				networkProtocolGame + "PacketPlayOutRespawn"
-			)
-		);
+			version.getPackageNms() + "PacketPlayOutRespawn",
+			networkProtocolGame + "PacketPlayOutRespawn"
+		));
 	}
 }
