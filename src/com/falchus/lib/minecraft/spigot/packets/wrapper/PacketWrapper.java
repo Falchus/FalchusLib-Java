@@ -256,6 +256,11 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 		if (wrapper != null) {
 			return (T) wrapper.apply(packet);
 		}
+		for (Map.Entry<Class<?>, Function<Object, PacketWrapper>> entry : registry.entrySet()) {
+			if (entry.getKey().isAssignableFrom(packet.getClass())) {
+				return (T) entry.getValue().apply(packet);
+			}
+		}
 		return (T) new PacketWrapper(packet, Set.of(packet.getClass().getName()));
 	}
 }
