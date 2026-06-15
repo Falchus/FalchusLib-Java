@@ -29,10 +29,6 @@
         <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
   	<repository>
-  		<id>spigotmc-repo</id>
-  		<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-  	</repository>
-  	<repository>
   		<id>cs-arcanearts</id>
   		<url>https://dl.cloudsmith.io/public/arcane/archive/maven/</url>
   	</repository>
