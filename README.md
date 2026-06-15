@@ -244,6 +244,28 @@ Constructor getFirstConstructor(Set<List<Class>> params);
     ```
 
 #### Utils
+`com.falchus.lib.utils.FileUtils`
+```java
+static void createFolder(Path path, FileAttribute<?>... attributes);
+
+static void writeString(Path path, CharSequence content, OpenOption... options;
+static void writeString(Path path, CharSequence content);
+
+static String readString(Path path);
+
+static void copy(Path source, Path target, CopyOption... options);
+static void copy(Path source, Path target);
+
+static void copyFolder(Path source, Path target, Set<FileVisitOption> fileVisitOptions, Set<CopyOption> copyOptions);
+static void copyFolder(Path source, Path target, FileVisitOption... fileVisitOptions);
+static void copyFolder(Path source, Path target, CopyOption... copyOptions);
+static void copyFolder(Path source, Path target);
+
+static void delete(Path path);
+
+static void deleteFolder(Path path);
+```
+
 `com.falchus.lib.utils.JsonUtils`
 ```java
 static JsonElement get(String json, String path);

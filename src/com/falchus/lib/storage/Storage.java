@@ -1,12 +1,10 @@
 package com.falchus.lib.storage;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.Comparator;
 
 import com.falchus.lib.storage.serializer.Serializer;
+import com.falchus.lib.utils.FileUtils;
 
 public class Storage {
 
@@ -20,67 +18,38 @@ public class Storage {
 		this.folder = folder;
 		this.defaultContent = defaultContent;
 		
-		try {
-			Files.createDirectories(folder);
-			file = folder.resolve(fileName).toFile();
-			
-			if (!file.exists() || file.length() == 0) {
-	            Files.writeString(file.toPath(), defaultContent);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		FileUtils.createFolder(folder);
+		file = folder.resolve(fileName).toFile();
+		
+		if (!file.exists() || file.length() == 0) {
+			FileUtils.writeString(file.toPath(), defaultContent);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T> void save(T value) {
-        try {
-        	String content = ((Serializer<T>) serializer).serialize(value);
-        	Files.writeString(file.toPath(), content);
-        } catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+    	String content = ((Serializer<T>) serializer).serialize(value);
+    	FileUtils.writeString(file.toPath(), content);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T> T load() {
-		try {
-			if (!file.exists() || file.length() == 0) {
-				return ((Serializer<T>) serializer).deserialize(defaultContent);
-			}
-			
-			String content = Files.readString(file.toPath());
-			if (content == null || content.isBlank()) {
-				return ((Serializer<T>) serializer).deserialize(defaultContent);
-			}
-			return ((Serializer<T>) serializer).deserialize(content);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		if (!file.exists() || file.length() == 0) {
+			return ((Serializer<T>) serializer).deserialize(defaultContent);
 		}
+		
+		String content = FileUtils.readString(file.toPath());
+		if (content == null || content.isBlank()) {
+			return ((Serializer<T>) serializer).deserialize(defaultContent);
+		}
+		return ((Serializer<T>) serializer).deserialize(content);
 	}
 	
 	public void delete() {
-		try {
-			Files.deleteIfExists(file.toPath());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		FileUtils.delete(file.toPath());
 	}
 	
 	public void deleteFolder() {
-		try {
-			Files.walk(folder)
-				.sorted(Comparator.reverseOrder())
-				.forEach(path -> {
-					try {
-						Files.deleteIfExists(path);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-				});
-		} catch (NoSuchFileException ignored) {
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		FileUtils.deleteFolder(folder);
 	}
 }
