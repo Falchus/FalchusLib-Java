@@ -64,6 +64,7 @@ void onEnd() {}
 ClassInstanceBuilder(Class clazz);
 
 ClassInstanceBuilder(String name);
+ClassInstanceBuilder(Set<String> names);
 ClassInstanceBuilder(String... names);
 
 ClassInstanceBuilder withParams(Map<Class, Object>... params);

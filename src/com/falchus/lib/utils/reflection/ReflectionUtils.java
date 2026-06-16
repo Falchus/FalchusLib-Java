@@ -42,7 +42,7 @@ public class ReflectionUtils {
     	}).orElse(null);
     }
     
-    public static Class<?> getFirstClass(@NonNull String... names) {
+    public static Class<?> getFirstClass(@NonNull Set<String> names) {
     	return firstClasses.computeIfAbsent(new ClassKey(names), k -> {
             for (String name : names) {
             	Class<?> found = getClass(name);
@@ -54,6 +54,10 @@ public class ReflectionUtils {
     	}).orElseThrow(() ->
     		new RuntimeException("None of the classes exist: " + String.join(", ", names))
     	);
+    }
+    
+    public static Class<?> getFirstClass(@NonNull String... names) {
+    	return getFirstClass(Set.of(names));
     }
     
     public static Field getField(@NonNull Class<?> clazz, @NonNull String name) {

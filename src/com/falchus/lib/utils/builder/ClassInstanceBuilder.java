@@ -34,6 +34,15 @@ public class ClassInstanceBuilder {
 	/**
 	 * Creates a new {@link ClassInstanceBuilder} by first class.
 	 */
+	public ClassInstanceBuilder(@NonNull Set<String> names) {
+		this.clazz = ReflectionUtils.getFirstClass(
+			names
+		);
+	}
+	
+	/**
+	 * Creates a new {@link ClassInstanceBuilder} by first class.
+	 */
 	public ClassInstanceBuilder(@NonNull String... names) {
 		this.clazz = ReflectionUtils.getFirstClass(
 			names
