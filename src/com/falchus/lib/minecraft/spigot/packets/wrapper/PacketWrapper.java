@@ -57,6 +57,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.steervehicle.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.tabcomplete.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.tileentitydata.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.title.*;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.transaction.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.update.attributes.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.update.health.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.update.sign.*;
@@ -211,6 +212,9 @@ public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketW
 			WrappedPacketOutAnimationTitle.class,
 			WrappedPacketOutSubtitleTitle.class,
 			WrappedPacketOutTitleTitle.class,
+			
+			WrappedPacketInTransaction.class,
+			WrappedPacketOutTransaction.class,
 			
 			WrappedPacketOutUpdateAttributes.class,
 			

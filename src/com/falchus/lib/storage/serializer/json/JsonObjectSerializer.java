@@ -1,5 +1,8 @@
 package com.falchus.lib.storage.serializer.json;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.simple.JSONObject;
 
 public abstract class JsonObjectSerializer<T> extends JsonSerializer<T, JSONObject> {
@@ -24,5 +27,16 @@ public abstract class JsonObjectSerializer<T> extends JsonSerializer<T, JSONObje
 			throw new RuntimeException(e);
 		}
 		return from(new JSONObject());
+	}
+	
+	@Override
+	public JSONObject to(T value) {
+		return new JSONObject((Map<?, ?>) value);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T from(JSONObject json) {
+		return (T) new HashMap<>(json);
 	}
 }
