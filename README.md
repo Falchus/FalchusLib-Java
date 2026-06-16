@@ -450,6 +450,7 @@ static Version getVersion();
 static String getVersionString();
 static int getMajorVersion();
 static int getMinorVersion();
+static int getPatchVersion();
 
 static double[] getRecentTps();
 ```

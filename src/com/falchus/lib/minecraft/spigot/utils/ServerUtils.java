@@ -82,6 +82,21 @@ public class ServerUtils {
 	}
 	
 	/**
+	 * @return e.g. 11 for 1.21.11
+	 */
+	public static int getPatchVersion() {
+		String bukkitVersion = Bukkit.getBukkitVersion();
+		String mc = bukkitVersion.split("-")[0];
+		
+		try {
+			String[] parts = mc.split("\\.");
+			return parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+        }
+	}
+	
+	/**
 	 * @return recent TPS
 	 */
 	public static double[] getRecentTps() {
