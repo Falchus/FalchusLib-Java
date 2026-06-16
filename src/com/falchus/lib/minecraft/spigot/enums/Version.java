@@ -25,12 +25,31 @@ public enum Version {
 	
 	private final int major;
 	private final int minor;
+	private final int patch;
+	
+	Version(int major, int minor) {
+		this(major, minor, 0);
+	}
 	
 	public boolean isAfter(Version version) {
-		return major > version.major || (major == version.major && minor > version.minor);
+		if (major != version.major) {
+			return major > version.major;
+		}
+		
+		if (minor != version.minor) {
+			return minor > version.minor;
+		}
+		return patch > version.patch;
 	}
 	
 	public boolean isBefore(Version version) {
-		return major < version.major || (major == version.major && minor < version.minor);
+		if (major != version.major) {
+			return major < version.major;
+		}
+		
+		if (minor != version.minor) {
+			return minor < version.minor;
+		}
+		return patch < version.patch;
 	}
 }
