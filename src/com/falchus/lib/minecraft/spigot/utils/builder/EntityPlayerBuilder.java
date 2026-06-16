@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
@@ -16,6 +15,8 @@ import com.falchus.lib.minecraft.spigot.utils.EntityUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.world.entity.Entity;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -78,6 +79,7 @@ public class EntityPlayerBuilder {
 		return this;
 	}
 	
+	// TODO: cross-version support
 	/**
 	 * Builds and returns the final EntityPlayer.
 	 */
@@ -101,7 +103,7 @@ public class EntityPlayerBuilder {
 				)
 			).build();
 
-			Object entityPlayer = new ClassInstanceBuilder(
+			Entity entityPlayer = SpigotWrapper.wrap(new ClassInstanceBuilder(
 				VersionProvider.get().getEntityPlayer()
 			).withParams(
 				Map.of(
@@ -120,20 +122,12 @@ public class EntityPlayerBuilder {
 					VersionProvider.get().getPlayerInteractManager(),
 					playerInteractManager
 				)
-			).build();
+			).build());
 			
 			if (location != null) {
-				VersionProvider.get().getEntity_setLocation().invoke(entityPlayer,
-					location.getX(),
-					location.getY(),
-					location.getZ(),
-					location.getYaw(),
-					location.getPitch()
-				);
+				entityPlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 			}
-			VersionProvider.get().getEntity_setInvisible().invoke(entityPlayer,
-				invisible
-			);
+			entityPlayer.setInvisible(invisible);
 			
 			plugin.getEntityPlayerListener().players.put(uuid, entityPlayer);
 			
@@ -141,7 +135,7 @@ public class EntityPlayerBuilder {
 				new SpigotTask() {
 					@Override
 					protected void onRun(int tick) {
-						Entity entity = EntityUtils.getBukkitEntity(entityPlayer);
+						org.bukkit.entity.Entity entity = entityPlayer.getBukkitEntity();
 						if (entity == null || !entity.isValid()) {
 							end();
 							return;

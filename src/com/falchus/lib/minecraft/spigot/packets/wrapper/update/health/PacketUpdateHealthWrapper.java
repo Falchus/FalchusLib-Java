@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketUpdateHealthWrapper extends PacketWrapper {
+class PacketUpdateHealthWrapper extends PacketWrapper implements PacketUpdateHealth {
 	
 	Field health;
 	Field food;
@@ -32,26 +32,32 @@ class PacketUpdateHealthWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public float getHealth() {
 		return getFieldValue(health);
 	}
 	
+	@Override
 	public void setHealth(float health) {
 		setField(this.health, health);
 	}
 
+	@Override
 	public int getFood() {
 		return getFieldValue(food);
 	}
 	
+	@Override
 	public void setFood(int food) {
 		setField(this.food, food);
 	}
 
+	@Override
 	public float getSaturation() {
 		return getFieldValue(saturation);
 	}
 	
+	@Override
 	public void setSaturation(int saturation) {
 		setField(this.saturation, saturation);
 	}

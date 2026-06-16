@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketUpdateTimeWrapper extends PacketWrapper {
+class PacketUpdateTimeWrapper extends PacketWrapper implements PacketUpdateTime {
 	
 	Field gameTime;
 	Field dayTime;
@@ -27,18 +27,22 @@ class PacketUpdateTimeWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public long getGameTime() {
 		return getFieldValue(gameTime);
 	}
 	
+	@Override
 	public void setGameTime(long gameTime) {
 		setField(this.gameTime, gameTime);
 	}
 
+	@Override
 	public long getDayTime() {
 		return getFieldValue(dayTime);
 	}
 	
+	@Override
 	public void setDayTime(long dayTime) {
 		setField(this.dayTime, dayTime);
 	}

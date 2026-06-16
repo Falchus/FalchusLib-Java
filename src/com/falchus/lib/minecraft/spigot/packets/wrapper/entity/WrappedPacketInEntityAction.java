@@ -27,19 +27,21 @@ public class WrappedPacketInEntityAction extends PacketEntityWrapper {
 			"c"
 		);
 	}
+	
+	public enum Action {
+		STOP_SLEEPING,
+		START_SPRINTING,
+		STOP_SPRINTING,
+		OPEN_INVENTORY
+	}
 
-	/**
-	 * @return PacketPlayInEntityAction$EnumPlayerAction
-	 */
-	public Object getAction() {
-		return getFieldValue(action);
+	public Action getAction() {
+		return Action.valueOf(getFieldValue(action, Enum.class).name());
 	}
 	
-	/**
-	 * @param action	PacketPlayInEntityAction$EnumPlayerAction
-	 */
-	public void setAction(Object action) {
-		setField(this.action, action);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setAction(Action action) {
+		setField(this.action, Enum.valueOf((Class<? extends Enum>) this.action.getType(), action.name()));
 	}
 
 	public int getData() {

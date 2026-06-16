@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketCollectWrapper extends PacketWrapper {
+class PacketCollectWrapper extends PacketWrapper implements PacketCollect {
 	
 	Field itemId;
 	Field playerId;
@@ -27,18 +27,22 @@ class PacketCollectWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getItemId() {
 		return getFieldValue(itemId);
 	}
 	
+	@Override
 	public void setItemId(int itemId) {
 		setField(this.itemId, itemId);
 	}
 
+	@Override
 	public int getPlayerId() {
 		return getFieldValue(playerId);
 	}
 	
+	@Override
 	public void setPlayerId(int playerId) {
 		setField(this.playerId, playerId);
 	}

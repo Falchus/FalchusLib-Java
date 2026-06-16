@@ -18,7 +18,7 @@ public class Bossbar extends PlayerElement {
 	private BiFunction<Integer, Player, Double> progressSupplier;
 	
 	private Bossbar(@NonNull Player player) {
-    	super(player);
+    	super(player, ServerUtils.getVersion().isBefore(Version.v1_17));
     }
 	
 	public void send(@NonNull BiFunction<Integer, Player, String> message, @NonNull BiFunction<Integer, Player, Double> progress) {

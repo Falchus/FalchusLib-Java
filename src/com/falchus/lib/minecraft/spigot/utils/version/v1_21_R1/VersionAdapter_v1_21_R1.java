@@ -1,8 +1,8 @@
 package com.falchus.lib.minecraft.spigot.utils.version.v1_21_R1;
 
-import com.falchus.lib.minecraft.spigot.utils.version.VersionAdapterModern;
+import com.falchus.lib.minecraft.spigot.utils.version.v1_20_R4.VersionAdapter_v1_20_R4;
 
-public class VersionAdapter_v1_21_R1 extends VersionAdapterModern {
+public class VersionAdapter_v1_21_R1 extends VersionAdapter_v1_20_R4 {
 
     @Override
     public double[] getRecentTps() {

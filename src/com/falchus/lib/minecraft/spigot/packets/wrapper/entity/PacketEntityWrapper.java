@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketEntityWrapper extends PacketWrapper {
+class PacketEntityWrapper extends PacketWrapper implements PacketEntity {
 
 	Field entityId;
 	
@@ -24,10 +24,12 @@ class PacketEntityWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getEntityId() {
 		return getFieldValue(entityId);
 	}
 	
+	@Override
 	public void setEntityId(int entityId) {
 		setField(this.entityId, entityId);
 	}

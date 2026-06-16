@@ -4,12 +4,14 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketKickDisconnectWrapper extends PacketWrapper {
+class PacketKickDisconnectWrapper extends PacketWrapper implements PacketKickDisconnect {
 	
 	Field reason;
 
@@ -22,17 +24,13 @@ class PacketKickDisconnectWrapper extends PacketWrapper {
 		);
 	}
 
-	/**
-	 * @return IChatBaseComponent
-	 */
-	public Object getReason() {
-		return getFieldValue(reason);
+	@Override
+	public Component getReason() {
+		return SpigotWrapper.wrap(getFieldValue(reason));
 	}
 	
-	/**
-	 * @param reason	IChatBaseComponent
-	 */
-	public void setReason(Object reason) {
-		setField(this.reason, reason);
+	@Override
+	public void setReason(Component reason) {
+		setField(this.reason, reason.getHandle());
 	}
 }

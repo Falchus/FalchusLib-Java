@@ -1,15 +1,17 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
-import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -46,17 +48,43 @@ public class WorldUtils {
     }
 	
 	/**
-	 * @return WorldServer from a World
+	 * @return World from a {@link World}
 	 */
-	public static Object getWorldServer(World world) {
+	public static Object getWorld(@NonNull World world) {
+		return VersionProvider.get().getWorld(world);
+	}
+	
+	/**
+	 * @return WorldServer from a {@link World}
+	 */
+	public static Object getWorldServer(@NonNull World world) {
 		return VersionProvider.get().getWorldServer(world);
 	}
 	
 	/**
 	 * @return {@link List}
 	 */
-	public static List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB) {
+	public static List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB) {
 		return VersionProvider.get().getCollidingBlocks(world, axisAlignedBB);
+	}
+	
+	public static List<Block> getBlocksInBox(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB) {
+		int minX = (int) Math.floor(axisAlignedBB.getMinX());
+		int maxX = (int) Math.floor(axisAlignedBB.getMaxX());
+		int minY = (int) Math.floor(axisAlignedBB.getMinY());
+		int maxY = (int) Math.floor(axisAlignedBB.getMaxY());
+		int minZ = (int) Math.floor(axisAlignedBB.getMinZ());
+		int maxZ = (int) Math.floor(axisAlignedBB.getMaxZ());
+		
+		List<Block> blocks = new ArrayList<>();
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				for (int z = minZ; z <= maxZ; z++) {
+					blocks.add(world.getBlockAt(x, y, z));
+				}
+			}
+		}
+		return blocks;
 	}
 	
 	/**

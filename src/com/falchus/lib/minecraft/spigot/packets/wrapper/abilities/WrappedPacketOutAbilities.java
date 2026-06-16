@@ -1,11 +1,22 @@
 package com.falchus.lib.minecraft.spigot.packets.wrapper.abilities;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Set;
 
-import lombok.NonNull;
+import com.falchus.lib.minecraft.spigot.wrapper.world.entity.player.PlayerAbilities;
+import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
+
+@FieldDefaults(makeFinal = true)
 public class WrappedPacketOutAbilities extends PacketAbilitiesWrapper {
+	
+	private static final Set<String> names = Set.of(
+		version.getPackageNms() + "PacketPlayOutAbilities",
+		networkProtocolGame + "PacketPlayOutAbilities"
+	);
 
 	Field invulnerable;
 	Field canFly;
@@ -14,10 +25,7 @@ public class WrappedPacketOutAbilities extends PacketAbilitiesWrapper {
 	Field walkingSpeed;
 	
 	private WrappedPacketOutAbilities(@NonNull Object handle) {
-		super(handle, Set.of(
-			version.getPackageNms() + "PacketPlayOutAbilities",
-			networkProtocolGame + "PacketPlayOutAbilities"
-		));
+		super(handle, names);
 		
 		invulnerable = getFirstField(
 			"invulnerable",
@@ -39,6 +47,17 @@ public class WrappedPacketOutAbilities extends PacketAbilitiesWrapper {
 			"walkingSpeed",
 			"f"
 		);
+	}
+	
+	public WrappedPacketOutAbilities(@NonNull PlayerAbilities abilities) {
+		this(new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				abilities.getHandle().getClass(),
+				abilities.getHandle()
+			)
+		).build());
 	}
 
 	public boolean isInvulnerable() {

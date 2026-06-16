@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class ClassWrapper<T> extends Wrapper<T> {
+public class ClassWrapper<T> extends Wrapper<T> implements IClassWrapper<T> {
 
 	protected final Set<Class<?>> classes;
 	

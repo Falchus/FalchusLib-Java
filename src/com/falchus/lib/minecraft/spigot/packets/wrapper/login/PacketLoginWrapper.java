@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketLoginWrapper extends PacketWrapper {
+class PacketLoginWrapper extends PacketWrapper implements PacketLogin {
 	
 	Field playerId;
 	Field hardcore;
@@ -37,34 +37,42 @@ class PacketLoginWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getPlayerId() {
 		return getFieldValue(playerId);
 	}
 	
+	@Override
 	public void setPlayerId(int playerId) {
 		setField(this.playerId, playerId);
 	}
 
+	@Override
 	public boolean getHardcore() {
 		return getFieldValue(hardcore);
 	}
 	
+	@Override
 	public void setHardcore(boolean hardcore) {
 		setField(this.hardcore, hardcore);
 	}
 
+	@Override
 	public int getMaxPlayers() {
 		return getFieldValue(maxPlayers);
 	}
 	
+	@Override
 	public void setMaxPlayers(int maxPlayers) {
 		setField(this.maxPlayers, maxPlayers);
 	}
 
+	@Override
 	public boolean isReducedDebugInfo() {
 		return getFieldValue(reducedDebugInfo);
 	}
 	
+	@Override
 	public void setReducedDebugInfo(boolean reducedDebugInfo) {
 		setField(this.reducedDebugInfo, reducedDebugInfo);
 	}

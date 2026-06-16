@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketScoreboardScoreWrapper extends PacketWrapper {
+class PacketScoreboardScoreWrapper extends PacketWrapper implements PacketScoreboardScore {
 	
 	Field owner;
 	Field objectiveName;
@@ -32,26 +32,32 @@ class PacketScoreboardScoreWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public String getOwner() {
 		return getFieldValue(owner);
 	}
 	
+	@Override
 	public void setOwner(String owner) {
 		setField(this.owner, owner);
 	}
 
+	@Override
 	public String getObjectiveName() {
 		return getFieldValue(objectiveName);
 	}
 	
+	@Override
 	public void setObjectiveName(String objectiveName) {
 		setField(this.objectiveName, objectiveName);
 	}
 
+	@Override
 	public int getScore() {
 		return getFieldValue(score);
 	}
 	
+	@Override
 	public void setScore(int score) {
 		setField(this.score, score);
 	}

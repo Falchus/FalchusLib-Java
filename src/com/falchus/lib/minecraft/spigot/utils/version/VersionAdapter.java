@@ -12,21 +12,41 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.IPacketWrapper;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.entity.WrappedPacketOutEntityDestroy;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.entity.WrappedPacketOutEntityMetadata;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.playerlistheaderfooter.PacketPlayerListHeaderFooter;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.playerlistheaderfooter.WrappedPacketOutPlayerListHeaderFooter;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.PacketScoreboardTeam;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.WrappedPacketOutScoreboardTeam;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.spawn.entity.WrappedPacketOutSpawnEntityLiving;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.title.WrappedPacketOutSubtitleTitle;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.title.WrappedPacketOutTitleTitle;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
-import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.WrappedComponent;
+import com.falchus.lib.minecraft.spigot.wrapper.network.syncher.DataWatcher;
+import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
+import com.falchus.lib.minecraft.spigot.wrapper.world.entity.EntityLiving;
+import com.falchus.lib.minecraft.spigot.wrapper.world.entity.WrappedEntity;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.WrappedScoreboardTeam;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
@@ -61,21 +81,23 @@ public class VersionAdapter implements IVersionAdapter {
     Class<?> networkManager;
     @Getter Field networkManager_channel;
     @Getter Class<?> playerInteractManager;
-    Class<?> entity;
+    @Getter Class<?> entity;
     @Getter Method entity_setLocation;
     @Getter Method entity_setInvisible;
+    @Getter Class<?> entityLiving;
     @Getter Class<?> world;
     @Getter Class<?> minecraftServer;
     @Getter Class<?> worldServer;
+    Class<?> iScoreboardCriteria;
+    @Getter Class<?> iScoreboardCriteria$enumScoreboardHealthDisplay;
     
     Class<?> chatComponentText;
     
     Class<?> craftEntity;
-    Method entity_getHandle;
-    Method entity_getBukkitEntity;
-    Method entity_getBoundingBox;
+    Method craftEntity_getHandle;
+    Class<?> craftLivingEntity;
+    Method craftLivingEntity_getHandle;
     Class<?> axisAlignedBB;
-    Method entity_setYawPitch;
 	
 	Class<?> craftItemStack;
 	Class<?> nmsItemStack;
@@ -92,7 +114,7 @@ public class VersionAdapter implements IVersionAdapter {
     Class<?> iChatBaseComponent;
     Class<?> scoreboardTeam;
     Class<?> scoreboard;
-    Object scoreboardINST;
+    Class<?> scoreboardObjective;
     Class<?> packetPlayOutScoreboardTeam;
     Class<?> craftPlayer;
     Method craftPlayer_getHandle;
@@ -115,6 +137,36 @@ public class VersionAdapter implements IVersionAdapter {
     Field biomeBase_biomes;
     Method biomeBase_getBiome;
     Method world_getCubes;
+    
+    @Override
+    public Method entity_setCustomName() {
+    	return ReflectionUtils.getMethod(entity, "setCustomName",
+    		String.class
+    	);
+    }
+    
+    @Override
+    public Method scoreboard_registerObjective() {
+    	return ReflectionUtils.getFirstMethod(scoreboard,
+			List.of(
+				String.class,
+				iScoreboardCriteria
+			),
+			"registerObjective",
+			"addObjective"
+		);
+    }
+    
+    @Override
+    public Method scoreboard_unregisterObjective() {
+    	return ReflectionUtils.getFirstMethod(scoreboard,
+			List.of(
+				scoreboardObjective
+			),
+			"unregisterObjective",
+			"removeObjective"
+		);
+    }
 	
 	private Method nmsItemStack_getTag() {
 		return ReflectionUtils.getMethod(nmsItemStack, "getTag");
@@ -149,19 +201,6 @@ public class VersionAdapter implements IVersionAdapter {
     private Method craftWorld_getHandle() {
     	return ReflectionUtils.getMethod(craftWorld(), "getHandle");
     }
-    private Method entity_setCustomName() {
-    	return ReflectionUtils.getMethod(entity, "setCustomName",
-    		String.class
-    	);
-    }
-    private Method entity_setCustomNameVisible() {
-    	return ReflectionUtils.getMethod(entity, "setCustomNameVisible",
-    		boolean.class
-    	);
-    }
-    private Method entity_getId() {
-    	return ReflectionUtils.getMethod(entity, "getId");
-    }
     private Class<?> dataWatcher() {
     	return ReflectionUtils.getClass(packageNms + "DataWatcher");
     }
@@ -176,40 +215,8 @@ public class VersionAdapter implements IVersionAdapter {
     		Object.class
     	);
     }
-    private Method entity_getDataWatcher() {
-    	return ReflectionUtils.getMethod(entity, "getDataWatcher");
-    }
-    private Class<?> entityLiving() {
-    	return ReflectionUtils.getClass(packageNms + "EntityLiving");
-    }
-    private Method entityLiving_setHealth() {
-    	return ReflectionUtils.getMethod(entityLiving(), "setHealth",
-    		float.class
-    	);
-    }
-    private Method entityLiving_getMaxHealth() {
-    	return ReflectionUtils.getMethod(entityLiving(), "getMaxHealth");
-    }
     private Class<?> entityWither() {
     	return ReflectionUtils.getClass(packageNms + "EntityWither");
-    }
-    private Field packetPlayOutScoreboardTeam_name() {
-    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam, "a");
-    }
-    private Field packetPlayOutScoreboardTeam_displayName() {
-    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam, "b");
-    }
-    private Field packetPlayOutScoreboardTeam_prefix() {
-    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam, "c");
-    }
-    private Field packetPlayOutScoreboardTeam_suffix() {
-    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam, "d");
-    }
-    private Field packetPlayOutScoreboardTeam_players() {
-    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam, "g");
-    }
-    private Field packetPlayOutScoreboardTeam_mode() {
-    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam, "h");
     }
     
 	public VersionAdapter() {
@@ -268,6 +275,7 @@ public class VersionAdapter implements IVersionAdapter {
             entity_setInvisible = ReflectionUtils.getMethod(entity, "setInvisible",
             	boolean.class
             );
+            entityLiving = ReflectionUtils.getClass(packageNms + "EntityLiving");
             world = ReflectionUtils.getFirstClass(
             	packageNms + "World",
             	packageNm + "world.level.World"
@@ -277,6 +285,14 @@ public class VersionAdapter implements IVersionAdapter {
     			packageNms + "WorldServer",
     			packageNms + "level.WorldServer"
     		);
+    		iScoreboardCriteria = ReflectionUtils.getFirstClass(
+    			packageNms + "IScoreboardCriteria",
+    			packageNm + "world.scores.criteria.IScoreboardCriteria"
+    		);
+    		iScoreboardCriteria$enumScoreboardHealthDisplay = ReflectionUtils.getFirstClass(
+    			packageNms + "IScoreboardCriteria$EnumScoreboardHealthDisplay",
+    			packageNm + "world.scores.criteria.IScoreboardCriteria$EnumScoreboardHealthDisplay"
+    		);
             
             chatComponentText = ReflectionUtils.getFirstClass(
             	packageNms + "ChatComponentText",
@@ -284,20 +300,12 @@ public class VersionAdapter implements IVersionAdapter {
             );
             
             craftEntity = ReflectionUtils.getClass(packageObc + "entity.CraftEntity");
-            entity_getHandle = ReflectionUtils.getMethod(craftEntity, "getHandle");
-            entity_getBukkitEntity = ReflectionUtils.getMethod(entity, "getBukkitEntity");
-            entity_getBoundingBox = ReflectionUtils.getMethod(entity, "getBoundingBox");
+            craftEntity_getHandle = ReflectionUtils.getMethod(craftEntity, "getHandle");
+            craftLivingEntity = ReflectionUtils.getClass(packageObc + "entity.CraftLivingEntity");
+            craftLivingEntity_getHandle = ReflectionUtils.getMethod(craftLivingEntity, "getHandle");
             axisAlignedBB = ReflectionUtils.getFirstClass(
             	packageNms + "AxisAlignedBB",
             	packageNm + "world.phys.AxisAlignedBB"
-            );
-            entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
-            	List.of(
-            		float.class,
-            		float.class
-            	),
-            	"setYawPitch",
-            	"setRot"
             );
             
             craftItemStack = ReflectionUtils.getClass(packageObc + "inventory.CraftItemStack");
@@ -360,9 +368,10 @@ public class VersionAdapter implements IVersionAdapter {
             	packageNms + "Scoreboard",
             	packageNm + "world.scores.Scoreboard"
             );
-            scoreboardINST = new ClassInstanceBuilder(
-            	scoreboard
-            ).build();
+            scoreboardObjective = ReflectionUtils.getFirstClass(
+            	packageNms + "ScoreboardObjective",
+            	packageNm + "world.scores.ScoreboardObjective"
+            );
             packetPlayOutScoreboardTeam = ReflectionUtils.getFirstClass(
             	packageNms + "PacketPlayOutScoreboardTeam",
             	packageNm + "network.protocol.game.PacketPlayOutScoreboardTeam"
@@ -411,57 +420,87 @@ public class VersionAdapter implements IVersionAdapter {
 	
 	@Override
 	public Object createChatComponentText(@NonNull String text) {
-		try {
-			return new ClassInstanceBuilder(
-				chatComponentText
-			).withParams(
-				Map.of(
-					String.class,
-					text
-				)
-			).build();
-		} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		return new ClassInstanceBuilder(
+			chatComponentText
+		).withParams(
+			Map.of(
+				String.class,
+				text
+			)
+		).build();
+	}
+	
+	@Override
+	public Object createPacketOutScoreboardTeam(@NonNull Set<String> names, @NonNull ScoreboardTeam team, int mode, String playerName) {
+		return new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				team.getHandle().getClass(),
+				team.getHandle()
+			),
+			Map.of(
+				int.class,
+				mode
+			)
+		).build();
+	}
+	
+	@Override
+	public Object createPacketOutPlayerListHeaderFooter(@NonNull Set<String> names, @NonNull String header, @NonNull String footer) {
+		PacketPlayerListHeaderFooter packet = PacketWrapper.wrap(new ClassInstanceBuilder(
+			names
+		).build());
+		packet.setHeader(header);
+		packet.setFooter(footer);
+		return packet.getHandle();
+	}
+	
+	@Override
+	public Object createClientboundSetTitleTextPacket(@NonNull Set<String> names, @NonNull Component text) {
+		return new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				packetPlayOutTitle$enumTitleAction(),
+				packetPlayOutTitle$enumTitleAction_TITLE()
+			),
+			Map.of(
+				iChatBaseComponent,
+				text.getHandle()
+			)
+		).build();
+	}
+	
+	@Override
+	public Object createClientboundSetSubtitleTextPacket(@NonNull Set<String> names, @NonNull Component text) {
+		return new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				packetPlayOutTitle$enumTitleAction(),
+				packetPlayOutTitle$enumTitleAction_SUBTITLE()
+			),
+			Map.of(
+				iChatBaseComponent,
+				text.getHandle()
+			)
+		).build();
 	}
 	
 	@Override
 	public Object getEntity(@NonNull Entity entity) {
 		try {
-			return entity_getHandle.invoke(entity);
+			return craftEntity_getHandle.invoke(entity);
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
 	}
 	
 	@Override
-	public Entity getBukkitEntity(@NonNull Object entity) {
+	public Object getEntityLiving(@NonNull LivingEntity entity) {
 		try {
-			return (Entity) entity_getBukkitEntity.invoke(entity);
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
-	}
-	
-	@Override
-	public WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity) {
-		try {
-			return SpigotWrapper.wrap(entity_getBoundingBox.invoke(getEntity(entity)));
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
-	}
-	
-	@Override
-	public WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-		try {
-			axisAlignedBB.setMinX(axisAlignedBB.getMinX() + minX);
-			axisAlignedBB.setMinY(axisAlignedBB.getMinY() + minY);
-			axisAlignedBB.setMinZ(axisAlignedBB.getMinZ() + minZ);
-			axisAlignedBB.setMaxX(axisAlignedBB.getMaxX() + maxX);
-			axisAlignedBB.setMaxY(axisAlignedBB.getMaxY() + maxY);
-			axisAlignedBB.setMaxZ(axisAlignedBB.getMaxZ() + maxZ);
-			return axisAlignedBB;
+			return craftLivingEntity_getHandle.invoke(entity);
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
@@ -470,8 +509,8 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public double getAbsorption(@NonNull Damageable entity) {
     	try {
-    		Object dataWatcher = entity_getDataWatcher().invoke(getEntity(entity));
-    		return (float) dataWatcher_getFloat().invoke(dataWatcher,
+    		DataWatcher dataWatcher = new WrappedEntity(entity).getDataWatcher();
+    		return (float) dataWatcher_getFloat().invoke(dataWatcher.getHandle(),
     			17
     		);
     	} catch (Exception e) {
@@ -482,8 +521,8 @@ public class VersionAdapter implements IVersionAdapter {
     @Override
     public void setAbsorption(@NonNull Damageable entity, double absorption) {
     	try {
-    		Object dataWatcher = entity_getDataWatcher().invoke(getEntity(entity));
-    		dataWatcher_watch().invoke(dataWatcher,
+    		DataWatcher dataWatcher = new WrappedEntity(entity).getDataWatcher();
+    		dataWatcher_watch().invoke(dataWatcher.getHandle(),
     			17,
     			(float) absorption
     		);
@@ -491,18 +530,6 @@ public class VersionAdapter implements IVersionAdapter {
             throw new RuntimeException(e);
         }
     }
-	
-	@Override
-	public void setYawPitch(@NonNull Object entity, float yaw, float pitch) {
-		try {
-			entity_setYawPitch.invoke(entity,
-				yaw,
-				pitch
-			);
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
-	}
 	
     @Override
     public ItemStack setUUID(@NonNull ItemStack item, UUID uuid) {
@@ -598,247 +625,121 @@ public class VersionAdapter implements IVersionAdapter {
     
     @Override
     public void sendTitle(@NonNull Player player, String title, String subtitle) {
-    	try {
-    		title = title != null ? title : "";
-    		subtitle = subtitle != null ? subtitle : "";
-    		
-			Object titleComponent = createChatComponentText(title);
-			Object titlePacket = new ClassInstanceBuilder(
-				packageNms + "PacketPlayOutTitle"
-			).withParams(
-				Map.of(
-					packetPlayOutTitle$enumTitleAction(),
-					packetPlayOutTitle$enumTitleAction_TITLE()
-				),
-				Map.of(
-					iChatBaseComponent,
-					titleComponent
-				)
-			).build();
-			sendPacket(player, titlePacket);
-    		
-			Object subtitleComponent = createChatComponentText(subtitle);
-			Object subtitlePacket = new ClassInstanceBuilder(
-				packageNms + "PacketPlayOutTitle"
-			).withParams(
-				Map.of(
-					packetPlayOutTitle$enumTitleAction(),
-					packetPlayOutTitle$enumTitleAction_SUBTITLE()
-				),
-				Map.of(
-					iChatBaseComponent,
-					subtitleComponent
-				)
-			).build();
-			sendPacket(player, subtitlePacket);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		title = title != null ? title : "";
+		subtitle = subtitle != null ? subtitle : "";
+		
+		Component titleComponent = new WrappedComponent(title);
+		WrappedPacketOutTitleTitle titlePacket = new WrappedPacketOutTitleTitle(titleComponent);
+		PlayerUtils.sendPacket(player, titlePacket);
+		
+		Component subtitleComponent = new WrappedComponent(subtitle);
+		WrappedPacketOutSubtitleTitle subtitlePacket = new WrappedPacketOutSubtitleTitle(subtitleComponent);
+		PlayerUtils.sendPacket(player, subtitlePacket);
     }
     
     @Override
     public void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {
-    	try {
-    	    String headerText = header != null ? String.join("\n", header) : "";
-    	    String footerText = footer != null ? String.join("\n", footer) : "";
+	    String headerText = header != null ? String.join("\n", header) : "";
+	    String footerText = footer != null ? String.join("\n", footer) : "";
 
-    	    Object headerComponent = createChatComponentText(headerText);
-    	    Object footerComponent = createChatComponentText(footerText);
-            
-            Object packet = new ClassInstanceBuilder(
-            	packageNms + "PacketPlayOutPlayerListHeaderFooter"
-            ).withParams(
-        		Map.of(
-    				iChatBaseComponent,
-        			headerComponent
-        		)
-            ).build();
-            
-            ReflectionUtils.setField(packet, "b", footerComponent);
-            
-            sendPacket(player, packet);
-            player.setPlayerListName(name);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+	    IPacketWrapper packet = new WrappedPacketOutPlayerListHeaderFooter(headerText, footerText);
+        
+        PlayerUtils.sendPacket(player, packet);
+        player.setPlayerListName(name);
     }
     
     @Override
     public void sendBossbar(@NonNull Player player, @NonNull String title, double progress) {
-    	try {
-    		removeBossbar(player);
-    		
-            Location eye = player.getEyeLocation().clone();
-            Location location = eye.add(eye.getDirection().multiply(45));
-            
-            float yaw = eye.getYaw();
-            float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
-            
-            Object worldServer = getWorldServer(player.getWorld());
-            Object wither = new ClassInstanceBuilder(
-            	entityWither()
-            ).withParams(
-        		Map.of(
-        			world,
-        			worldServer
-        		)
-            ).build();
-            
-            entity_setInvisible.invoke(wither,
-            	true
-            );
-            entity_setCustomName().invoke(wither,
-            	title
-            );
-            entity_setCustomNameVisible().invoke(wither,
-            	true
-            );
-            
-            float maxHealth = (float) entityLiving_getMaxHealth().invoke(wither);
-            float newHealth = (float) Math.max(1, Math.min(maxHealth, progress * maxHealth));
-            entityLiving_setHealth().invoke(wither,
-            	newHealth
-            );
-            
-            entity_setLocation.invoke(wither,
-            	location.getX(),
-            	location.getY(),
-            	location.getZ(),
-            	yaw,
-            	pitch
-            );
-            
-            Object spawnPacket = new ClassInstanceBuilder(
-            	packageNms + "PacketPlayOutSpawnEntityLiving"
-            ).withParams(
-        		Map.of(
-        			entityLiving(),
-        			wither
-        		)
-            ).build();
-            sendPacket(player, spawnPacket);
-            
-            Object metadataPacket = new ClassInstanceBuilder(
-            	packageNms + "PacketPlayOutEntityMetadata"
-            ).withParams(
-        		Map.of(
-        			int.class,
-        			entity_getId().invoke(wither)
-        		),
-				Map.of(
-					dataWatcher(),
-					entity_getDataWatcher().invoke(wither)
-				),
-				Map.of(
-					boolean.class,
-					true
-				)
-            ).build();
-            sendPacket(player, metadataPacket);
-            
-            bossBars.put(player, wither);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		removeBossbar(player);
+		
+        EntityLiving wither = SpigotWrapper.wrap(new ClassInstanceBuilder(
+        	entityWither()
+        ).withParams(
+    		Map.of(
+    			world,
+    			getWorldServer(player.getWorld())
+    		)
+        ).build());
+        wither.setInvisible(true);
+        wither.setCustomName(title);
+        wither.setCustomNameVisible(true);
+        
+        float maxHealth = wither.getMaxHealth();
+        float newHealth = (float) Math.max(1, Math.min(maxHealth, progress * maxHealth));
+        wither.setHealth(newHealth);
+        
+        Location eye = player.getEyeLocation().clone();
+        Location location = eye.add(eye.getDirection().multiply(45));
+        float pitch = Math.max(-15, Math.min(15, eye.getPitch()));
+        wither.setLocation(location.getX(), location.getY(), location.getZ(), eye.getYaw(), pitch);
+        
+        IPacketWrapper spawnPacket = new WrappedPacketOutSpawnEntityLiving(wither);
+        PlayerUtils.sendPacket(player, spawnPacket);
+        
+        IPacketWrapper metadataPacket = new WrappedPacketOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true);
+        PlayerUtils.sendPacket(player, metadataPacket);
+        
+        bossBars.put(player, wither);
     }
     
     @Override
     public void removeBossbar(@NonNull Player player) {
-    	try {
-    		Object wither = bossBars.remove(player);
-    		if (wither != null) {
-    			int id = (int) entity_getId().invoke(wither);
-    			Object destroyPacket = new ClassInstanceBuilder(
-    				packageNms + "PacketPlayOutEntityDestroy"
-    			).withParams(
-					Map.of(
-						int[].class,
-						new int[] { id }
-					)
-    			).build();
-    			sendPacket(player, destroyPacket);
-    		}
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		Object obj = bossBars.remove(player);
+		if (obj instanceof EntityLiving wither) {
+			int id = wither.getId();
+			IPacketWrapper destroyPacket = new WrappedPacketOutEntityDestroy(id);
+			PlayerUtils.sendPacket(player, destroyPacket);
+		}
     }
     
     @Override
     public void sendActionbar(@NonNull Player player, @NonNull String message) {
-		try {
-			Object chatMessage = createChatComponentText(message);
-			Object packet = new ClassInstanceBuilder(
-				packageNms + "PacketPlayOutChat"
-			).withParams(
-				Map.of(
-					iChatBaseComponent,
-					chatMessage
-				),
-				Map.of(
-					byte.class,
-					(byte) 2
-				)
-			).build();
-			sendPacket(player, packet);
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
+		Object packet = new ClassInstanceBuilder(
+			packageNms + "PacketPlayOutChat"
+		).withParams(
+			Map.of(
+				iChatBaseComponent,
+				new WrappedComponent(message).getHandle()
+			),
+			Map.of(
+				byte.class,
+				(byte) 2
+			)
+		).build();
+		sendPacket(player, packet);
     }
     
     @Override
     public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
-		try {
-			Set<String> players = Set.of(player.getName());
-			
-	        Object createPacket = new ClassInstanceBuilder(
-	        	packetPlayOutScoreboardTeam
-	        ).build();
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_name(), player.getName());	        
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_displayName(), player.getName());
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_players(), players);
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_mode(), 0);
-	        
-	        Object updatePacket = new ClassInstanceBuilder(
-	        	packetPlayOutScoreboardTeam
-	        ).build();
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_name(), player.getName());	        
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_displayName(), player.getName());
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_players(), players);
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_mode(), 2);
-	        
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_prefix(), prefix);
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_prefix(), prefix);
-	        
-	        ReflectionUtils.setField(createPacket, packetPlayOutScoreboardTeam_suffix(), suffix);
-	        ReflectionUtils.setField(updatePacket, packetPlayOutScoreboardTeam_suffix(), suffix);
-	        
-	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-	        	sendPacket(onlinePlayer, createPacket);
-	        	sendPacket(onlinePlayer, updatePacket);
-	        }
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
+		Set<String> players = Set.of(player.getName());
+		
+		ScoreboardTeam team = new WrappedScoreboardTeam(player.getName());
+		team.setDisplayName(player.getName());
+		team.setPrefix(prefix);
+		team.setSuffix(suffix);
+		
+		PacketScoreboardTeam createPacket = new WrappedPacketOutScoreboardTeam(team, WrappedPacketOutScoreboardTeam.Mode.CREATE);
+		createPacket.setPlayers(players);
+        
+		PacketScoreboardTeam updatePacket = new WrappedPacketOutScoreboardTeam(team, WrappedPacketOutScoreboardTeam.Mode.UPDATE);
+		updatePacket.setPlayers(players);
+        
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        	PlayerUtils.sendPacket(onlinePlayer, createPacket);
+        	PlayerUtils.sendPacket(onlinePlayer, updatePacket);
+        }
     }
     
     @Override
     public void removeNametag(@NonNull Player player) {
-		try {
-			Set<String> players = Set.of(player.getName());
-			
-	        Object removePacket = new ClassInstanceBuilder(
-	        	packetPlayOutScoreboardTeam
-	        ).build();
-	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_name(), player.getName());
-	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_players(), players);
-	        ReflectionUtils.setField(removePacket, packetPlayOutScoreboardTeam_mode(), 4);
-			
-	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-	        	sendPacket(onlinePlayer, removePacket);
-	        }
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
+		Set<String> players = Set.of(player.getName());
+		
+		PacketScoreboardTeam removePacket = new WrappedPacketOutScoreboardTeam(WrappedPacketOutScoreboardTeam.Mode.REMOVE_PLAYER, player.getName());
+		removePacket.setPlayers(players);
+		
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        	PlayerUtils.sendPacket(onlinePlayer, removePacket);
+        }
     }
     
     @Override
@@ -891,191 +792,157 @@ public class VersionAdapter implements IVersionAdapter {
     
     @Override
     public void setSkin(@NonNull Player player, @NonNull UUID uuid) {
-    	try {
-    		Object entityPlayer = getEntityPlayer(player);
-    		GameProfile profile = getProfile(entityPlayer);
-    		
-    		Collection<Property> textures = profile.getProperties().get("textures");
-    		if (!PlayerUtils.skins.containsKey(player.getUniqueId()) && textures != null && !textures.isEmpty()) {
-    		    PlayerUtils.skins.put(player.getUniqueId(), textures.iterator().next());
-    		}
-			
-			GameProfile skinProfile = GameProfileBuilder.fetch(uuid);
-			
-			profile.getProperties().removeAll("textures");
-			for (Property property : skinProfile.getProperties().get("textures")) {
-				profile.getProperties().put("textures", property);
-			}
-			
-			refresh(player);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		Object entityPlayer = getEntityPlayer(player);
+		GameProfile profile = getProfile(entityPlayer);
+		
+		Collection<Property> textures = profile.getProperties().get("textures");
+		if (!PlayerUtils.skins.containsKey(player.getUniqueId()) && textures != null && !textures.isEmpty()) {
+		    PlayerUtils.skins.put(player.getUniqueId(), textures.iterator().next());
+		}
+		
+		GameProfile skinProfile = GameProfileBuilder.fetch(uuid);
+		
+		profile.getProperties().removeAll("textures");
+		for (Property property : skinProfile.getProperties().get("textures")) {
+			profile.getProperties().put("textures", property);
+		}
+		
+		refresh(player);
     }
     
     @Override
     public void resetSkin(@NonNull Player player) {
-    	try {
-    		Object entityPlayer = getEntityPlayer(player);
-    		GameProfile profile = getProfile(entityPlayer);
+		Object entityPlayer = getEntityPlayer(player);
+		GameProfile profile = getProfile(entityPlayer);
 
-	        Property original = PlayerUtils.skins.get(player.getUniqueId());
-	        if (original != null) {
-	            profile.getProperties().removeAll("textures");
-	            profile.getProperties().put("textures", original);
+        Property original = PlayerUtils.skins.get(player.getUniqueId());
+        if (original != null) {
+            profile.getProperties().removeAll("textures");
+            profile.getProperties().put("textures", original);
 
-	            refresh(player);
+            refresh(player);
 
-	            PlayerUtils.skins.remove(player.getUniqueId());
-	        }
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
+            PlayerUtils.skins.remove(player.getUniqueId());
         }
     }
     
     @Override
     public void setName(@NonNull Player player, @NonNull String name) {
-    	try {
-    		Object entityPlayer = getEntityPlayer(player);
-    		GameProfile profile = getProfile(entityPlayer);
-    		
-    		PlayerUtils.names.put(player.getUniqueId(), profile.getName());
+		Object entityPlayer = getEntityPlayer(player);
+		GameProfile profile = getProfile(entityPlayer);
+		
+		PlayerUtils.names.put(player.getUniqueId(), profile.getName());
 
-	        player.setCustomName(name);
-	        player.setCustomNameVisible(true);
-	        player.setDisplayName(name);
-	        
-	        ReflectionUtils.setField(ReflectionUtils.getField(GameProfile.class, "name"), name);
+        player.setCustomName(name);
+        player.setCustomNameVisible(true);
+        player.setDisplayName(name);
+        
+        ReflectionUtils.setField(ReflectionUtils.getField(GameProfile.class, "name"), name);
 
-	        refresh(player);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        refresh(player);
     }
     
     @Override
     public void resetName(@NonNull Player player) {
-    	try {
-	        String original = PlayerUtils.names.get(player.getUniqueId());
-	        if (original == null) return;
-    		
-	        player.setCustomName(original);
-	        player.setCustomNameVisible(true);
-	        player.setDisplayName(original);
+        String original = PlayerUtils.names.remove(player.getUniqueId());
+        if (original == null) return;
+		
+        player.setCustomName(original);
+        player.setCustomNameVisible(true);
+        player.setDisplayName(original);
 
-	        ReflectionUtils.setField(ReflectionUtils.getField(GameProfile.class, "name"), original);
+        ReflectionUtils.setField(ReflectionUtils.getField(GameProfile.class, "name"), original);
 
-	        refresh(player);
-
-	        PlayerUtils.names.remove(player.getUniqueId());
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        refresh(player);
     }
     
     @Override
     public void refresh(@NonNull Player player) {
-    	try {
-    		Object entityPlayer = getEntityPlayer(player);
-    		
-    		Object update = packetPlayOutPlayerInfo$enumPlayerInfoAction_UPDATE_DISPLAY_NAME;
-    		Object packet = new ClassInstanceBuilder(
-				packageNms + "PacketPlayOutPlayerInfo",
-				packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
-			).withParams(
-				Map.of(
-					packetPlayOutPlayerInfo$enumPlayerInfoAction,
-					update
-				),
-				Map.of(
-					Iterable.class,
-					List.of(entityPlayer)
-				)
-			).build();
-    	    for (Player online : Bukkit.getOnlinePlayers()) {
-    	        sendPacket(online, packet);
-    	    }
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		Object entityPlayer = getEntityPlayer(player);
+		
+		Object update = packetPlayOutPlayerInfo$enumPlayerInfoAction_UPDATE_DISPLAY_NAME;
+		Object packet = new ClassInstanceBuilder(
+			packageNms + "PacketPlayOutPlayerInfo",
+			packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
+		).withParams(
+			Map.of(
+				packetPlayOutPlayerInfo$enumPlayerInfoAction,
+				update
+			),
+			Map.of(
+				Iterable.class,
+				List.of(entityPlayer)
+			)
+		).build();
+	    for (Player online : Bukkit.getOnlinePlayers()) {
+	        sendPacket(online, packet);
+	    }
     }
     
     @Override
     public void addEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-    	try {
-    		Object add = packetPlayOutPlayerInfo$enumPlayerInfoAction_ADD_PLAYER;
-    		Object packet = new ClassInstanceBuilder(
-				packageNms + "PacketPlayOutPlayerInfo",
-				packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
-			).withParams(
-				Map.of(
-					packetPlayOutPlayerInfo$enumPlayerInfoAction,
-					add
-				),
-				Map.of(
-					Iterable.class,
-					List.of(entityPlayer)
-				)
-			).build();
-            sendPacket(player, packet);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		Object add = packetPlayOutPlayerInfo$enumPlayerInfoAction_ADD_PLAYER;
+		Object packet = new ClassInstanceBuilder(
+			packageNms + "PacketPlayOutPlayerInfo",
+			packageNm + "network.protocol.game.ClientboundPlayerInfoUpdatePacket"
+		).withParams(
+			Map.of(
+				packetPlayOutPlayerInfo$enumPlayerInfoAction,
+				add
+			),
+			Map.of(
+				Iterable.class,
+				List.of(entityPlayer)
+			)
+		).build();
+        sendPacket(player, packet);
     }
     
     @Override
     public void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-    	try {
-    		Object remove = packetPlayOutPlayerInfo$enumPlayerInfoAction_REMOVE_PLAYER();
-    		Object packet = new ClassInstanceBuilder(
-    			packageNms + "PacketPlayOutPlayerInfo"
-    		).withParams(
-				Map.of(
-					packetPlayOutPlayerInfo$enumPlayerInfoAction,
-					remove
-				),
-				Map.of(
-					Iterable.class,
-					List.of(entityPlayer)
-				)
-    		).build();
-            sendPacket(player, packet);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		Object remove = packetPlayOutPlayerInfo$enumPlayerInfoAction_REMOVE_PLAYER();
+		Object packet = new ClassInstanceBuilder(
+			packageNms + "PacketPlayOutPlayerInfo"
+		).withParams(
+			Map.of(
+				packetPlayOutPlayerInfo$enumPlayerInfoAction,
+				remove
+			),
+			Map.of(
+				Iterable.class,
+				List.of(entityPlayer)
+			)
+		).build();
+        sendPacket(player, packet);
     }
     
     @Override
     public void spawnEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-    	try {
-    		addEntityPlayer(player, entityPlayer);
-    		
-    		Object spawn = new ClassInstanceBuilder(
-    			packageNms + "PacketPlayOutNamedEntitySpawn",
-    			packageNm + "network.protocol.game.ClientboundAddPlayerPacket"
-    		).withParams(
-				Map.of(
-					entityHuman,
-					entityPlayer
-				)
-    		).build();
-    		sendPacket(player, spawn);
-    		
-    		Object teleport = new ClassInstanceBuilder(
-    			packageNms + "PacketPlayOutEntityTeleport",
-    			packageNm + "network.protocol.game.ClientboundPlayerPositionPacket"
-    		).withParams(
-				Map.of(
-					entity,
-					entityPlayer
-				)
-    		).build();
-    		sendPacket(player, teleport);
-    		
-    		SchedulerUtils.runTask(() -> removeEntityPlayer(player, entityPlayer));
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		addEntityPlayer(player, entityPlayer);
+		
+		Object spawn = new ClassInstanceBuilder(
+			packageNms + "PacketPlayOutNamedEntitySpawn",
+			packageNm + "network.protocol.game.ClientboundAddPlayerPacket"
+		).withParams(
+			Map.of(
+				entityHuman,
+				entityPlayer
+			)
+		).build();
+		sendPacket(player, spawn);
+		
+		Object teleport = new ClassInstanceBuilder(
+			packageNms + "PacketPlayOutEntityTeleport",
+			packageNm + "network.protocol.game.PacketPlayOutEntityTeleport"
+		).withParams(
+			Map.of(
+				entity,
+				entityPlayer
+			)
+		).build();
+		sendPacket(player, teleport);
+		
+		SchedulerUtils.runTask(() -> removeEntityPlayer(player, entityPlayer));
     }
     
     @Override
@@ -1089,8 +956,8 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public Object getBukkitServer() {
-		return bukkitServer.cast(Bukkit.getServer());
+    public Server getBukkitServer() {
+		return (Server) bukkitServer.cast(Bukkit.getServer());
     }
     
     @Override
@@ -1129,107 +996,103 @@ public class VersionAdapter implements IVersionAdapter {
     
     @Override
     public int getBiomeId(Biome biome) {
-    	try {
-    		int id;
-    		if (biome == null) {
-    			id = 1;
-    		} else {
-    			switch (biome.name()) {
-					case "BEACH": id = 16; break;
+		int id;
+		if (biome == null) {
+			id = 1;
+		} else {
+			switch (biome.name()) {
+				case "BEACH": id = 16; break;
+				
+				case "BIRCH_FOREST": id = 27; break;
+				case "BIRCH_FOREST_MOUNTAINS": id = 155; break;
 					
-					case "BIRCH_FOREST": id = 27; break;
-					case "BIRCH_FOREST_MOUNTAINS": id = 155; break;
-						
-	    			case "BIRCH_FOREST_HILLS": id = 28; break;
-	    			case "BIRCH_FOREST_HILLS_MOUNTAINS": id = 156; break;
-	    				
-	    			case "COLD_BEACH": id = 26; break;
-	    			case "COLD_TAIGA": id = 30; break;
-	    			
-	    			case "COLD_TAIGA_HILLS": id = 31; break;
-	    			case "COLD_TAIGA_MOUNTAINS": id = 158; break;
-	    				
-	    			case "DEEP_OCEAN": id = 24; break;
-	    			case "DESERT": id = 2; break;
-	    			
-	    			case "DESERT_HILLS": id = 17; break;
-	    			case "DESERT_MOUNTAINS": id = 145; break;
-	    				
-	    			case "EXTREME_HILLS": id = 3; break;
-	    			case "EXTREME_HILLS_MOUNTAINS": id = 131; break;
-	    				
-	    			case "EXTREME_HILLS_PLUS": id = 20; break;
-	    			case "EXTREME_HILLS_PLUS_MOUNTAINS": id = 148; break;
-	    				
-	    			case "FOREST": id = 4; break;
-	    			case "FLOWER_FOREST": id = 132; break;
-	    				
-	    			case "FOREST_HILLS": id = 18; break;
-	    			case "FROZEN_OCEAN": id = 10; break;
-	    			case "FROZEN_RIVER": id = 11; break;
-	    			case "HELL": id = 8; break;
-	    			case "ICE_MOUNTAINS": id = 13; break;
-	    			
-	    			case "ICE_PLAINS": id = 12; break;
-	    			case "ICE_PLAINS_SPIKES": id = 140; break;
-	    				
-	    			case "JUNGLE": id = 21; break;
-	    			
-	    			case "JUNGLE_EDGE": id = 23; break;
-	    			case "JUNGLE_EDGE_MOUNTAINS": id = 151; break;
-	    				
-	    			case "JUNGLE_HILLS": id = 22; break;
-	    			case "JUNGLE_MOUNTAINS": id = 149; break;
-	    				
-	    			case "MEGA_TAIGA": id = 32; break;
-	    			case "MEGA_TAIGA_HILLS": id = 33; break;
-	    			
-	    			case "MESA": id = 37; break;
-	    			case "MESA_BRYCE": id = 165; break;
-	    			case "MESA_PLATEAU": id = 39; break;
-	    			case "MESA_PLATEAU_FOREST": id = 38; break;
-	    			case "MESA_PLATEAU_FOREST_MOUNTAINS": id = 166; break;
-	    			case "MESA_PLATEAU_MOUNTAINS": id = 167; break;
-	    				
-	    			case "MUSHROOM_ISLAND": id = 14; break;
-	    			case "MUSHROOM_SHORE": id = 15; break;
-	    			case "OCEAN": id = 0; break;
-	    			
-	    			case "PLAINS": id = 1; break;
-	    			case "SUNFLOWER_PLAINS": id = 129; break;
-	    				
-	    			case "RIVER": id = 7; break;
-	    			
-	    			case "ROOFED_FOREST": id = 29; break;
-	    			case "ROOFED_FOREST_MOUNTAINS": id = 157; break;
-	    				
-	    			case "SAVANNA": id = 35; break;
-	    			case "SAVANNA_MOUNTAINS": id = 163; break;
-	    				
-	    			case "SAVANNA_PLATEAU": id = 36; break;
-	    			case "SAVANNA_PLATEAU_MOUNTAINS": id = 164; break;
-	    				
-	    			case "SKY": id = 9; break;
-	    			case "SMALL_MOUNTAINS": id = 34; break;
-	    			case "STONE_BEACH": id = 25; break;
-	    			
-	    			case "SWAMPLAND": id = 6; break;
-	    			case "SWAMPLAND_MOUNTAINS": id = 134; break;
-	    				
-	    			case "TAIGA": id = 5; break;
-	    			case "MEGA_SPRUCE_TAIGA": id = 160; break;
-	    			case "MEGA_SPRUCE_TAIGA_HILLS": id = 161; break;
-	    				
-	    			case "TAIGA_HILLS": id = 19; break;
-	    			case "TAIGA_MOUNTAINS": id = 133; break;
-	    				
-	    			default: id = 1; break;
-    			}
-    		}
-    		return id;
-    	} catch (Exception e) {
-    		throw new RuntimeException(e);
+    			case "BIRCH_FOREST_HILLS": id = 28; break;
+    			case "BIRCH_FOREST_HILLS_MOUNTAINS": id = 156; break;
+    				
+    			case "COLD_BEACH": id = 26; break;
+    			case "COLD_TAIGA": id = 30; break;
+    			
+    			case "COLD_TAIGA_HILLS": id = 31; break;
+    			case "COLD_TAIGA_MOUNTAINS": id = 158; break;
+    				
+    			case "DEEP_OCEAN": id = 24; break;
+    			case "DESERT": id = 2; break;
+    			
+    			case "DESERT_HILLS": id = 17; break;
+    			case "DESERT_MOUNTAINS": id = 145; break;
+    				
+    			case "EXTREME_HILLS": id = 3; break;
+    			case "EXTREME_HILLS_MOUNTAINS": id = 131; break;
+    				
+    			case "EXTREME_HILLS_PLUS": id = 20; break;
+    			case "EXTREME_HILLS_PLUS_MOUNTAINS": id = 148; break;
+    				
+    			case "FOREST": id = 4; break;
+    			case "FLOWER_FOREST": id = 132; break;
+    				
+    			case "FOREST_HILLS": id = 18; break;
+    			case "FROZEN_OCEAN": id = 10; break;
+    			case "FROZEN_RIVER": id = 11; break;
+    			case "HELL": id = 8; break;
+    			case "ICE_MOUNTAINS": id = 13; break;
+    			
+    			case "ICE_PLAINS": id = 12; break;
+    			case "ICE_PLAINS_SPIKES": id = 140; break;
+    				
+    			case "JUNGLE": id = 21; break;
+    			
+    			case "JUNGLE_EDGE": id = 23; break;
+    			case "JUNGLE_EDGE_MOUNTAINS": id = 151; break;
+    				
+    			case "JUNGLE_HILLS": id = 22; break;
+    			case "JUNGLE_MOUNTAINS": id = 149; break;
+    				
+    			case "MEGA_TAIGA": id = 32; break;
+    			case "MEGA_TAIGA_HILLS": id = 33; break;
+    			
+    			case "MESA": id = 37; break;
+    			case "MESA_BRYCE": id = 165; break;
+    			case "MESA_PLATEAU": id = 39; break;
+    			case "MESA_PLATEAU_FOREST": id = 38; break;
+    			case "MESA_PLATEAU_FOREST_MOUNTAINS": id = 166; break;
+    			case "MESA_PLATEAU_MOUNTAINS": id = 167; break;
+    				
+    			case "MUSHROOM_ISLAND": id = 14; break;
+    			case "MUSHROOM_SHORE": id = 15; break;
+    			case "OCEAN": id = 0; break;
+    			
+    			case "PLAINS": id = 1; break;
+    			case "SUNFLOWER_PLAINS": id = 129; break;
+    				
+    			case "RIVER": id = 7; break;
+    			
+    			case "ROOFED_FOREST": id = 29; break;
+    			case "ROOFED_FOREST_MOUNTAINS": id = 157; break;
+    				
+    			case "SAVANNA": id = 35; break;
+    			case "SAVANNA_MOUNTAINS": id = 163; break;
+    				
+    			case "SAVANNA_PLATEAU": id = 36; break;
+    			case "SAVANNA_PLATEAU_MOUNTAINS": id = 164; break;
+    				
+    			case "SKY": id = 9; break;
+    			case "SMALL_MOUNTAINS": id = 34; break;
+    			case "STONE_BEACH": id = 25; break;
+    			
+    			case "SWAMPLAND": id = 6; break;
+    			case "SWAMPLAND_MOUNTAINS": id = 134; break;
+    				
+    			case "TAIGA": id = 5; break;
+    			case "MEGA_SPRUCE_TAIGA": id = 160; break;
+    			case "MEGA_SPRUCE_TAIGA_HILLS": id = 161; break;
+    				
+    			case "TAIGA_HILLS": id = 19; break;
+    			case "TAIGA_MOUNTAINS": id = 133; break;
+    				
+    			default: id = 1; break;
+			}
 		}
+		return id;
     }
     
     @Override
@@ -1244,6 +1107,15 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
+    public Object getWorld(@NonNull World world) {
+    	try {
+    		return this.world.cast(getWorldServer(world));
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
     public Object getWorldServer(@NonNull World world) {
     	try {
     		return craftWorld_getHandle().invoke(world);
@@ -1253,9 +1125,9 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB) {
+    public List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB) {
     	try {
-    		List<WrappedAxisAlignedBB> list = new ArrayList<>();
+    		List<AxisAlignedBB> list = new ArrayList<>();
     		for (Object obj : (List<?>) world_getCubes.invoke(getWorldServer(world),
     			axisAlignedBB.getHandle()
     		)) {

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketCameraWrapper extends PacketWrapper {
+class PacketCameraWrapper extends PacketWrapper implements PacketCamera {
 	
 	Field cameraId;
 
@@ -22,10 +22,12 @@ class PacketCameraWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getCameraId() {
 		return getFieldValue(cameraId);
 	}
 	
+	@Override
 	public void setCameraId(int cameraId) {
 		setField(this.cameraId, cameraId);
 	}

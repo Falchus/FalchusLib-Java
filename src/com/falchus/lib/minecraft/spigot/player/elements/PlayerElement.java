@@ -23,12 +23,17 @@ public class PlayerElement {
 	protected static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	protected final Player player;
+	protected final boolean async;
 	
     private static final Map<Class<? extends PlayerElement>, Map<UUID, PlayerElement>> instances = new ConcurrentHashMap<>();
     private static final Map<Class<? extends PlayerElement>, Map<UUID, SpigotTask>> tasks = new ConcurrentHashMap<>();
     
     protected Runnable updateRunnable;
     protected int frame = 0;
+    
+    public PlayerElement(@NonNull Player player) {
+    	this(player, false);
+    }
 	
 	/**
 	 * Updates the element manually.
@@ -40,7 +45,12 @@ public class PlayerElement {
 			remove();
 			return;
 		}
-		updateRunnable.run();
+		SpigotTask task = SpigotTask.of(updateRunnable);
+		if (async) {
+			task.runAsync();
+		} else {
+			task.run();
+		}
 	}
 	
 	/**
@@ -75,7 +85,12 @@ public class PlayerElement {
 				frame = tick;
 				runnable.run();
 			}
-		}.runTimer(intervalTicks, TimeUnit.MILLISECONDS);
+		};
+		if (async) {
+			task.runTimerAsync(intervalTicks, TimeUnit.MILLISECONDS);
+		} else {
+			task.runTimer(intervalTicks, TimeUnit.MILLISECONDS);
+		}
 		
 		map.put(player.getUniqueId(), task);
 	}

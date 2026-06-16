@@ -4,16 +4,21 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.falchus.lib.minecraft.spigot.enums.Sound;
-import com.falchus.lib.minecraft.spigot.utils.version.v1_15_R1.VersionAdapter_v_1_15_R1;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.IPacketWrapper;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.utils.version.v1_15_R1.VersionAdapter_v1_15_R1;
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.WrappedComponent;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
@@ -23,7 +28,7 @@ import lombok.SneakyThrows;
 /**
  * Default adapter for all versions over 1.17. (tested with 1.21.11)
  */
-public class VersionAdapterModern extends VersionAdapter_v_1_15_R1 {
+public class VersionAdapterModern extends VersionAdapter_v1_15_R1 {
 	
     private Class<?> itemMeta() {
     	return ReflectionUtils.getClass(packageOb + "inventory.meta.ItemMeta");
@@ -124,6 +129,17 @@ public class VersionAdapterModern extends VersionAdapter_v_1_15_R1 {
     		Array.newInstance(bossFlag(), 0).getClass()
     	);
     }
+    private Class<?> packetPlayOutScoreboardTeam$a() {
+    	return ReflectionUtils.getClass(packageNm + "network.protocol.game.PacketPlayOutScoreboardTeam$a");
+    }
+    @SneakyThrows
+    private Object packetPlayOutScoreboardTeam$a_ADD() {
+    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam$a(), "ADD").get(null);
+    }
+    @SneakyThrows
+    private Object packetPlayOutScoreboardTeam$a_REMOVE() {
+    	return ReflectionUtils.getField(packetPlayOutScoreboardTeam$a(), "REMOVE").get(null);
+    }
     private Method packetPlayOutScoreboardTeam_createAddOrModifyPacket() {
     	return ReflectionUtils.getMethod(packetPlayOutScoreboardTeam, "createAddOrModifyPacket",
     		scoreboardTeam,
@@ -133,6 +149,13 @@ public class VersionAdapterModern extends VersionAdapter_v_1_15_R1 {
     private Method packetPlayOutScoreboardTeam_createRemovePacket() {
     	return ReflectionUtils.getMethod(packetPlayOutScoreboardTeam, "createRemovePacket",
     		scoreboardTeam
+    	);
+    }
+    private Method packetPlayOutScoreboardTeam_createPlayerPacket() {
+    	return ReflectionUtils.getMethod(packetPlayOutScoreboardTeam, "createPlayerPacket",
+    		scoreboardTeam,
+    		String.class,
+    		packetPlayOutScoreboardTeam$a()
     	);
     }
 	
@@ -145,6 +168,83 @@ public class VersionAdapterModern extends VersionAdapter_v_1_15_R1 {
 		} catch (Exception e) {
             throw new RuntimeException(e);
         }
+	}
+	
+	@Override
+	public Object createPacketOutScoreboardTeam(@NonNull Set<String> names, @NonNull ScoreboardTeam team, int mode, String playerName) {
+		try {
+			switch (mode) {
+				case 0:
+				case 2:
+					boolean isCreate = (mode == 0);
+					return packetPlayOutScoreboardTeam_createAddOrModifyPacket().invoke(null,
+						team.getHandle(),
+						isCreate
+					);
+					
+				case 1:
+					return packetPlayOutScoreboardTeam_createRemovePacket().invoke(null,
+						team.getHandle()
+					);
+					
+				case 3:
+				case 4:
+					Object action = (mode == 3)
+						? packetPlayOutScoreboardTeam$a_ADD()
+						: packetPlayOutScoreboardTeam$a_REMOVE();
+					return packetPlayOutScoreboardTeam_createPlayerPacket().invoke(null,
+						team.getHandle(),
+						playerName,
+						action
+					);
+					
+				default:
+					return null;
+			}
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+	}
+	
+    @Override
+    public Object createPacketOutPlayerListHeaderFooter(@NonNull Set<String> names, @NonNull String header, @NonNull String footer) {
+		IPacketWrapper packet = PacketWrapper.wrap(new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				iChatBaseComponent,
+				new WrappedComponent(header).getHandle()
+			),
+			Map.of(
+				iChatBaseComponent,
+				new WrappedComponent(footer).getHandle()
+			)
+		).build());
+		return packet.getHandle();
+    }
+    
+	@Override
+	public Object createClientboundSetTitleTextPacket(@NonNull Set<String> names, @NonNull Component text) {
+		return new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				iChatBaseComponent,
+				text.getHandle()
+			)
+		).build();
+	}
+	
+	@Override
+	public Object createClientboundSetSubtitleTextPacket(@NonNull Set<String> names, @NonNull Component text) {
+		return new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				iChatBaseComponent,
+				text.getHandle()
+			)
+		).build();
 	}
 	
 	@Override
@@ -303,94 +403,21 @@ public class VersionAdapterModern extends VersionAdapter_v_1_15_R1 {
     }
     
     @Override
-    public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
-		try {
-			Object team = new ClassInstanceBuilder(
-				scoreboardTeam
-			).withParams(
-				Map.of(
-					scoreboard,
-					scoreboardINST
-				),
-				Map.of(
-					String.class,
-					player.getName()
-				)
-			).build();
-			scoreboardTeam_setDisplayName().invoke(team,
-				createChatComponentText(player.getName())
-			);
-			scoreboardTeam_setPrefix().invoke(team,
-				createChatComponentText(prefix)
-			);
-			scoreboardTeam_setSuffix().invoke(team,
-				createChatComponentText(suffix)
-			);
-			
-			Object createPacket = packetPlayOutScoreboardTeam_createAddOrModifyPacket().invoke(null,
-				team,
-				false
-			);
-	        
-	        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-	        	sendPacket(onlinePlayer, createPacket);
-	        }
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
-    }
-    
-    @Override
-    public void removeNametag(@NonNull Player player) {
-		try {
-			Object team = new ClassInstanceBuilder(
-				scoreboardTeam
-			).withParams(
-				Map.of(
-					scoreboard,
-					scoreboardINST
-				),
-				Map.of(
-					String.class,
-					player.getName()
-				)
-			).build();
-			scoreboardTeam_setDisplayName().invoke(team,
-				createChatComponentText(player.getName())
-			);
-			
-			Object removePacket = packetPlayOutScoreboardTeam_createRemovePacket().invoke(null,
-				team
-			);
-			
-			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-				sendPacket(onlinePlayer, removePacket);
-			}
-		} catch (Exception e) {
-	        throw new RuntimeException(e);
-	    }
-    }
-    
-    @Override
     public void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
     	player.playSound(location, org.bukkit.Sound.valueOf(sound.getModernName()), volume, pitch);
     }
 
 	@Override
 	public void removeEntityPlayer(@NonNull Player player, @NonNull Object entityPlayer) {
-		try {
-			UUID uuid = getProfile(entityPlayer).getId();
-			Object packet = new ClassInstanceBuilder(
-				clientboundPlayerInfoRemovePacket()
-			).withParams(
-				Map.of(
-					List.class,
-					List.of(uuid)
-				)
-			).build();
-			sendPacket(player, packet);
-		} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+		UUID uuid = getProfile(entityPlayer).getId();
+		Object packet = new ClassInstanceBuilder(
+			clientboundPlayerInfoRemovePacket()
+		).withParams(
+			Map.of(
+				List.class,
+				List.of(uuid)
+			)
+		).build();
+		sendPacket(player, packet);
 	}
 }

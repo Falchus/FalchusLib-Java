@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketHeldItemSlotWrapper extends PacketWrapper {
+class PacketHeldItemSlotWrapper extends PacketWrapper implements PacketHeldItemSlot {
 	
 	Field slot;
 
@@ -22,10 +22,12 @@ class PacketHeldItemSlotWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getSlot() {
 		return getFieldValue(slot);
 	}
 	
+	@Override
 	public void setSlot(int slot) {
 		setField(this.slot, slot);
 	}

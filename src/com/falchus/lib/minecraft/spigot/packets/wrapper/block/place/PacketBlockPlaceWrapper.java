@@ -5,13 +5,14 @@ import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
-import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.WrappedBlockPosition;
+import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.BlockPosition;
+import com.falchus.lib.minecraft.spigot.wrapper.world.level.block.Block;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketBlockPlaceWrapper extends PacketWrapper {
+class PacketBlockPlaceWrapper extends PacketWrapper implements PacketBlockPlace {
 	
 	Field pos;
 	Field type;
@@ -39,44 +40,43 @@ class PacketBlockPlaceWrapper extends PacketWrapper {
 		);
 	}
 
-	/**
-	 * @return {@link WrappedBlockPosition}
-	 */
-	public WrappedBlockPosition getPos() {
+	@Override
+	public BlockPosition getPos() {
 		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
-	/**
-	 * @param pos	BlockPosition
-	 */
-	public void setPos(Object pos) {
-		setField(this.pos, pos);
+	@Override
+	public void setPos(BlockPosition pos) {
+		setField(this.pos, pos.getHandle());
 	}
 
+	@Override
 	public int getType() {
 		return getFieldValue(type);
 	}
 	
+	@Override
 	public void setType(int type) {
 		setField(this.type, type);
 	}
 
+	@Override
 	public int getData() {
 		return getFieldValue(data);
 	}
 	
+	@Override
 	public void setData(int data) {
 		setField(this.data, data);
 	}
 
-	public Object getBlock() {
-		return getFieldValue(block);
+	@Override
+	public Block getBlock() {
+		return SpigotWrapper.wrap(getFieldValue(block));
 	}
 	
-	/**
-	 * @param block	Block
-	 */
-	public void setBlock(Object block) {
-		setField(this.block, block);
+	@Override
+	public void setBlock(Block block) {
+		setField(this.block, block.getHandle());
 	}
 }

@@ -4,12 +4,14 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.world.item.ItemStack;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketSetSlotWrapper extends PacketWrapper {
+class PacketSetSlotWrapper extends PacketWrapper implements PacketSetSlot {
 	
 	Field containerId;
 	Field slot;
@@ -32,33 +34,33 @@ class PacketSetSlotWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getContainerId() {
 		return getFieldValue(containerId);
 	}
 	
+	@Override
 	public void setContainerId(int containerId) {
 		setField(this.containerId, containerId);
 	}
 
+	@Override
 	public int getSlot() {
 		return getFieldValue(slot);
 	}
 	
+	@Override
 	public void setSlot(int slot) {
 		setField(this.slot, slot);
 	}
 
-	/**
-	 * @return ItemStack
-	 */
-	public Object getItemStack() {
-		return getFieldValue(itemStack);
+	@Override
+	public ItemStack getItemStack() {
+		return SpigotWrapper.wrap(getFieldValue(itemStack));
 	}
 	
-	/**
-	 * @param itemStack	ItemStack
-	 */
-	public void setItemStack(Object itemStack) {
-		setField(this.itemStack, itemStack);
+	@Override
+	public void setItemStack(ItemStack itemStack) {
+		setField(this.itemStack, itemStack.getHandle());
 	}
 }

@@ -4,12 +4,12 @@ import java.lang.reflect.Method;
 
 import org.bukkit.entity.Damageable;
 
-import com.falchus.lib.minecraft.spigot.utils.version.v_1_13_R1.VersionAdapter_v_1_13_R1;
+import com.falchus.lib.minecraft.spigot.utils.version.v1_13_R1.VersionAdapter_v1_13_R1;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 
 import lombok.NonNull;
 
-public class VersionAdapter_v_1_15_R1 extends VersionAdapter_v_1_13_R1 {
+public class VersionAdapter_v1_15_R1 extends VersionAdapter_v1_13_R1 {
 	
 	private Method damageable_getAbsorptionAmount() {
 		return ReflectionUtils.getMethod(Damageable.class, "getAbsorptionAmount");

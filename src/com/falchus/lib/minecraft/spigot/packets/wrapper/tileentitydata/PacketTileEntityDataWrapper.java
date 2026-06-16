@@ -4,12 +4,15 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.BlockPosition;
+import com.falchus.lib.minecraft.spigot.wrapper.nbt.CompoundTag;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketTileEntityDataWrapper extends PacketWrapper {
+class PacketTileEntityDataWrapper extends PacketWrapper implements PacketTileEntityData {
 	
 	Field pos;
 	Field type;
@@ -32,39 +35,33 @@ class PacketTileEntityDataWrapper extends PacketWrapper {
 		);
 	}
 
-	/**
-	 * @return BlockPosition
-	 */
-	public Object getPos() {
-		return getFieldValue(pos);
+	@Override
+	public BlockPosition getPos() {
+		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
-	/**
-	 * @param pos	BlockPosition
-	 */
-	public void setPos(Object pos) {
-		setField(this.pos, pos);
+	@Override
+	public void setPos(BlockPosition pos) {
+		setField(this.pos, pos.getHandle());
 	}
 
+	@Override
 	public int getType() {
 		return getFieldValue(type);
 	}
 	
+	@Override
 	public void setType(int type) {
 		setField(this.type, type);
 	}
 
-	/**
-	 * @return NBTTagCompound
-	 */
-	public Object getTag() {
-		return getFieldValue(tag);
+	@Override
+	public CompoundTag getTag() {
+		return SpigotWrapper.wrap(getFieldValue(tag));
 	}
 	
-	/**
-	 * @param tag	NBTTagCompound
-	 */
-	public void setTag(Object tag) {
-		setField(this.tag, tag);
+	@Override
+	public void setTag(CompoundTag tag) {
+		setField(this.tag, tag.getHandle());
 	}
 }

@@ -12,12 +12,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
+import com.falchus.lib.minecraft.spigot.wrapper.world.entity.Entity;
 
 public class EntityPlayerListener implements Listener {
 
 	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
-	public final Map<UUID, Object> players = new HashMap<>();
+	public final Map<UUID, Entity> players = new HashMap<>();
 	public final Map<UUID, Consumer<Player>> actions = new HashMap<>();
 	
 	public EntityPlayerListener() {

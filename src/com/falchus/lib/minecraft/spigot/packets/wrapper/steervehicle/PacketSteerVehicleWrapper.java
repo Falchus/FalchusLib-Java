@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketSteerVehicleWrapper extends PacketWrapper {
+class PacketSteerVehicleWrapper extends PacketWrapper implements PacketSteerVehicle {
 	
 	Field sideways;
 	Field forward;
@@ -36,34 +36,42 @@ class PacketSteerVehicleWrapper extends PacketWrapper {
 		);
 	}
 	
+	@Override
 	public float getSideways() {
 		return getFieldValue(sideways);
 	}
 	
+	@Override
 	public void setSideways(float sideways) {
 		setField(this.sideways, sideways);
 	}
 	
+	@Override
 	public float getForward() {
 		return getFieldValue(forward);
 	}
 	
+	@Override
 	public void setForward(float forward) {
 		setField(this.forward, forward);
 	}
 	
+	@Override
 	public boolean isJumping() {
 		return getFieldValue(jumping);
 	}
 	
+	@Override
 	public void setJumping(boolean jumping) {
 		setField(this.jumping, jumping);
 	}
 	
+	@Override
 	public boolean isSneaking() {
 		return getFieldValue(sneaking);
 	}
 	
+	@Override
 	public void setSneaking(boolean sneaking) {
 		setField(this.sneaking, sneaking);
 	}

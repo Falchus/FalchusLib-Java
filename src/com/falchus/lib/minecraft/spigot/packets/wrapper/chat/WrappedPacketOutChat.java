@@ -2,6 +2,8 @@ package com.falchus.lib.minecraft.spigot.packets.wrapper.chat;
 
 import java.util.Set;
 
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.WrappedComponent;
+
 import lombok.NonNull;
 
 public class WrappedPacketOutChat extends PacketChatWrapper {
@@ -17,6 +19,6 @@ public class WrappedPacketOutChat extends PacketChatWrapper {
 	
 	@Override
 	public void setMessage(String message) {
-		setField(this.message, version.createChatComponentText(message));
+		setField(this.message, new WrappedComponent(message).getHandle());
 	}
 }

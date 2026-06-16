@@ -4,15 +4,22 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 import com.falchus.lib.FalchusLib;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.display.objective.WrappedPacketOutScoreboardDisplayObjective;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.objective.WrappedPacketOutScoreboardObjective;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.score.WrappedPacketOutScoreboardScore;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.WrappedPacketOutScoreboardTeam;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
+import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardObjective;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardScore;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.WrappedScoreboard;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.WrappedScoreboardScore;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.criteria.WrappedScoreboardCriteria;
 
 import lombok.NonNull;
 
@@ -23,26 +30,15 @@ public class Scoreboard extends PlayerElement {
 	
 	private List<String> lastLines;
 	
-	public final org.bukkit.scoreboard.Scoreboard scoreboard;
-	private final Objective objective;
+	private final com.falchus.lib.minecraft.spigot.wrapper.world.scores.Scoreboard scoreboard;
+	private final ScoreboardObjective objective;
 	
 	private Scoreboard(@NonNull Player player) {
-		super(player);
-		org.bukkit.scoreboard.Scoreboard scoreboard = player.getScoreboard();
-		if (scoreboard == null || scoreboard == Bukkit.getScoreboardManager().getMainScoreboard()) {
-			scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-		}
-		
-        Objective objective = scoreboard.getObjective(FalchusLib.nameFull);
-        if (objective == null) {
-        	objective = scoreboard.registerNewObjective(FalchusLib.nameFull, "dummy");
-        }
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        
-        player.setScoreboard(scoreboard);
-        
-		this.scoreboard = scoreboard;
-        this.objective = objective;
+		super(player, true);
+		scoreboard = new WrappedScoreboard();
+		objective = scoreboard.registerObjective(FalchusLib.nameFull, WrappedScoreboardCriteria.dummy());
+		PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardObjective(objective, 0));
+		PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardDisplayObjective(WrappedPacketOutScoreboardDisplayObjective.DisplaySlot.SIDEBAR, objective));
 	}
 	
 	public void send(@NonNull BiFunction<Integer, Player, String> title, @NonNull BiFunction<Integer, Player, List<String>> lines) {
@@ -55,15 +51,18 @@ public class Scoreboard extends PlayerElement {
 				newTitle = newTitle.substring(0, 32);
 			}
 			objective.setDisplayName(newTitle);
+			PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardObjective(objective, 2));
 			
 			List<String> newLines = linesSupplier.apply(frame, player);
-			
-			if (lastLines == null || lastLines.size() != newLines.size()) {
-				for (Team team : scoreboard.getTeams()) {
-					team.unregister();
-				}
-				for (String entry : scoreboard.getEntries()) {
-					scoreboard.resetScores(entry);
+			int lastSize = lastLines == null ? 0 : lastLines.size();
+			int newSize = newLines.size();
+			if (lastSize > newSize) {
+				for (int i = newSize + 1; i <= lastSize; i++) {
+					ScoreboardTeam team = scoreboard.getTeam(getClass().getSimpleName() + "_" + i);
+					if (team != null) {
+						PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardTeam(team, WrappedPacketOutScoreboardTeam.Mode.REMOVE));
+					}
+					PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardScore("§" + Integer.toHexString(i), objective));
 				}
 			}
 			lastLines = newLines;
@@ -77,14 +76,15 @@ public class Scoreboard extends PlayerElement {
 		        }
 		
 		        String teamName = getClass().getSimpleName() + "_" + score;
-		        Team team = scoreboard.getTeam(teamName);
-		        if (team == null) {
-		        	team = scoreboard.registerNewTeam(teamName);
+		        ScoreboardTeam team = scoreboard.getTeam(teamName);
+		        boolean create = team == null;
+		        if (create) {
+		        	team = scoreboard.createTeam(teamName);
 		        }
 		        
 		        String entry = "§" + Integer.toHexString(score);
-		        if (!team.hasEntry(entry)) {
-		        	team.addEntry(entry);
+		        if (!team.getPlayers().contains(entry)) {
+		        	scoreboard.addPlayerToTeam(entry, team);
 		        }
 		        
 		        int maxLength = 16;
@@ -107,8 +107,16 @@ public class Scoreboard extends PlayerElement {
 		        }
 		        team.setPrefix(prefix);
 		        team.setSuffix(suffix);
-		
-		        objective.getScore(entry).setScore(score);
+		        
+		        if (create || score > lastSize) {
+					PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardTeam(team, WrappedPacketOutScoreboardTeam.Mode.CREATE));
+				} else {
+					PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardTeam(team, WrappedPacketOutScoreboardTeam.Mode.UPDATE));
+				}
+		        
+		        ScoreboardScore sbScore = new WrappedScoreboardScore(scoreboard, objective, entry);
+		        sbScore.setScore(score);
+		        PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardScore(sbScore));
 		        score--;
 		    }
 		};
@@ -143,7 +151,8 @@ public class Scoreboard extends PlayerElement {
 		
 		lastLines.clear();
 		
-		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+		PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardObjective(objective, 1));
+		scoreboard.unregisterObjective(objective);
 	}
 	
 	public void setTitle(@NonNull String title) {

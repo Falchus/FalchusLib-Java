@@ -15,7 +15,7 @@ public class Nametag extends PlayerElement {
 	private Supplier<String> suffixSupplier;
 	
 	private Nametag(@NonNull Player player) {
-		super(player);
+		super(player, true);
 	}
 
 	public void send(@NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {

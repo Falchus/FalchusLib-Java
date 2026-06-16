@@ -44,7 +44,8 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.display.objec
 import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.objective.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.score.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.*;
-import com.falchus.lib.minecraft.spigot.packets.wrapper.serverdifficulty.*;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.server.difficulty.*;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.server.info.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.set.creativeslot.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.set.slot.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.settings.*;
@@ -71,21 +72,22 @@ import com.falchus.lib.utils.wrapper.impl.FirstClassWrapper;
 
 import lombok.NonNull;
 
-public class PacketWrapper extends FirstClassWrapper<Object> {
+public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketWrapper {
 	
 	protected static final IVersionAdapter version = VersionProvider.get();
 	private static final String networkProtocol = version.getPackageNm() + "network.protocol.";
 	protected static final String networkProtocolCommon = networkProtocol + "common.";
 	protected static final String networkProtocolGame = networkProtocol + "game.";
+	protected static final String networkProtocolStatus = networkProtocol + "status.";
 
-	private static final Map<Class<?>, Function<Object, PacketWrapper>> registry = new HashMap<>();
+	private static final Map<Class<?>, Function<Object, IPacketWrapper>> registry = new HashMap<>();
 	
 	public PacketWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <T extends PacketWrapper> void register() {
+	private static <T extends IPacketWrapper> void register() {
 		if (!registry.isEmpty()) return;
 		Class<T>[] wrappers = new Class[] {
 			WrappedPacketInAbilities.class,
@@ -182,6 +184,8 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 			
 			WrappedPacketOutServerDifficulty.class,
 			
+			WrappedPacketOutServerInfo.class,
+			
 			WrappedPacketInSetCreativeSlot.class,
 			
 			WrappedPacketOutSetSlot.class,
@@ -189,6 +193,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 			WrappedPacketInSettings.class,
 			
 			WrappedPacketOutSpawnEntity.class,
+			WrappedPacketOutSpawnEntityLiving.class,
 			
 			WrappedPacketOutSpawnPosition.class,
 			
@@ -225,7 +230,7 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 		};
 		
 		for (Class<T> wrapper : wrappers) {
-			PacketWrapper dummy = (T) new ClassInstanceBuilder(
+			IPacketWrapper dummy = (T) new ClassInstanceBuilder(
 				wrapper
 			).withParams(
 				Map.of(
@@ -249,18 +254,18 @@ public class PacketWrapper extends FirstClassWrapper<Object> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends PacketWrapper> T wrap(Object packet) {
+	public static <T extends IPacketWrapper> T wrap(Object obj) {
+		if (obj == null) return null;
 		register();
 		
-		Function<Object, PacketWrapper> wrapper = registry.get(packet.getClass());
-		if (wrapper != null) {
-			return (T) wrapper.apply(packet);
-		}
-		for (Map.Entry<Class<?>, Function<Object, PacketWrapper>> entry : registry.entrySet()) {
-			if (entry.getKey().isAssignableFrom(packet.getClass())) {
-				return (T) entry.getValue().apply(packet);
+		Class<?> current = obj.getClass();
+		while (current != null) {
+			Function<Object, IPacketWrapper> wrapper = registry.get(current);
+			if (wrapper != null) {
+				return (T) wrapper.apply(obj);
 			}
+			current = current.getSuperclass();
 		}
-		return (T) new PacketWrapper(packet, Set.of(packet.getClass().getName()));
+		return (T) new PacketWrapper(obj, Set.of(obj.getClass().getName()));
 	}
 }

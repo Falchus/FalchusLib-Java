@@ -26,7 +26,7 @@ public class Chat extends PlayerElement implements Listener {
 	private static final List<Boolean> registered = new ArrayList<>();
 	
 	private Chat(@NonNull Player player) {
-		super(player);
+		super(player, true);
 	}
 	
 	public void send(@NonNull Supplier<String> prefix) {

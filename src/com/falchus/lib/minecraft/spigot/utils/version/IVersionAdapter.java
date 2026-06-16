@@ -3,6 +3,7 @@ package com.falchus.lib.minecraft.spigot.utils.version;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -11,12 +12,15 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
-import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
+import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
+import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
 import com.mojang.authlib.GameProfile;
 
 import lombok.NonNull;
@@ -28,39 +32,31 @@ public interface IVersionAdapter {
 	String getPackageNm();
 	String getPackageNms();
 	
-	Class<?> getBlockPosition();
 	Class<?> getEntityPlayer();
 	Field getEntityPlayer_playerConnection();
 	Field getPlayerConnection_networkManager();
 	Field getNetworkManager_channel();
 	Class<?> getPlayerInteractManager();
-	Method getEntity_setLocation();
-	Method getEntity_setInvisible();
+	Class<?> getEntity();
+	Class<?> getEntityLiving();
 	Class<?> getWorld();
 	Class<?> getMinecraftServer();
 	Class<?> getWorldServer();
+	Class<?> getIScoreboardCriteria$enumScoreboardHealthDisplay();
+	
+	Method entity_setCustomName();
+	Method scoreboard_registerObjective();
+	Method scoreboard_unregisterObjective();
 	
 	Object createChatComponentText(@NonNull String text);
+	Object createPacketOutScoreboardTeam(@NonNull Set<String> names, @NonNull ScoreboardTeam team, int mode, String playerName);
+	Object createPacketOutPlayerListHeaderFooter(@NonNull Set<String> names, @NonNull String header, @NonNull String footer);
+	Object createClientboundSetTitleTextPacket(@NonNull Set<String> names, @NonNull Component text);
+	Object createClientboundSetSubtitleTextPacket(@NonNull Set<String> names, @NonNull Component text);
 	
-	/**
-	 * @return Entity
-	 */
 	Object getEntity(@NonNull Entity entity);
 	
-	/**
-	 * @return {@link Entity}
-	 */
-	Entity getBukkitEntity(@NonNull Object entity);
-	
-	/**
-	 * @return {@link WrappedAxisAlignedBB}
-	 */
-	WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity);
-	
-	/**
-	 * @return {@link WrappedAxisAlignedBB}
-	 */
-	WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+	Object getEntityLiving(@NonNull LivingEntity entity);
 	
 	/**
 	 * @return absorption from a {@link Damageable} entity.
@@ -71,11 +67,6 @@ public interface IVersionAdapter {
 	 * Sets absorption.
 	 */
 	void setAbsorption(@NonNull Damageable entity, double absorption);
-	
-	/**
-	 * Sets yaw and pitch.
-	 */
-	void setYawPitch(@NonNull Object entity, float yaw, float pitch);
 	
     /**
      * Sets a UUID on the given item via NBT.
@@ -210,7 +201,7 @@ public interface IVersionAdapter {
 	/**
 	 * @return {@link Server}
 	 */
-	Object getBukkitServer();
+	Server getBukkitServer();
 	
 	/**
 	 * @return e.g. "1.8.8"
@@ -243,12 +234,17 @@ public interface IVersionAdapter {
 	Object getNmsBiome(Biome biome);
 	
 	/**
-	 * @return WorldServer from a World
+	 * @return World from a {@link World}
 	 */
-	Object getWorldServer(World world);
+	Object getWorld(@NonNull World world);
+	
+	/**
+	 * @return WorldServer from a {@link World}
+	 */
+	Object getWorldServer(@NonNull World world);
 	
 	/**
 	 * @return {@link List}
 	 */
-	List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB);
+	List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB);
 }

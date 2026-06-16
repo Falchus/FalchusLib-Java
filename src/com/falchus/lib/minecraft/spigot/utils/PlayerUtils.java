@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+import com.falchus.lib.minecraft.spigot.packets.wrapper.IPacketWrapper;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -35,10 +36,10 @@ public class PlayerUtils {
 	public static final Map<UUID, String> names = new HashMap<>();
 
 	/**
-	 * Sends a raw NMS packet to a player.
+	 * Sends a packet to a player.
 	 */
-	public static void sendPacket(@NonNull Player player, @NonNull Object packet) {
-		VersionProvider.get().sendPacket(player, packet);
+	public static void sendPacket(@NonNull Player player, @NonNull IPacketWrapper packet) {
+		VersionProvider.get().sendPacket(player, packet.getHandle());
 	}
 	
 	/**

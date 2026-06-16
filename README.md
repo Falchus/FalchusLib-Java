@@ -350,8 +350,9 @@ static boolean isSoftLanding(Block block);
 `com.falchus.lib.minecraft.spigot.utils.EntityUtils`
 ```java
 static Object getEntity(Entity entity);
+static Object getEntityLiving(LivingEntity entity);
 
-static Entity getBukkitEntity(Object entity);
+static Entity getBukkitEntity(WrappedEntity entity);
 
 static Entity getEntityById(World world, int id);
 
@@ -392,7 +393,7 @@ static String itemStackArrayToBase64(ItemStack[] items);
 
 `com.falchus.lib.minecraft.spigot.utils.PlayerUtils`
 ```java
-static void sendPacket(Player player, Object packet);
+static void sendPacket(Player player, PacketWrapper packet);
 
 static void sendTitle(Player player, String title, String subtitle);
 
@@ -445,7 +446,7 @@ static void runTaskLater(Runnable runnable, long delayTicks);
 `com.falchus.lib.minecraft.spigot.utils.ServerUtils`
 ```java
 static Object getMcServer();
-static Object getBukkitServer();
+static Server getBukkitServer();
 
 static Version getVersion();
 static String getVersionString();
@@ -464,6 +465,7 @@ static Object[] getBiomes(World world);
 static int getBiomeId(Biome biome);
 static Object getNmsBiome(Biome biome);
 
+static Object getWorld(World world);
 static Object getWorldServer(World world);
 
 static List<WrappedAxisAlignedBB> getCollidingBlocks(World world, WrappedAxisAlignedBB axisAlignedBB);

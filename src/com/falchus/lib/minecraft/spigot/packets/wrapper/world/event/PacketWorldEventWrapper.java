@@ -4,13 +4,15 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.BlockPosition;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 // TODO: add PacketPlayOutWorldParticles wrapper
 @FieldDefaults(makeFinal = true)
-class PacketWorldEventWrapper extends PacketWrapper {
+class PacketWorldEventWrapper extends PacketWrapper implements PacketWorldEvent {
 	
 	Field type;
 	Field pos;
@@ -38,40 +40,42 @@ class PacketWorldEventWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getType() {
 		return getFieldValue(type);
 	}
 	
+	@Override
 	public void setType(int type) {
 		setField(this.type, type);
 	}
 
-	/**
-	 * @return BlockPosition
-	 */
-	public Object getPos() {
-		return getFieldValue(type);
+	@Override
+	public BlockPosition getPos() {
+		return SpigotWrapper.wrap(getFieldValue(type));
 	}
 	
-	/**
-	 * @param pos	BlockPosition
-	 */
-	public void setPos(Object pos) {
-		setField(this.pos, pos);
+	@Override
+	public void setPos(BlockPosition pos) {
+		setField(this.pos, pos.getHandle());
 	}
 
+	@Override
 	public int getData() {
 		return getFieldValue(data);
 	}
 	
+	@Override
 	public void setData(int data) {
 		setField(this.data, data);
 	}
 
+	@Override
 	public boolean isGlobalEvent() {
 		return getFieldValue(globalEvent);
 	}
 	
+	@Override
 	public void setGlobalEvent(boolean globalEvent) {
 		setField(this.globalEvent, globalEvent);
 	}

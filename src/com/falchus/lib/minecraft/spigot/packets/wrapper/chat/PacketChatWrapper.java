@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-abstract class PacketChatWrapper extends PacketWrapper {
+abstract class PacketChatWrapper extends PacketWrapper implements PacketChat {
 	
 	Field message;
 
@@ -24,10 +24,7 @@ abstract class PacketChatWrapper extends PacketWrapper {
 		);
 	}
 
-	/**
-	 * In:	{@link String}
-	 * Out:	IChatBaseComponent
-	 */
+	@Override
 	public Object getMessage() {
 		return getFieldValue(message);
 	}

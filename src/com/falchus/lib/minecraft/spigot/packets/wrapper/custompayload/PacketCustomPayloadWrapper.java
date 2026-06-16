@@ -6,7 +6,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 
 import lombok.NonNull;
 
-class PacketCustomPayloadWrapper extends PacketWrapper {
+class PacketCustomPayloadWrapper extends PacketWrapper implements PacketCustomPayload {
 
 	PacketCustomPayloadWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketGameStateChangeWrapper extends PacketWrapper {
+class PacketGameStateChangeWrapper extends PacketWrapper implements PacketGameStateChange {
 	
 	Field param;
 
@@ -22,10 +22,12 @@ class PacketGameStateChangeWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public float getParam() {
 		return getFieldValue(param);
 	}
 	
+	@Override
 	public void setParam(float param) {
 		setField(this.param, param);
 	}

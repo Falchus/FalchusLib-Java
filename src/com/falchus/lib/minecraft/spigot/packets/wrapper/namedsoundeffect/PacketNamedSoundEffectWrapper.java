@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketNamedSoundEffectWrapper extends PacketWrapper {
+class PacketNamedSoundEffectWrapper extends PacketWrapper implements PacketNamedSoundEffect {
 	
 	Field x;
 	Field y;
@@ -37,34 +37,42 @@ class PacketNamedSoundEffectWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getX() {
 		return getFieldValue(x);
 	}
 	
+	@Override
 	public void setX(int x) {
 		setField(this.x, x);
 	}
 
+	@Override
 	public int getY() {
 		return getFieldValue(y);
 	}
 	
+	@Override
 	public void setY(int y) {
 		setField(this.y, y);
 	}
 
+	@Override
 	public int getZ() {
 		return getFieldValue(z);
 	}
 	
+	@Override
 	public void setZ(int z) {
 		setField(this.z, z);
 	}
 
+	@Override
 	public float getVolume() {
 		return getFieldValue(volume);
 	}
 	
+	@Override
 	public void setVolume(float volume) {
 		setField(this.volume, volume);
 	}

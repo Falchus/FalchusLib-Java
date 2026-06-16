@@ -4,7 +4,7 @@ import java.util.Set;
 
 import lombok.NonNull;
 
-public class WrappedPacketOutWindowItems extends PacketUpdateWindowItems {
+public class WrappedPacketOutWindowItems extends PacketWindowItemsWrapper {
 
 	private WrappedPacketOutWindowItems(@NonNull Object handle) {
 		super(handle, Set.of(

@@ -142,17 +142,13 @@ public class ItemBuilder {
 		if (item.getType() == WorldUtils.getMaterial(com.falchus.lib.minecraft.spigot.enums.Material.PLAYER_HEAD)) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if (meta != null) {
-				try {
-					GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-					gameProfile.getProperties().put("textures", new Property("textures", texture));
-					
-					Field gameProfile_profile = ReflectionUtils.getField(meta.getClass(), "profile");
-					gameProfile_profile.set(meta, gameProfile);
-					
-					item.setItemMeta(meta);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
+				gameProfile.getProperties().put("textures", new Property("textures", texture));
+				
+				Field gameProfile_profile = ReflectionUtils.getField(meta.getClass(), "profile");
+				ReflectionUtils.setField(meta, gameProfile_profile, gameProfile);
+				
+				item.setItemMeta(meta);
 			}
 		}
 		return this;

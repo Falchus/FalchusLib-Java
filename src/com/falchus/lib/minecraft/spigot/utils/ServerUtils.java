@@ -21,7 +21,7 @@ public class ServerUtils {
 	/**
 	 * @return {@link Server}
 	 */
-	public static Object getBukkitServer() {
+	public static Server getBukkitServer() {
 		return VersionProvider.get().getBukkitServer();
 	}
 	

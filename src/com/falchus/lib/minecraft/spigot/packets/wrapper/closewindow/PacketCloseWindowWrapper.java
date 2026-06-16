@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketCloseWindowWrapper extends PacketWrapper {
+class PacketCloseWindowWrapper extends PacketWrapper implements PacketCloseWindow {
 	
 	Field containerId;
 
@@ -22,10 +22,12 @@ class PacketCloseWindowWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getContainerId() {
 		return getFieldValue(containerId);
 	}
 	
+	@Override
 	public void setContainerId(int containerId) {
 		setField(this.containerId, containerId);
 	}

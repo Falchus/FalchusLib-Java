@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketAnimationWrapper extends PacketWrapper {
+class PacketAnimationWrapper extends PacketWrapper implements PacketAnimation {
 	
 	Field id;
 	Field action;
@@ -27,18 +27,22 @@ class PacketAnimationWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public int getId() {
 		return getFieldValue(id);
 	}
 	
+	@Override
 	public void setId(int id) {
 		setField(this.id, id);
 	}
 
+	@Override
 	public int getAction() {
 		return getFieldValue(action);
 	}
 	
+	@Override
 	public void setAction(int action) {
 		setField(this.action, action);
 	}

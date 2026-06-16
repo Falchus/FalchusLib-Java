@@ -9,10 +9,9 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketSpawnEntityWrapper extends PacketWrapper {
+class PacketSpawnEntityWrapper extends PacketWrapper implements PacketSpawnEntity {
 
 	Field id;
-	Field data;
 
 	PacketSpawnEntityWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);
@@ -21,25 +20,15 @@ class PacketSpawnEntityWrapper extends PacketWrapper {
 			"id",
 			"a"
 		);
-		data = getFirstField(
-			"data",
-			"k"
-		);
 	}
 
+	@Override
 	public int getId() {
 		return getFieldValue(id);
 	}
 
+	@Override
 	public void setId(int id) {
 		setField(this.id, id);
-	}
-
-	public int getData() {
-		return getFieldValue(data);
-	}
-
-	public void setData(int data) {
-		setField(this.data, data);
 	}
 }

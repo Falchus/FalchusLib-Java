@@ -3,16 +3,14 @@ package com.falchus.lib.minecraft.spigot.packets.wrapper.use;
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
-import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketUseEntityWrapper extends PacketWrapper {
+class PacketUseEntityWrapper extends PacketWrapper implements PacketUseEntity {
 	
 	Field entityId;
 	Field action;
@@ -27,35 +25,25 @@ class PacketUseEntityWrapper extends PacketWrapper {
 		action = getField("action");
 	}
 
+	@Override
 	public int getEntityId() {
 		return getFieldValue(entityId);
 	}
 	
+	@Override
 	public void setEntityId(int entityId) {
 		setField(this.entityId, entityId);
 	}
-	
-	public enum Action {
-		INTERACT,
-		ATTACK,
-		INTERACT_AT
-	}
 
 	@SneakyThrows
+	@Override
 	public Action getAction() {
-		String name;
-		if (ServerUtils.getVersion().isBefore(Version.v1_17)) {
-			name = ((Enum<?>) getFieldValue(action)).name();
-		} else {
-			name = getFieldValue(action, Enum.class).name();
-		}
-		return Action.valueOf(name);
+		return Action.valueOf(getFieldValue(action, Enum.class).name());
 	}
 	
-	/**
-	 * @param action	PacketPlayInUseEntity$EnumEntityUseAction
-	 */
-	public void setAction(Object action) {
-		setField(this.action, action);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void setAction(Action action) {
+		setField(this.action, Enum.valueOf((Class<? extends Enum>) this.action.getType(), action.name()));
 	}
 }

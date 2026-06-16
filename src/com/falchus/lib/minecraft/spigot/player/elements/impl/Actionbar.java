@@ -5,8 +5,10 @@ import java.util.function.Supplier;
 
 import org.bukkit.entity.Player;
 
+import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 
 import lombok.NonNull;
 
@@ -15,7 +17,7 @@ public class Actionbar extends PlayerElement {
 	private BiFunction<Integer, Player, String> messageSupplier;
 
 	private Actionbar(@NonNull Player player) {
-		super(player);
+		super(player, ServerUtils.getVersion().isBefore(Version.v1_9));
 	}
 	
 	public void send(@NonNull BiFunction<Integer, Player, String> message) {

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketExperienceWrapper extends PacketWrapper {
+class PacketExperienceWrapper extends PacketWrapper implements PacketExperience {
 	
 	Field experienceProgress;
 	Field totalExperience;
@@ -32,26 +32,32 @@ class PacketExperienceWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public float getExperienceProgress() {
 		return getFieldValue(experienceProgress);
 	}
 	
+	@Override
 	public void setExperienceProgress(float experienceProgress) {
 		setField(this.experienceProgress, experienceProgress);
 	}
 
+	@Override
 	public int getTotalExperience() {
 		return getFieldValue(totalExperience);
 	}
 	
+	@Override
 	public void setTotalExperience(int totalExperience) {
 		setField(this.totalExperience, totalExperience);
 	}
 
+	@Override
 	public int getExperienceLevel() {
 		return getFieldValue(experienceLevel);
 	}
 	
+	@Override
 	public void setExperienceLevel(int experienceLevel) {
 		setField(this.experienceLevel, experienceLevel);
 	}

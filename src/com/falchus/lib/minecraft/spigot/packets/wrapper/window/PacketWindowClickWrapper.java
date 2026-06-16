@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketWindowClickWrapper extends PacketUpdateWindow {
+class PacketWindowClickWrapper extends PacketWindowWrapper implements PacketWindowClick {
 	
 	Field slotNum;
 	Field buttonNum;
@@ -30,26 +30,32 @@ class PacketWindowClickWrapper extends PacketUpdateWindow {
 		);
 	}
 
+	@Override
 	public int getSlotNum() {
 		return getFieldValue(slotNum);
 	}
 	
+	@Override
 	public void setSlotNum(int slotNum) {
 		setField(this.slotNum, slotNum);
 	}
 
+	@Override
 	public int getButtonNum() {
 		return getFieldValue(buttonNum);
 	}
 	
+	@Override
 	public void setButtonNum(int buttonNum) {
 		setField(this.buttonNum, buttonNum);
 	}
 
+	@Override
 	public short getUID() {
 		return getFieldValue(uid);
 	}
 	
+	@Override
 	public void setUID(short uid) {
 		setField(this.uid, uid);
 	}

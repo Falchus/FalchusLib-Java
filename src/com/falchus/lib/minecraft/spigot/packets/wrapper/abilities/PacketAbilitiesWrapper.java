@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketAbilitiesWrapper extends PacketWrapper {
+class PacketAbilitiesWrapper extends PacketWrapper implements PacketAbilities {
 	
 	Field flying;
 
@@ -22,10 +22,12 @@ class PacketAbilitiesWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public boolean isFlying() {
 		return getFieldValue(flying);
 	}
 	
+	@Override
 	public void setFlying(boolean isFlying) {
 		setField(this.flying, isFlying);
 	}

@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketMapWrapper extends PacketWrapper {
+class PacketMapWrapper extends PacketWrapper implements PacketMap {
 	
 	Field scale;
 
@@ -22,10 +22,12 @@ class PacketMapWrapper extends PacketWrapper {
 		);
 	}
 
+	@Override
 	public byte getScale() {
 		return getFieldValue(scale);
 	}
 	
+	@Override
 	public void setScale(byte scale) {
 		setField(this.scale, scale);
 	}

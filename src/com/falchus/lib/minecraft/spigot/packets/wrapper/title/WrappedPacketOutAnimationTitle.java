@@ -1,23 +1,28 @@
 package com.falchus.lib.minecraft.spigot.packets.wrapper.title;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Set;
+
+import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
 public class WrappedPacketOutAnimationTitle extends PacketTitleWrapper {
+	
+	private static final Set<String> names = Set.of(
+		version.getPackageNms() + "PacketPlayOutTitle",
+		networkProtocolGame + "ClientboundSetTitlesAnimationPacket"
+	);
 
 	Field fadeInTime;
 	Field stayTime;
 	Field fadeOutTime;
 	
 	private WrappedPacketOutAnimationTitle(@NonNull Object handle) {
-		super(handle, Set.of(
-			version.getPackageNms() + "PacketPlayOutTitle",
-			networkProtocolGame + "ClientboundSetTitlesAnimationPacket"
-		));
+		super(handle, names);
 		
 		fadeInTime = getFirstField(
 			"fadeInTime",
@@ -34,6 +39,25 @@ public class WrappedPacketOutAnimationTitle extends PacketTitleWrapper {
 			"fadeOut",
 			"e"
 		);
+	}
+	
+	public WrappedPacketOutAnimationTitle(int fadeInTicks, int stayTicks, int fadeOutTicks) {
+		this(new ClassInstanceBuilder(
+			names
+		).withParams(
+			Map.of(
+				int.class,
+				fadeInTicks
+			),
+			Map.of(
+				int.class,
+				stayTicks
+			),
+			Map.of(
+				int.class,
+				fadeOutTicks
+			)
+		).build());
 	}
 
 	public int getFadeInTime() {

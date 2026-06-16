@@ -6,7 +6,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 
 import lombok.NonNull;
 
-class PacketPositionWrapper extends PacketWrapper {
+class PacketPositionWrapper extends PacketWrapper implements PacketPosition {
 
 	PacketPositionWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);

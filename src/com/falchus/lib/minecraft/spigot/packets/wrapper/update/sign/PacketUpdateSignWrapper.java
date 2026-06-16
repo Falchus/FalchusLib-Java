@@ -4,12 +4,14 @@ import java.lang.reflect.Field;
 import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.BlockPosition;
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketUpdateSignWrapper extends PacketWrapper {
+class PacketUpdateSignWrapper extends PacketWrapper implements PacketUpdateSign {
 	
 	Field pos;
 
@@ -22,17 +24,13 @@ class PacketUpdateSignWrapper extends PacketWrapper {
 		);
 	}
 
-	/**
-	 * @return BlockPosition
-	 */
-	public Object getPos() {
-		return getFieldValue(pos);
+	@Override
+	public BlockPosition getPos() {
+		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
-	/**
-	 * @param pos	BlockPosition
-	 */
-	public void setPos(Object pos) {
-		setField(this.pos, pos);
+	@Override
+	public void setPos(BlockPosition pos) {
+		setField(this.pos, pos.getHandle());
 	}
 }

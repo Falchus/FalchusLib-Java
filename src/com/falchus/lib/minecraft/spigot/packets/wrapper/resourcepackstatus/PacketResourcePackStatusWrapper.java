@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
-class PacketResourcePackStatusWrapper extends PacketWrapper {
+class PacketResourcePackStatusWrapper extends PacketWrapper implements PacketResourcePackStatus {
 	
 	Field status;
 
@@ -23,17 +23,14 @@ class PacketResourcePackStatusWrapper extends PacketWrapper {
 		);
 	}
 
-	/**
-	 * @return PacketPlayInResourcePackStatus$EnumResourcePackStatus
-	 */
-	public Object getStatus() {
-		return getFieldValue(status);
+	@Override
+	public Status getStatus() {
+		return Status.valueOf(getFieldValue(status, Enum.class).name());
 	}
 	
-	/**
-	 * @param status	PacketPlayInResourcePackStatus$EnumResourcePackStatus
-	 */
-	public void setStatus(Object status) {
-		setField(this.status, status);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void setStatus(Status status) {
+		setField(this.status, Enum.valueOf((Class<? extends Enum>) this.status.getType(), status.name()));
 	}
 }
