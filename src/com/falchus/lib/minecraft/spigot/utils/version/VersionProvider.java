@@ -22,10 +22,10 @@ public class VersionProvider {
 	
 	private static IVersionAdapter load() {
 		Version version = ServerUtils.getVersion();
-		if (version.isAfter(Version.v1_20)) return new VersionAdapter_v1_21_R1();
+		if (version.isAfter(Version.v1_20_6)) return new VersionAdapter_v1_21_R1();
 		if (version.isAfter(Version.v1_16)) return new VersionAdapterModern();
 		if (version.isAfter(Version.v1_12)) return new VersionAdapter_v_1_13_R1();
-		if (version.isAfter(Version.v1_8)) return new VersionAdapter_v1_9_R1();
+		if (version.isAfter(Version.v1_8_8)) return new VersionAdapter_v1_9_R1();
 		if (version.isBefore(Version.v1_9)) return new VersionAdapter();
 		
 		try {
