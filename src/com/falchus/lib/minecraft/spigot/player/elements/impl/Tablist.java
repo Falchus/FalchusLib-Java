@@ -65,11 +65,12 @@ public class Tablist extends PlayerElement {
 	public void remove() {
 		super.remove();
 		
-		send(
-			(BiFunction<Integer, Player, List<String>>) null,
-			(BiFunction<Integer, Player, List<String>>) null,
-			(Supplier<String>) null
-		);
+//		send(
+//			(BiFunction<Integer, Player, List<String>>) null,
+//			(BiFunction<Integer, Player, List<String>>) null,
+//			(Supplier<String>) null
+//		);
+		// TODO: fix recursion
 	}
 	
 	public void setHeader(@NonNull List<String> header) {
