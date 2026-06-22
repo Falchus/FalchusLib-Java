@@ -17,6 +17,7 @@ import com.falchus.lib.minecraft.spigot.player.elements.impl.Chat;
 import com.falchus.lib.minecraft.spigot.player.elements.impl.Nametag;
 import com.falchus.lib.minecraft.spigot.player.elements.impl.Scoreboard;
 import com.falchus.lib.minecraft.spigot.player.elements.impl.Tablist;
+import com.falchus.lib.minecraft.spigot.player.elements.impl.Tag;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 
 public class JoinQuitListener implements Listener {
@@ -40,6 +41,7 @@ public class JoinQuitListener implements Listener {
     	PlayerElement.updateAll(Nametag.class);
 		PlayerElement.updateAll(Scoreboard.class);
     	PlayerElement.updateAll(Tablist.class);
+    	PlayerElement.updateAll(Tag.class);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
@@ -68,6 +70,7 @@ public class JoinQuitListener implements Listener {
     	PlayerElement.updateAll(Nametag.class);
 		PlayerElement.updateAll(Scoreboard.class);
     	PlayerElement.updateAll(Tablist.class);
+    	PlayerElement.updateAll(Tag.class);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
