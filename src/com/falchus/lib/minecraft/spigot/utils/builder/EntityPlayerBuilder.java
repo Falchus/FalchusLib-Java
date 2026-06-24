@@ -87,7 +87,7 @@ public class EntityPlayerBuilder {
 		try {
 			Object server = ServerUtils.getMcServer();
 			
-			Object world = WorldUtils.getWorldServer(location != null ? location.getWorld() : Bukkit.getWorlds().get(0));
+			Object world = WorldUtils.getWorldServer(location != null ? location.getWorld() : Bukkit.getWorlds().getFirst());
 			
 			GameProfile profile = new GameProfile(uuid, name);
 			if (skinValue != null && skinSignature != null) {
