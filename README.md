@@ -612,7 +612,7 @@ Object build();
 
 `com.falchus.lib.minecraft.spigot.utils.builder.InventoryBuilder`
 ```java
-InventoryBuilder(String title, Integer size);
+InventoryBuilder(String title, int size);
 
 InventoryBuilder dynamicSize(boolean dynamicSize);
 

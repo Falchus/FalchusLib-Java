@@ -33,7 +33,7 @@ public class InventoryBuilder {
     /**
      * Creates a new InventoryBuilder with a title and size.
      */
-    public InventoryBuilder(@NonNull String title, @NonNull Integer size) {
+    public InventoryBuilder(@NonNull String title, int size) {
         this.title = title;
         this.size = size;
     }
