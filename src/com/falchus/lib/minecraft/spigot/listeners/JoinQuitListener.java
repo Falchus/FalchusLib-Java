@@ -33,17 +33,6 @@ public class JoinQuitListener implements Listener {
 		PacketInjector.inject(event.getPlayer());
 	}
 	
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-    	PlayerElement.updateAll(Actionbar.class);
-    	PlayerElement.updateAll(Bossbar.class);
-    	PlayerElement.updateAll(Chat.class);
-    	PlayerElement.updateAll(Nametag.class);
-		PlayerElement.updateAll(Scoreboard.class);
-    	PlayerElement.updateAll(Tablist.class);
-    	PlayerElement.updateAll(Tag.class);
-	}
-	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin_HIGH(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
@@ -60,6 +49,14 @@ public class JoinQuitListener implements Listener {
 				player.showPlayer(onlinePlayer);
 			}
 		}
+		
+    	PlayerElement.updateAll(Actionbar.class);
+    	PlayerElement.updateAll(Bossbar.class);
+    	PlayerElement.updateAll(Chat.class);
+    	PlayerElement.updateAll(Nametag.class);
+		PlayerElement.updateAll(Scoreboard.class);
+    	PlayerElement.updateAll(Tablist.class);
+    	PlayerElement.updateAll(Tag.class);
 	}
 	
 	@EventHandler

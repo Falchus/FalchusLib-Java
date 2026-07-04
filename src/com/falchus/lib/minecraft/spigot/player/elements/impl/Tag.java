@@ -67,6 +67,7 @@ public class Tag extends PlayerElement {
 		
 		if (entity != null) {
 			entity.remove();
+			entity = null;
 		}
 	}
 	

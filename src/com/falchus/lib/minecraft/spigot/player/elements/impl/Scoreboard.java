@@ -149,7 +149,7 @@ public class Scoreboard extends PlayerElement {
 	public void remove() {
 		super.remove();
 		
-		lastLines.clear();
+		lastLines = null;
 		
 		PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardObjective(objective, 1));
 		scoreboard.unregisterObjective(objective);

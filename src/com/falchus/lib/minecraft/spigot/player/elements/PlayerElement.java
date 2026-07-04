@@ -39,12 +39,12 @@ public class PlayerElement {
 	 * Updates the element manually.
 	 */
 	public void update() {
-		if (updateRunnable == null) return;
-		
 		if (!player.isOnline()) {
 			remove();
 			return;
 		}
+		
+		if (updateRunnable == null) return;
 		SpigotTask task = SpigotTask.of(updateRunnable);
 		if (async) {
 			task.runAsync();
@@ -69,9 +69,9 @@ public class PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
 	    Map<UUID, SpigotTask> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
 	    
-	    SpigotTask oldTask = map.get(player.getUniqueId());
+	    SpigotTask oldTask = map.remove(player.getUniqueId());
 		if (oldTask != null) {
-			remove();
+			oldTask.end();
 		}
 		frame = 0;
 		
@@ -121,6 +121,11 @@ public class PlayerElement {
 	public static <T extends PlayerElement> T get(@NonNull Class<T> clazz, @NonNull Player player) {
 		if (!PlayerElement.class.isAssignableFrom(clazz)) return null;
 		Map<UUID, PlayerElement> map = instances.computeIfAbsent(clazz, c -> new ConcurrentHashMap<>());
+		
+		PlayerElement existing = map.get(player.getUniqueId());
+		if (existing != null && existing.player != player) {
+			existing.remove();
+		}
 		
 		return (T) map.computeIfAbsent(player.getUniqueId(), uuid -> {
 			return (T) new ClassInstanceBuilder(
