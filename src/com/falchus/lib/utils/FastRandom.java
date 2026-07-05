@@ -1,6 +1,7 @@
 package com.falchus.lib.utils;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -10,9 +11,12 @@ import lombok.AllArgsConstructor;
  * Implementation of George Marsaglia's elegant Xorshift random generator which is 
  * 30% faster and better quality than the built-in java.util.random see also see
  * http://www.javamex.com/tutorials/random_numbers/xorshift.shtml
+ * 
+ * @deprecated since 2.0.0, use {@link ThreadLocalRandom} instead!
  */
 @AllArgsConstructor
 @ThreadSafe // The fast random can be used with multiple threads
+@Deprecated(since = "2.0.0")
 public class FastRandom extends Random implements Cloneable {
 	
     private static final long serialVersionUID = 1L;
