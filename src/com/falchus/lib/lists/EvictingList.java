@@ -12,6 +12,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class EvictingList<T> extends LinkedList<T> {
 
+	private static final long serialVersionUID = 1L;
+	
 	private final int maxSize;
 	
 	public EvictingList(Collection<? extends T> c, int maxSize) {
