@@ -7,16 +7,20 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class AdventureUtils {
+	
+	public static final GsonComponentSerializer gson = GsonComponentSerializer.gson();
+	public static final LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+	public static final PlainTextComponentSerializer plain = PlainTextComponentSerializer.plainText();
 
 	public static String toJson(@NonNull Component component) {
-	    return GsonComponentSerializer.gson().serialize(component);
+	    return gson.serialize(component);
 	}
 	
 	public static Component legacy(@NonNull String input) {
-		return LegacyComponentSerializer.legacySection().deserialize(input);
+		return legacy.deserialize(input);
 	}
 	
 	public static String plain(@NonNull String input) {
-		return PlainTextComponentSerializer.plainText().serialize(legacy(input));
+		return plain.serialize(legacy(input));
 	}
 }
