@@ -2,7 +2,6 @@ package com.falchus.lib.minecraft.utils;
 
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -13,7 +12,7 @@ public class AdventureUtils {
 	    return GsonComponentSerializer.gson().serialize(component);
 	}
 	
-	public static TextComponent legacy(@NonNull String input) {
+	public static Component legacy(@NonNull String input) {
 		return LegacyComponentSerializer.legacySection().deserialize(input);
 	}
 	
