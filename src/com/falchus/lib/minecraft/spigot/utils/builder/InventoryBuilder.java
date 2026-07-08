@@ -67,10 +67,13 @@ public class InventoryBuilder {
      * Adds an item to a specific slot with a full InventoryClickEvent callback.
      */
     public InventoryBuilder setItem(int slot, @NonNull ItemStack item, @NonNull TriConsumer<Player, ItemStack, InventoryClickEvent> onClick) {
-        UUID uuid = UUID.randomUUID();
-        ItemStack itemWithUUID = ItemUtils.setUUID(item, uuid);
+    	UUID uuid = ItemUtils.getUUID(item);
+    	if (uuid == null) {
+    		uuid = UUID.randomUUID();
+    		item = ItemUtils.setUUID(item, uuid);
+    	}
         ItemUtils.itemActionsInventory.put(uuid, onClick);
-        items.add(new ItemUtils.InventoryItem(slot, itemWithUUID, null));
+        items.add(new ItemUtils.InventoryItem(slot, item, null));
         return this;
     }
     
@@ -102,10 +105,13 @@ public class InventoryBuilder {
      * Adds an item with a full InventoryClickEvent callback.
      */
     public InventoryBuilder addItem(@NonNull ItemStack item, @NonNull TriConsumer<Player, ItemStack, InventoryClickEvent> onClick) {
-        UUID uuid = UUID.randomUUID();
-        ItemStack itemWithUUID = ItemUtils.setUUID(item, uuid);
+	    UUID uuid = ItemUtils.getUUID(item);
+	    if (uuid == null) {
+	        uuid = UUID.randomUUID();
+	        item = ItemUtils.setUUID(item, uuid);
+	    }
         ItemUtils.itemActionsInventory.put(uuid, onClick);
-        items.add(new ItemUtils.InventoryItem(-1, itemWithUUID, null));
+        items.add(new ItemUtils.InventoryItem(-1, item, null));
         return this;
     }
 
@@ -232,9 +238,7 @@ public class InventoryBuilder {
     	    if (uuid == null) {
     	    	uuid = UUID.randomUUID();
     	    }
-    	    ItemStack itemWithUUID = ItemUtils.setUUID(item.item, uuid);
-    	    
-    	    inventory.setItem(targetSlot, itemWithUUID);
+    	    inventory.setItem(targetSlot, ItemUtils.setUUID(item.item, uuid));
 
     	    if (item.onInventoryClick != null) {
     	        ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> item.onInventoryClick.accept(pl));
