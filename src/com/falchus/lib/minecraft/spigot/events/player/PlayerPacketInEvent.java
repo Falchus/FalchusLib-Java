@@ -7,7 +7,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 import lombok.Getter;
 
 /**
- * Called when a player receives a packet.
+ * Called when a player sends a packet.
  */
 @Getter
 public class PlayerPacketInEvent extends PlayerPacketEvent {

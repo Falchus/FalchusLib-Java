@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Called when a player receives/sends a packet.
+ * Called when a player sends/receives a packet.
  */
 @Getter
 public class PlayerPacketEvent extends Event implements Cancellable {
