@@ -116,7 +116,7 @@ public interface IVersionAdapter {
 	/**
 	 * Sends a nametag for a player.
 	 */
-	void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix);
+	void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix, int sort);
 	
 	/**
 	 * Removes a nametag from a player.

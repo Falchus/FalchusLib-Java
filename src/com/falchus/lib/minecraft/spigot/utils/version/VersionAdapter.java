@@ -67,6 +67,7 @@ public class VersionAdapter implements IVersionAdapter {
 	protected static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	final Map<Player, Object> bossBars = new HashMap<>();
+	final Map<Player, String> nametags = new HashMap<>();
 	
 	@Getter String packageOb = "org.bukkit.";
 	@Getter String packageObc = packageOb + "craftbukkit.";
@@ -710,10 +711,18 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
+    public void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix, int sort) {
+    	removeNametag(player);
+    	
 		Set<String> players = Set.of(player.getName());
 		
-		ScoreboardTeam team = new WrappedScoreboardTeam(player.getName());
+		long s = Math.clamp(Integer.MAX_VALUE - (long) sort, 0, Integer.MAX_VALUE);
+		String teamName = String.format("%08x", s) + player.getName();
+		if (teamName.length() > 16) {
+			teamName = teamName.substring(0, 16);
+		}
+		
+		ScoreboardTeam team = new WrappedScoreboardTeam(teamName);
 		team.setDisplayName(player.getName());
 		team.setPrefix(prefix);
 		team.setSuffix(suffix);
@@ -728,14 +737,16 @@ public class VersionAdapter implements IVersionAdapter {
         	PlayerUtils.sendPacket(onlinePlayer, createPacket);
         	PlayerUtils.sendPacket(onlinePlayer, updatePacket);
         }
+        
+        nametags.put(player, teamName);
     }
     
     @Override
     public void removeNametag(@NonNull Player player) {
-		Set<String> players = Set.of(player.getName());
+    	String teamName = nametags.remove(player);
+    	if (teamName == null) return;
 		
-		PacketScoreboardTeam removePacket = new WrappedPacketOutScoreboardTeam(WrappedPacketOutScoreboardTeam.Mode.REMOVE_PLAYER, player.getName());
-		removePacket.setPlayers(players);
+		PacketScoreboardTeam removePacket = new WrappedPacketOutScoreboardTeam(WrappedPacketOutScoreboardTeam.Mode.REMOVE, teamName);
 		
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         	PlayerUtils.sendPacket(onlinePlayer, removePacket);

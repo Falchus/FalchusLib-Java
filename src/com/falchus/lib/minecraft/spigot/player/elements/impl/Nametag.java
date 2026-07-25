@@ -13,29 +13,33 @@ public class Nametag extends PlayerElement {
 	
 	private Supplier<String> prefixSupplier;
 	private Supplier<String> suffixSupplier;
+	private Supplier<Integer> sortSupplier;
 	
 	private Nametag(@NonNull Player player) {
 		super(player, true);
 	}
 
-	public void send(@NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
+	public void send(@NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix, @NonNull Supplier<Integer> sort) {
 		prefixSupplier = prefix;
 		suffixSupplier = suffix;
+		sortSupplier = sort;
 		
 		updateRunnable = () -> {
 			String newPrefix = prefixSupplier.get();
 			String newSuffix = suffixSupplier.get();
+			int newSort = sortSupplier.get();
 			
-	        PlayerUtils.sendNametag(player, newPrefix, newSuffix);
+	        PlayerUtils.sendNametag(player, newPrefix, newSuffix, newSort);
 		};
 		update();
 	}
 	
-	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix) {
+	public void sendUpdating(long intervalTicks, @NonNull Supplier<String> prefix, @NonNull Supplier<String> suffix, @NonNull Supplier<Integer> sort) {
 		super.sendUpdating(intervalTicks, () ->
 			send(
 				prefix,
-				suffix
+				suffix,
+				sort
 			)
 		);
 	}
@@ -49,14 +53,24 @@ public class Nametag extends PlayerElement {
 	public void setPrefix(String prefix) {
 		send(
 			() -> prefix,
-			suffixSupplier
+			suffixSupplier,
+			sortSupplier
 		);
 	}
 	
 	public void setSuffix(String suffix) {
 		send(
 			prefixSupplier,
-			() -> suffix
+			() -> suffix,
+			sortSupplier
+		);
+	}
+	
+	public void setSort(int sort) {
+		send(
+			prefixSupplier,
+			suffixSupplier,
+			() -> sort
 		);
 	}
 }
