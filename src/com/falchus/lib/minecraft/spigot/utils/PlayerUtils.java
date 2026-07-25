@@ -80,8 +80,8 @@ public class PlayerUtils {
 	/**
 	 * Sends a nametag for a player.
 	 */
-	public static void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix) {
-		VersionProvider.get().sendNametag(player, prefix, suffix);
+	public static void sendNametag(@NonNull Player player, @NonNull String prefix, @NonNull String suffix, int sort) {
+		VersionProvider.get().sendNametag(player, prefix, suffix, sort);
 	}
 	
 	/**
@@ -123,6 +123,19 @@ public class PlayerUtils {
 		net.luckperms.api.cacheddata.CachedMetaData metaData = user.getCachedData().getMetaData();
 		String prefix = metaData.getPrefix();
 		return prefix != null ? prefix : "";
+	}
+	
+	/**
+	 * Retrieves the LuckPerms rank weight of a player.
+	 */
+	public static Integer getLuckPermsRankWeight(@NonNull Player player) {
+		if (!Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) return null;
+		
+		net.luckperms.api.LuckPerms luckPerms = net.luckperms.api.LuckPermsProvider.get();
+		net.luckperms.api.model.user.User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
+		net.luckperms.api.cacheddata.CachedMetaData metaData = user.getCachedData().getMetaData();
+		int weight = metaData.getWeight();
+		return weight;
 	}
 	
 	/**
