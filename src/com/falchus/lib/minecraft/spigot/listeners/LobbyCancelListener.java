@@ -33,7 +33,6 @@ public class LobbyCancelListener implements Listener {
 			BlockFromToEvent.class,
 			BlockGrowEvent.class,
 			BlockIgniteEvent.class,
-			BlockPhysicsEvent.class,
 			BlockPistonExtendEvent.class,
 			BlockPistonRetractEvent.class,
 			BlockPlaceEvent.class,
@@ -56,8 +55,10 @@ public class LobbyCancelListener implements Listener {
 			InventoryPickupItemEvent.class,
 			
 			PlayerAchievementAwardedEvent.class,
+			PlayerArmorStandManipulateEvent.class,
 			PlayerDropItemEvent.class,
 			PlayerEditBookEvent.class,
+			PlayerInteractAtEntityEvent.class,
 			PlayerInteractEntityEvent.class,
 			PlayerInteractEvent.class,
 			PlayerItemConsumeEvent.class,
@@ -90,7 +91,15 @@ public class LobbyCancelListener implements Listener {
 		
 		LobbyCancelEvent e = new LobbyCancelEvent(event);
 		Bukkit.getPluginManager().callEvent(e);
-		cancellable.setCancelled(e.isCancelled());
+		
+		boolean cancel = e.isCancelled();
+		cancellable.setCancelled(cancel);
+		if (cancel) {
+			if (event instanceof VehicleEntityCollisionEvent ev) {
+				ev.setCollisionCancelled(true);
+				ev.setPickupCancelled(true);
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
