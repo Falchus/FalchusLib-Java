@@ -158,7 +158,7 @@ public class ItemBuilder {
 	 * Sets a custom UUID (stored in NBT).
 	 */
 	public ItemBuilder setUUID(@NonNull UUID uuid) {
-		ItemUtils.setUUID(item, uuid);
+		item = ItemUtils.setUUID(item, uuid);
 		return this;
 	}
 
@@ -169,7 +169,7 @@ public class ItemBuilder {
 	    UUID uuid = ItemUtils.getUUID(item);
 	    if (uuid == null) {
 	        uuid = UUID.randomUUID();
-	        item = ItemUtils.setUUID(item, uuid);
+	        setUUID(uuid);
 	    }
 	    ItemUtils.itemActions.put(uuid, onPlayerInteract);
 	    return this;
@@ -182,7 +182,7 @@ public class ItemBuilder {
 	    UUID uuid = ItemUtils.getUUID(item);
 	    if (uuid == null) {
 	        uuid = UUID.randomUUID();
-	        item = ItemUtils.setUUID(item, uuid);
+	        setUUID(uuid);
 	    }
 	    ItemUtils.itemActionsInventory.put(uuid, onInventoryClick);
 	    return this;

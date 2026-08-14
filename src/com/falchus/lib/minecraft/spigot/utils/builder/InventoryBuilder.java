@@ -234,17 +234,16 @@ public class InventoryBuilder {
     	for (ItemUtils.InventoryItem item : items) {
     		int targetSlot = item.slot == -1 ? autoSlot++ : item.slot;
     		
-    	    UUID uuid = ItemUtils.getUUID(item.item);
-    	    if (uuid == null) {
-    	    	uuid = UUID.randomUUID();
-    	    }
-    	    inventory.setItem(targetSlot, ItemUtils.setUUID(item.item, uuid));
-
-    	    if (item.onInventoryClick != null) {
-    	        ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> item.onInventoryClick.accept(pl));
-    	    } else if (globalClickListener != null) {
-    	        ItemUtils.itemActionsInventory.put(uuid, (pl, clickedItem, event) -> globalClickListener.accept(pl, clickedItem, event));
-    	    }
+    		if (item.onInventoryClick != null) {
+	    	    UUID uuid = ItemUtils.getUUID(item.item);
+	    	    if (uuid == null) {
+	    	    	uuid = UUID.randomUUID();
+	    	    }
+	    	    inventory.setItem(targetSlot, ItemUtils.setUUID(item.item, uuid));
+	    	    ItemUtils.itemActionsInventory.putIfAbsent(uuid, (pl, clickedItem, event) -> item.onInventoryClick.accept(pl));
+    		} else {
+    			inventory.setItem(targetSlot, item.item);
+    		}
     	}
     	
         if (filler != null) {

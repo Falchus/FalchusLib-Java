@@ -44,40 +44,32 @@ public class ItemListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
+        Inventory top = event.getView().getTopInventory();
         ItemStack item = event.getCurrentItem();
-        if (item == null) return;
-        
-        UUID uuid = ItemUtils.getUUID(item);
-        if (uuid != null) {
-            TriConsumer<Player, ItemStack, InventoryClickEvent> action = ItemUtils.itemActionsInventory.get(uuid);
-            if (action != null) {
-                event.setCancelled(true);
-                action.accept(player, item, event);
-                return;
+        TriConsumer<Player, ItemStack, InventoryClickEvent> callback = ItemUtils.inventoryCallbacks.get(top);
+        boolean click = event.getRawSlot() < top.getSize();
+        if (click && item != null) {
+            UUID uuid = ItemUtils.getUUID(item);
+            if (uuid != null) {
+                TriConsumer<Player, ItemStack, InventoryClickEvent> action = ItemUtils.itemActionsInventory.get(uuid);
+                if (action != null) {
+                    event.setCancelled(true);
+                    action.accept(player, item, event);
+                    return;
+                }
             }
         }
 
-        TriConsumer<Player, ItemStack, InventoryClickEvent> callback = ItemUtils.inventoryCallbacks.get(event.getInventory());
         if (callback != null) {
             event.setCancelled(true);
-            callback.accept(player, item, event);
+            if (click && item != null) {
+            	callback.accept(player, item, event);
+            }
         }
     }
     
-    // TODO: search for a better, more bulletproof solution
-//    @EventHandler
-//    public void onInventoryClose(InventoryCloseEvent event) {
-//    	Inventory inventory = event.getInventory();
-//    	
-//    	for (ItemStack item : inventory.getContents()) {
-//    		if (item == null) continue;
-//    		
-//    		UUID uuid = ItemUtils.getUUID(item);
-//    		if (uuid == null) continue;
-//    		
-//    		ItemUtils.itemActionsInventory.remove(uuid);
-//    	}
-//    	
-//    	ItemUtils.inventoryCallbacks.remove(inventory);
-//    }
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+    	ItemUtils.inventoryCallbacks.remove(event.getInventory());
+    }
 }
