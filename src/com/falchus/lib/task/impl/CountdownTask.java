@@ -1,21 +1,27 @@
 package com.falchus.lib.task.impl;
 
+import java.util.function.Function;
+
 import com.falchus.lib.task.Task;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * to be used with {@link Task#runTaskTimer(long)}
- */
 @Getter
-@AllArgsConstructor
-public class CountdownTask extends Task {
+public class CountdownTask extends TaskImplTimer {
 	
 	private volatile int remaining;
 	
+	public CountdownTask(int remaining) {
+		this(remaining, null);
+	}
+	
+	public CountdownTask(int remaining, Function<Runnable, Task> task) {
+		super(task);
+		this.remaining = remaining;
+	}
+	
 	@Override
-	public final void onRun(int tick) {		
+	public final void run() {		
 		if (remaining <= 0) {
 			end();
 			return;

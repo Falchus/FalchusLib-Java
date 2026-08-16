@@ -25,6 +25,10 @@ public class Task implements Runnable {
 	@Getter private volatile boolean ended;
 	@Getter private volatile int tick;
 	
+	public Task() {
+		tasks.put(id, this);
+	}
+	
 	public static Task of(@NonNull Runnable runnable) {
 		return new Task() {
 			@Override
@@ -73,39 +77,35 @@ public class Task implements Runnable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runTimer(long delay, long period, @NonNull TimeUnit unit) {
+	public <T extends Task> T runTimer(long delay, long period, @NonNull TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this::execute, delay, period, unit);
-		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runTimerAsync(long delay, long period, @NonNull TimeUnit unit) {
+	public <T extends Task> T runTimerAsync(long delay, long period, @NonNull TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this::executeAsync, delay, period, unit);
-		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runLater(long delay, @NonNull TimeUnit unit) {
+	public <T extends Task> T runLater(long delay, @NonNull TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.schedule(() -> execute(() -> {
 			run();
 			end();
 		}), delay, unit);
-		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public final <T extends Task> T runLaterAsync(long delay, @NonNull TimeUnit unit) {
+	public <T extends Task> T runLaterAsync(long delay, @NonNull TimeUnit unit) {
 		ScheduledFuture<?> future = scheduler.schedule(() -> executeAsync(() -> {
 			run();
 			end();
 		}), delay, unit);
-		tasks.put(id, this);
 		taskFutures.put(id, future);
 		return (T) this;
 	}

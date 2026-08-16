@@ -2,6 +2,7 @@ package com.falchus.lib.minecraft.spigot.task;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
@@ -25,6 +26,10 @@ public class SpigotTask extends Task {
 			}
 		};
 	}
+	
+	private static long toTicks(long time, @NonNull TimeUnit unit) {
+		return Math.max(0, unit.toMillis(time) / 50);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -32,7 +37,7 @@ public class SpigotTask extends Task {
 		if (Bukkit.isPrimaryThread()) {
 			super.execute(runnable);
 		} else {
-			tasks.put(getId(), Bukkit.getScheduler().runTask(plugin, runnable));
+			Bukkit.getScheduler().runTask(plugin, runnable);
 		}
 		return (T) this;
 	}
@@ -43,8 +48,46 @@ public class SpigotTask extends Task {
 		if (!Bukkit.isPrimaryThread()) {
 			super.executeAsync(runnable);
 		} else {
-			tasks.put(getId(), Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable));
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
 		}
+		return (T) this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Task> T runTimer(long delay, long period, @NonNull TimeUnit unit) {
+		long d = toTicks(delay, unit);
+		long p = Math.max(1, toTicks(period, unit));
+		tasks.put(getId(), Bukkit.getScheduler().runTaskTimer(plugin, this, d, p));
+		return (T) this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Task> T runTimerAsync(long delay, long period, @NonNull TimeUnit unit) {
+		long d = toTicks(delay, unit);
+		long p = Math.max(1, toTicks(period, unit));
+		tasks.put(getId(), Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, d, p));
+		return (T) this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Task> T runLater(long delay, @NonNull TimeUnit unit) {
+		tasks.put(getId(), Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			run();
+			end();
+		}, toTicks(delay, unit)));
+		return (T) this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Task> T runLaterAsync(long delay, @NonNull TimeUnit unit) {
+		tasks.put(getId(), Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+			run();
+			end();
+		}, toTicks(delay, unit)));
 		return (T) this;
 	}
 	

@@ -5,7 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.falchus.lib.minecraft.spigot.listeners.*;
 import com.falchus.lib.minecraft.spigot.listeners.message.*;
 import com.falchus.lib.minecraft.spigot.manager.*;
+import com.falchus.lib.minecraft.spigot.task.SpigotTask;
 import com.falchus.lib.minecraft.spigot.utils.*;
+import com.falchus.lib.task.impl.TaskImpl;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,6 +34,8 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		new Metrics(this, 28050);
 		
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+		
+		TaskImpl.setDefaultTask(SpigotTask::of);
 		
 		labyModMessageListener = new LabyModMessageListener();
 		lunarMessageListener = new LunarMessageListener();
