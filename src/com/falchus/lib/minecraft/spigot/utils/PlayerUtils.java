@@ -113,32 +113,6 @@ public class PlayerUtils {
 	}
 	
 	/**
-	 * Retrieves the LuckPerms rank prefix of a player.
-	 */
-	public static String getLuckPermsRankPrefix(@NonNull Player player) {
-		if (!Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) return "";
-		
-		net.luckperms.api.LuckPerms luckPerms = net.luckperms.api.LuckPermsProvider.get();
-		net.luckperms.api.model.user.User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
-		net.luckperms.api.cacheddata.CachedMetaData metaData = user.getCachedData().getMetaData();
-		String prefix = metaData.getPrefix();
-		return prefix != null ? prefix : "";
-	}
-	
-	/**
-	 * Retrieves the LuckPerms rank weight of a player.
-	 */
-	public static Integer getLuckPermsRankWeight(@NonNull Player player) {
-		if (!Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) return null;
-		
-		net.luckperms.api.LuckPerms luckPerms = net.luckperms.api.LuckPermsProvider.get();
-		net.luckperms.api.model.user.User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
-		net.luckperms.api.cacheddata.CachedMetaData metaData = user.getCachedData().getMetaData();
-		int weight = metaData.getWeight();
-		return weight;
-	}
-	
-	/**
 	 * Vanishes a player.
 	 */
 	public static void vanish(@NonNull Player player) {

@@ -402,8 +402,6 @@ static void playSound(Player player, Location location, Sound sound, float volum
 static void freeze(Player player);
 static void unfreeze(Player player);
 
-static String getLuckPermsRankPrefix(Player player);
-
 static void vanish(Player player);
 static void unvanish(Player player);
 
