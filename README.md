@@ -85,9 +85,16 @@ HTTPServer build(String ip);
 #### Storage
 `com.falchus.lib.storage.Storage`
 ```java
+void write(String content);
+
+<T> String serialize(T value);
+<T> T deserialize(String content);
+
 <T> void save(T value);
+<T> void saveAsync(T value);
 
 <T> T load();
+<T> void loadAsync(Consumer<T> consumer);
 
 void delete();
 void deleteFolder();

@@ -2,8 +2,10 @@ package com.falchus.lib.storage;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import com.falchus.lib.storage.serializer.Serializer;
+import com.falchus.lib.task.Task;
 import com.falchus.lib.utils.FileUtils;
 
 public class Storage {
@@ -22,27 +24,48 @@ public class Storage {
 		file = folder.resolve(fileName).toFile();
 		
 		if (!file.exists() || file.length() == 0) {
-			FileUtils.writeString(file.toPath(), defaultContent);
+			write(defaultContent);
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T> void save(T value) {
-    	String content = ((Serializer<T>) serializer).serialize(value);
-    	FileUtils.writeString(file.toPath(), content);
+	public void write(String content) {
+		FileUtils.writeString(file.toPath(), content);
 	}
 	
 	@SuppressWarnings("unchecked")
+	public <T> String serialize(T value) {
+		return ((Serializer<T>) serializer).serialize(value);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T deserialize(String content) {
+		return ((Serializer<T>) serializer).deserialize(content);
+	}
+	
+	public <T> void save(T value) {
+    	String content = serialize(value);
+    	write(content);
+	}
+	
+	public <T> void saveAsync(T value) {
+		String content = serialize(value);
+		Task.of(() -> write(content)).runAsync();
+	}
+	
 	public <T> T load() {
 		if (!file.exists() || file.length() == 0) {
-			return ((Serializer<T>) serializer).deserialize(defaultContent);
+			return deserialize(defaultContent);
 		}
 		
 		String content = FileUtils.readString(file.toPath());
 		if (content == null || content.isBlank()) {
-			return ((Serializer<T>) serializer).deserialize(defaultContent);
+			return deserialize(defaultContent);
 		}
-		return ((Serializer<T>) serializer).deserialize(content);
+		return deserialize(content);
+	}
+	
+	public <T> void loadAsync(Consumer<T> consumer) {
+		Task.of(() -> consumer.accept(load())).runAsync();
 	}
 	
 	public void delete() {
