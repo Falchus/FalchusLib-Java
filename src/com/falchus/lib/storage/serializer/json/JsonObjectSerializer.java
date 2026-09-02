@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-public abstract class JsonObjectSerializer<T> extends JsonSerializer<T, JSONObject> {
+public class JsonObjectSerializer<T> extends JsonSerializer<T, JSONObject> {
 	
 	@Override
 	public String serialize(T value) {

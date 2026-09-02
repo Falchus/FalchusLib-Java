@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.json.simple.JSONArray;
 
-public abstract class JsonArraySerializer<T> extends JsonSerializer<T, JSONArray> {
+public class JsonArraySerializer<T> extends JsonSerializer<T, JSONArray> {
 	
 	@Override
 	public String serialize(T value) {
