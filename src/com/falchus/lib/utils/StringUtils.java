@@ -36,4 +36,11 @@ public class StringUtils {
 		if (string.length() < prefix.length()) return false;
 		return string.regionMatches(true, 0, prefix, 0, prefix.length());
 	}
+	
+	public static String limit(@NonNull String string, int limit) {
+		if (string.length() > limit) {
+			return string.substring(0, limit);
+		}
+		return string;
+	}
 }
