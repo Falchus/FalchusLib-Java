@@ -6,6 +6,8 @@ import java.nio.file.Path;
 
 import org.slf4j.Logger;
 
+import com.falchus.lib.minecraft.utils.messaging.BungeeMessaging;
+import com.falchus.lib.minecraft.velocity.utils.BungeeMessagingAdapterVelocity;
 import com.falchus.lib.minecraft.velocity.utils.Metrics;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -28,7 +30,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FalchusLibMinecraftVelocity {
 
-	final ProxyServer server;
+	final ProxyServer proxy;
 	final Logger logger;
 	final File dataFolder;
 	final File file;
@@ -37,8 +39,8 @@ public class FalchusLibMinecraftVelocity {
 	@Getter static FalchusLibMinecraftVelocity instance;
 	
 	@Inject
-	public FalchusLibMinecraftVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataFolder, Metrics.Factory metricsFactory) {
-		this.server = server;
+	public FalchusLibMinecraftVelocity(ProxyServer proxy, Logger logger, @DataDirectory Path dataFolder, Metrics.Factory metricsFactory) {
+		this.proxy = proxy;
 		this.logger = logger;
 		this.dataFolder = new File(dataFolder.toFile().getParentFile(), this.getClass().getAnnotation(Plugin.class).name());
 		this.metricsFactory = metricsFactory;
@@ -54,5 +56,7 @@ public class FalchusLibMinecraftVelocity {
 	public void onProxyInitialize(ProxyInitializeEvent event) {
 		instance = this;
 		metricsFactory.make(this, 28136);
+		
+		BungeeMessaging.setAdapter(new BungeeMessagingAdapterVelocity());
 	}
 }

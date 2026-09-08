@@ -7,6 +7,7 @@ import com.falchus.lib.minecraft.spigot.listeners.message.*;
 import com.falchus.lib.minecraft.spigot.manager.*;
 import com.falchus.lib.minecraft.spigot.task.SpigotTask;
 import com.falchus.lib.minecraft.spigot.utils.*;
+import com.falchus.lib.minecraft.utils.messaging.BungeeMessaging;
 import com.falchus.lib.task.impl.TaskImpl;
 
 import lombok.AccessLevel;
@@ -33,7 +34,9 @@ public class FalchusLibMinecraftSpigot extends JavaPlugin {
 		instance = this;
 		new Metrics(this, 28050);
 		
+		BungeeMessaging.setAdapter(new BungeeMessagingAdapterSpigot());
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeMessaging.channel);
 		
 		TaskImpl.setDefaultTask(SpigotTask::of);
 		
