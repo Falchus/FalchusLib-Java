@@ -43,4 +43,21 @@ public class StringUtils {
 		}
 		return string;
 	}
+	
+	public static boolean matches(@NonNull String string, @NonNull String pattern) {
+		if (!pattern.contains("*")) return string.equals(pattern);
+		
+		String[] parts = pattern.split("\\*", -1);
+		if (!pattern.startsWith("*") && !string.startsWith(parts[0])) return false;
+		if (!pattern.endsWith("*") && !string.endsWith(parts[parts.length - 1])) return false;
+		
+		int i = 0;
+		for (String part : parts) {
+			if (part.isEmpty()) continue;
+			int found = string.indexOf(part, i);
+			if (found == -1) return false;
+			i = found + part.length();
+		}
+		return true;
+	}
 }
