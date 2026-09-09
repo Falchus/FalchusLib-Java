@@ -114,6 +114,15 @@ public class ItemBuilder {
 	}
 	
 	/**
+	 * Makes the item glow by adding {@link Enchantment#DURABILITY} and hiding enchantments.
+	 */
+	public ItemBuilder glow() {
+		addEnchantment(Enchantment.DURABILITY, 0);
+		addItemFlag(ItemFlag.HIDE_ENCHANTS);
+		return this;
+	}
+	
+	/**
 	 * Sets the durability.
 	 */
 	public ItemBuilder setDurability(short durability) {

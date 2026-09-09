@@ -661,6 +661,8 @@ ItemBuilder addEnchantment(Enchantment enchantment, int level);
 
 ItemBuilder addItemFlag(ItemFlag itemFlag);
 
+ItemBuilder glow();
+
 ItemBuilder setDurability(short durability);
 
 ItemBuilder setSkullOwner(String owner);
