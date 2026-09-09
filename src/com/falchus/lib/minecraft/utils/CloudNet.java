@@ -153,6 +153,20 @@ public class CloudNet {
     }
     
     /**
+     * @return {@link ServiceInfoSnapshot} of the current service
+     */
+    public static ServiceInfoSnapshot getServiceInfo() {
+    	return serviceInfoHolder.serviceInfo();
+    }
+    
+    /**
+     * @return the name of the current service
+     */
+    public static String getName() {
+    	return getServiceInfo().serviceId().name();
+    }
+    
+    /**
      * @return the state of the given service
      */
     public static String getState(@NonNull String service) {
@@ -185,14 +199,14 @@ public class CloudNet {
      * Connects a player to a specified task using the given selector type.
      */
     public static void connectPlayerToTask(@NonNull UUID uuid, @NonNull String task, @NonNull ServerSelectorType serverSelectorType) {
-        playerManager.playerExecutor(uuid).connectToTask(task, serverSelectorType);
+    	getPlayerExecutor(uuid).connectToTask(task, serverSelectorType);
     }
 
     /**
      * Connects a player to a specified service.
      */
     public static void connectPlayerToService(@NonNull UUID uuid, @NonNull String service) {
-        playerManager.playerExecutor(uuid).connect(service);
+    	getPlayerExecutor(uuid).connect(service);
     }
     
     /**
