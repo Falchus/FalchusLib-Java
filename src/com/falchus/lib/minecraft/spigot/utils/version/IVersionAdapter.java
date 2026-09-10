@@ -89,11 +89,6 @@ public interface IVersionAdapter {
 	void sendPacket(@NonNull Player player, @NonNull Object packet);
 	
 	/**
-	 * Sends a title and/or subtitle to a player.
-	 */
-	void sendTitle(@NonNull Player player, String title, String subtitle);
-	
-	/**
 	 * Sends a tablist to a player.
 	 */
 	void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name);
@@ -137,11 +132,6 @@ public interface IVersionAdapter {
 	 * @return EntityPlayer from Player
 	 */
 	Object getEntityPlayer(@NonNull Player player);
-	
-	/**
-	 * @return Player.Spigot from Player
-	 */
-	Object getPlayerSpigot(@NonNull Player player);
 	
 	/**
 	 * @return {@link GameProfile} from EntityPlayer

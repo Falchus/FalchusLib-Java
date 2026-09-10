@@ -33,8 +33,6 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.playerlistheaderfooter.W
 import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.PacketScoreboardTeam;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.WrappedPacketOutScoreboardTeam;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.spawn.entity.WrappedPacketOutSpawnEntityLiving;
-import com.falchus.lib.minecraft.spigot.packets.wrapper.title.WrappedPacketOutSubtitleTitle;
-import com.falchus.lib.minecraft.spigot.packets.wrapper.title.WrappedPacketOutTitleTitle;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
@@ -120,7 +118,6 @@ public class VersionAdapter implements IVersionAdapter {
     Class<?> craftPlayer;
     Method craftPlayer_getHandle;
     Class<?> player$Spigot;
-    Method player_spigot;
     Class<?> entityHuman;
     Field entityHuman_profile;
     Field entityPlayer_ping;
@@ -380,7 +377,6 @@ public class VersionAdapter implements IVersionAdapter {
             craftPlayer = ReflectionUtils.getClass(packageObc + "entity.CraftPlayer");
             craftPlayer_getHandle = ReflectionUtils.getMethod(craftPlayer, "getHandle");
             player$Spigot = ReflectionUtils.getClass(packageOb + "entity.Player$Spigot");
-            player_spigot = ReflectionUtils.getMethod(Player.class, "spigot");
             entityHuman = entityPlayer.getSuperclass();
             entityHuman_profile = ReflectionUtils.getFirstField(entityHuman,
             	"bH",
@@ -625,20 +621,6 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
-    public void sendTitle(@NonNull Player player, String title, String subtitle) {
-		title = title != null ? title : "";
-		subtitle = subtitle != null ? subtitle : "";
-		
-		Component titleComponent = new WrappedComponent(title);
-		WrappedPacketOutTitleTitle titlePacket = new WrappedPacketOutTitleTitle(titleComponent);
-		PlayerUtils.sendPacket(player, titlePacket);
-		
-		Component subtitleComponent = new WrappedComponent(subtitle);
-		WrappedPacketOutSubtitleTitle subtitlePacket = new WrappedPacketOutSubtitleTitle(subtitleComponent);
-		PlayerUtils.sendPacket(player, subtitlePacket);
-    }
-    
-    @Override
     public void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {
 	    String headerText = header != null ? String.join("\n", header) : "";
 	    String footerText = footer != null ? String.join("\n", footer) : "";
@@ -768,15 +750,6 @@ public class VersionAdapter implements IVersionAdapter {
     	try {
     		Object craftPlayer = getCraftPlayer(player);
     		return craftPlayer_getHandle.invoke(craftPlayer);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    @Override
-    public Object getPlayerSpigot(@NonNull Player player) {
-    	try {
-    		return player_spigot.invoke(player);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -43,13 +43,6 @@ public class PlayerUtils {
 	}
 	
 	/**
-	 * Sends a title and/or subtitle to a player.
-	 */
-	public static void sendTitle(@NonNull Player player, String title, String subtitle) {
-		VersionProvider.get().sendTitle(player, title, subtitle);
-	}
-	
-	/**
 	 * Sends a tablist to a player.
 	 */
 	public static void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {

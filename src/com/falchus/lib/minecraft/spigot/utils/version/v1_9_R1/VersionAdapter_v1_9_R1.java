@@ -14,12 +14,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class VersionAdapter_v1_9_R1 extends VersionAdapter {
 	
-	private Method player_sendTitle() {
-		return ReflectionUtils.getMethod(Player.class, "sendTitle",
-			String.class,
-			String.class
-		);
-	}
 	private Method player$Spigot_sendMessage() {
 		return ReflectionUtils.getMethod(player$Spigot, "sendMessage",
 			ChatMessageType.class,
@@ -28,24 +22,9 @@ public class VersionAdapter_v1_9_R1 extends VersionAdapter {
 	}
 	
     @Override
-    public void sendTitle(@NonNull Player player, String title, String subtitle) {
-    	try {
-    		title = title != null ? title : "";
-    		subtitle = subtitle != null ? subtitle : "";
-    		
-			player_sendTitle().invoke(player,
-				title,
-				subtitle
-			);
-    	} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-	
-    @Override
     public void sendActionbar(@NonNull Player player, @NonNull String message) {
 		try {
-			Object spigot = getPlayerSpigot(player);
+			Object spigot = player.spigot();
 			Object chatMessage = TextComponent.fromLegacyText(message);
 			
 			player$Spigot_sendMessage().invoke(spigot,
