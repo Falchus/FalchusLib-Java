@@ -17,7 +17,6 @@ public class WrappedPacketOutAnimation extends PacketAnimationWrapper {
 	);
 
 	private WrappedPacketOutAnimation(@NonNull Object handle) {
-<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -34,11 +33,5 @@ public class WrappedPacketOutAnimation extends PacketAnimationWrapper {
 				animationId
 			)
 		).build());
-=======
-		super(handle, Set.of(
-			version.getPackageNms() + "PacketPlayOutAnimation",
-			networkProtocolGame + "PacketPlayOutAnimation"
-		));
->>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

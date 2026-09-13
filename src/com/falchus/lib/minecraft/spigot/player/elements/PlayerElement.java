@@ -69,11 +69,7 @@ public class PlayerElement {
 	public void sendUpdating(long intervalTicks, @NonNull Runnable runnable) {
 	    Map<UUID, SpigotTask> map = tasks.computeIfAbsent(getClass(), c -> new ConcurrentHashMap<>());
 	    
-<<<<<<< HEAD
 	    SpigotTask oldTask = map.remove(player.getUniqueId());
-=======
-	    SpigotTask oldTask = map.get(player.getUniqueId());
->>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		if (oldTask != null) {
 			oldTask.end();
 		}

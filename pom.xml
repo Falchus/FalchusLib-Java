@@ -46,15 +46,6 @@
 		<groupId>com.velocitypowered</groupId>
 		<artifactId>velocity-api</artifactId>
 		<version>4.0.0</version>
-<<<<<<< HEAD
-=======
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.bukkit.craftbukkit</groupId>
-		<artifactId>1.8.8</artifactId>
-		<version>1.8.8</version>
->>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		<scope>provided</scope>
 	</dependency>
 	<dependency>
