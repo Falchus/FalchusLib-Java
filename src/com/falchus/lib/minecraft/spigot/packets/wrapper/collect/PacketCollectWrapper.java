@@ -9,7 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketCollectWrapper extends PacketWrapper implements PacketCollect {
+=======
+class PacketCollectWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field itemId;
 	Field playerId;

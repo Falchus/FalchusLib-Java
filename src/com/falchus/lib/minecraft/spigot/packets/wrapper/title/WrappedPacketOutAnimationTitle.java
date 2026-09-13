@@ -22,7 +22,14 @@ public class WrappedPacketOutAnimationTitle extends PacketTitleWrapper {
 	Field fadeOutTime;
 	
 	private WrappedPacketOutAnimationTitle(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutTitle",
+			networkProtocolGame + "ClientboundSetTitlesAnimationPacket"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		
 		fadeInTime = getFirstField(
 			"fadeInTime",

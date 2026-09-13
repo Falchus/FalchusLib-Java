@@ -10,7 +10,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketScoreboardTeamWrapper extends PacketWrapper implements PacketScoreboardTeam {
+=======
+class PacketScoreboardTeamWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field name;
 	Field players;

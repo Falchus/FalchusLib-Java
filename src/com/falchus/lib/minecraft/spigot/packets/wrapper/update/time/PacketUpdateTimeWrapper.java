@@ -9,7 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketUpdateTimeWrapper extends PacketWrapper implements PacketUpdateTime {
+=======
+class PacketUpdateTimeWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field gameTime;
 	Field dayTime;

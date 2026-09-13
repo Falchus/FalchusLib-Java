@@ -16,6 +16,7 @@ public class WrappedPacketInSetCreativeSlot extends PacketSetCreativeSlotWrapper
 	);
 
 	private WrappedPacketInSetCreativeSlot(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -32,5 +33,11 @@ public class WrappedPacketInSetCreativeSlot extends PacketSetCreativeSlotWrapper
 				stack.getHandle()
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayInSetCreativeSlot",
+			networkProtocolGame + "PacketPlayInSetCreativeSlot"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

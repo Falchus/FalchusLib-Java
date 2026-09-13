@@ -17,6 +17,7 @@ public class WrappedPacketOutCamera extends PacketCameraWrapper {
 	);
 
 	private WrappedPacketOutCamera(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -29,5 +30,11 @@ public class WrappedPacketOutCamera extends PacketCameraWrapper {
 				entity.getHandle()
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutCamera",
+			networkProtocolGame + "PacketPlayOutCamera"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

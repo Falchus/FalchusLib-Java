@@ -9,7 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketAnimationWrapper extends PacketWrapper implements PacketAnimation {
+=======
+class PacketAnimationWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field id;
 	Field action;

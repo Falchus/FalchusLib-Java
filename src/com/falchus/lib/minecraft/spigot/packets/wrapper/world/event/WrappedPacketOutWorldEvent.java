@@ -16,6 +16,7 @@ public class WrappedPacketOutWorldEvent extends PacketWorldEventWrapper {
 	);
 
 	private WrappedPacketOutWorldEvent(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -40,5 +41,11 @@ public class WrappedPacketOutWorldEvent extends PacketWorldEventWrapper {
 				global
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutWorldEvent",
+			networkProtocolGame + "PacketPlayOutWorldEvent"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

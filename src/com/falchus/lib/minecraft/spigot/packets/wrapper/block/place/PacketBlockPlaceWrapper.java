@@ -5,14 +5,22 @@ import java.util.Set;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+<<<<<<< HEAD
 import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.BlockPosition;
 import com.falchus.lib.minecraft.spigot.wrapper.world.level.block.Block;
+=======
+import com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition.WrappedBlockPosition;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketBlockPlaceWrapper extends PacketWrapper implements PacketBlockPlace {
+=======
+class PacketBlockPlaceWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field pos;
 	Field type;
@@ -40,14 +48,29 @@ class PacketBlockPlaceWrapper extends PacketWrapper implements PacketBlockPlace 
 		);
 	}
 
+<<<<<<< HEAD
 	@Override
 	public BlockPosition getPos() {
+=======
+	/**
+	 * @return {@link WrappedBlockPosition}
+	 */
+	public WrappedBlockPosition getPos() {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setPos(BlockPosition pos) {
 		setField(this.pos, pos.getHandle());
+=======
+	/**
+	 * @param pos	BlockPosition
+	 */
+	public void setPos(Object pos) {
+		setField(this.pos, pos);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 
 	@Override
@@ -75,8 +98,16 @@ class PacketBlockPlaceWrapper extends PacketWrapper implements PacketBlockPlace 
 		return SpigotWrapper.wrap(getFieldValue(block));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setBlock(Block block) {
 		setField(this.block, block.getHandle());
+=======
+	/**
+	 * @param block	Block
+	 */
+	public void setBlock(Object block) {
+		setField(this.block, block);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

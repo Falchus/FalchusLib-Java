@@ -21,12 +21,19 @@ public class WrappedPacketOutSpawnEntity extends PacketSpawnEntityWrapper {
 	Field data;
 
 	private WrappedPacketOutSpawnEntity(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 		
 		data = getFirstField(
 			"data",
 			"k"
 		);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutSpawnEntity",
+			networkProtocolGame + "PacketPlayOutSpawnEntity"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 	
 	// TODO: support 1.21+

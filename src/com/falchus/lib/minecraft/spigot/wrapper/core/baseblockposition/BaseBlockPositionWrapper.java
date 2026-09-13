@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class BaseBlockPositionWrapper extends SpigotWrapper implements BaseBlockPosition {
 	
 	Field x;
@@ -58,6 +59,51 @@ class BaseBlockPositionWrapper extends SpigotWrapper implements BaseBlockPositio
 	}
 	
 	@Override
+=======
+class BaseBlockPositionWrapper extends SpigotWrapper {
+	
+	Field x;
+	Field y;
+	Field z;
+
+	BaseBlockPositionWrapper(@NonNull Object handle, @NonNull Set<String> names) {
+		super(handle, names);
+		
+		x = getFirstField(
+			"x",
+			"a"
+		);
+		y = getFirstField(
+			"y",
+			"c"
+		);
+		z = getFirstField(
+			"z",
+			"d"
+		);
+	}
+	
+	public int getX() {
+		return getFieldValue(x);
+	}
+	
+	public void setX(int x) {
+		setField(this.x, x);
+	}
+	
+	public int getY() {
+		return getFieldValue(y);
+	}
+	
+	public void setY(int y) {
+		setField(this.y, y);
+	}
+	
+	public int getZ() {
+		return getFieldValue(z);
+	}
+	
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	public void setZ(int z) {
 		setField(this.z, z);
 	}

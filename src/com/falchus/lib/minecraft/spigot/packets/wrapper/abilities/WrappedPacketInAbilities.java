@@ -16,6 +16,7 @@ public class WrappedPacketInAbilities extends PacketAbilitiesWrapper {
 	);
 
 	private WrappedPacketInAbilities(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -28,5 +29,11 @@ public class WrappedPacketInAbilities extends PacketAbilitiesWrapper {
 				abilities.getHandle()
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayInAbilities",
+			networkProtocolGame + "PacketPlayInAbilities"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

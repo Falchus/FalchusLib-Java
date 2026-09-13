@@ -12,7 +12,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketBlockActionWrapper extends PacketWrapper implements PacketBlockAction {
+=======
+class PacketBlockActionWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field pos;
 	Field type;
@@ -45,9 +49,17 @@ class PacketBlockActionWrapper extends PacketWrapper implements PacketBlockActio
 		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setPos(BlockPosition pos) {
 		setField(this.pos, pos.getHandle());
+=======
+	/**
+	 * @param pos	BlockPosition
+	 */
+	public void setPos(Object pos) {
+		setField(this.pos, pos);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 
 	@Override
@@ -75,8 +87,16 @@ class PacketBlockActionWrapper extends PacketWrapper implements PacketBlockActio
 		return SpigotWrapper.wrap(getFieldValue(block));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setBlock(Block block) {
 		setField(this.block, block.getHandle());
+=======
+	/**
+	 * @param block	Block
+	 */
+	public void setBlock(Object block) {
+		setField(this.block, block);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

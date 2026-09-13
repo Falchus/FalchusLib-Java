@@ -1,6 +1,9 @@
 package com.falchus.lib.minecraft.spigot.utils;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 import java.util.List;
 
 import org.bukkit.Material;
@@ -11,7 +14,11 @@ import org.bukkit.block.Block;
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+<<<<<<< HEAD
 import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
+=======
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -64,7 +71,11 @@ public class WorldUtils {
 	/**
 	 * @return {@link List}
 	 */
+<<<<<<< HEAD
 	public static List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB) {
+=======
+	public static List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB) {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		return VersionProvider.get().getCollidingBlocks(world, axisAlignedBB);
 	}
 	

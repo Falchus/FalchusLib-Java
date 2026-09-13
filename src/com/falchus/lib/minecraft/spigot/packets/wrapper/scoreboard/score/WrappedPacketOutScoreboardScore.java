@@ -18,6 +18,7 @@ public class WrappedPacketOutScoreboardScore extends PacketScoreboardScoreWrappe
 	);
 
 	private WrappedPacketOutScoreboardScore(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -63,5 +64,11 @@ public class WrappedPacketOutScoreboardScore extends PacketScoreboardScoreWrappe
 				};
 			}
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutScoreboardScore",
+			networkProtocolGame + "PacketPlayOutScoreboardScore"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

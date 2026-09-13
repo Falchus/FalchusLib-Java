@@ -15,6 +15,7 @@ public class WrappedPacketOutUpdateTime extends PacketUpdateTimeWrapper {
 	);
 
 	private WrappedPacketOutUpdateTime(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -35,5 +36,11 @@ public class WrappedPacketOutUpdateTime extends PacketUpdateTimeWrapper {
 				tickDayTime
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutUpdateTime",
+			networkProtocolGame + "PacketPlayOutUpdateTime"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

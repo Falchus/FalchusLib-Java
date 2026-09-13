@@ -18,6 +18,7 @@ public class WrappedPacketOutAttachEntity extends PacketAttachEntityWrapper {
 	);
 
 	private WrappedPacketOutAttachEntity(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -54,5 +55,11 @@ public class WrappedPacketOutAttachEntity extends PacketAttachEntityWrapper {
 				};
 			}
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutAttachEntity",
+			networkProtocolGame + "PacketPlayOutAttachEntity"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

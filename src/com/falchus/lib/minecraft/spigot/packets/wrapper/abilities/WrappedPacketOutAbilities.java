@@ -25,7 +25,14 @@ public class WrappedPacketOutAbilities extends PacketAbilitiesWrapper {
 	Field walkingSpeed;
 	
 	private WrappedPacketOutAbilities(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutAbilities",
+			networkProtocolGame + "PacketPlayOutAbilities"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		
 		invulnerable = getFirstField(
 			"invulnerable",

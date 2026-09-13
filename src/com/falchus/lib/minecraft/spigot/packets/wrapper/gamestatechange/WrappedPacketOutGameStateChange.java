@@ -15,6 +15,7 @@ public class WrappedPacketOutGameStateChange extends PacketGameStateChangeWrappe
 	);
 
 	private WrappedPacketOutGameStateChange(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -32,5 +33,11 @@ public class WrappedPacketOutGameStateChange extends PacketGameStateChangeWrappe
 				param
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutGameStateChange",
+			networkProtocolGame + "PacketPlayOutGameStateChange"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

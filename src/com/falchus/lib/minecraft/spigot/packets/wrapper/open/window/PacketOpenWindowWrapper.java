@@ -11,7 +11,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketOpenWindowWrapper extends PacketWrapper implements PacketOpenWindow {
+=======
+class PacketOpenWindowWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field containerId;
 	Field title;
@@ -44,8 +48,16 @@ class PacketOpenWindowWrapper extends PacketWrapper implements PacketOpenWindow 
 		return SpigotWrapper.wrap(getFieldValue(title));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setTitle(Component title) {
 		setField(this.title, title.getHandle());
+=======
+	/**
+	 * @param title	IChatBaseComponent
+	 */
+	public void setTitle(Object title) {
+		setField(this.title, title);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

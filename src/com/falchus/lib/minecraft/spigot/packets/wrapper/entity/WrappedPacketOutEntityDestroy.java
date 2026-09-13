@@ -15,6 +15,7 @@ public class WrappedPacketOutEntityDestroy extends PacketEntityWrapper {
 	);
 	
 	private WrappedPacketOutEntityDestroy(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -27,5 +28,11 @@ public class WrappedPacketOutEntityDestroy extends PacketEntityWrapper {
 				entityIds
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutEntityDestroy",
+			networkProtocolGame + "PacketPlayOutEntityDestroy"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

@@ -9,7 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketRemoveEntityEffectWrapper extends PacketWrapper implements PacketRemoveEntityEffect {
+=======
+class PacketRemoveEntityEffectWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field entityId;
 

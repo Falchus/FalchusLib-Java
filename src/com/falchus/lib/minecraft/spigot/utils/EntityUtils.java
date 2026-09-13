@@ -3,13 +3,21 @@ package com.falchus.lib.minecraft.spigot.utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+<<<<<<< HEAD
+=======
+import org.bukkit.block.Block;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+<<<<<<< HEAD
 import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
 import com.falchus.lib.minecraft.spigot.wrapper.world.entity.WrappedEntity;
+=======
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -41,10 +49,31 @@ public class EntityUtils {
 		return null;
 	}
 	
+<<<<<<< HEAD
 	public static AxisAlignedBB getBoundingBox(@NonNull Entity entity) {
 		return new WrappedEntity(entity).getBoundingBox();
+=======
+	/**
+	 * @return {@link Entity}
+	 */
+	public static Entity getEntityById(@NonNull World world, int id) {
+		for (Entity entity : world.getEntities()) {
+			if (entity.getEntityId() == id) {
+				return entity;
+			}
+		}
+		return null;
 	}
 	
+	/**
+	 * @return {@link WrappedAxisAlignedBB}
+	 */
+	public static WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity) {
+		return VersionProvider.get().getBoundingBox(entity);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
+	}
+	
+<<<<<<< HEAD
 	public static AxisAlignedBB modifyBoundingBox(@NonNull AxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		axisAlignedBB.setMinX(axisAlignedBB.getMinX() + minX);
 		axisAlignedBB.setMinY(axisAlignedBB.getMinY() + minY);
@@ -53,6 +82,13 @@ public class EntityUtils {
 		axisAlignedBB.setMaxY(axisAlignedBB.getMaxY() + maxY);
 		axisAlignedBB.setMaxZ(axisAlignedBB.getMaxZ() + maxZ);
 		return axisAlignedBB;
+=======
+	/**
+	 * @return {@link WrappedAxisAlignedBB}
+	 */
+	public static WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		return VersionProvider.get().modifyBoundingBox(axisAlignedBB, minX, minY, minZ, maxX, maxY, maxZ);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 	
 	/**
@@ -73,6 +109,7 @@ public class EntityUtils {
 	 * @return {@code true} if in liquid, {@code false} otherwise.
 	 */
 	public static boolean isInLiquid(@NonNull Entity entity) {
+<<<<<<< HEAD
 		AxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
 		return WorldUtils.getBlocksInBox(entity.getWorld(), axisAlignedBB).stream()
 				.anyMatch(BlockUtils::isLiquid);
@@ -107,6 +144,81 @@ public class EntityUtils {
 		AxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
 		return WorldUtils.getBlocksInBox(entity.getWorld(), axisAlignedBB).stream()
 				.anyMatch(block -> block.getType().name().endsWith("ICE"));
+=======
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (BlockUtils.isLiquid(block)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return {@code true} if on slime, {@code false} otherwise.
+	 */
+	public static boolean isOnSlime(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (block.getType() == Material.SLIME_BLOCK) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return {@code true} if on stairs, {@code false} otherwise.
+	 */
+	public static boolean isOnStairs(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (BlockUtils.isStair(block) ||
+						BlockUtils.isSlab(block) ||
+						block.getType() == Material.SKULL ||
+						block.getType() == Material.CAKE_BLOCK) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @return {@code true} if on ice, {@code false} otherwise.
+	 */
+	public static boolean isOnIce(@NonNull Entity entity) {
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (block.getType().name().endsWith("ICE")) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 	
 	/**
@@ -122,9 +234,25 @@ public class EntityUtils {
 	 * @return {@code true} if under block, {@code false} otherwise.
 	 */
 	public static boolean isUnderBlock(@NonNull Entity entity) {
+<<<<<<< HEAD
 		AxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
 		return WorldUtils.getBlocksInBox(entity.getWorld(), axisAlignedBB).stream()
 				.anyMatch(block -> block.getType().isSolid());
+=======
+		WrappedAxisAlignedBB axisAlignedBB = modifyBoundingBox(getBoundingBox(entity), 0, -0.5, 0, 0, 0, 0);
+		for (double x = axisAlignedBB.getMinX(); x < axisAlignedBB.getMaxX(); x++) {
+			for (double y = axisAlignedBB.getMinY(); y < axisAlignedBB.getMaxY(); y++) {
+				for (double z = axisAlignedBB.getMinZ(); z < axisAlignedBB.getMaxZ(); z++) {
+					Block block = new Location(entity.getWorld(), x, y, z).getBlock();
+					
+					if (block.getType().isSolid()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 	
 	/**

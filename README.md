@@ -252,6 +252,7 @@ Constructor getFirstConstructor(Set<List<Class>> params);
     ```
 
 #### Utils
+<<<<<<< HEAD
 `com.falchus.lib.utils.FileUtils`
 ```java
 static void createFolder(Path path, FileAttribute<?>... attributes);
@@ -274,6 +275,8 @@ static void delete(Path path);
 static void deleteFolder(Path path);
 ```
 
+=======
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 `com.falchus.lib.utils.JsonUtils`
 ```java
 static JsonElement get(String json, String path);
@@ -357,9 +360,37 @@ static boolean isSoftLanding(Block block);
 `com.falchus.lib.minecraft.spigot.utils.EntityUtils`
 ```java
 static Object getEntity(Entity entity);
+<<<<<<< HEAD
 static Object getEntityLiving(LivingEntity entity);
 
 static Entity getBukkitEntity(WrappedEntity entity);
+
+static Entity getEntityById(World world, int id);
+
+static WrappedAxisAlignedBB getBoundingBox(Entity entity);
+static WrappedAxisAlignedBB modifyBoundingBox(WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+
+static boolean isOnGround(Entity entity, double yExpand);
+static boolean isOnGround(Entity entity);
+
+static boolean isInLiquid(Entity entity);
+
+static boolean isOnSlime(Entity entity);
+
+static boolean isOnStairs(Entity entity);
+
+static boolean isOnIce(Entity entity);
+
+static boolean isOnClimbable(Entity entity);
+
+static boolean isUnderBlock(Entity entity);
+
+static double getAbsorption(Damageable entity);
+static void setAbsorption(Damageable entity, double absorption);
+=======
+
+static Entity getBukkitEntity(Object entity);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 
 static Entity getEntityById(World world, int id);
 

@@ -17,6 +17,7 @@ public class WrappedPacketOutBlockAction extends PacketBlockActionWrapper {
 	);
 
 	private WrappedPacketOutBlockAction(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -41,5 +42,11 @@ public class WrappedPacketOutBlockAction extends PacketBlockActionWrapper {
 				data
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutBlockAction",
+			networkProtocolGame + "PacketPlayOutBlockAction"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

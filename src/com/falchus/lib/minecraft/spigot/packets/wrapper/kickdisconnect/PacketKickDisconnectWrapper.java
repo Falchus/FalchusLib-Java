@@ -11,7 +11,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketKickDisconnectWrapper extends PacketWrapper implements PacketKickDisconnect {
+=======
+class PacketKickDisconnectWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field reason;
 
@@ -29,8 +33,16 @@ class PacketKickDisconnectWrapper extends PacketWrapper implements PacketKickDis
 		return SpigotWrapper.wrap(getFieldValue(reason));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setReason(Component reason) {
 		setField(this.reason, reason.getHandle());
+=======
+	/**
+	 * @param reason	IChatBaseComponent
+	 */
+	public void setReason(Object reason) {
+		setField(this.reason, reason);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

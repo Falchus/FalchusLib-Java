@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.wrapper.core.baseblockposition;
 
+<<<<<<< HEAD
 import java.util.Map;
 import java.util.Set;
 
@@ -35,5 +36,18 @@ public class WrappedBaseBlockPosition extends BaseBlockPositionWrapper {
 				z
 			)
 		).build());
+=======
+import java.util.Set;
+
+import lombok.NonNull;
+
+public class WrappedBaseBlockPosition extends BaseBlockPositionWrapper {
+
+	WrappedBaseBlockPosition(@NonNull Object handle) {
+		super(handle, Set.of(
+			version.getPackageNms() + "BaseBlockPosition",
+			core + "BaseBlockPosition"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

@@ -15,8 +15,11 @@ import com.falchus.lib.minecraft.spigot.utils.EntityUtils;
 import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.WorldUtils;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
+<<<<<<< HEAD
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
 import com.falchus.lib.minecraft.spigot.wrapper.world.entity.Entity;
+=======
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
