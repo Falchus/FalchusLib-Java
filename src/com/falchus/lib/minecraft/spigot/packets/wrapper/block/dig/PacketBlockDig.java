@@ -4,7 +4,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.block.PacketBlock;
 
 public interface PacketBlockDig extends PacketBlock {
 	
-	public enum Direction {
+	enum Direction {
 		DOWN,
 		UP,
 		NORTH,
@@ -15,7 +15,7 @@ public interface PacketBlockDig extends PacketBlock {
 	Direction getDirection();
 	void setDirection(Direction direction);
 	
-	public enum Action {
+	enum Action {
 		START_DESTROY_BLOCK,
 		ABORT_DESTROY_BLOCK,
 		STOP_DESTROY_BLOCK,

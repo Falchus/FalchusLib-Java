@@ -9,7 +9,7 @@ public interface PacketBlockUpdate extends PacketBlock {
 	 */
 	Object getBlockState();
 	/**
-	 * @param block	BlockState
+	 * @param blockState BlockState
 	 */
 	void setBlockState(Object blockState);
 }

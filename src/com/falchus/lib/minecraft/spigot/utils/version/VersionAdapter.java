@@ -984,97 +984,71 @@ public class VersionAdapter implements IVersionAdapter {
 		if (biome == null) {
 			id = 1;
 		} else {
-			switch (biome.name()) {
-				case "BEACH": id = 16; break;
-				
-				case "BIRCH_FOREST": id = 27; break;
-				case "BIRCH_FOREST_MOUNTAINS": id = 155; break;
-					
-    			case "BIRCH_FOREST_HILLS": id = 28; break;
-    			case "BIRCH_FOREST_HILLS_MOUNTAINS": id = 156; break;
-    				
-    			case "COLD_BEACH": id = 26; break;
-    			case "COLD_TAIGA": id = 30; break;
-    			
-    			case "COLD_TAIGA_HILLS": id = 31; break;
-    			case "COLD_TAIGA_MOUNTAINS": id = 158; break;
-    				
-    			case "DEEP_OCEAN": id = 24; break;
-    			case "DESERT": id = 2; break;
-    			
-    			case "DESERT_HILLS": id = 17; break;
-    			case "DESERT_MOUNTAINS": id = 145; break;
-    				
-    			case "EXTREME_HILLS": id = 3; break;
-    			case "EXTREME_HILLS_MOUNTAINS": id = 131; break;
-    				
-    			case "EXTREME_HILLS_PLUS": id = 20; break;
-    			case "EXTREME_HILLS_PLUS_MOUNTAINS": id = 148; break;
-    				
-    			case "FOREST": id = 4; break;
-    			case "FLOWER_FOREST": id = 132; break;
-    				
-    			case "FOREST_HILLS": id = 18; break;
-    			case "FROZEN_OCEAN": id = 10; break;
-    			case "FROZEN_RIVER": id = 11; break;
-    			case "HELL": id = 8; break;
-    			case "ICE_MOUNTAINS": id = 13; break;
-    			
-    			case "ICE_PLAINS": id = 12; break;
-    			case "ICE_PLAINS_SPIKES": id = 140; break;
-    				
-    			case "JUNGLE": id = 21; break;
-    			
-    			case "JUNGLE_EDGE": id = 23; break;
-    			case "JUNGLE_EDGE_MOUNTAINS": id = 151; break;
-    				
-    			case "JUNGLE_HILLS": id = 22; break;
-    			case "JUNGLE_MOUNTAINS": id = 149; break;
-    				
-    			case "MEGA_TAIGA": id = 32; break;
-    			case "MEGA_TAIGA_HILLS": id = 33; break;
-    			
-    			case "MESA": id = 37; break;
-    			case "MESA_BRYCE": id = 165; break;
-    			case "MESA_PLATEAU": id = 39; break;
-    			case "MESA_PLATEAU_FOREST": id = 38; break;
-    			case "MESA_PLATEAU_FOREST_MOUNTAINS": id = 166; break;
-    			case "MESA_PLATEAU_MOUNTAINS": id = 167; break;
-    				
-    			case "MUSHROOM_ISLAND": id = 14; break;
-    			case "MUSHROOM_SHORE": id = 15; break;
-    			case "OCEAN": id = 0; break;
-    			
-    			case "PLAINS": id = 1; break;
-    			case "SUNFLOWER_PLAINS": id = 129; break;
-    				
-    			case "RIVER": id = 7; break;
-    			
-    			case "ROOFED_FOREST": id = 29; break;
-    			case "ROOFED_FOREST_MOUNTAINS": id = 157; break;
-    				
-    			case "SAVANNA": id = 35; break;
-    			case "SAVANNA_MOUNTAINS": id = 163; break;
-    				
-    			case "SAVANNA_PLATEAU": id = 36; break;
-    			case "SAVANNA_PLATEAU_MOUNTAINS": id = 164; break;
-    				
-    			case "SKY": id = 9; break;
-    			case "SMALL_MOUNTAINS": id = 34; break;
-    			case "STONE_BEACH": id = 25; break;
-    			
-    			case "SWAMPLAND": id = 6; break;
-    			case "SWAMPLAND_MOUNTAINS": id = 134; break;
-    				
-    			case "TAIGA": id = 5; break;
-    			case "MEGA_SPRUCE_TAIGA": id = 160; break;
-    			case "MEGA_SPRUCE_TAIGA_HILLS": id = 161; break;
-    				
-    			case "TAIGA_HILLS": id = 19; break;
-    			case "TAIGA_MOUNTAINS": id = 133; break;
-    				
-    			default: id = 1; break;
-			}
+            id = switch (biome.name()) {
+                case "BEACH" -> 16;
+                case "BIRCH_FOREST" -> 27;
+                case "BIRCH_FOREST_MOUNTAINS" -> 155;
+                case "BIRCH_FOREST_HILLS" -> 28;
+                case "BIRCH_FOREST_HILLS_MOUNTAINS" -> 156;
+                case "COLD_BEACH" -> 26;
+                case "COLD_TAIGA" -> 30;
+                case "COLD_TAIGA_HILLS" -> 31;
+                case "COLD_TAIGA_MOUNTAINS" -> 158;
+                case "DEEP_OCEAN" -> 24;
+                case "DESERT" -> 2;
+                case "DESERT_HILLS" -> 17;
+                case "DESERT_MOUNTAINS" -> 145;
+                case "EXTREME_HILLS" -> 3;
+                case "EXTREME_HILLS_MOUNTAINS" -> 131;
+                case "EXTREME_HILLS_PLUS" -> 20;
+                case "EXTREME_HILLS_PLUS_MOUNTAINS" -> 148;
+                case "FOREST" -> 4;
+                case "FLOWER_FOREST" -> 132;
+                case "FOREST_HILLS" -> 18;
+                case "FROZEN_OCEAN" -> 10;
+                case "FROZEN_RIVER" -> 11;
+                case "HELL" -> 8;
+                case "ICE_MOUNTAINS" -> 13;
+                case "ICE_PLAINS" -> 12;
+                case "ICE_PLAINS_SPIKES" -> 140;
+                case "JUNGLE" -> 21;
+                case "JUNGLE_EDGE" -> 23;
+                case "JUNGLE_EDGE_MOUNTAINS" -> 151;
+                case "JUNGLE_HILLS" -> 22;
+                case "JUNGLE_MOUNTAINS" -> 149;
+                case "MEGA_TAIGA" -> 32;
+                case "MEGA_TAIGA_HILLS" -> 33;
+                case "MESA" -> 37;
+                case "MESA_BRYCE" -> 165;
+                case "MESA_PLATEAU" -> 39;
+                case "MESA_PLATEAU_FOREST" -> 38;
+                case "MESA_PLATEAU_FOREST_MOUNTAINS" -> 166;
+                case "MESA_PLATEAU_MOUNTAINS" -> 167;
+                case "MUSHROOM_ISLAND" -> 14;
+                case "MUSHROOM_SHORE" -> 15;
+                case "OCEAN" -> 0;
+                case "PLAINS" -> 1;
+                case "SUNFLOWER_PLAINS" -> 129;
+                case "RIVER" -> 7;
+                case "ROOFED_FOREST" -> 29;
+                case "ROOFED_FOREST_MOUNTAINS" -> 157;
+                case "SAVANNA" -> 35;
+                case "SAVANNA_MOUNTAINS" -> 163;
+                case "SAVANNA_PLATEAU" -> 36;
+                case "SAVANNA_PLATEAU_MOUNTAINS" -> 164;
+                case "SKY" -> 9;
+                case "SMALL_MOUNTAINS" -> 34;
+                case "STONE_BEACH" -> 25;
+                case "SWAMPLAND" -> 6;
+                case "SWAMPLAND_MOUNTAINS" -> 134;
+                case "TAIGA" -> 5;
+                case "MEGA_SPRUCE_TAIGA" -> 160;
+                case "MEGA_SPRUCE_TAIGA_HILLS" -> 161;
+                case "TAIGA_HILLS" -> 19;
+                case "TAIGA_MOUNTAINS" -> 133;
+
+                default -> 1;
+            };
 		}
 		return id;
     }
@@ -1083,7 +1057,7 @@ public class VersionAdapter implements IVersionAdapter {
     public Object getNmsBiome(Biome biome) {
         try {
     		return biomeBase_getBiome.invoke(null,
-    			getNmsBiome(biome)
+    			getNmsBiome(biome) // TODO: wtf???
     		);
         } catch (Exception e) {
             throw new RuntimeException(e);

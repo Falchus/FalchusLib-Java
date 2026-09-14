@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils.labymod;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -79,7 +80,7 @@ public class LabyModProtocol {
      * @param string	the string that should be written to the buffer
      */
 	private static void writeString(ByteBuf buf, String string) {
-		byte[] abyte = string.getBytes(Charset.forName("UTF-8"));
+		byte[] abyte = string.getBytes(StandardCharsets.UTF_8);
 		
 		if (abyte.length > Short.MAX_VALUE) {
 			throw new EncoderException("String too big (was " + string.length() + " bytes encoded, max " + Short.MAX_VALUE + ")");
@@ -128,7 +129,7 @@ public class LabyModProtocol {
 			byte[] bytes = new byte[i];
 			buf.readBytes(bytes);
 			
-			String s = new String(bytes, Charset.forName("UTF-8"));
+			String s = new String(bytes, StandardCharsets.UTF_8);
             if (s.length() > maxLength) {
                 throw new DecoderException("The received string length is longer than maximum allowed (" + i + " > " + maxLength + ")");
             } else {

@@ -13,7 +13,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JsonUtils {
 	
-	private static final Pattern bracketPattern = Pattern.compile("\\[(\\d+)\\]");
+	private static final Pattern bracketPattern = Pattern.compile("\\[(\\d+)]");
 	private static final Pattern dotPattern = Pattern.compile("\\.");
 	
 	public static JsonElement get(@NonNull String json, @NonNull String path) {

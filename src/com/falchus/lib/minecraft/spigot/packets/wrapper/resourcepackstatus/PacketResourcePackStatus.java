@@ -4,7 +4,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.IPacketWrapper;
 
 public interface PacketResourcePackStatus extends IPacketWrapper {
 
-	public enum Status {
+	enum Status {
 		SUCCESSFULLY_LOADED,
 		DECLINED,
 		FAILED_DOWNLOAD,

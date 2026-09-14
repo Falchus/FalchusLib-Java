@@ -243,16 +243,16 @@ public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketW
 				)
 			).build(); // TODO: fix "Failed to create class instance"
 			for (Class<?> clazz : dummy.getClasses()) {
-				registry.put(clazz, obj -> {
-					return (T) new ClassInstanceBuilder(
+				registry.put(clazz, obj ->
+					(T) new ClassInstanceBuilder(
 						wrapper
 					).withParams(
 						Map.of(
 							Object.class,
 							obj
 						)
-					).build();
-				});
+					).build()
+				);
 			}
 		}
 	}

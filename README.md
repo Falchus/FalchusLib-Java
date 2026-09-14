@@ -256,7 +256,7 @@ Constructor getFirstConstructor(Set<List<Class>> params);
 ```java
 static void createFolder(Path path, FileAttribute<?>... attributes);
 
-static void writeString(Path path, CharSequence content, OpenOption... options;
+static void writeString(Path path, CharSequence content, OpenOption... options);
 static void writeString(Path path, CharSequence content);
 
 static String readString(Path path);

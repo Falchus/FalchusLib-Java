@@ -19,7 +19,7 @@ public abstract class InventoryAnimation {
     protected static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
     
     protected int delayTicks = 2;
-    protected List<ItemStack> excludedItems = new ArrayList<>();
+    protected final List<ItemStack> excludedItems = new ArrayList<>();
 	
 	/**
 	 * Called to implement animation logic.

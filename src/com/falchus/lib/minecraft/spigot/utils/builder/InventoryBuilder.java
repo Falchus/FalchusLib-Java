@@ -232,17 +232,17 @@ public class InventoryBuilder {
     	
     	int autoSlot = 0;
     	for (ItemUtils.InventoryItem item : items) {
-    		int targetSlot = item.slot == -1 ? autoSlot++ : item.slot;
+    		int targetSlot = item.slot() == -1 ? autoSlot++ : item.slot();
     		
-    		if (item.onInventoryClick != null) {
-	    	    UUID uuid = ItemUtils.getUUID(item.item);
+    		if (item.onInventoryClick() != null) {
+	    	    UUID uuid = ItemUtils.getUUID(item.item());
 	    	    if (uuid == null) {
 	    	    	uuid = UUID.randomUUID();
 	    	    }
-	    	    inventory.setItem(targetSlot, ItemUtils.setUUID(item.item, uuid));
-	    	    ItemUtils.itemActionsInventory.putIfAbsent(uuid, (pl, clickedItem, event) -> item.onInventoryClick.accept(pl));
+	    	    inventory.setItem(targetSlot, ItemUtils.setUUID(item.item(), uuid));
+	    	    ItemUtils.itemActionsInventory.putIfAbsent(uuid, (pl, clickedItem, event) -> item.onInventoryClick().accept(pl));
     		} else {
-    			inventory.setItem(targetSlot, item.item);
+    			inventory.setItem(targetSlot, item.item());
     		}
     	}
     	

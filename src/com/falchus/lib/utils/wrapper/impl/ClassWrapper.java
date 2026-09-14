@@ -23,7 +23,7 @@ public class ClassWrapper<T> extends Wrapper<T> implements IClassWrapper<T> {
 		this.classes = classes;
 		
 		if (handle instanceof Dummy) return;
-		if (!classes.stream().anyMatch(clazz -> clazz.isAssignableFrom(handle.getClass()))) {
+		if (classes.stream().noneMatch(clazz -> clazz.isAssignableFrom(handle.getClass()))) {
 			throw new RuntimeException("Handle " + handle.getClass().getName() + " is not assignable to any of: " + classes.stream().map(Class::getName).toList());
 		}
 	}

@@ -173,34 +173,30 @@ public class VersionAdapterModern extends VersionAdapter_v1_15_R1 {
 	@Override
 	public Object createPacketOutScoreboardTeam(@NonNull Set<String> names, @NonNull ScoreboardTeam team, int mode, String playerName) {
 		try {
-			switch (mode) {
-				case 0:
-				case 2:
-					boolean isCreate = (mode == 0);
-					return packetPlayOutScoreboardTeam_createAddOrModifyPacket().invoke(null,
-						team.getHandle(),
-						isCreate
-					);
-					
-				case 1:
-					return packetPlayOutScoreboardTeam_createRemovePacket().invoke(null,
-						team.getHandle()
-					);
-					
-				case 3:
-				case 4:
-					Object action = (mode == 3)
-						? packetPlayOutScoreboardTeam$a_ADD()
-						: packetPlayOutScoreboardTeam$a_REMOVE();
-					return packetPlayOutScoreboardTeam_createPlayerPacket().invoke(null,
-						team.getHandle(),
-						playerName,
-						action
-					);
-					
-				default:
-					return null;
-			}
+            return switch (mode) {
+                case 0, 2 -> {
+                    boolean isCreate = (mode == 0);
+                    yield packetPlayOutScoreboardTeam_createAddOrModifyPacket().invoke(null,
+                        team.getHandle(),
+                        isCreate
+                    );
+                }
+                case 1 -> packetPlayOutScoreboardTeam_createRemovePacket().invoke(null,
+                    team.getHandle()
+                );
+                case 3, 4 -> {
+                    Object action = (mode == 3)
+                        ? packetPlayOutScoreboardTeam$a_ADD()
+                        : packetPlayOutScoreboardTeam$a_REMOVE();
+                    yield packetPlayOutScoreboardTeam_createPlayerPacket().invoke(null,
+                        team.getHandle(),
+                        playerName,
+                        action
+                    );
+                }
+
+                default -> null;
+            };
 		} catch (Exception e) {
             throw new RuntimeException(e);
         }

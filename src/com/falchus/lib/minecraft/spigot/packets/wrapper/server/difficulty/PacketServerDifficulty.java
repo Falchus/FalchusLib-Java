@@ -4,7 +4,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.IPacketWrapper;
 
 public interface PacketServerDifficulty extends IPacketWrapper {
 
-	public enum Difficulty {
+	enum Difficulty {
 		PEACEFUL,
 		EASY,
 		NORMAL,

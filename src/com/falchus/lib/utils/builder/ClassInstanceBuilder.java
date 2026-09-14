@@ -13,7 +13,7 @@ import lombok.NonNull;
 @Getter
 public class ClassInstanceBuilder {
 
-	private Class<?> clazz;
+	private final Class<?> clazz;
 	private Class<?>[] parents = new Class<?>[0];
 	private Object[] children = new Object[0];
 	

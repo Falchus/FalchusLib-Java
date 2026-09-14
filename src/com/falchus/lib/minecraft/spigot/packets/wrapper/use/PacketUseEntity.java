@@ -4,7 +4,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.entity.PacketEntity;
 
 public interface PacketUseEntity extends PacketEntity {
 
-	public enum Action {
+	enum Action {
 		INTERACT,
 		ATTACK,
 		INTERACT_AT

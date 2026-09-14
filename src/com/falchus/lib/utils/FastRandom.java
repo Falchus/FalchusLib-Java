@@ -1,5 +1,6 @@
 package com.falchus.lib.utils;
 
+import java.io.Serial;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -19,6 +20,7 @@ import lombok.AllArgsConstructor;
 @Deprecated(since = "2.0.0")
 public class FastRandom extends Random implements Cloneable {
 	
+    @Serial
     private static final long serialVersionUID = 1L;
 
 	protected long seed;
@@ -34,7 +36,7 @@ public class FastRandom extends Random implements Cloneable {
 	/**
 	 * Returns the current state of the seed, can be used to clone the object
 	 *
-	 * @returns the current seed
+	 * @return the current seed
 	 */
 	public synchronized long getSeed() {
 		return seed;

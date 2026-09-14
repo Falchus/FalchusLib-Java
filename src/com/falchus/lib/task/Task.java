@@ -44,7 +44,7 @@ public class Task implements Runnable {
 		return (T) this;
 	}
 	
-	private final <T extends Task> T execute() {
+	private <T extends Task> T execute() {
 		return execute(this);
 	}
 	
@@ -54,7 +54,7 @@ public class Task implements Runnable {
 		return (T) this;
 	}
 	
-	private final <T extends Task> T executeAsync() {
+	private <T extends Task> T executeAsync() {
 		return executeAsync(this);
 	}
 	
@@ -110,7 +110,7 @@ public class Task implements Runnable {
 		return (T) this;
 	}
 	
-	public static final void end(int id) {
+	public static void end(int id) {
 		Task task = tasks.remove(id);
 		if (task == null) return;
 		

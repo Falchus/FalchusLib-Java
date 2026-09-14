@@ -38,30 +38,21 @@ public class BlockUtils {
 	 * @return {@code true} if climbable, {@code false} otherwise.
 	 */
 	public static boolean isClimbable(@NonNull Block block) {
-		switch (block.getType()) {
-			case VINE:
-			case LADDER:
-				return true;
-		
-			default:
-				return false;
-		}
+        return switch (block.getType()) {
+            case VINE, LADDER -> true;
+
+            default -> false;
+        };
 	}
 	
 	/**
 	 * @return {@code true} if soft landing, {@code false} otherwise.
 	 */
 	public static boolean isSoftLanding(@NonNull Block block) {
-		switch (block.getType()) {
-			case WATER:
-			case STATIONARY_WATER:
-			case WEB:
-			case SLIME_BLOCK:
-			case HAY_BLOCK:
-				return true;
-		
-			default:
-				return false;
-		}
+        return switch (block.getType()) {
+            case WATER, STATIONARY_WATER, WEB, SLIME_BLOCK, HAY_BLOCK -> true;
+
+            default -> false;
+        };
 	}
 }

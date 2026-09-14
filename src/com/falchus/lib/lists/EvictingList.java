@@ -1,5 +1,6 @@
 package com.falchus.lib.lists;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,7 +13,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class EvictingList<T> extends LinkedList<T> {
 
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	
 	private final int maxSize;
 	

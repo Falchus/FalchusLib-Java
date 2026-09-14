@@ -105,16 +105,16 @@ public class SpigotWrapper extends FirstClassWrapper<Object> implements ISpigotW
 				)
 			).build();
 			for (Class<?> clazz : dummy.getClasses()) {
-				registry.put(clazz, obj -> {
-					return (T) new ClassInstanceBuilder(
+				registry.put(clazz, obj ->
+					(T) new ClassInstanceBuilder(
 						wrapper
 					).withParams(
 						Map.of(
 							Object.class,
 							obj
 						)
-					).build();
-				});
+					).build()
+				);
 			}
 		}
 	}

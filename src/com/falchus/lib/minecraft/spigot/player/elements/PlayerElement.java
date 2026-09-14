@@ -127,15 +127,15 @@ public class PlayerElement {
 			existing.remove();
 		}
 		
-		return (T) map.computeIfAbsent(player.getUniqueId(), uuid -> {
-			return (T) new ClassInstanceBuilder(
+		return (T) map.computeIfAbsent(player.getUniqueId(), uuid ->
+			(T) new ClassInstanceBuilder(
 				clazz
 			).withParams(
 				Map.of(
 					Player.class,
 					player
 				)
-			).build();
-		});
+			).build()
+		);
 	}
 }

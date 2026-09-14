@@ -39,12 +39,11 @@ public class BoundingBoxUtils {
 		if (vec5 != null && (vec6 == null || vecA.distanceSquared(vec5) < vecA.distanceSquared(vec6))) {
 			vec6 = vec5;
 		}
-		if (vec6 == null) return null;
-		return vec6;
+        return vec6;
 	}
 	
 	public static boolean isVecInside(AxisAlignedBB box, Vector vec) {
-		return vec.getX() > box.getMinX() && vec.getX() < box.getMaxX() ? (vec.getY() > box.getMinY() && vec.getY() < box.getMaxY() ? vec.getZ() > box.getMinZ() && vec.getZ() < box.getMaxZ() : false) : false;
+		return vec.getX() > box.getMinX() && vec.getX() < box.getMaxX() && (vec.getY() > box.getMinY() && vec.getY() < box.getMaxY() && vec.getZ() > box.getMinZ() && vec.getZ() < box.getMaxZ());
 	}
 	
 	/**
@@ -93,20 +92,20 @@ public class BoundingBoxUtils {
 	 * Checks if the specified vector is within the YZ dimensions of the bounding box.
 	 */
 	private static boolean isVecInYZ(AxisAlignedBB self, Vector vec) {
-		return vec == null ? false : vec.getY() >= self.getMinY() && vec.getY() <= self.getMaxY() && vec.getZ() >= self.getMinZ() && vec.getZ() <= self.getMaxZ();
+		return vec != null && vec.getY() >= self.getMinY() && vec.getY() <= self.getMaxY() && vec.getZ() >= self.getMinZ() && vec.getZ() <= self.getMaxZ();
 	}
 	
 	/**
 	 * Checks if the specified vector is within the XZ dimensions of the bounding box.
 	 */
 	private static boolean isVecInXZ(AxisAlignedBB self, Vector vec) {
-		return vec == null ? false : vec.getX() >= self.getMinX() && vec.getX() <= self.getMaxX() && vec.getZ() >= self.getMinZ() && vec.getZ() <= self.getMaxZ();
+		return vec != null && vec.getX() >= self.getMinX() && vec.getX() <= self.getMaxX() && vec.getZ() >= self.getMinZ() && vec.getZ() <= self.getMaxZ();
 	}
 	
 	/**
 	 * Checks if the specified vector is within the XY dimensions of the bounding box.
 	 */
 	private static boolean isVecInXY(AxisAlignedBB self, Vector vec) {
-		return vec == null ? false : vec.getX() >= self.getMinX() && vec.getX() <= self.getMaxX() && vec.getY() >= self.getMinY() && vec.getY() <= self.getMaxY();
+		return vec != null && vec.getX() >= self.getMinX() && vec.getX() <= self.getMaxX() && vec.getY() >= self.getMinY() && vec.getY() <= self.getMaxY();
 	}
 }

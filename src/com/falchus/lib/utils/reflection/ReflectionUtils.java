@@ -134,7 +134,7 @@ public class ReflectionUtils {
 	@SuppressWarnings("unchecked")
 	public static <T> T getFieldValue(Object instance, @NonNull Field field, @NonNull Class<T> type) {
     	try {
-    		return (T) getFieldValue(instance, field);
+    		return getFieldValue(instance, field);
     	} catch (Exception e) {
     		throw new RuntimeException(e);
     	}

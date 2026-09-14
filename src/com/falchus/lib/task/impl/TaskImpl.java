@@ -11,7 +11,7 @@ import lombok.Setter;
 public abstract class TaskImpl implements Runnable {
 	
 	@Setter private static Function<Runnable, Task> defaultTask = Task::of;
-	private Function<Runnable, Task> task;
+	private final Function<Runnable, Task> task;
 	
 	protected final Task handle;
 	

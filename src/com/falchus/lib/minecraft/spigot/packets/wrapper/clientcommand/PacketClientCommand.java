@@ -4,7 +4,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.IPacketWrapper;
 
 public interface PacketClientCommand extends IPacketWrapper {
 
-	public enum Action {
+	enum Action {
 		PERFORM_RESPAWN,
 		REQUEST_STATS
 	}

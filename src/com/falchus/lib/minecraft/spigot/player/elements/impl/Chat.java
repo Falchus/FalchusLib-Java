@@ -30,7 +30,7 @@ public class Chat extends PlayerElement implements Listener {
 	}
 	
 	public void send(@NonNull Supplier<String> prefix) {
-		if (registered.size() == 0) {
+		if (registered.isEmpty()) {
 			Bukkit.getPluginManager().registerEvents(this, plugin);
 			registered.add(true);
 		}
@@ -41,7 +41,7 @@ public class Chat extends PlayerElement implements Listener {
 			String lastPrefix = lastPrefixes.get(player.getUniqueId());
 			String newPrefix = prefixSuppliers.get(player.getUniqueId()).get();
 			
-			if (lastPrefix == null || !newPrefix.equals(lastPrefix)) {
+			if (!newPrefix.equals(lastPrefix)) {
 				lastPrefixes.put(player.getUniqueId(), newPrefix);
 			}
 		};

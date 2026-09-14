@@ -92,11 +92,7 @@ public class ItemUtils {
     /**
      * Represents an item in an inventory.
      */
-    public static class InventoryItem {
-        public final int slot;
-        public final ItemStack item;
-        public final Consumer<Player> onInventoryClick;
-
+    public record InventoryItem(int slot, @NonNull ItemStack item, Consumer<Player> onInventoryClick) {
         /**
          * Constructs a new InventoryItem.
          */

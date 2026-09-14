@@ -1,5 +1,6 @@
 package com.falchus.lib.utils.wrapper.impl;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class FirstClassWrapper<T> extends ClassWrapper<T> {
 						return null;
 					}
 				})
-				.filter(c -> c != null)
+				.filter(Objects::nonNull)
 				.collect(Collectors.toSet())
 			);
 	}

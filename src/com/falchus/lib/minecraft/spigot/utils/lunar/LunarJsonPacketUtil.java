@@ -50,23 +50,28 @@ public class LunarJsonPacketUtil {
 	}
 	 
 	private static JsonElement convertToJsonElement(Object value) {
-	    if (value == null) {
-	        return JsonNull.INSTANCE;
-	    } else if (value instanceof String valueString) {
-	        return new JsonPrimitive(valueString);
-	    } else if (value instanceof Number valueNumber) {
-	        return new JsonPrimitive(valueNumber);
-	    } else if (value instanceof Boolean valueBoolean) {
-	        return new JsonPrimitive(valueBoolean);
-	    } else if (value instanceof List valueList) {
-	        JsonArray jsonArray = new JsonArray();
-	        for (Object item : valueList) {
-	            jsonArray.add(convertToJsonElement(item));
-	        }
-	        return jsonArray;
-	    }
-	 
-	    throw new RuntimeException("Unable to wrap value of type '" + value.getClass().getSimpleName() + "'!");
+        switch (value) {
+            case null -> {
+                return JsonNull.INSTANCE;
+            }
+            case String valueString -> {
+                return new JsonPrimitive(valueString);
+            }
+            case Number valueNumber -> {
+                return new JsonPrimitive(valueNumber);
+            }
+            case Boolean valueBoolean -> {
+                return new JsonPrimitive(valueBoolean);
+            }
+            case List valueList -> {
+                JsonArray jsonArray = new JsonArray();
+                for (Object item : valueList) {
+                    jsonArray.add(convertToJsonElement(item));
+                }
+                return jsonArray;
+            }
+            default -> throw new RuntimeException("Unable to wrap value of type '" + value.getClass().getSimpleName() + "'!");
+        }
 	}
 	
 	public static void enableModules(Player player, List<String> modules, Table<String, String, Object> moduleProperties) {
