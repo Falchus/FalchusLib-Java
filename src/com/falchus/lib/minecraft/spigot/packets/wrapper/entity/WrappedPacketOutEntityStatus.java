@@ -22,7 +22,14 @@ public class WrappedPacketOutEntityStatus extends PacketEntityWrapper {
 	Field eventId;
 	
 	private WrappedPacketOutEntityStatus(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutEntityStatus",
+			networkProtocolGame + "PacketPlayOutEntityStatus"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		
 		eventId = getFirstField(
 			"eventId",

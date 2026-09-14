@@ -8,6 +8,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.PacketWrapper;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
+<<<<<<< HEAD
 @FieldDefaults(makeFinal = true)
 class PacketPositionWrapper extends PacketWrapper implements PacketPosition {
 	
@@ -17,6 +18,9 @@ class PacketPositionWrapper extends PacketWrapper implements PacketPosition {
 	Field yaw;
 	Field pitch;
 	Field relatives;
+=======
+class PacketPositionWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 
 	// TODO: multi-version
 	PacketPositionWrapper(@NonNull Object handle, @NonNull Set<String> names) {

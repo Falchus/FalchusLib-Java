@@ -7,7 +7,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketWindowClickWrapper extends PacketWindowWrapper implements PacketWindowClick {
+=======
+class PacketWindowClickWrapper extends PacketUpdateWindow {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field slotNum;
 	Field buttonNum;

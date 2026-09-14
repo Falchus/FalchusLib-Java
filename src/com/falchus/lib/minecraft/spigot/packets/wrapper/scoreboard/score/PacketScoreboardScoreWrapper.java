@@ -9,7 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketScoreboardScoreWrapper extends PacketWrapper implements PacketScoreboardScore {
+=======
+class PacketScoreboardScoreWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field owner;
 	Field objectiveName;

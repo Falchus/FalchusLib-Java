@@ -9,7 +9,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketSteerVehicleWrapper extends PacketWrapper implements PacketSteerVehicle {
+=======
+class PacketSteerVehicleWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field sideways;
 	Field forward;
@@ -36,6 +40,7 @@ class PacketSteerVehicleWrapper extends PacketWrapper implements PacketSteerVehi
 		);
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public float getSideways() {
 		return getFieldValue(sideways);
@@ -72,6 +77,36 @@ class PacketSteerVehicleWrapper extends PacketWrapper implements PacketSteerVehi
 	}
 	
 	@Override
+=======
+	public float getSideways() {
+		return getFieldValue(sideways);
+	}
+	
+	public void setSideways(float sideways) {
+		setField(this.sideways, sideways);
+	}
+	
+	public float getForward() {
+		return getFieldValue(forward);
+	}
+	
+	public void setForward(float forward) {
+		setField(this.forward, forward);
+	}
+	
+	public boolean isJumping() {
+		return getFieldValue(jumping);
+	}
+	
+	public void setJumping(boolean jumping) {
+		setField(this.jumping, jumping);
+	}
+	
+	public boolean isSneaking() {
+		return getFieldValue(sneaking);
+	}
+	
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	public void setSneaking(boolean sneaking) {
 		setField(this.sneaking, sneaking);
 	}

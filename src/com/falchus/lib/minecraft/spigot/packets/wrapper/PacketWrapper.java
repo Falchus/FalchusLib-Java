@@ -270,6 +270,15 @@ public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketW
 			}
 			current = current.getSuperclass();
 		}
+<<<<<<< HEAD
 		return (T) new PacketWrapper(obj, Set.of(obj.getClass().getName()));
+=======
+		for (Map.Entry<Class<?>, Function<Object, PacketWrapper>> entry : registry.entrySet()) {
+			if (entry.getKey().isAssignableFrom(packet.getClass())) {
+				return (T) entry.getValue().apply(packet);
+			}
+		}
+		return (T) new PacketWrapper(packet, Set.of(packet.getClass().getName()));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

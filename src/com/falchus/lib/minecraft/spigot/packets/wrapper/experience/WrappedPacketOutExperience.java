@@ -15,6 +15,7 @@ public class WrappedPacketOutExperience extends PacketExperienceWrapper {
 	);
 
 	private WrappedPacketOutExperience(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -35,5 +36,11 @@ public class WrappedPacketOutExperience extends PacketExperienceWrapper {
 				experience
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutExperience",
+			networkProtocolGame + "PacketPlayOutExperience"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

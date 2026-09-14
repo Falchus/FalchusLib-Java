@@ -16,6 +16,7 @@ public class WrappedPacketOutBlockBreakAnimation extends PacketBlockBreakAnimati
 	);
 	
 	private WrappedPacketOutBlockBreakAnimation(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -36,5 +37,11 @@ public class WrappedPacketOutBlockBreakAnimation extends PacketBlockBreakAnimati
 				progress
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutBlockBreakAnimation",
+			networkProtocolGame + "PacketPlayOutBlockBreakAnimation"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

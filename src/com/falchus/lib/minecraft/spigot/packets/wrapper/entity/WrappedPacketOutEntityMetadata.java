@@ -16,6 +16,7 @@ public class WrappedPacketOutEntityMetadata extends PacketEntityWrapper {
 	);
 	
 	private WrappedPacketOutEntityMetadata(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -37,5 +38,11 @@ public class WrappedPacketOutEntityMetadata extends PacketEntityWrapper {
 				forceUpdateAll
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutEntityMetadata",
+			networkProtocolGame + "PacketPlayOutEntityMetadata"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

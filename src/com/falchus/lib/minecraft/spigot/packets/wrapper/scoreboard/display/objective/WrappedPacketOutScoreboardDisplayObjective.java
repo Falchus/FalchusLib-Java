@@ -19,6 +19,7 @@ public class WrappedPacketOutScoreboardDisplayObjective extends PacketScoreboard
 	);
 
 	private WrappedPacketOutScoreboardDisplayObjective(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -71,5 +72,11 @@ public class WrappedPacketOutScoreboardDisplayObjective extends PacketScoreboard
 	    TEAM_WHITE(18);
 		
 		private final int slot;
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutScoreboardDisplayObjective",
+			networkProtocolGame + "PacketPlayOutScoreboardDisplayObjective"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

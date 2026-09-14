@@ -11,7 +11,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketSetSlotWrapper extends PacketWrapper implements PacketSetSlot {
+=======
+class PacketSetSlotWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field containerId;
 	Field slot;
@@ -59,8 +63,16 @@ class PacketSetSlotWrapper extends PacketWrapper implements PacketSetSlot {
 		return SpigotWrapper.wrap(getFieldValue(itemStack));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setItemStack(ItemStack itemStack) {
 		setField(this.itemStack, itemStack.getHandle());
+=======
+	/**
+	 * @param itemStack	ItemStack
+	 */
+	public void setItemStack(Object itemStack) {
+		setField(this.itemStack, itemStack);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

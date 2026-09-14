@@ -12,7 +12,11 @@ import lombok.experimental.FieldDefaults;
 
 // TODO: add PacketPlayOutWorldParticles wrapper
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketWorldEventWrapper extends PacketWrapper implements PacketWorldEvent {
+=======
+class PacketWorldEventWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field type;
 	Field pos;
@@ -55,9 +59,17 @@ class PacketWorldEventWrapper extends PacketWrapper implements PacketWorldEvent 
 		return SpigotWrapper.wrap(getFieldValue(type));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setPos(BlockPosition pos) {
 		setField(this.pos, pos.getHandle());
+=======
+	/**
+	 * @param pos	BlockPosition
+	 */
+	public void setPos(Object pos) {
+		setField(this.pos, pos);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 
 	@Override

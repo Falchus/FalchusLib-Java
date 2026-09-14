@@ -30,6 +30,7 @@ public class WrappedPacketOutScoreboardTeam extends PacketScoreboardTeamWrapper 
 	}
 
 	private WrappedPacketOutScoreboardTeam(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -43,5 +44,11 @@ public class WrappedPacketOutScoreboardTeam extends PacketScoreboardTeamWrapper 
 	
 	public WrappedPacketOutScoreboardTeam(@NonNull Mode mode, String playerName) {
 		this(new WrappedScoreboardTeam(playerName), mode, playerName);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutScoreboardTeam",
+			networkProtocolGame + "PacketPlayOutScoreboardTeam"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

@@ -11,7 +11,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketOpenSignEditorWrapper extends PacketWrapper implements PacketOpenSignEditor {
+=======
+class PacketOpenSignEditorWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field pos;
 
@@ -29,8 +33,16 @@ class PacketOpenSignEditorWrapper extends PacketWrapper implements PacketOpenSig
 		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setPos(BlockPosition pos) {
 		setField(this.pos, pos.getHandle());
+=======
+	/**
+	 * @param pos	BlockPosition
+	 */
+	public void setPos(Object pos) {
+		setField(this.pos, pos);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

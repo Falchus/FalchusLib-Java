@@ -16,6 +16,7 @@ public class WrappedPacketInSpectate extends PacketSpectateWrapper {
 	);
 
 	private WrappedPacketInSpectate(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -28,5 +29,11 @@ public class WrappedPacketInSpectate extends PacketSpectateWrapper {
 				targetUuid
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayInSpectate",
+			networkProtocolGame + "PacketPlayInSpectate"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

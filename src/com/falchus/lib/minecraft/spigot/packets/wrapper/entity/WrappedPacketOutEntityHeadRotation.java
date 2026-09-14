@@ -22,7 +22,14 @@ public class WrappedPacketOutEntityHeadRotation extends PacketEntityWrapper {
 	Field yHeadRot;
 	
 	private WrappedPacketOutEntityHeadRotation(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutEntityHeadRotation",
+			networkProtocolGame + "PacketPlayOutEntityHeadRotation"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		
 		yHeadRot = getFirstField(
 			"yHeadRot",

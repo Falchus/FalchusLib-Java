@@ -15,6 +15,7 @@ public class WrappedPacketInCloseWindow extends PacketCloseWindowWrapper {
 	);
 
 	private WrappedPacketInCloseWindow(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -27,5 +28,11 @@ public class WrappedPacketInCloseWindow extends PacketCloseWindowWrapper {
 				syncId
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayInCloseWindow",
+			networkProtocolGame + "PacketPlayInCloseWindow"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

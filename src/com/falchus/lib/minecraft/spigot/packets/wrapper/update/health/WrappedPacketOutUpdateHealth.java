@@ -15,6 +15,7 @@ public class WrappedPacketOutUpdateHealth extends PacketUpdateHealthWrapper {
 	);
 
 	private WrappedPacketOutUpdateHealth(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -35,5 +36,11 @@ public class WrappedPacketOutUpdateHealth extends PacketUpdateHealthWrapper {
 				saturation
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutUpdateHealth",
+			networkProtocolGame + "PacketPlayOutUpdateHealth"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

@@ -21,7 +21,14 @@ public class WrappedPacketOutSubtitleTitle extends PacketTitleWrapper {
 	Field text;
 	
 	private WrappedPacketOutSubtitleTitle(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutTitle",
+			networkProtocolGame + "ClientboundSetSubtitleTextPacket"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		
 		text = getFirstField(
 			"text",
@@ -37,7 +44,15 @@ public class WrappedPacketOutSubtitleTitle extends PacketTitleWrapper {
 		return SpigotWrapper.wrap(getFieldValue(text));
 	}
 	
+<<<<<<< HEAD
 	public void setText(Component text) {
 		setField(this.text, text.getHandle());
+=======
+	/**
+	 * @param text	IChatBaseComponent
+	 */
+	public void setText(Object text) {
+		setField(this.text, text);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

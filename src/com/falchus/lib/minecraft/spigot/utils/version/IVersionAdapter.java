@@ -18,9 +18,13 @@ import org.bukkit.inventory.ItemStack;
 
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
 import com.falchus.lib.minecraft.spigot.enums.Sound;
+<<<<<<< HEAD
 import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
 import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
 import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
+=======
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 import com.mojang.authlib.GameProfile;
 
 import lombok.NonNull;
@@ -56,7 +60,24 @@ public interface IVersionAdapter {
 	
 	Object getEntity(@NonNull Entity entity);
 	
+<<<<<<< HEAD
 	Object getEntityLiving(@NonNull LivingEntity entity);
+=======
+	/**
+	 * @return {@link Entity}
+	 */
+	Entity getBukkitEntity(@NonNull Object entity);
+	
+	/**
+	 * @return {@link WrappedAxisAlignedBB}
+	 */
+	WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity);
+	
+	/**
+	 * @return {@link WrappedAxisAlignedBB}
+	 */
+	WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	/**
 	 * @return absorption from a {@link Damageable} entity.
@@ -229,12 +250,20 @@ public interface IVersionAdapter {
 	Object getWorld(@NonNull World world);
 	
 	/**
+<<<<<<< HEAD
 	 * @return WorldServer from a {@link World}
+=======
+	 * @return {@link List}
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	 */
+<<<<<<< HEAD
 	Object getWorldServer(@NonNull World world);
 	
 	/**
 	 * @return {@link List}
 	 */
 	List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB);
+=======
+	List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 }

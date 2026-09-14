@@ -12,7 +12,11 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(makeFinal = true)
+<<<<<<< HEAD
 class PacketTileEntityDataWrapper extends PacketWrapper implements PacketTileEntityData {
+=======
+class PacketTileEntityDataWrapper extends PacketWrapper {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Field pos;
 	Field type;
@@ -40,9 +44,17 @@ class PacketTileEntityDataWrapper extends PacketWrapper implements PacketTileEnt
 		return SpigotWrapper.wrap(getFieldValue(pos));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setPos(BlockPosition pos) {
 		setField(this.pos, pos.getHandle());
+=======
+	/**
+	 * @param pos	BlockPosition
+	 */
+	public void setPos(Object pos) {
+		setField(this.pos, pos);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 
 	@Override
@@ -60,8 +72,16 @@ class PacketTileEntityDataWrapper extends PacketWrapper implements PacketTileEnt
 		return SpigotWrapper.wrap(getFieldValue(tag));
 	}
 	
+<<<<<<< HEAD
 	@Override
 	public void setTag(CompoundTag tag) {
 		setField(this.tag, tag.getHandle());
+=======
+	/**
+	 * @param tag	NBTTagCompound
+	 */
+	public void setTag(Object tag) {
+		setField(this.tag, tag);
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

@@ -15,6 +15,7 @@ public class WrappedPacketInEnchantItem extends PacketEnchantItemWrapper {
 	);
 
 	private WrappedPacketInEnchantItem(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -31,5 +32,11 @@ public class WrappedPacketInEnchantItem extends PacketEnchantItemWrapper {
 				buttonId
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayInEnchantItem",
+			networkProtocolGame + "PacketPlayInEnchantItem"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

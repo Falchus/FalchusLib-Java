@@ -15,6 +15,7 @@ public class WrappedPacketOutHeldItemSlot extends PacketHeldItemSlotWrapper {
 	);
 
 	private WrappedPacketOutHeldItemSlot(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -27,5 +28,11 @@ public class WrappedPacketOutHeldItemSlot extends PacketHeldItemSlotWrapper {
 				slot
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutHeldItemSlot",
+			networkProtocolGame + "PacketPlayOutHeldItemSlot"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

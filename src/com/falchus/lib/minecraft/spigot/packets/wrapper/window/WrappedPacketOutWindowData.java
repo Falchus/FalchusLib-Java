@@ -15,6 +15,7 @@ public class WrappedPacketOutWindowData extends PacketWindowDataWrapper {
 	);
 
 	private WrappedPacketOutWindowData(@NonNull Object handle) {
+<<<<<<< HEAD
 		super(handle, names);
 	}
 	
@@ -35,5 +36,11 @@ public class WrappedPacketOutWindowData extends PacketWindowDataWrapper {
 				value
 			)
 		).build());
+=======
+		super(handle, Set.of(
+			version.getPackageNms() + "PacketPlayOutWindowData",
+			networkProtocolGame + "PacketPlayOutWindowData"
+		));
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	}
 }

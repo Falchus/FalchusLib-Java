@@ -37,6 +37,7 @@ import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
+<<<<<<< HEAD
 import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
 import com.falchus.lib.minecraft.spigot.wrapper.network.chat.WrappedComponent;
 import com.falchus.lib.minecraft.spigot.wrapper.network.syncher.DataWatcher;
@@ -45,6 +46,9 @@ import com.falchus.lib.minecraft.spigot.wrapper.world.entity.EntityLiving;
 import com.falchus.lib.minecraft.spigot.wrapper.world.entity.WrappedEntity;
 import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
 import com.falchus.lib.minecraft.spigot.wrapper.world.scores.WrappedScoreboardTeam;
+=======
+import com.falchus.lib.minecraft.spigot.wrapper.world.WrappedAxisAlignedBB;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 import com.falchus.lib.utils.builder.ClassInstanceBuilder;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
@@ -93,10 +97,20 @@ public class VersionAdapter implements IVersionAdapter {
     Class<?> chatComponentText;
     
     Class<?> craftEntity;
+<<<<<<< HEAD
     Method craftEntity_getHandle;
     Class<?> craftLivingEntity;
     Method craftLivingEntity_getHandle;
+=======
+    Method entity_getHandle;
+    Method entity_getBukkitEntity;
+    Method entity_getBoundingBox;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
     Class<?> axisAlignedBB;
+<<<<<<< HEAD
+=======
+    Method entity_setYawPitch;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 	
 	Class<?> craftItemStack;
 	Class<?> nmsItemStack;
@@ -298,13 +312,30 @@ public class VersionAdapter implements IVersionAdapter {
             );
             
             craftEntity = ReflectionUtils.getClass(packageObc + "entity.CraftEntity");
+<<<<<<< HEAD
             craftEntity_getHandle = ReflectionUtils.getMethod(craftEntity, "getHandle");
             craftLivingEntity = ReflectionUtils.getClass(packageObc + "entity.CraftLivingEntity");
             craftLivingEntity_getHandle = ReflectionUtils.getMethod(craftLivingEntity, "getHandle");
+=======
+            entity_getHandle = ReflectionUtils.getMethod(craftEntity, "getHandle");
+            entity_getBukkitEntity = ReflectionUtils.getMethod(entity, "getBukkitEntity");
+            entity_getBoundingBox = ReflectionUtils.getMethod(entity, "getBoundingBox");
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
             axisAlignedBB = ReflectionUtils.getFirstClass(
             	packageNms + "AxisAlignedBB",
             	packageNm + "world.phys.AxisAlignedBB"
             );
+<<<<<<< HEAD
+=======
+            entity_setYawPitch = ReflectionUtils.getFirstMethod(entity,
+            	List.of(
+            		float.class,
+            		float.class
+            	),
+            	"setYawPitch",
+            	"setRot"
+            );
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
             
             craftItemStack = ReflectionUtils.getClass(packageObc + "inventory.CraftItemStack");
             nmsItemStack = ReflectionUtils.getFirstClass(
@@ -497,7 +528,35 @@ public class VersionAdapter implements IVersionAdapter {
 	@Override
 	public Object getEntityLiving(@NonNull LivingEntity entity) {
 		try {
+<<<<<<< HEAD
 			return craftLivingEntity_getHandle.invoke(entity);
+=======
+			return (Entity) entity_getBukkitEntity.invoke(entity);
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Override
+	public WrappedAxisAlignedBB getBoundingBox(@NonNull Entity entity) {
+		try {
+			return SpigotWrapper.wrap(entity_getBoundingBox.invoke(getEntity(entity)));
+		} catch (Exception e) {
+	        throw new RuntimeException(e);
+	    }
+	}
+	
+	@Override
+	public WrappedAxisAlignedBB modifyBoundingBox(@NonNull WrappedAxisAlignedBB axisAlignedBB, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		try {
+			axisAlignedBB.setMinX(axisAlignedBB.getMinX() + minX);
+			axisAlignedBB.setMinY(axisAlignedBB.getMinY() + minY);
+			axisAlignedBB.setMinZ(axisAlignedBB.getMinZ() + minZ);
+			axisAlignedBB.setMaxX(axisAlignedBB.getMaxX() + maxX);
+			axisAlignedBB.setMaxY(axisAlignedBB.getMaxY() + maxY);
+			axisAlignedBB.setMaxZ(axisAlignedBB.getMaxZ() + maxZ);
+			return axisAlignedBB;
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
 		} catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
@@ -1109,9 +1168,17 @@ public class VersionAdapter implements IVersionAdapter {
     }
     
     @Override
+<<<<<<< HEAD
     public List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB) {
+=======
+    public List<WrappedAxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull WrappedAxisAlignedBB axisAlignedBB) {
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
     	try {
+<<<<<<< HEAD
     		List<AxisAlignedBB> list = new ArrayList<>();
+=======
+    		List<WrappedAxisAlignedBB> list = new ArrayList<>();
+>>>>>>> branch 'master' of https://github.com/Falchus/FalchusLib-Java.git
     		for (Object obj : (List<?>) world_getCubes.invoke(getWorldServer(world),
     			axisAlignedBB.getHandle()
     		)) {
