@@ -61,7 +61,13 @@ public class Storage {
 		if (content == null || content.isBlank()) {
 			return deserialize(defaultContent);
 		}
-		return deserialize(content);
+		
+		try {
+			return deserialize(content);
+		} catch (Exception e) {
+			write(defaultContent);
+			return deserialize(defaultContent);
+		}
 	}
 	
 	public <T> void loadAsync(Consumer<T> consumer) {
