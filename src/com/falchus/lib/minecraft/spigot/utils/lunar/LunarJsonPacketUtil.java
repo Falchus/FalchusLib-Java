@@ -70,6 +70,7 @@ public class LunarJsonPacketUtil {
                 }
                 return jsonArray;
             }
+            
             default -> throw new RuntimeException("Unable to wrap value of type '" + value.getClass().getSimpleName() + "'!");
         }
 	}
