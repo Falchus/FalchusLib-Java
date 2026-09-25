@@ -1,9 +1,7 @@
 package com.falchus.lib.minecraft.spigot.packets.wrapper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 import com.falchus.lib.minecraft.spigot.packets.wrapper.abilities.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.animation.*;
@@ -67,30 +65,29 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.window.*;
 import com.falchus.lib.minecraft.spigot.packets.wrapper.world.event.*;
 import com.falchus.lib.minecraft.spigot.utils.version.IVersionAdapter;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
-import com.falchus.lib.utils.builder.ClassInstanceBuilder;
-import com.falchus.lib.utils.reflection.Dummy;
+import com.falchus.lib.utils.wrapper.WrapperRegistry;
 import com.falchus.lib.utils.wrapper.impl.FirstClassWrapper;
 
 import lombok.NonNull;
 
 public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketWrapper {
-	
+
+	private static final WrapperRegistry<PacketWrapper> registry = new WrapperRegistry<>(
+		handle -> new PacketWrapper(handle, Set.of(handle.getClass().getName()))
+	);
+
 	protected static final IVersionAdapter version = VersionProvider.get();
 	private static final String networkProtocol = version.getPackageNm() + "network.protocol.";
 	protected static final String networkProtocolCommon = networkProtocol + "common.";
 	protected static final String networkProtocolGame = networkProtocol + "game.";
 	protected static final String networkProtocolStatus = networkProtocol + "status.";
-
-	private static final Map<Class<?>, Function<Object, IPacketWrapper>> registry = new HashMap<>();
 	
 	public PacketWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);
 	}
-	
-	@SuppressWarnings("unchecked")
-	private static <T extends IPacketWrapper> void register() {
-		if (!registry.isEmpty()) return;
-		Class<T>[] wrappers = new Class[] {
+
+	static {
+		registry.register(List.of(
 			WrappedPacketInAbilities.class,
 			WrappedPacketOutAbilities.class,
 			
@@ -231,45 +228,11 @@ public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketW
 			WrappedPacketOutWindowItems.class,
 			
 			WrappedPacketOutWorldEvent.class
-		};
-		
-		for (Class<T> wrapper : wrappers) {
-			IPacketWrapper dummy = (T) new ClassInstanceBuilder(
-				wrapper
-			).withParams(
-				Map.of(
-					Object.class,
-					Dummy.instance
-				)
-			).build(); // TODO: fix "Failed to create class instance"
-			for (Class<?> clazz : dummy.getClasses()) {
-				registry.put(clazz, obj ->
-					(T) new ClassInstanceBuilder(
-						wrapper
-					).withParams(
-						Map.of(
-							Object.class,
-							obj
-						)
-					).build()
-				);
-			}
-		}
+		));
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends IPacketWrapper> T wrap(Object obj) {
-		if (obj == null) return null;
-		register();
-		
-		Class<?> current = obj.getClass();
-		while (current != null) {
-			Function<Object, IPacketWrapper> wrapper = registry.get(current);
-			if (wrapper != null) {
-				return (T) wrapper.apply(obj);
-			}
-			current = current.getSuperclass();
-		}
-		return (T) new PacketWrapper(obj, Set.of(obj.getClass().getName()));
+	public static <T extends IPacketWrapper> T wrap(Object handle) {
+		return (T) registry.wrap(handle);
 	}
 }

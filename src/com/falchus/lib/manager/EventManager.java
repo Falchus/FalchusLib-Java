@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,6 +14,7 @@ import com.falchus.lib.events.EventHandler;
 import com.falchus.lib.events.listener.Listener;
 import com.falchus.lib.events.listener.RegisteredListener;
 
+import com.falchus.lib.task.Task;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -81,7 +81,7 @@ public class EventManager {
 			}
 			
 			if (event.isAsync()) {
-				CompletableFuture.runAsync(() -> listener.execute(event));
+				Task.of(() -> listener.execute(event)).runAsync();
 			} else {
 				try {
 					listener.execute(event);
