@@ -217,6 +217,9 @@ static Constructor getConstructor(Object instance, Class... params);
 static Constructor getFirstConstructor(Class clazz, Set<List<Class>> params);
 static Constructor getFirstConstructor(Object instance, Set<List<Class>> params);
 static Constructor getFirstConstructor(Set<Class> classes, Set<List<Class>> params);
+
+static Class getSuperclass(Set<Class> classes);
+static Class getSuperclass(Class... classes);
 ```
 
 `com.falchus.lib.utils.wrapper.Wrapper`

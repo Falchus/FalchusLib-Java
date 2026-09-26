@@ -31,6 +31,8 @@ public class ReflectionUtils {
 	private final Map<ConstructorKey, Optional<Constructor<?>>> constructors = new ConcurrentHashMap<>();
 	private final Map<ConstructorKey, Optional<Constructor<?>>> firstConstructors = new ConcurrentHashMap<>();
 	private final Map<ConstructorKey, Optional<Constructor<?>>> firstConstructorsClasses = new ConcurrentHashMap<>();
+	
+	private final Map<SuperclassKey, Optional<Class<?>>> superclasses = new ConcurrentHashMap<>();
 
     public static Class<?> getClass(@NonNull String name) {
     	return classes.computeIfAbsent(new ClassKey(name), k -> {
@@ -303,5 +305,31 @@ public class ReflectionUtils {
     	}).orElseThrow(() ->
 			new RuntimeException("No matching constructor found for classes: " + classes)
 		);
+    }
+    
+    public static Class<?> getSuperclass(@NonNull Set<Class<?>> classes) {
+    	return superclasses.computeIfAbsent(new SuperclassKey(classes), k -> {
+    		Class<?> found = null;
+    		for (Class<?> clazz : classes) {
+    			if (found == null) {
+    				found = clazz;
+    				continue;
+    			}
+    			Class<?> current = found;
+    			while (current != null) {
+    				if (current.isAssignableFrom(clazz)) break;
+    				current = current.getSuperclass();
+    			}
+    			found = current;
+    			if (found == null) {
+    				return Optional.empty();
+    			}
+    		}
+    		return found != null ? Optional.of(found) : Optional.empty();
+    	}).orElse(null);
+    }
+    
+    public static Class<?> getSuperclass(@NonNull Class<?>... classes) {
+    	return getSuperclass(Set.of(classes));
     }
 }
