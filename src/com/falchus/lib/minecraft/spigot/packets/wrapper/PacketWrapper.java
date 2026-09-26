@@ -75,6 +75,149 @@ public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketW
 	private static final WrapperRegistry<PacketWrapper> registry = new WrapperRegistry<>(
 		handle -> new PacketWrapper(handle, Set.of(handle.getClass().getName()))
 	);
+	
+	private static final List<Class<? extends PacketWrapper>> wrappers = List.of(
+		WrappedPacketInAbilities.class,
+		WrappedPacketOutAbilities.class,
+		
+		WrappedPacketOutAnimation.class,
+		
+		WrappedPacketInArmAnimation.class,
+		
+		WrappedPacketOutAttachEntity.class,
+		
+		WrappedPacketOutBlockAction.class,
+		
+		WrappedPacketOutBlockBreakAnimation.class,
+		
+		WrappedPacketOutBlockChange.class,
+		
+		WrappedPacketInBlockDig.class,
+		
+		WrappedPacketInBlockPlace.class,
+		
+//		WrappedPacketOutBlockUpdate.class,
+		
+		WrappedPacketOutCamera.class,
+		
+		WrappedPacketInChat.class,
+		WrappedPacketOutChat.class,
+		
+		WrappedPacketInClientCommand.class,
+		
+//		WrappedPacketInCloseWindow.class,
+		WrappedPacketOutCloseWindow.class,
+		
+		WrappedPacketOutCollect.class,
+		
+		WrappedPacketInCustomPayload.class,
+		WrappedPacketOutCustomPayload.class,
+		
+		WrappedPacketInEnchantItem.class,
+		
+		WrappedPacketInEntityAction.class,
+		WrappedPacketOutEntity.class,
+		WrappedPacketOutEntityDestroy.class,
+		WrappedPacketOutEntityEffect.class,
+		WrappedPacketOutEntityEquipment.class,
+		WrappedPacketOutEntityHeadRotation.class,
+		WrappedPacketOutEntityMetadata.class,
+		WrappedPacketOutEntityStatus.class,
+		WrappedPacketOutEntityTeleport.class,
+		WrappedPacketOutEntityVelocity.class,
+		
+		WrappedPacketOutExperience.class,
+		
+		WrappedPacketOutExplosion.class,
+		
+		WrappedPacketInFlying.class,
+		
+		WrappedPacketOutGameStateChange.class,
+		
+//		WrappedPacketInHeldItemSlot.class,
+		WrappedPacketOutHeldItemSlot.class,
+		
+		WrappedPacketOutKickDisconnect.class,
+		
+		WrappedPacketOutLogin.class,
+		
+		WrappedPacketOutMap.class,
+		
+		WrappedPacketOutMultiBlockChange.class,
+		
+		WrappedPacketOutNamedSoundEffect.class,
+		
+		WrappedPacketOutOpenSignEditor.class,
+		
+		WrappedPacketOutOpenWindow.class,
+		
+		WrappedPacketOutPlayerListHeaderFooter.class,
+		
+		WrappedPacketOutPosition.class,
+		
+		WrappedPacketOutRemoveEntityEffect.class,
+		
+		WrappedPacketInResourcePackStatus.class,
+		
+		WrappedPacketOutRespawn.class,
+		
+		WrappedPacketOutScoreboardDisplayObjective.class,
+		
+		WrappedPacketOutScoreboardObjective.class,
+		
+		WrappedPacketOutScoreboardScore.class,
+		
+		WrappedPacketOutScoreboardTeam.class,
+		
+		WrappedPacketOutServerDifficulty.class,
+		
+		WrappedPacketOutServerInfo.class,
+		
+		WrappedPacketInSetCreativeSlot.class,
+		
+		WrappedPacketOutSetSlot.class,
+		
+		WrappedPacketInSettings.class,
+		
+		WrappedPacketOutSpawnEntity.class,
+		WrappedPacketOutSpawnEntityLiving.class,
+		
+		WrappedPacketOutSpawnPosition.class,
+		
+		WrappedPacketInSpectate.class,
+		
+		WrappedPacketOutStatistic.class,
+		
+		WrappedPacketInSteerVehicle.class,
+		
+		WrappedPacketInTabComplete.class,
+		WrappedPacketOutTabComplete.class,
+		
+		WrappedPacketOutTileEntityData.class,
+		
+		WrappedPacketOutAnimationTitle.class,
+		WrappedPacketOutSubtitleTitle.class,
+		WrappedPacketOutTitleTitle.class,
+		
+		WrappedPacketInTransaction.class,
+		WrappedPacketOutTransaction.class,
+		
+		WrappedPacketOutUpdateAttributes.class,
+		
+		WrappedPacketOutUpdateHealth.class,
+		
+		WrappedPacketInUpdateSign.class,
+		
+		WrappedPacketOutUpdateTime.class,
+		
+		WrappedPacketInUseEntity.class,
+		
+//		WrappedPacketInWindowClick.class,
+		WrappedPacketOutWindowData.class,
+		WrappedPacketOutWindowItems.class,
+		
+		WrappedPacketOutWorldEvent.class
+	);
 
 	protected static final IVersionAdapter version = VersionProvider.get();
 	private static final String networkProtocol = version.getPackageNm() + "network.protocol.";
@@ -85,154 +228,10 @@ public class PacketWrapper extends FirstClassWrapper<Object> implements IPacketW
 	public PacketWrapper(@NonNull Object handle, @NonNull Set<String> names) {
 		super(handle, names);
 	}
-
-	static {
-		registry.register(List.of(
-			WrappedPacketInAbilities.class,
-			WrappedPacketOutAbilities.class,
-			
-			WrappedPacketOutAnimation.class,
-			
-			WrappedPacketInArmAnimation.class,
-			
-			WrappedPacketOutAttachEntity.class,
-			
-			WrappedPacketOutBlockAction.class,
-			
-			WrappedPacketOutBlockBreakAnimation.class,
-			
-			WrappedPacketOutBlockChange.class,
-			
-			WrappedPacketInBlockDig.class,
-			
-			WrappedPacketInBlockPlace.class,
-			
-//			WrappedPacketOutBlockUpdate.class,
-			
-			WrappedPacketOutCamera.class,
-			
-			WrappedPacketInChat.class,
-			WrappedPacketOutChat.class,
-			
-			WrappedPacketInClientCommand.class,
-			
-//			WrappedPacketInCloseWindow.class,
-			WrappedPacketOutCloseWindow.class,
-			
-			WrappedPacketOutCollect.class,
-			
-			WrappedPacketInCustomPayload.class,
-			WrappedPacketOutCustomPayload.class,
-			
-			WrappedPacketInEnchantItem.class,
-			
-			WrappedPacketInEntityAction.class,
-			WrappedPacketOutEntity.class,
-			WrappedPacketOutEntityDestroy.class,
-			WrappedPacketOutEntityEffect.class,
-			WrappedPacketOutEntityEquipment.class,
-			WrappedPacketOutEntityHeadRotation.class,
-			WrappedPacketOutEntityMetadata.class,
-			WrappedPacketOutEntityStatus.class,
-			WrappedPacketOutEntityTeleport.class,
-			WrappedPacketOutEntityVelocity.class,
-			
-			WrappedPacketOutExperience.class,
-			
-			WrappedPacketOutExplosion.class,
-			
-			WrappedPacketInFlying.class,
-			
-			WrappedPacketOutGameStateChange.class,
-			
-//			WrappedPacketInHeldItemSlot.class,
-			WrappedPacketOutHeldItemSlot.class,
-			
-			WrappedPacketOutKickDisconnect.class,
-			
-			WrappedPacketOutLogin.class,
-			
-			WrappedPacketOutMap.class,
-			
-			WrappedPacketOutMultiBlockChange.class,
-			
-			WrappedPacketOutNamedSoundEffect.class,
-			
-			WrappedPacketOutOpenSignEditor.class,
-			
-			WrappedPacketOutOpenWindow.class,
-			
-			WrappedPacketOutPlayerListHeaderFooter.class,
-			
-			WrappedPacketOutPosition.class,
-			
-			WrappedPacketOutRemoveEntityEffect.class,
-			
-			WrappedPacketInResourcePackStatus.class,
-			
-			WrappedPacketOutRespawn.class,
-			
-			WrappedPacketOutScoreboardDisplayObjective.class,
-			
-			WrappedPacketOutScoreboardObjective.class,
-			
-			WrappedPacketOutScoreboardScore.class,
-			
-			WrappedPacketOutScoreboardTeam.class,
-			
-			WrappedPacketOutServerDifficulty.class,
-			
-			WrappedPacketOutServerInfo.class,
-			
-			WrappedPacketInSetCreativeSlot.class,
-			
-			WrappedPacketOutSetSlot.class,
-			
-			WrappedPacketInSettings.class,
-			
-			WrappedPacketOutSpawnEntity.class,
-			WrappedPacketOutSpawnEntityLiving.class,
-			
-			WrappedPacketOutSpawnPosition.class,
-			
-			WrappedPacketInSpectate.class,
-			
-			WrappedPacketOutStatistic.class,
-			
-			WrappedPacketInSteerVehicle.class,
-			
-			WrappedPacketInTabComplete.class,
-			WrappedPacketOutTabComplete.class,
-			
-			WrappedPacketOutTileEntityData.class,
-			
-			WrappedPacketOutAnimationTitle.class,
-			WrappedPacketOutSubtitleTitle.class,
-			WrappedPacketOutTitleTitle.class,
-			
-			WrappedPacketInTransaction.class,
-			WrappedPacketOutTransaction.class,
-			
-			WrappedPacketOutUpdateAttributes.class,
-			
-			WrappedPacketOutUpdateHealth.class,
-			
-			WrappedPacketInUpdateSign.class,
-			
-			WrappedPacketOutUpdateTime.class,
-			
-			WrappedPacketInUseEntity.class,
-			
-//			WrappedPacketInWindowClick.class,
-			WrappedPacketOutWindowData.class,
-			WrappedPacketOutWindowItems.class,
-			
-			WrappedPacketOutWorldEvent.class
-		));
-	}
 	
 	@SuppressWarnings("unchecked")
 	public static <T extends IPacketWrapper> T wrap(Object handle) {
+		registry.register(wrappers);
 		return (T) registry.wrap(handle);
 	}
 }

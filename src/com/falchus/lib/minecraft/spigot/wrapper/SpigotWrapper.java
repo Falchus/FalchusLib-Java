@@ -28,6 +28,41 @@ public class SpigotWrapper extends FirstClassWrapper<Object> implements ISpigotW
 	private static final WrapperRegistry<SpigotWrapper> registry = new WrapperRegistry<>(
 		handle -> new SpigotWrapper(handle, Set.of(handle.getClass().getName()))
 	);
+	
+	private static final List<Class<? extends SpigotWrapper>> wrappers = List.of(
+		WrappedBaseBlockPosition.class,
+		WrappedBlockPosition.class,
+
+		WrappedCompoundTag.class,
+
+		WrappedComponent.class,
+
+		WrappedServerPing.class,
+		WrappedServerPing.WrappedPlayers.class,
+
+		WrappedDataWatcher.class,
+
+		WrappedPlayerAbilities.class,
+
+		WrappedEntity.class,
+		WrappedEntityArmorStand.class,
+		WrappedEntityLiving.class,
+
+		WrappedItemStack.class,
+
+		WrappedBlock.class,
+
+		WrappedWorld.class,
+
+		WrappedScoreboardCriteria.class,
+
+		WrappedScoreboard.class,
+		WrappedScoreboardObjective.class,
+		WrappedScoreboardScore.class,
+		WrappedScoreboardTeam.class,
+
+		WrappedAxisAlignedBB.class
+	);
 
 	protected static final IVersionAdapter version = VersionProvider.get();
 	
@@ -56,45 +91,9 @@ public class SpigotWrapper extends FirstClassWrapper<Object> implements ISpigotW
 		super(handle, names);
 	}
 	
-	static {
-		registry.register(List.of(
-			WrappedBaseBlockPosition.class,
-			WrappedBlockPosition.class,
-
-			WrappedCompoundTag.class,
-
-			WrappedComponent.class,
-
-			WrappedServerPing.class,
-			WrappedServerPing.WrappedPlayers.class,
-
-			WrappedDataWatcher.class,
-
-			WrappedPlayerAbilities.class,
-
-			WrappedEntity.class,
-			WrappedEntityArmorStand.class,
-			WrappedEntityLiving.class,
-
-			WrappedItemStack.class,
-
-			WrappedBlock.class,
-
-			WrappedWorld.class,
-
-			WrappedScoreboardCriteria.class,
-
-			WrappedScoreboard.class,
-			WrappedScoreboardObjective.class,
-			WrappedScoreboardScore.class,
-			WrappedScoreboardTeam.class,
-
-			WrappedAxisAlignedBB.class
-		));
-	}
-	
 	@SuppressWarnings("unchecked")
 	public static <T extends ISpigotWrapper> T wrap(Object obj) {
+		registry.register(wrappers);
 		return (T) registry.wrap(obj);
 	}
 }
