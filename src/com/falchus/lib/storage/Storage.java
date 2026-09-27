@@ -2,9 +2,9 @@ package com.falchus.lib.storage;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.function.Consumer;
 
 import com.falchus.lib.storage.serializer.Serializer;
+import com.falchus.lib.task.Promise;
 import com.falchus.lib.task.Task;
 import com.falchus.lib.utils.FileUtils;
 
@@ -70,8 +70,8 @@ public class Storage {
 		}
 	}
 	
-	public <T> void loadAsync(Consumer<T> consumer) {
-		Task.of(() -> consumer.accept(load())).runAsync();
+	public <T> Promise<T> loadAsync() {
+		return Promise.supplyAsync(this::load);
 	}
 	
 	public void delete() {

@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import com.falchus.lib.FalchusLib;
 import com.falchus.lib.minecraft.command.BaseCommand;
 import com.falchus.lib.minecraft.utils.AdventureUtils;
+import com.falchus.lib.task.Promise;
 import com.falchus.lib.utils.StringUtils;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
@@ -56,7 +57,7 @@ public abstract class VelocityCommandAdapter implements BaseCommand, SimpleComma
 	
 	@Override
 	public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
-		return CompletableFuture.completedFuture(suggest(invocation));
+		return Promise.of(suggest(invocation));
 	}
 	
 	@Override

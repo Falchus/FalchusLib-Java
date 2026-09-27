@@ -25,6 +25,21 @@ A library designed to simplify & speed up software development.
 
 ### Usage
 #### Tasks
+`com.falchus.lib.task.Promise`
+```java
+static <T> Promise<T> of(T value);
+static <T> Promise<T> completedFuture(T value);
+static <T> Promise<T> failedFuture(Throwable t);
+
+static <T> Promise<T> supplyAsync(Supplier<T> supplier);
+static <T> Promise<T> supplyAsync(Supplier<T> supplier, Executor executor);
+
+Promise<T> run(Consumer<? super T> action);
+Promise<T> runAsync(Consumer<? super T> action);
+Promise<T> runAsync(Consumer<? super T> action, Executor executor);
+static Promise<Void> runAsync(Runnable runnable, Executor executor);
+static Promise<Void> runAsync(Runnable runnable);
+```
 `com.falchus.lib.task.Task`
 ```java
 void run();
@@ -94,7 +109,7 @@ void write(String content);
 <T> void saveAsync(T value);
 
 <T> T load();
-<T> void loadAsync(Consumer<T> consumer);
+<T> Promise<T> loadAsync();
 
 void delete();
 void deleteFolder();
