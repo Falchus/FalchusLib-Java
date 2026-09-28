@@ -25,10 +25,6 @@ public class Task implements Runnable {
 	@Getter private volatile boolean ended;
 	@Getter private volatile int tick;
 	
-	public Task() {
-		tasks.put(id, this);
-	}
-	
 	public static Task of(@NonNull Runnable runnable) {
 		return new Task() {
 			@Override
@@ -57,7 +53,11 @@ public class Task implements Runnable {
 	private <T extends Task> T executeAsync() {
 		return executeAsync(this);
 	}
-	
+
+	protected final void register() {
+		tasks.put(id, this);
+	}
+
 	@Override
 	public final void run() {
 		if (ended) return;
@@ -78,35 +78,35 @@ public class Task implements Runnable {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Task> T runTimer(long delay, long period, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this::execute, delay, period, unit);
-		taskFutures.put(id, future);
+		register();
+		taskFutures.put(id, scheduler.scheduleAtFixedRate(this::execute, delay, period, unit));
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Task> T runTimerAsync(long delay, long period, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this::executeAsync, delay, period, unit);
-		taskFutures.put(id, future);
+		register();
+		taskFutures.put(id, scheduler.scheduleAtFixedRate(this::executeAsync, delay, period, unit));
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Task> T runLater(long delay, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.schedule(() -> execute(() -> {
+		register();
+		taskFutures.put(id, scheduler.schedule(() -> execute(() -> {
 			run();
 			end();
-		}), delay, unit);
-		taskFutures.put(id, future);
+		}), delay, unit));
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Task> T runLaterAsync(long delay, @NonNull TimeUnit unit) {
-		ScheduledFuture<?> future = scheduler.schedule(() -> executeAsync(() -> {
+		register();
+		taskFutures.put(id, scheduler.schedule(() -> executeAsync(() -> {
 			run();
 			end();
-		}), delay, unit);
-		taskFutures.put(id, future);
+		}), delay, unit));
 		return (T) this;
 	}
 	

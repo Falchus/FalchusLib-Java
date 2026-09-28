@@ -56,38 +56,44 @@ public class SpigotTask extends Task {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Task> T runTimer(long delay, long period, @NonNull TimeUnit unit) {
-		long d = toTicks(delay, unit);
-		long p = Math.max(1, toTicks(period, unit));
-		tasks.put(getId(), Bukkit.getScheduler().runTaskTimer(plugin, this, d, p));
+		delay = toTicks(delay, unit);
+		period = Math.max(1, toTicks(period, unit));
+		register();
+		tasks.put(getId(), Bukkit.getScheduler().runTaskTimer(plugin, this, delay, period));
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Task> T runTimerAsync(long delay, long period, @NonNull TimeUnit unit) {
-		long d = toTicks(delay, unit);
-		long p = Math.max(1, toTicks(period, unit));
-		tasks.put(getId(), Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, d, p));
+		delay = toTicks(delay, unit);
+		period = Math.max(1, toTicks(period, unit));
+		register();
+		tasks.put(getId(), Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this, delay, period));
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Task> T runLater(long delay, @NonNull TimeUnit unit) {
+		delay = toTicks(delay, unit);
+		register();
 		tasks.put(getId(), Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			run();
 			end();
-		}, toTicks(delay, unit)));
+		}, delay));
 		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Task> T runLaterAsync(long delay, @NonNull TimeUnit unit) {
+		delay = toTicks(delay, unit);
+		register();
 		tasks.put(getId(), Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
 			run();
 			end();
-		}, toTicks(delay, unit)));
+		}, delay));
 		return (T) this;
 	}
 	
