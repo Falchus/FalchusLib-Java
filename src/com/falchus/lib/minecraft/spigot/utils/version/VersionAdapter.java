@@ -10,10 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
+import com.falchus.lib.enums.TaskPriority;
+import com.falchus.lib.task.Promise;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -1096,4 +1095,9 @@ public class VersionAdapter implements IVersionAdapter {
             throw new RuntimeException(e);
         }
     }
+
+	@Override
+	public Promise<Chunk> getChunkAtAsync(@NonNull World world, @NonNull Location location, boolean gen, @NonNull TaskPriority priority) {
+		return Promise.of(world.getChunkAt(location));
+	}
 }

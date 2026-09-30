@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.falchus.lib.enums.TaskPriority;
+import com.falchus.lib.task.Promise;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -237,4 +240,9 @@ public interface IVersionAdapter {
 	 * @return {@link List}
 	 */
 	List<AxisAlignedBB> getCollidingBlocks(@NonNull World world, @NonNull AxisAlignedBB axisAlignedBB);
+
+	/**
+	 * Gets a Chunk async (if an API is available).
+	 */
+	Promise<Chunk> getChunkAtAsync(@NonNull World world, @NonNull Location location, boolean gen, @NonNull TaskPriority priority);
 }

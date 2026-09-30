@@ -3,6 +3,10 @@ package com.falchus.lib.minecraft.spigot.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.falchus.lib.enums.TaskPriority;
+import com.falchus.lib.task.Promise;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -105,5 +109,12 @@ public class WorldUtils {
 			return Material.valueOf(material.getLegacyName());
 		}
 		return Material.valueOf(material.name());
+	}
+
+	/**
+	 * Gets the Chunk async (if an API is available).
+	 */
+	public static Promise<Chunk> getChunkAtAsync(@NonNull World world, @NonNull Location location, boolean gen, @NonNull TaskPriority priority) {
+		return VersionProvider.get().getChunkAtAsync(world, location, gen, priority);
 	}
 }

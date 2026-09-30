@@ -1,10 +1,11 @@
 package com.falchus.lib.minecraft.spigot.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum Version {
 	v1_8_8(1, 8, 8),
 	
@@ -77,13 +78,29 @@ public enum Version {
 	v26_1(26, 1),
 	v26_1_1(26, 1, 1),
 	v26_1_2(26, 1, 2);
-	
+
+	private static Software software;
+
 	private final int major;
 	private final int minor;
 	private final int patch;
 	
 	Version(int major, int minor) {
 		this(major, minor, 0);
+	}
+
+	public Software getSoftware() {
+		if (software != null) return software;
+
+		String name = Bukkit.getName();
+		for (Software software : Software.values()) {
+			for (String n : software.names) {
+				if (n.equalsIgnoreCase(name)) {
+					return Version.software = software;
+				}
+			}
+		}
+		return software;
 	}
 	
 	public boolean isAfter(Version version) {
@@ -106,5 +123,18 @@ public enum Version {
 			return minor < version.minor;
 		}
 		return patch < version.patch;
+	}
+
+	@Getter
+	public enum Software {
+		SPIGOT("Spigot"),
+		PAPER("Paper", "PaperSpigot"),
+		FALCHUS_SPIGOT("FalchusSpigot");
+
+		private final String[] names;
+
+		Software(String... names) {
+			this.names = names;
+		}
 	}
 }

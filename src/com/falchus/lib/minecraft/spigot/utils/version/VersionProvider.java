@@ -21,9 +21,35 @@ import lombok.experimental.UtilityClass;
 public class VersionProvider {
 
 	private static IVersionAdapter adapter;
+
+	private static IVersionAdapter load(String name) {
+		try {
+			String[] parts = Bukkit.getServer().getClass().getPackageName().split("\\.");
+			if (parts.length < 4) return null;
+			String ver = parts[3];
+			name = name != null
+				? "_" + name
+				: "";
+			return (IVersionAdapter) new ClassInstanceBuilder(
+				VersionProvider.class.getPackageName() + "." + ver + "." + VersionAdapter.class.getSimpleName() + "_" + ver + name
+			).build();
+		} catch (Exception ignored) {
+			return null;
+		}
+	}
 	
 	private static IVersionAdapter load() {
 		Version version = ServerUtils.getVersion();
+		Version.Software software = version.getSoftware();
+		if (software != null) {
+			for (String name : software.getNames()) {
+				IVersionAdapter adapter = load(name);
+				if (adapter != null) {
+					return adapter;
+				}
+			}
+		}
+
 		if (version.isAfter(Version.v1_20_6)) return new VersionAdapter_v1_21_R1();
 		if (version.isAfter(Version.v1_20_2)) return new VersionAdapter_v1_20_R4();
 		if (version.isAfter(Version.v1_16_5)) return new VersionAdapterModern();
@@ -31,17 +57,9 @@ public class VersionProvider {
 		if (version.isAfter(Version.v1_12_2)) return new VersionAdapter_v1_13_R1();
 		if (version.isAfter(Version.v1_8_8)) return new VersionAdapter_v1_9_R1();
 		if (version.isBefore(Version.v1_9)) return new VersionAdapter();
-		
-		try {
-	        String[] parts = Bukkit.getServer().getClass().getPackageName().split("\\.");
-	        if (parts.length >= 4) {
-	            String ver = parts[3];
-    			return (IVersionAdapter) new ClassInstanceBuilder(
-    				VersionProvider.class.getPackageName() + "." + ver + "." + VersionAdapter.class.getSimpleName() + "_" + ver
-    			).build();
-	        }
-		} catch (Exception ignored) {}
-		return new VersionAdapter();
+
+		IVersionAdapter adapter = load(null);
+		return adapter != null ? adapter : new VersionAdapter();
 	}
 	
 	public static IVersionAdapter get() {
