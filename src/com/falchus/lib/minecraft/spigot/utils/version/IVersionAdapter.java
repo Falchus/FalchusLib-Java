@@ -92,6 +92,11 @@ public interface IVersionAdapter {
 	void sendPacket(@NonNull Player player, @NonNull Object packet);
 	
 	/**
+	 * Receives a raw NMS packet from a player.
+	 */
+	void receivePacket(@NonNull Player player, @NonNull Object packet);
+	
+	/**
 	 * Sends a tablist to a player.
 	 */
 	void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name);

@@ -43,6 +43,13 @@ public class PlayerUtils {
 	}
 	
 	/**
+	 * Receives a packet from a player.
+	 */
+	public static void receivePacket(@NonNull Player player, @NonNull IPacketWrapper packet) {
+		VersionProvider.get().receivePacket(player, packet.getHandle());
+	}
+	
+	/**
 	 * Sends a tablist to a player.
 	 */
 	public static void sendTablist(@NonNull Player player, List<String> header, List<String> footer, String name) {

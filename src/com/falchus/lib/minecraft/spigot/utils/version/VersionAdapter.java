@@ -49,6 +49,9 @@ import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -614,6 +617,30 @@ public class VersionAdapter implements IVersionAdapter {
     		playerConnection_sendPacket.invoke(connection,
     			packet
     		);
+    	} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public void receivePacket(@NonNull Player player, @NonNull Object packet) {
+    	try {
+    		Object entityPlayer = getEntityPlayer(player);
+    		Object connection = entityPlayer_playerConnection.get(entityPlayer);
+    		Object networkManager = playerConnection_networkManager.get(connection);
+    		Channel channel = (Channel) networkManager_channel.get(networkManager);
+    		channel.eventLoop().execute(() -> {
+    			try {
+	    			ChannelHandlerContext ctx = channel.pipeline().context("packet_handler");
+	    			if (ctx == null) return;
+	    			
+	    			if (ctx.handler() instanceof ChannelInboundHandler handler) {
+	    				handler.channelRead(ctx, packet);
+	    			}
+    			} catch (Exception e) {
+    	            throw new RuntimeException(e);
+    	        }
+    		});
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }
