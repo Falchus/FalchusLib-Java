@@ -70,6 +70,11 @@ public class ItemListener implements Listener {
     
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-    	ItemUtils.inventoryCallbacks.remove(event.getInventory());
+    	Inventory inventory = event.getInventory();
+    	ItemUtils.inventoryCallbacks.remove(inventory);
+    	ItemUtils.clearActions(inventory);
+    	if (event.getPlayer() instanceof Player player) {
+    		ItemUtils.clearActions(player.getItemOnCursor());
+    	}
     }
 }

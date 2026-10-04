@@ -66,8 +66,8 @@ public class VersionAdapter implements IVersionAdapter {
 	
 	protected static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
-	final Map<Player, Object> bossBars = new HashMap<>();
-	final Map<Player, String> nametags = new HashMap<>();
+	final Map<UUID, Object> bossBars = new HashMap<>();
+	final Map<UUID, String> nametags = new HashMap<>();
 	
 	@Getter String packageOb = "org.bukkit.";
 	@Getter String packageObc = packageOb + "craftbukkit.";
@@ -688,12 +688,12 @@ public class VersionAdapter implements IVersionAdapter {
         IPacketWrapper metadataPacket = new WrappedPacketOutEntityMetadata(wither.getId(), wither.getDataWatcher(), true);
         PlayerUtils.sendPacket(player, metadataPacket);
         
-        bossBars.put(player, wither);
+        bossBars.put(player.getUniqueId(), wither);
     }
     
     @Override
     public void removeBossbar(@NonNull Player player) {
-		Object obj = bossBars.remove(player);
+		Object obj = bossBars.remove(player.getUniqueId());
 		if (obj instanceof EntityLiving wither) {
 			int id = wither.getId();
 			IPacketWrapper destroyPacket = new WrappedPacketOutEntityDestroy(id);
@@ -746,12 +746,12 @@ public class VersionAdapter implements IVersionAdapter {
         	PlayerUtils.sendPacket(onlinePlayer, updatePacket);
         }
         
-        nametags.put(player, teamName);
+        nametags.put(player.getUniqueId(), teamName);
     }
     
     @Override
     public void removeNametag(@NonNull Player player) {
-    	String teamName = nametags.remove(player);
+    	String teamName = nametags.remove(player.getUniqueId());
     	if (teamName == null) return;
 		
 		PacketScoreboardTeam removePacket = new WrappedPacketOutScoreboardTeam(WrappedPacketOutScoreboardTeam.Mode.REMOVE, teamName);

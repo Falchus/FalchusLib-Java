@@ -378,7 +378,7 @@ public class VersionAdapterModern extends VersionAdapter_v1_15_R1 {
     			player
     		);
     		
-    		bossBars.put(player, key);
+    		bossBars.put(player.getUniqueId(), key);
     	} catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -387,7 +387,7 @@ public class VersionAdapterModern extends VersionAdapter_v1_15_R1 {
     @Override
     public void removeBossbar(@NonNull Player player) {
     	try {
-    		Object key = bossBars.remove(player);
+    		Object key = bossBars.remove(player.getUniqueId());
     		if (key == null) return;
     		
     		bossBar_removeBossBar().invoke(getBukkitServer(),

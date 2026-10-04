@@ -27,6 +27,8 @@ public class ItemUtils {
     public static final Map<UUID, TriConsumer<Player, ItemStack, InventoryClickEvent>> itemActionsInventory = new HashMap<>();
     public static final Map<Inventory, TriConsumer<Player, ItemStack, InventoryClickEvent>> inventoryCallbacks = new HashMap<>();
 
+    private static final Set<UUID> permanent = new HashSet<>();
+    
     public static Consumer<PlayerInteractEvent> globalInteractCallback;
     public static Consumer<InventoryClickEvent> globalInventoryCallback;
 
@@ -49,6 +51,24 @@ public class ItemUtils {
      */
     public static ItemStack clearNBT(@NonNull ItemStack item) {
     	return VersionProvider.get().clearNBT(item);
+    }
+    
+    /**
+     * Sets the given item to permanent.
+     */
+    public static void setPermanent(@NonNull UUID uuid, boolean permanent) {
+    	if (permanent) {
+    		ItemUtils.permanent.add(uuid);
+    	} else {
+    		ItemUtils.permanent.remove(uuid);
+    	}
+    }
+    
+    /**
+     * @return {@code true} if permanent, else {@code false}
+     */
+    public static boolean isPermanent(@NonNull UUID uuid) {
+    	return permanent.contains(uuid);
     }
     
     /**
@@ -88,18 +108,38 @@ public class ItemUtils {
     	}
     	return null;
     }
+    
+    public static void clearActions(ItemStack item) {
+    	if (item == null) return;
+    	UUID uuid = getUUID(item);
+    	if (uuid == null || permanent.contains(uuid)) return;
+    	itemActions.remove(uuid);
+    	itemActionsInventory.remove(uuid);
+    }
+    
+    public static void clearActions(Inventory inventory) {
+    	if (inventory == null) return;
+    	for (ItemStack item : inventory.getContents()) {
+    		clearActions(item);
+    	}
+    }
+    
+    public static void clearActions(@NonNull Player player) {
+    	clearActions(player.getInventory());
+    	for (ItemStack item : player.getInventory().getArmorContents()) {
+    		clearActions(item);
+    	}
+    	clearActions(player.getItemOnCursor());
+    	
+    	Inventory top = player.getOpenInventory().getTopInventory();
+    	inventoryCallbacks.remove(top);
+    	if (top != player.getInventory()) {
+    		clearActions(top);
+    	}
+    }
 
     /**
      * Represents an item in an inventory.
      */
-    public record InventoryItem(int slot, @NonNull ItemStack item, Consumer<Player> onInventoryClick) {
-        /**
-         * Constructs a new InventoryItem.
-         */
-        public InventoryItem(int slot, @NonNull ItemStack item, Consumer<Player> onInventoryClick) {
-            this.slot = slot;
-            this.item = item;
-            this.onInventoryClick = onInventoryClick;
-        }
-    }
+    public record InventoryItem(int slot, @NonNull ItemStack item, Consumer<Player> onInventoryClick) {}
 }

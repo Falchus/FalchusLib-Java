@@ -170,6 +170,19 @@ public class ItemBuilder {
 		item = ItemUtils.setUUID(item, uuid);
 		return this;
 	}
+	
+	/**
+	 * Sets as permanent.
+	 */
+	public ItemBuilder permanent() {
+		UUID uuid = ItemUtils.getUUID(item);
+		if (uuid == null) {
+			uuid = UUID.randomUUID();
+			setUUID(uuid);
+		}
+		ItemUtils.setPermanent(uuid, true);
+		return this;
+	}
 
 	/**
 	 * Registers a callback to be executed when a player interacts.

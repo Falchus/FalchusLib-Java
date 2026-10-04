@@ -158,6 +158,16 @@ public class InventoryBuilder {
     	List<Inventory> pages = buildPages();
     	if (pages.isEmpty()) return;
     	
+    	if (page < 0) page = 0;
+    	if (page >= pages.size()) page = pages.size() - 1;
+    	
+    	for (int i = 0; i < pages.size(); i++) {
+    		if (i == page) continue;
+    		Inventory inventory  = pages.get(i);
+    		ItemUtils.inventoryCallbacks.remove(inventory);
+    		ItemUtils.clearActions(inventory);
+    	}
+    	
     	Inventory inventory = pages.get(page);
     	player.openInventory(inventory);
     	
@@ -196,14 +206,14 @@ public class InventoryBuilder {
 			inv.setItem(size - 9, new ItemBuilder(Material.PLAYER_HEAD).setName("§ePrevious page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWYxMzNlOTE5MTlkYjBhY2VmZGMyNzJkNjdmZDg3YjRiZTg4ZGM0NGE5NTg5NTg4MjQ0NzRlMjFlMDZkNTNlNiJ9fX0=").withInventoryClickListener(
 				(player, item, event) -> {
 					if (currentPage > 0) {
-						player.openInventory(pages.get(currentPage - 1));
+						openPage(player, currentPage - 1);
 					}
 				})
 			.build());
 			inv.setItem(size - 1, new ItemBuilder(Material.PLAYER_HEAD).setName("§eNext page").setSkullTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNmYzUyMjY0ZDhhZDllNjU0ZjQxNWJlZjAxYTIzOTQ3ZWRiY2NjY2Y2NDkzNzMyODliZWE0ZDE0OTU0MWY3MCJ9fX0=").withInventoryClickListener(
 				(player, item, event) -> {
 	                if (currentPage < totalPages - 1) {
-	                    player.openInventory(pages.get(currentPage + 1));
+	                	openPage(player, currentPage + 1);
 	                }
 				})
 			.build());

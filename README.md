@@ -412,8 +412,15 @@ static UUID getUUID(ItemStack item);
 
 static ItemStack clearNBT(ItemStack item);
 
+static void setPermanent(UUID uuid, boolean permanent);
+static boolean isPermanent(UUID uuid);
+
 static ItemStack[] itemStackArrayFromBase64(String base64);
 static String itemStackArrayToBase64(ItemStack[] items);
+
+static void clearActions(ItemStack item);
+static void clearActions(Inventory inventory);
+static void clearActions(Player player);
 ```
 
 `com.falchus.lib.minecraft.spigot.utils.PlayerUtils`
@@ -687,6 +694,8 @@ ItemBuilder setSkullOwner(String owner);
 ItemBuilder setSkullTexture(String texture);
 
 ItemBuilder setUUID(UUID uuid);
+
+ItemBuilder permanent();
 
 ItemBuilder withInteractListener(Consumer<Player> onPlayerInteract);
 ItemBuilder withInventoryClickListener(TriConsumer<Player, ItemStack, InventoryClickEvent> onInventoryClick);
