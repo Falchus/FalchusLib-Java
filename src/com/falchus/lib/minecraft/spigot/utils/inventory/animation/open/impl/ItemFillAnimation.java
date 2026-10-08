@@ -22,7 +22,7 @@ public class ItemFillAnimation extends InventoryOpenAnimation {
 		ItemStack item = items[tick];
 		if (item != null) {
 			inventory.setItem(tick, item);
-			PlayerUtils.playSound(player, player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 2);
+			PlayerUtils.playSound(player, player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 2);
 		}
 	}
 }

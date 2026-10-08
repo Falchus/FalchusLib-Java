@@ -7,13 +7,11 @@ import com.falchus.lib.enums.TaskPriority;
 import com.falchus.lib.task.Promise;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
 import com.falchus.lib.minecraft.spigot.enums.GameRule;
-import com.falchus.lib.minecraft.spigot.enums.Version;
 import com.falchus.lib.minecraft.spigot.utils.version.VersionProvider;
 import com.falchus.lib.minecraft.spigot.wrapper.world.AxisAlignedBB;
 
@@ -89,26 +87,6 @@ public class WorldUtils {
 			}
 		}
 		return blocks;
-	}
-	
-	/**
-	 * @return {@link Biome}
-	 */
-	public static Biome getBiome(com.falchus.lib.minecraft.spigot.enums.Biome biome) {
-		if (ServerUtils.getVersion().isBefore(Version.v1_17)) {
-			return Biome.valueOf(biome.name());
-		}
-		return Biome.valueOf(biome.getModernName());
-	}
-	
-	/**
-	 * @return {@link Material}
-	 */
-	public static Material getMaterial(com.falchus.lib.minecraft.spigot.enums.Material material) {
-		if (ServerUtils.getVersion().isBefore(Version.v1_13)) {
-			return Material.valueOf(material.getLegacyName());
-		}
-		return Material.valueOf(material.name());
 	}
 
 	/**

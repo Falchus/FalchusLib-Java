@@ -763,7 +763,7 @@ public class VersionAdapter implements IVersionAdapter {
     
     @Override
     public void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
-    	player.playSound(location, org.bukkit.Sound.valueOf(sound.name()), volume, pitch);
+    	player.playSound(location, sound.toBukkit(), volume, pitch);
     }
     
     @Override
@@ -992,7 +992,7 @@ public class VersionAdapter implements IVersionAdapter {
     
     @Override
     public void setGameRule(@NonNull World world, @NonNull GameRule gameRule, @NonNull String value) {
-    	world.setGameRuleValue(gameRule.getKey(), value);
+    	world.setGameRuleValue(gameRule.getName(), value);
     }
 	
     @Override
@@ -1072,7 +1072,6 @@ public class VersionAdapter implements IVersionAdapter {
                 case "MEGA_SPRUCE_TAIGA_HILLS" -> 161;
                 case "TAIGA_HILLS" -> 19;
                 case "TAIGA_MOUNTAINS" -> 133;
-
                 default -> 1;
             };
 		}

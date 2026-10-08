@@ -400,7 +400,7 @@ public class VersionAdapterModern extends VersionAdapter_v1_15_R1 {
     
     @Override
     public void playSound(@NonNull Player player, @NonNull Location location, @NonNull Sound sound, float volume, float pitch) {
-    	player.playSound(location, org.bukkit.Sound.valueOf(sound.getModernName()), volume, pitch);
+    	player.playSound(location, sound.toBukkit(), volume, pitch);
     }
 
 	@Override

@@ -499,10 +499,6 @@ static Object getWorld(World world);
 static Object getWorldServer(World world);
 
 static List<WrappedAxisAlignedBB> getCollidingBlocks(World world, WrappedAxisAlignedBB axisAlignedBB);
-
-static Biome getBiome(com.falchus.lib.minecraft.spigot.enums.Biome biome);
-
-static Material getMaterial(com.falchus.lib.minecraft.spigot.enums.Material material);
 ```
 
 ##### Commands
