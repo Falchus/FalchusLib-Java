@@ -10,6 +10,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ServerUtils {
+	
+	private static Version version;
 
 	/**
 	 * @return MinecraftServer
@@ -29,19 +31,23 @@ public class ServerUtils {
 	 * @return {@link Version}
 	 */
 	public static Version getVersion() {
-		int major = getMajorVersion();
-		int minor = getMinorVersion();
-		
-		Version version = null;
-		for (Version v : Version.values()) {
-			if (v.getMajor() < major || (v.getMajor() == major && v.getMinor() <= minor)) {
-	            if (version == null || v.isAfter(version)) {
-	            	version = v;
-	            }
-			}
-		}
 		if (version == null) {
-			throw new IllegalStateException("Unsupported server version: " + getVersionString());
+			int major = getMajorVersion();
+			int minor = getMinorVersion();
+			int patch = getPatchVersion();
+			
+			for (Version v : Version.values()) {
+				if (v.getMajor() < major
+						|| (v.getMajor() == major && v.getMinor() < minor)
+						|| (v.getMajor() == major && v.getMinor() == minor && v.getPatch() <= patch)) {
+		            if (version == null || v.isAfter(version)) {
+		            	version = v;
+		            }
+				}
+			}
+			if (version == null) {
+				throw new IllegalStateException("Unsupported server version: " + getVersionString());
+			}
 		}
 		return version;
 	}

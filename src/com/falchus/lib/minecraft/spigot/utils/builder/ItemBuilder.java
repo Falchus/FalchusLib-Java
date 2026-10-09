@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.falchus.lib.interfaces.consumer.TriConsumer;
+import com.falchus.lib.minecraft.spigot.enums.Material;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
 import com.falchus.lib.utils.reflection.ReflectionUtils;
 import com.mojang.authlib.GameProfile;
@@ -29,22 +29,22 @@ public class ItemBuilder {
 	/**
 	 * Creates an ItemBuilder for the given material and amount.
 	 */
-	public ItemBuilder(@NonNull Material material, int amount) {
+	public ItemBuilder(@NonNull org.bukkit.Material material, int amount) {
 		item = new ItemStack(material, amount);
 	}
 	
 	/**
 	 * Creates an ItemBuilder for the given material.
 	 */
-	public ItemBuilder(@NonNull Material material) {
+	public ItemBuilder(@NonNull org.bukkit.Material material) {
 		this(material, 1);
 	}
 	
 	/**
 	 * Creates an ItemBuilder for the given material and amount.
 	 */
-	public ItemBuilder(@NonNull com.falchus.lib.minecraft.spigot.enums.Material material, int amount) {
-		Material mat = material.toBukkit();
+	public ItemBuilder(@NonNull Material material, int amount) {
+		org.bukkit.Material mat = material.toBukkit();
 		Integer durability = material.getDurability();
 		this.item = durability != null
 			? new ItemStack(mat, amount, durability.shortValue())
@@ -54,7 +54,7 @@ public class ItemBuilder {
 	/**
 	 * Creates an ItemBuilder for the given material.
 	 */
-	public ItemBuilder(@NonNull com.falchus.lib.minecraft.spigot.enums.Material material) {
+	public ItemBuilder(@NonNull Material material) {
 		this(material, 1);
 	}
 	
@@ -130,7 +130,7 @@ public class ItemBuilder {
 	 * Sets the skull owner.
 	 */
 	public ItemBuilder setSkullOwner(@NonNull String owner) {
-		if (item.getType() == com.falchus.lib.minecraft.spigot.enums.Material.PLAYER_HEAD.toBukkit()) {
+		if (item.getType() == Material.PLAYER_HEAD.toBukkit()) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if (meta != null) {
 				meta.setOwner(owner);
@@ -144,7 +144,7 @@ public class ItemBuilder {
 	 * Sets a custom skull texture using a Base64 texture string.
 	 */
 	public ItemBuilder setSkullTexture(@NonNull String texture) {
-		if (item.getType() == com.falchus.lib.minecraft.spigot.enums.Material.PLAYER_HEAD.toBukkit()) {
+		if (item.getType() == Material.PLAYER_HEAD.toBukkit()) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if (meta != null) {
 				GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);

@@ -120,7 +120,8 @@ public enum Sound {
 	BLOCK_NOTE_BLOCK_GUITAR(
 		v -> switch (v) {
 			case v1_8_8 -> "NOTE_BASS_GUITAR";
-			case v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2, v1_12, v1_12_1, v1_12_2 -> "BLOCK_NOTE_GUITAR";
+			case v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2 -> "BLOCK_NOTE_BASS";
+			case v1_12, v1_12_1, v1_12_2 -> "BLOCK_NOTE_GUITAR";
 			default -> null;
 		}
 	),
@@ -227,6 +228,7 @@ public enum Sound {
 	BLOCK_WOODEN_BUTTON_CLICK_OFF(
 		v -> switch (v) {
 			case v1_8_8 -> "WOOD_CLICK";
+			case v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2, v1_12, v1_12_1, v1_12_2 -> "BLOCK_WOOD_BUTTON_CLICK_OFF";
 			default -> null;
 		}
 	),
@@ -564,6 +566,7 @@ public enum Sound {
 	ENTITY_FISHING_BOBBER_SPLASH(
 		v -> switch (v) {
 			case v1_8_8 -> "SPLASH2";
+			case v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2, v1_12, v1_12_1, v1_12_2 -> "ENTITY_BOBBER_SPLASH";
 			default -> null;
 		}
 	),
@@ -1211,6 +1214,19 @@ public enum Sound {
 			}
 		}
 		return name();
+	}
+	
+	public static Sound ofBukkit(org.bukkit.Sound sound) {
+		String name = sound.name();
+		try {
+			return Sound.valueOf(name);
+		} catch (Exception e) {}
+		for (Sound value : values()) {
+			if (value.getName().equals(name)) {
+				return value;
+			}
+		}
+		return null;
 	}
 
 	public org.bukkit.Sound toBukkit() {

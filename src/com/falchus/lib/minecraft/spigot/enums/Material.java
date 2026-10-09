@@ -3438,6 +3438,24 @@ public enum Material {
 	public Integer getDurability() {
 		return durability != null ? durability.apply(ServerUtils.getVersion()) : null;
 	}
+	
+	public static Material ofBukkit(org.bukkit.Material material) {
+		String name = material.name();
+		try {
+			return Material.valueOf(name);
+		} catch (Exception e) {}
+		Material found = null;
+		for (Material value : values()) {
+			if (!value.getName().equals(name)) continue;
+			Integer durability = value.getDurability();
+			if (durability == null || durability == 0) return value;
+			
+			if (found == null) {
+				found = value;
+			}
+		}
+		return found;
+	}
 
 	public org.bukkit.Material toBukkit() {
 		return org.bukkit.Material.valueOf(getName());

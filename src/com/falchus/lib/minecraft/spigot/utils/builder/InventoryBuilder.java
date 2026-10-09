@@ -135,7 +135,7 @@ public class InventoryBuilder {
      * Defines a default filler item that will be placed in all unused slots.
      */
     public InventoryBuilder fill() {
-        this.filler = new ItemBuilder(com.falchus.lib.minecraft.spigot.enums.Material.GRAY_STAINED_GLASS_PANE).setName("§r").build();
+        this.filler = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName("§r").build();
         return this;
     }
     
