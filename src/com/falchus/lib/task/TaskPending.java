@@ -3,7 +3,6 @@ package com.falchus.lib.task;
 import com.falchus.lib.enums.TaskPriority;
 import lombok.NonNull;
 
-import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -57,7 +56,7 @@ public class TaskPending<T> extends Promise<T> implements Runnable {
 
     public TaskPending<T> submit() {
         if (started.get()) {
-            throw new RejectedExecutionException("Task has been shut down");
+        	return this;
         }
 
         for (;;) {
