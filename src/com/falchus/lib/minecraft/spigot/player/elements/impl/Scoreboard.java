@@ -14,6 +14,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.score.Wrapped
 import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.WrappedPacketOutScoreboardTeam;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardObjective;
 import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardScore;
 import com.falchus.lib.minecraft.spigot.wrapper.world.scores.ScoreboardTeam;
@@ -47,8 +48,12 @@ public class Scoreboard extends PlayerElement {
 		
 		updateRunnable = () -> {
 			String newTitle = titleSupplier.apply(frame, player);
-			if (newTitle.length() > 32) {
-				newTitle = newTitle.substring(0, 32);
+			int maxTitle = switch (ServerUtils.getVersion()) {
+				case v1_8_8, v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2, v1_12, v1_12_1, v1_12_2 -> 32;
+				default -> 128;
+			};
+			if (newTitle.length() > maxTitle) {
+				newTitle = newTitle.substring(0, maxTitle);
 			}
 			objective.setDisplayName(newTitle);
 			PlayerUtils.sendPacket(player, new WrappedPacketOutScoreboardObjective(objective, 2));
@@ -71,8 +76,8 @@ public class Scoreboard extends PlayerElement {
 		    for (String line : newLines) {
 		        if (line.isEmpty()) {
 		        	line = "§r";
-		        } else if (line.length() > 32) {
-		            line = line.substring(0, 32);
+		        } else if (line.length() > maxTitle) {
+		            line = line.substring(0, maxTitle);
 		        }
 		
 		        String teamName = getClass().getSimpleName() + "_" + score;
@@ -87,10 +92,13 @@ public class Scoreboard extends PlayerElement {
 		        	scoreboard.addPlayerToTeam(entry, team);
 		        }
 		        
-		        int maxLength = 16;
+		        int maxLength = switch (ServerUtils.getVersion()) {
+					case v1_8_8, v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2, v1_12, v1_12_1, v1_12_2 -> 16;
+					default -> 64;
+				};
 		        String prefix = line;
 		        String suffix = "";
-		        if (prefix.length() > 16) {
+		        if (prefix.length() > maxLength) {
 		        	int index = line.charAt(maxLength - 1) == ChatColor.COLOR_CHAR
 		        			? (maxLength - 1) : maxLength;
 		        	prefix = line.substring(0, index);
@@ -104,6 +112,9 @@ public class Scoreboard extends PlayerElement {
 		        	String color = ChatColor.getLastColors(prefix);
 		        	boolean addColor = chatColor == null || chatColor.isFormat();
 		        	suffix = (addColor ? (color.isEmpty() ? ChatColor.RESET.toString() : color) : "") + suffixTmp;
+		        	if (suffix.length() > maxLength) {
+		        		suffix = suffix.substring(0, maxLength);
+		        	}
 		        }
 		        team.setPrefix(prefix);
 		        team.setSuffix(suffix);

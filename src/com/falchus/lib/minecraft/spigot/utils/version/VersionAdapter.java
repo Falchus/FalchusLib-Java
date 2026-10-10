@@ -34,6 +34,7 @@ import com.falchus.lib.minecraft.spigot.packets.wrapper.scoreboard.team.WrappedP
 import com.falchus.lib.minecraft.spigot.packets.wrapper.spawn.entity.WrappedPacketOutSpawnEntityLiving;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
 import com.falchus.lib.minecraft.spigot.utils.SchedulerUtils;
+import com.falchus.lib.minecraft.spigot.utils.ServerUtils;
 import com.falchus.lib.minecraft.spigot.utils.builder.GameProfileBuilder;
 import com.falchus.lib.minecraft.spigot.wrapper.SpigotWrapper;
 import com.falchus.lib.minecraft.spigot.wrapper.network.chat.Component;
@@ -728,6 +729,16 @@ public class VersionAdapter implements IVersionAdapter {
 		String teamName = String.format("%08x", s) + player.getName();
 		if (teamName.length() > 16) {
 			teamName = teamName.substring(0, 16);
+		}
+		int max = switch (ServerUtils.getVersion()) {
+			case v1_8_8, v1_9, v1_9_2, v1_9_4, v1_10, v1_10_2, v1_11, v1_11_1, v1_11_2, v1_12, v1_12_1, v1_12_2 -> 16;
+			default -> 64;
+		};
+		if (prefix.length() > max) {
+			prefix = prefix.substring(0, max);
+		}
+		if (suffix.length() > max) {
+			suffix = suffix.substring(0, max);
 		}
 		
 		ScoreboardTeam team = new WrappedScoreboardTeam(teamName);
