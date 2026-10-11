@@ -43,7 +43,6 @@ public class LobbyCancelListener implements Listener {
 			EntityDamageEvent.class,
 			EntityExplodeEvent.class,
 			EntityInteractEvent.class,
-			EntitySpawnEvent.class,
 			EntityTargetEvent.class,
 			EntityTeleportEvent.class,
 			FoodLevelChangeEvent.class,
