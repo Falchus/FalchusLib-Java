@@ -1,5 +1,6 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
+import com.falchus.lib.cache.Cache;
 import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.*;
 import com.mojang.authlib.GameProfile;
@@ -7,16 +8,14 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.util.UUIDTypeAdapter;
 
-import lombok.AllArgsConstructor;
-
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class GameProfileBuilder {
 
@@ -25,9 +24,17 @@ public class GameProfileBuilder {
     private static final String jsonCape = "{\"timestamp\":%d,\"profileId\":\"%s\",\"profileName\":\"%s\",\"isPublic\":true,\"textures\":{\"SKIN\":{\"url\":\"%s\"},\"CAPE\":{\"url\":\"%s\"}}}";
 
     private static final Gson gson = new GsonBuilder().disableHtmlEscaping().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(GameProfile.class, new GameProfileSerializer()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
-    private static final HashMap<UUID, CachedProfile> cache = new HashMap<>();
-    private static long cacheTime = -1;
+    private static final Cache<UUID, GameProfile> cache = Cache.of()
+    		.maxSize(5000)
+    		.loader(GameProfileBuilder::load);
 
+    private static GameProfile load(UUID uuid) {
+    	String json = HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid)));
+    	if (json == null) return null;
+    	
+    	return gson.fromJson(json, GameProfile.class);
+    }
+    
     /**
      * Don't run in main thread!
      * <p>
@@ -50,16 +57,10 @@ public class GameProfileBuilder {
      * @return {@link GameProfile}
      */
     public static GameProfile fetch(UUID uuid, boolean forceNew) {
-        if (!forceNew && cache.containsKey(uuid) && cache.get(uuid).isValid()) {
-            return cache.get(uuid).profile;
-        }
-        
-        String json = HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid)));
-        if (json == null) return null;
-        
-        GameProfile result = gson.fromJson(json, GameProfile.class);
-        cache.put(uuid, new CachedProfile(result));
-        return result;
+    	if (forceNew) {
+    		cache.remove(uuid);
+    	}
+        return cache.get(uuid);
     }
 
     /**
@@ -106,7 +107,7 @@ public class GameProfileBuilder {
      * @param	time cache time (default = -1)
      */
     public static void setCacheTime(long time) {
-        cacheTime = time;
+    	cache.expireAfterWrite(time < 0 ? 0 : time, TimeUnit.MILLISECONDS);
     }
 
     private static class GameProfileSerializer implements JsonSerializer<GameProfile>, JsonDeserializer<GameProfile> {
@@ -139,16 +140,5 @@ public class GameProfileBuilder {
             return result;
         }
 
-    }
-
-    @AllArgsConstructor
-    private static class CachedProfile {
-
-        private final long timestamp = System.currentTimeMillis();
-        private final GameProfile profile;
-
-        public boolean isValid() {
-            return cacheTime < 0 || (System.currentTimeMillis() - timestamp) < cacheTime;
-        }
     }
 }

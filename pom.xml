@@ -41,6 +41,12 @@
   		<version>${lombok.version}</version>
   		<scope>provided</scope>
   	</dependency>
+
+	<dependency>
+		<groupId>javax.cache</groupId>
+		<artifactId>cache-api</artifactId>
+		<version>1.1.1</version>
+	</dependency>
   
 	<dependency>
 		<groupId>com.velocitypowered</groupId>
@@ -91,6 +97,7 @@
         <includes>
         	<include>plugin.yml</include>
         	<include>velocity-plugin.json</include>
+        	<include>META-INF/services/**</include>
         </includes>
         <excludes>
           <exclude>**/*.java</exclude>
