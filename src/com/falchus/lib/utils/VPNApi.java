@@ -1,5 +1,6 @@
 package com.falchus.lib.utils;
 
+import com.falchus.lib.task.Promise;
 import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -16,18 +17,19 @@ public class VPNApi {
 	 * 
 	 * @return {@code true} if it is, {@code false} otherwise.
 	 */
-	public static boolean isVPN(@NonNull String ip, String apiKey) {
+	public static Promise<Boolean> isVPN(@NonNull String ip, String apiKey) {
 		String url = "https://vpnapi.io/api/" + ip;
 		if (apiKey != null && !apiKey.isEmpty()) {
 			url += "?key=" + apiKey;
 		}
 		
-		String body = HTTPRequest.get(url);
-		if (body == null) return false;
-		
-		JsonObject json = JsonParser.parseString(body).getAsJsonObject();
-		return json.has("security") &&
-				json.getAsJsonObject("security").has("vpn") &&
-				json.getAsJsonObject("security").get("vpn").getAsBoolean();
+		return HTTPRequest.get(url).thenApply(body -> {
+			if (body == null) return false;
+			
+			JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+			return json.has("security") &&
+					json.getAsJsonObject("security").has("vpn") &&
+					json.getAsJsonObject("security").get("vpn").getAsBoolean();
+		});
 	}
 }

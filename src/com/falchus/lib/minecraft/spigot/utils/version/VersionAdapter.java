@@ -821,14 +821,14 @@ public class VersionAdapter implements IVersionAdapter {
 		    PlayerUtils.skins.put(player.getUniqueId(), textures.iterator().next());
 		}
 		
-		GameProfile skinProfile = GameProfileBuilder.fetch(uuid);
-		
-		profile.getProperties().removeAll("textures");
-		for (Property property : skinProfile.getProperties().get("textures")) {
-			profile.getProperties().put("textures", property);
-		}
-		
-		refresh(player);
+		GameProfileBuilder.fetch(uuid).thenAccept(skinProfile -> {
+			profile.getProperties().removeAll("textures");
+			for (Property property : skinProfile.getProperties().get("textures")) {
+				profile.getProperties().put("textures", property);
+			}
+			
+			refresh(player);
+		});
     }
     
     @Override

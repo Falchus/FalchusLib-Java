@@ -1,9 +1,11 @@
 package com.falchus.lib.task;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.falchus.lib.task.impl.TaskImpl;
@@ -58,6 +60,12 @@ public class Promise<T> extends CompletableFuture<T> {
 		return runAsync(runnable, async);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <U> Promise<U> thenApply(@NonNull Function<? super T,? extends U> function) {
+		return (Promise<U>) thenApplyAsync(function, sync);
+	}
+	
 	@Override
 	public Promise<Void> thenAccept(@NonNull Consumer<? super T> action) {
 		return (Promise<Void>) thenAcceptAsync(action, sync);
@@ -66,6 +74,11 @@ public class Promise<T> extends CompletableFuture<T> {
 	@Override
 	public Promise<Void> thenRun(@NonNull Runnable action) {
 		return (Promise<Void>) thenRunAsync(action, sync);
+	}
+	
+	@Override
+	public <U> Promise<U> thenCompose(@NonNull Function<? super T, ? extends CompletionStage<U>> function) {
+		return (Promise<U>) thenComposeAsync(function, sync);
 	}
 	
 	@Override

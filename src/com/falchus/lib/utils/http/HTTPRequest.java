@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.falchus.lib.task.Promise;
+
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
@@ -26,119 +28,121 @@ public class HTTPRequest {
 	
 	private static final Pattern etagJsonPattern = Pattern.compile("\"etag\"\\s*:\\s*\"([^\"]+)\"", Pattern.CASE_INSENSITIVE);
 	
-	public static String get(@NonNull String url, Map<String, String> headers) {
+	public static Promise<String> get(@NonNull String url, Map<String, String> headers) {
 		return request("GET", url, headers, null);
 	}
 	
-	public static String get(@NonNull String url) {
+	public static Promise<String> get(@NonNull String url) {
 		return get(url, null);
 	}
 	
-	public static String post(@NonNull String url, Map<String, String> headers, String body) {
+	public static Promise<String> post(@NonNull String url, Map<String, String> headers, String body) {
 		return request("POST", url, headers, body);
 	}
 	
-	public static String post(@NonNull String url, String body) {
+	public static Promise<String> post(@NonNull String url, String body) {
 		return post(url, null, body);
 	}
 	
-	public static String put(@NonNull String url, Map<String, String> headers, String body) {
+	public static Promise<String> put(@NonNull String url, Map<String, String> headers, String body) {
 		return request("PUT", url, headers, body);
 	}
 	
-	public static String put(@NonNull String url, String body) {
+	public static Promise<String> put(@NonNull String url, String body) {
 		return put(url, null, body);
 	}
 	
-	public static String delete(@NonNull String url, Map<String, String> headers) {
+	public static Promise<String> delete(@NonNull String url, Map<String, String> headers) {
 		return request("DELETE", url, headers, null);
 	}
 	
-	public static String delete(@NonNull String url) {
+	public static Promise<String> delete(@NonNull String url) {
 		return delete(url, null);
 	}
 	
-	public static String head(@NonNull String url, Map<String, String> headers) {
+	public static Promise<String> head(@NonNull String url, Map<String, String> headers) {
 		return request("HEAD", url, headers, null);
 	}
 	
-	public static String head(@NonNull String url) {
+	public static Promise<String> head(@NonNull String url) {
 		return head(url, null);
 	}
 	
-	public static String request(@NonNull String method, @NonNull String url, Map<String, String> headers, String body) {
-		try {
-			Builder builder = HttpRequest.newBuilder()
-					.uri(URI.create(url));
-			
-			if (headers != null) {
-				headers.forEach(builder::header);
-			}
-			
-			method = method.toUpperCase();
-			String activeEtag = etags.get(url);
-			
-			BodyPublisher publisher = body == null
-					? BodyPublishers.noBody()
-					: BodyPublishers.ofString(body);
-			switch (method) {
-				case "POST":
-					builder.POST(publisher);
-					break;
-				case "PUT":
-					if (activeEtag != null) builder.header("If-Match", activeEtag);
-					builder.PUT(publisher);
-					break;
-				case "DELETE":
-					if (activeEtag != null) builder.header("If-Match", activeEtag);
-					builder.method("DELETE", publisher);
-					break;
-				case "HEAD":
-					builder.HEAD();
-					break;
-					
-				case "GET":
-				default:
-					if (activeEtag != null) builder.header("If-None-Match", activeEtag);
-					builder.GET();
-					break;
-			}
-			
-			HttpRequest request = builder.build();
-			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-			int code = response.statusCode();
-			if (code == 304) {
-				return cache.getOrDefault(url, "{}");
-			}
-			if (code < 200 || code >= 300) return null;
-			
-			String responseBody = response.body();
-			if (method.equals("GET") || method.equals("PUT")) {
-				String etag = response.headers().map().entrySet().stream()
-					.filter(entry -> entry.getKey().equalsIgnoreCase("etag"))
-					.map(entry -> entry.getValue().getFirst())
-					.findFirst()
-					.orElse(null);
-				if (etag == null && responseBody != null) {
-					Matcher matcher = etagJsonPattern.matcher(responseBody);
-					if (matcher.find()) {
-						etag = matcher.group(1);
-					}
+	public static Promise<String> request(@NonNull String method, @NonNull String url, Map<String, String> headers, String body) {
+		return Promise.supplyAsync(() -> {
+			try {
+				Builder builder = HttpRequest.newBuilder()
+						.uri(URI.create(url));
+				
+				if (headers != null) {
+					headers.forEach(builder::header);
 				}
 				
-				if (etag != null) {
-					etags.put(url, etag);
-					cache.put(url, responseBody);
+				String m = method.toUpperCase();
+				String activeEtag = etags.get(url);
+				
+				BodyPublisher publisher = body == null
+						? BodyPublishers.noBody()
+						: BodyPublishers.ofString(body);
+				switch (m) {
+					case "POST":
+						builder.POST(publisher);
+						break;
+					case "PUT":
+						if (activeEtag != null) builder.header("If-Match", activeEtag);
+						builder.PUT(publisher);
+						break;
+					case "DELETE":
+						if (activeEtag != null) builder.header("If-Match", activeEtag);
+						builder.method("DELETE", publisher);
+						break;
+					case "HEAD":
+						builder.HEAD();
+						break;
+						
+					case "GET":
+					default:
+						if (activeEtag != null) builder.header("If-None-Match", activeEtag);
+						builder.GET();
+						break;
 				}
-			} else if (method.equals("DELETE")) {
-				etags.remove(url);
-				cache.remove(url);
+				
+				HttpRequest request = builder.build();
+				HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+				int code = response.statusCode();
+				if (code == 304) {
+					return cache.getOrDefault(url, "{}");
+				}
+				if (code < 200 || code >= 300) return null;
+				
+				String responseBody = response.body();
+				if (m.equals("GET") || m.equals("PUT")) {
+					String etag = response.headers().map().entrySet().stream()
+						.filter(entry -> entry.getKey().equalsIgnoreCase("etag"))
+						.map(entry -> entry.getValue().getFirst())
+						.findFirst()
+						.orElse(null);
+					if (etag == null && responseBody != null) {
+						Matcher matcher = etagJsonPattern.matcher(responseBody);
+						if (matcher.find()) {
+							etag = matcher.group(1);
+						}
+					}
+					
+					if (etag != null) {
+						etags.put(url, etag);
+						cache.put(url, responseBody);
+					}
+				} else if (m.equals("DELETE")) {
+					etags.remove(url);
+					cache.remove(url);
+				}
+				
+	            return responseBody;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
 			}
-			
-            return responseBody;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		});
 	}
 }

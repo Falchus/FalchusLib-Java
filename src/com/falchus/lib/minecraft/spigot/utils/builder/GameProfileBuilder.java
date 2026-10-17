@@ -1,6 +1,7 @@
 package com.falchus.lib.minecraft.spigot.utils.builder;
 
 import com.falchus.lib.cache.Cache;
+import com.falchus.lib.task.Promise;
 import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.*;
 import com.mojang.authlib.GameProfile;
@@ -25,15 +26,7 @@ public class GameProfileBuilder {
 
     private static final Gson gson = new GsonBuilder().disableHtmlEscaping().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).registerTypeAdapter(GameProfile.class, new GameProfileSerializer()).registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer()).create();
     private static final Cache<UUID, GameProfile> cache = Cache.of()
-    		.maxSize(5000)
-    		.loader(GameProfileBuilder::load);
-
-    private static GameProfile load(UUID uuid) {
-    	String json = HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid)));
-    	if (json == null) return null;
-    	
-    	return gson.fromJson(json, GameProfile.class);
-    }
+    		.maxSize(5000);
     
     /**
      * Don't run in main thread!
@@ -43,7 +36,7 @@ public class GameProfileBuilder {
      * @param uuid	The player uuid
      * @return {@link GameProfile}
      */
-    public static GameProfile fetch(UUID uuid) {
+    public static Promise<GameProfile> fetch(UUID uuid) {
         return fetch(uuid, false);
     }
 
@@ -56,11 +49,23 @@ public class GameProfileBuilder {
      * @param forceNew	If true the cache is ignored
      * @return {@link GameProfile}
      */
-    public static GameProfile fetch(UUID uuid, boolean forceNew) {
+    public static Promise<GameProfile> fetch(UUID uuid, boolean forceNew) {
     	if (forceNew) {
     		cache.remove(uuid);
     	}
-        return cache.get(uuid);
+    	
+    	GameProfile hit = cache.getIfPresent(uuid);
+    	if (hit != null) return Promise.of(hit);
+    	
+        return HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid))).thenApply(json -> {
+        	if (json == null) return null;
+        	
+        	GameProfile profile = gson.fromJson(json, GameProfile.class);
+        	if (profile != null) {
+        		cache.put(uuid, profile);
+        	}
+        	return profile;
+        });
     }
 
     /**

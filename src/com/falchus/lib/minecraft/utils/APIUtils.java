@@ -2,6 +2,7 @@ package com.falchus.lib.minecraft.utils;
 
 import java.util.UUID;
 
+import com.falchus.lib.task.Promise;
 import com.falchus.lib.utils.http.HTTPRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -17,18 +18,19 @@ public class APIUtils {
 	 * 
 	 * @return the player's {@link UUID}
 	 */
-    public static UUID getUUID(@NonNull String username) {
-    	String body = HTTPRequest.get("https://api.mojang.com/users/profiles/minecraft/" + username);
-        if (body == null) return null;
-
-    	JsonObject json = JsonParser.parseString(body).getAsJsonObject();
-    	String id = json.get("id").getAsString();
-    	
-        String uuid = id.replaceFirst(
-            "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w+)",
-            "$1-$2-$3-$4-$5"
-        );
-        return UUID.fromString(uuid);
+    public static Promise<UUID> getUUID(@NonNull String username) {
+    	return HTTPRequest.get("https://api.mojang.com/users/profiles/minecraft/" + username).thenApply(body -> {
+    		if (body == null) return null;
+    		
+    		JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+    		String id = json.get("id").getAsString();
+    		
+            String uuid = id.replaceFirst(
+                "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w+)",
+                "$1-$2-$3-$4-$5"
+            );
+            return UUID.fromString(uuid);
+    	});
     }
     
     /**
@@ -36,11 +38,12 @@ public class APIUtils {
      * 
      * @return the player's username {@link String}
 	 */
-    public static String getName(@NonNull String uuid) {
-        String body = HTTPRequest.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", ""));
-        if (body == null) return null;
-
-    	JsonObject json = JsonParser.parseString(body).getAsJsonObject();
-    	return json.get("name").getAsString();
+    public static Promise<String> getName(@NonNull String uuid) {
+        return HTTPRequest.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", "")).thenApply(body -> {
+	        if (body == null) return null;
+	
+	    	JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+	    	return json.get("name").getAsString();
+        });
     }
 }
