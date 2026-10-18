@@ -55,6 +55,10 @@ public class HTTPServer {
             byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
             exchange.getResponseHeaders().set("Content-Type", contentType);
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+            if ("HEAD".equalsIgnoreCase(exchange.getRequestMethod())) {
+            	exchange.sendResponseHeaders(statusCode, -1);
+            	return;
+            }
             exchange.sendResponseHeaders(statusCode, bytes.length);
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(bytes);
