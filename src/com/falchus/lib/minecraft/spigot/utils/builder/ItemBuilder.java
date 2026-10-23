@@ -3,11 +3,12 @@ package com.falchus.lib.minecraft.spigot.utils.builder;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -183,7 +184,7 @@ public class ItemBuilder {
 	/**
 	 * Registers a callback to be executed when a player interacts.
 	 */
-	public ItemBuilder withInteractListener(@NonNull Consumer<Player> onPlayerInteract) {
+	public ItemBuilder withInteractListener(@NonNull BiConsumer<Player, PlayerInteractEvent> onPlayerInteract) {
 	    UUID uuid = ItemUtils.getUUID(item);
 	    if (uuid == null) {
 	        uuid = UUID.randomUUID();

@@ -3,6 +3,7 @@ package com.falchus.lib.minecraft.spigot.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ItemUtils {
 	
-	public static final Map<UUID, Consumer<Player>> itemActions = new HashMap<>();
+	public static final Map<UUID, BiConsumer<Player, PlayerInteractEvent>> itemActions = new HashMap<>();
     public static final Map<UUID, TriConsumer<Player, ItemStack, InventoryClickEvent>> itemActionsInventory = new HashMap<>();
     public static final Map<Inventory, TriConsumer<Player, ItemStack, InventoryClickEvent>> inventoryCallbacks = new HashMap<>();
 

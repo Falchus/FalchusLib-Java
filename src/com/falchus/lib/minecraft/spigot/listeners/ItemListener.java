@@ -1,7 +1,7 @@
 package com.falchus.lib.minecraft.spigot.listeners;
 
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -32,10 +32,10 @@ public class ItemListener implements Listener {
     	
         UUID uuid = ItemUtils.getUUID(item);
         if (uuid != null) {
-            Consumer<Player> action = ItemUtils.itemActions.get(uuid);
+            BiConsumer<Player, PlayerInteractEvent> action = ItemUtils.itemActions.get(uuid);
             if (action != null) {
                 event.setCancelled(true);
-                action.accept(event.getPlayer());
+                action.accept(event.getPlayer(), event);
             }
         }
     }

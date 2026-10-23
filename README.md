@@ -629,7 +629,7 @@ EntityPlayerBuilder setInvisible(boolean invisible);
 
 EntityPlayerBuilder setLocation(Location location);
 
-EntityPlayerBuilder withInteractListener(Consumer<Player> onPlayerInteract);
+EntityPlayerBuilder withInteractListener(BiConsumer<Player, PlayerInteractEvent> onPlayerInteract);
 
 EntityPlayerBuilder lookAtPlayer(boolean lookAtPlayer);
 
@@ -693,7 +693,7 @@ ItemBuilder setUUID(UUID uuid);
 
 ItemBuilder permanent();
 
-ItemBuilder withInteractListener(Consumer<Player> onPlayerInteract);
+ItemBuilder withInteractListener(BiConsumer<Player, PlayerInteractEvent> onPlayerInteract);
 ItemBuilder withInventoryClickListener(TriConsumer<Player, ItemStack, InventoryClickEvent> onInventoryClick);
 
 ItemStack build();
