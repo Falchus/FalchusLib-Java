@@ -33,6 +33,7 @@ import javax.cache.processor.MutableEntry;
 
 import com.falchus.lib.manager.CacheManager;
 import com.falchus.lib.task.Promise;
+import com.falchus.lib.task.Task;
 
 import lombok.AllArgsConstructor;
 import lombok.Lombok;
@@ -81,12 +82,14 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 	@SuppressWarnings("unchecked")
 	public <K1 extends K, V1 extends V> Cache<K1, V1> expireAfterAccess(long duration, @NonNull TimeUnit unit) {
 		expireAfterAccess = unit.toNanos(duration);
+		map.forEach(this::scheduleExpire);
 		return (Cache<K1, V1>) this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <K1 extends K, V1 extends V> Cache<K1, V1> expireAfterWrite(long duration, @NonNull TimeUnit unit) {
 		expireAfterWrite = unit.toNanos(duration);
+		map.forEach(this::scheduleExpire);
 		return (Cache<K1, V1>) this;
 	}
 
@@ -113,19 +116,32 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 		this.loader = (Function<? super K, ? extends V>) loader;
 		return (Cache<K1, V1>) this;
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	public V getIfPresent(@NonNull K key) {
+	public V peek(@NonNull K key) {
 		ensureOpen();
 		Node node = map.get(key);
 		if (node == null) return null;
-
+		
 		V value = (V) node.get();
 		if (value == null || node.expired(expireAfterAccess, expireAfterWrite)) {
 			evict(key, node, true);
 			return null;
 		}
+		return value;
+	}
+
+	public V getIfPresent(@NonNull K key) {
+		V value = peek(key);
+		if (value == null) return null;
+		
+		Node node = map.get(key);
+		if (node == null) return null;
+		
 		node.access = System.nanoTime();
+		if (expireAfterAccess > 0) {
+			scheduleExpire(key, node);
+		}
 		return value;
 	}
 
@@ -218,14 +234,17 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 
 	@Override
 	public boolean containsKey(@NonNull K key) {
-		return getIfPresent(key) != null;
+		return peek(key) != null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void put(@NonNull K key, @NonNull V value) {
 		ensureOpen();
-		Node previous = map.put(key, new Node(value, weak));
+		Node node = new Node(value, weak);
+		Node previous = map.put(key, node);
+		if (previous != null) previous.cancelExpire();
+		scheduleExpire(key, node);
 		trim();
 		if (previous != null) {
 			fireUpdated(key, value, (V) previous.get());
@@ -262,6 +281,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 		refreshing.remove(key);
 		Node node = map.remove(key);
 		if (node == null) return false;
+		node.cancelExpire();
 
 		V value = (V) node.get();
 		if (value != null) {
@@ -275,7 +295,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 
 	@Override
 	public boolean remove(@NonNull K key, @NonNull V oldValue) {
-		V current = getIfPresent(key);
+		V current = peek(key);
 		if (current == null || !current.equals(oldValue)) return false;
 
 		return remove(key);
@@ -292,7 +312,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 
 	@Override
 	public boolean replace(@NonNull K key, @NonNull V oldValue, @NonNull V newValue) {
-		V current = getIfPresent(key);
+		V current = peek(key);
 		if (current == null || !current.equals(oldValue)) return false;
 
 		put(key, newValue);
@@ -331,6 +351,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 	@Override
 	public void clear() {
 		ensureOpen();
+		map.values().forEach(Node::cancelExpire);
 		map.clear();
 		loads.clear();
 		refreshing.clear();
@@ -392,6 +413,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 	public void close() {
 		if (closed) return;
 		closed = true;
+		map.values().forEach(Node::cancelExpire);
 		map.clear();
 		loads.clear();
 		refreshing.clear();
@@ -436,7 +458,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 	public void loadAll(@NonNull Set<? extends K> keys, boolean replaceExistingValues, CompletionListener completionListener) {
 		try {
 			for (K key : keys) {
-				if (!replaceExistingValues && getIfPresent(key) != null) continue;
+				if (!replaceExistingValues && containsKey(key)) continue;
 				if (loader != null) {
 					get(key, loader);
 				}
@@ -490,6 +512,30 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 			}
 		});
 	}
+	
+	private void scheduleExpire(K key, Node node) {
+		node.cancelExpire();
+		if (map.get(key) != node) return;
+		long now = System.nanoTime();
+		long accessLeft = expireAfterAccess > 0 ? expireAfterAccess - (now - node.access) : Long.MAX_VALUE;
+		long writeLeft = expireAfterWrite > 0 ? expireAfterWrite - (now - node.write) : Long.MAX_VALUE;
+		long delay = Math.min(writeLeft, accessLeft);
+		if (delay == Long.MAX_VALUE) return;
+		if (delay <= 0) {
+			evict(key, node, true);
+			return;
+		}
+		Task task = Task.of(() -> {
+			if (map.get(key) == node) {
+				evict(key, node, true);
+			}
+		});
+		node.expireTask = task;
+		task.runLater(delay, TimeUnit.NANOSECONDS);
+		if (map.get(key) != node) {
+			node.cancelExpire();
+		}
+	}
 
 	private void trim() {
 		map.forEach((key, node) -> {
@@ -514,6 +560,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 
 	@SuppressWarnings("unchecked")
 	private boolean evict(@NonNull K key, @NonNull Node node, boolean expired) {
+		node.cancelExpire();
 		if (!map.remove(key, node)) return false;
 		V value = (V) node.get();
 		if (value != null) {
@@ -693,6 +740,7 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 		private final Object value;
 		private final long write;
 		private volatile long access;
+		private volatile Task expireTask;
 
 		private Node(Object value, boolean weak) {
 			long now = System.nanoTime();
@@ -703,6 +751,12 @@ public class Cache<K, V> implements javax.cache.Cache<K, V> {
 
 		private Object get() {
 			return value instanceof WeakReference<?> ref ? ref.get() : value;
+		}
+		
+		private void cancelExpire() {
+			if (expireTask == null) return;
+			expireTask.end();
+			expireTask = null;
 		}
 
 		private boolean expired(long accessExpire, long writeExpire) {
