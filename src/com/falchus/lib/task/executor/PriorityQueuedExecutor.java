@@ -15,10 +15,13 @@ public class PriorityQueuedExecutor implements Executor {
 
     @Delegate private final PriorityQueues queues = new PriorityQueues();
 
-    public PriorityQueuedExecutor(@NonNull String name, int threads, int threadPriority) {
+    private final int wait;
+    
+    public PriorityQueuedExecutor(@NonNull String name, int threads, int threadPriority, int wait) {
         if (threads <= -1) {
             threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         }
+        this.wait = wait;
         for (int i = 0; i < threads; i++) {
             ExecutorThread thread = new ExecutorThread(this::process);
             thread.setDaemon(true);
@@ -28,6 +31,10 @@ public class PriorityQueuedExecutor implements Executor {
             thread.setPriority(threadPriority);
             thread.start();
         }
+    }
+    
+    public PriorityQueuedExecutor(@NonNull String name, int threads, int threadPriority) {
+    	this(name, threads, threadPriority, 0);
     }
 
     public PriorityQueuedExecutor(@NonNull String name, int threads) {
@@ -100,7 +107,7 @@ public class PriorityQueuedExecutor implements Executor {
                 if ((runnable = poll()) != null) continue;
 
                 try {
-                    wait();
+                    wait(wait);
                 } catch (InterruptedException ignored) {
                     Thread.currentThread().interrupt();
                 }
