@@ -3,7 +3,6 @@ package com.falchus.lib.minecraft.spigot.listeners;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -103,7 +102,8 @@ public class LobbyCancelListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onEntitySpawn(EntitySpawnEvent event) {
-		if (event.getEntityType() == EntityType.ARMOR_STAND) return;
+		if (event instanceof ItemSpawnEvent) return;
+		if (event instanceof CreatureSpawnEvent creatureSpawn && creatureSpawn.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
 		cancel(event);
 	}
 }
