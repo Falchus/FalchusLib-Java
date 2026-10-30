@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -62,7 +63,7 @@ public class Promise<T> extends CompletableFuture<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <U> Promise<U> thenApply(@NonNull Function<? super T,? extends U> function) {
+	public <U> Promise<U> thenApply(@NonNull Function<? super T, ? extends U> function) {
 		return (Promise<U>) thenApplyAsync(function, sync);
 	}
 	
@@ -80,6 +81,12 @@ public class Promise<T> extends CompletableFuture<T> {
 	public <U> Promise<U> thenCompose(@NonNull Function<? super T, ? extends CompletionStage<U>> function) {
 		return (Promise<U>) thenComposeAsync(function, sync);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+    public <U, V> Promise<V> thenCombine(@NonNull CompletionStage<? extends U> other, @NonNull BiFunction<? super T, ? super U, ? extends V> fn) {
+        return (Promise<V>) thenCombineAsync(other, fn, sync);
+    }
 	
 	@Override
 	public Promise<T> whenComplete(@NonNull BiConsumer<? super T, ? super Throwable> action) {
