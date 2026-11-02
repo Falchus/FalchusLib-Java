@@ -14,6 +14,7 @@ public class MySQL {
 	
 	public MySQL(@NonNull String host, int port, @NonNull String database, @NonNull String username, String password) {
 		HikariConfig config = new HikariConfig();
+		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		config.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database 
 				+ "?useSSL=false&characterEncoding=UTF-8&useUnicode=true");
 		config.setUsername(username);
