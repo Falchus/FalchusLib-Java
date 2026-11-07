@@ -3,6 +3,8 @@ package com.falchus.lib.minecraft.utils;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.falchus.lib.task.Promise;
+
 import lombok.NonNull;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedMetaData;
@@ -18,41 +20,51 @@ public class LuckPerms {
 		}
 	}
 	
-	public static User getUser(@NonNull UUID uuid) {
+	public static Promise<User> getUser(@NonNull UUID uuid) {
 		try {
 			return getApi()
-					.map(api -> api.getUserManager().getUser(uuid))
-					.orElse(null);
+					.map(api -> {
+						User user = api.getUserManager().getUser(uuid);
+						if (user != null) return Promise.of(user);
+						
+						return Promise.from(api.getUserManager().loadUser(uuid));
+					})
+					.orElseGet(() -> Promise.of(null));
 		} catch (LinkageError e) {
-			return null;
+			return Promise.of(null);
 		}
 	}
 	
-	public static Optional<CachedMetaData> getMetaData(@NonNull UUID uuid) {
+	public static Promise<CachedMetaData> getMetaData(@NonNull UUID uuid) {
 		try {
-			return Optional.ofNullable(getUser(uuid)).map(user -> user.getCachedData().getMetaData());
+			return getUser(uuid).thenApply(user -> user == null
+				? null
+				: user.getCachedData().getMetaData()
+			);
 		} catch (LinkageError e) {
-			return Optional.empty();
+			return Promise.of(null);
 		}
 	}
 
-	public static String getPrefix(@NonNull UUID uuid) {
+	public static Promise<String> getPrefix(@NonNull UUID uuid) {
 		try {
-			return getMetaData(uuid)
-					.map(CachedMetaData::getPrefix)
-					.orElse("");
+			return getMetaData(uuid).thenApply(meta -> meta == null || meta.getPrefix() == null
+				? ""
+				: meta.getPrefix()
+			);
 		} catch (LinkageError e) {
-			return "";
+			return Promise.of("");
 		}
 	}
 	
-	public static Integer getWeight(@NonNull UUID uuid) {
+	public static Promise<Integer> getWeight(@NonNull UUID uuid) {
 		try {
-			return getMetaData(uuid)
-					.map(CachedMetaData::getWeight)
-					.orElse(null);
+			return getMetaData(uuid).thenApply(meta -> meta == null
+				? null
+				: meta.getWeight()
+			);
 		} catch (LinkageError e) {
-			return null;
+			return Promise.of(null);
 		}
 	}
 }
