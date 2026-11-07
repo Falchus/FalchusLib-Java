@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRegisterChannelEvent;
+import org.bukkit.event.player.PlayerUnregisterChannelEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
@@ -23,7 +23,6 @@ public class BungeeMessagingAdapterSpigot implements BungeeMessagingAdapter, Lis
 	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	private static boolean available;
-	private static boolean checking;
 	
 	public BungeeMessagingAdapterSpigot() {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -32,9 +31,9 @@ public class BungeeMessagingAdapterSpigot implements BungeeMessagingAdapter, Lis
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		if (available || checking) return;
-		checking = true;
+	public void onPlayerRegisterChannel(PlayerRegisterChannelEvent event) {
+		if (available) return;
+		if (!BungeeMessaging.channel.equals(event.getChannel())) return;
 		
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("Ping");
@@ -42,20 +41,19 @@ public class BungeeMessagingAdapterSpigot implements BungeeMessagingAdapter, Lis
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerUnregisterChannel(PlayerUnregisterChannelEvent event) {
+		if (!BungeeMessaging.channel.equals(event.getChannel())) return;
 		if (Bukkit.getOnlinePlayers().size() <= 1) {
 			available = false;
-			checking = false;
 		}
 	}
 	
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-		if (!channel.equals(BungeeMessaging.channel)) return;
+		if (!BungeeMessaging.channel.equals(channel)) return;
 		ByteArrayDataInput in = ByteStreams.newDataInput(message);
 		if (!in.readUTF().equals("Pong")) return;
 		available = true;
-		checking = false;
 	}
 	
 	@Override
