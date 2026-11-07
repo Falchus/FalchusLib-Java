@@ -18,6 +18,18 @@ public class Promise<T> extends CompletableFuture<T> {
 	private static final Executor sync = runnable -> TaskImpl.getDefaultTask().apply(runnable).run();
 	private static final Executor async = runnable -> TaskImpl.getDefaultTask().apply(runnable).runAsync();
 	
+	public static <T> Promise<T> from(@NonNull CompletionStage<T> stage) {
+		Promise<T> promise = new Promise<>();
+		stage.whenComplete((v, t) -> {
+			if (t != null) {
+				promise.completeExceptionally(t);
+			} else {
+				promise.complete(v);
+			}
+		});
+		return promise;
+	}
+	
 	public static <T> Promise<T> of(T value) {
 		Promise<T> promise = new Promise<>();
 		promise.complete(value);
