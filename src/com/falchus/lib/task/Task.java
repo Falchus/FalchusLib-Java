@@ -9,6 +9,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.falchus.lib.task.impl.TaskImpl;
+
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -25,13 +27,17 @@ public class Task implements Runnable {
 	@Getter private volatile boolean ended;
 	@Getter private volatile int tick;
 	
-	public static Task of(@NonNull Runnable runnable) {
+	public static Task create(@NonNull Runnable runnable) {
 		return new Task() {
 			@Override
 			protected void onRun(int tick) {
 				execute(runnable);
 			}
 		};
+	}
+	
+	public static Task of(@NonNull Runnable runnable) {
+		return TaskImpl.getDefaultTask().apply(runnable);
 	}
 	
 	@SuppressWarnings("unchecked")

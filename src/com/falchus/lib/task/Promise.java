@@ -9,14 +9,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.falchus.lib.task.impl.TaskImpl;
-
 import lombok.NonNull;
 
 public class Promise<T> extends CompletableFuture<T> {
 	
-	private static final Executor sync = runnable -> TaskImpl.getDefaultTask().apply(runnable).run();
-	private static final Executor async = runnable -> TaskImpl.getDefaultTask().apply(runnable).runAsync();
+	private static final Executor sync = runnable -> Task.of(runnable).run();
+	private static final Executor async = runnable -> Task.of(runnable).runAsync();
 	
 	public static <T> Promise<T> from(@NonNull CompletionStage<T> stage) {
 		Promise<T> promise = new Promise<>();
