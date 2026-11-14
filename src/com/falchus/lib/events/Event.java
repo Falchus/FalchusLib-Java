@@ -17,7 +17,7 @@ public class Event {
 	final boolean async;
 	
 	public Event() {
-		this(false);
+		this(true);
 	}
 	
 	public boolean callEvent() {

@@ -80,14 +80,17 @@ public class EventManager {
 				if (cancellable.isCancelled() && listener.isIgnoreCancelled()) continue;
 			}
 			
-			if (event.isAsync()) {
-				Task.of(() -> listener.execute(event)).runAsync();
-			} else {
+			Task task = Task.of(() -> {
 				try {
 					listener.execute(event);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			});
+			if (event.isAsync()) {
+				task.runAsync();
+			} else {
+				task.run();
 			}
 		}
 	}
