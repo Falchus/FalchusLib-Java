@@ -1,10 +1,9 @@
-package com.falchus.lib.minecraft.spigot.utils.labymod;
+package com.falchus.lib.minecraft.utils.client.labymod;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
+import com.falchus.lib.minecraft.FalchusLibMinecraft;
 import com.google.gson.JsonElement;
 
 import io.netty.buffer.ByteBuf;
@@ -20,14 +19,13 @@ public class LabyModProtocol {
     /**
      * Send a message to LabyMod
      * 
-     * @param player 			Minecraft Client
+     * @param uuid 				Minecraft Client
      * @param key 				LabyMod message key
      * @param messageContent 	json object content
      */
-	public static void sendMessage(@NonNull Plugin plugin, @NonNull Player player, String key, JsonElement messageContent) {
+	public static void sendMessage(@NonNull UUID uuid, String key, JsonElement messageContent) {
 		byte[] data = LabyModProtocol.getBytesToSend(key, messageContent.toString());
-		
-		player.sendPluginMessage(plugin, "labymod3:main", data);
+		FalchusLibMinecraft.get().sendMessage(uuid, LabyModMessage.labymod3Main, data);
 	}
 	
     /**

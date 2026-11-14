@@ -8,6 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.falchus.lib.manager.EventManager;
+import com.falchus.lib.minecraft.enums.Client;
+import com.falchus.lib.minecraft.events.player.PlayerClientJoinEvent;
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
 import com.falchus.lib.minecraft.spigot.packets.PacketInjector;
 import com.falchus.lib.minecraft.spigot.player.elements.PlayerElement;
@@ -21,6 +24,8 @@ import com.falchus.lib.minecraft.spigot.player.elements.impl.TablistObjective;
 import com.falchus.lib.minecraft.spigot.player.elements.impl.Tag;
 import com.falchus.lib.minecraft.spigot.utils.ItemUtils;
 import com.falchus.lib.minecraft.spigot.utils.PlayerUtils;
+
+import net.labymod.serverapi.server.bukkit.event.LabyModPlayerJoinEvent;
 
 public class JoinQuitListener implements Listener {
 
@@ -60,6 +65,11 @@ public class JoinQuitListener implements Listener {
     	PlayerElement.updateAll(Tablist.class);
     	PlayerElement.updateAll(TablistObjective.class);
     	PlayerElement.updateAll(Tag.class);
+	}
+	
+	@EventHandler
+	public void onPlayerLabyJoin(LabyModPlayerJoinEvent event) {
+		EventManager.callEvent(new PlayerClientJoinEvent(event.labyModPlayer().getUniqueId(), Client.LABYMOD4));
 	}
 	
 	@EventHandler

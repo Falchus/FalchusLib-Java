@@ -2,11 +2,10 @@ package com.falchus.lib.minecraft;
 
 import com.falchus.lib.minecraft.enums.Software;
 
-/**
- * Class for detecting the Minecraft server software at runtime.
- */
 public class FalchusLibMinecraft {
 
+	private static IFalchusLibMinecraft instance;
+	
     private static Software software;
 
 	/**
@@ -35,5 +34,13 @@ public class FalchusLibMinecraft {
             } catch (ClassNotFoundException ignored) {}
         }
         return null;
+    }
+    
+    public static IFalchusLibMinecraft get() {
+    	return instance;
+    }
+    
+    public static void set(IFalchusLibMinecraft instance) {
+    	FalchusLibMinecraft.instance = instance;
     }
 }

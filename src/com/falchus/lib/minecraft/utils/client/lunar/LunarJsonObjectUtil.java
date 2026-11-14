@@ -1,11 +1,9 @@
-package com.falchus.lib.minecraft.spigot.utils.lunar;
+package com.falchus.lib.minecraft.utils.client.lunar;
 
 import java.awt.Color;
 import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
-
-import org.bukkit.entity.Entity;
 
 import com.google.gson.JsonObject;
 
@@ -59,10 +57,10 @@ public class LunarJsonObjectUtil {
 	    return cuboid2DObject;
 	}
 	 
-	public static JsonObject createEntityIdObject(@NonNull Entity entity) {
+	public static JsonObject createEntityIdObject(int id, @NonNull UUID uuid) {
 	    JsonObject entityIdObject = new JsonObject();
-	    entityIdObject.addProperty("entity_id", entity.getEntityId());
-	    entityIdObject.add("entity_uuid", createUuidObject(entity.getUniqueId()));
+	    entityIdObject.addProperty("entity_id", id);
+	    entityIdObject.add("entity_uuid", createUuidObject(uuid));
 	    return entityIdObject;
 	}
 }

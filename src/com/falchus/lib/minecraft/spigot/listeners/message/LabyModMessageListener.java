@@ -1,37 +1,26 @@
 package com.falchus.lib.minecraft.spigot.listeners.message;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.falchus.lib.minecraft.spigot.FalchusLibMinecraftSpigot;
-import com.falchus.lib.minecraft.spigot.enums.Client;
-import com.falchus.lib.minecraft.spigot.events.player.PlayerClientJoinEvent;
-import com.falchus.lib.minecraft.spigot.utils.labymod.LabyModProtocol;
+import com.falchus.lib.minecraft.utils.client.labymod.LabyModMessage;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
-public class LabyModMessageListener implements PluginMessageListener {
+public class LabyModMessageListener extends LabyModMessage implements PluginMessageListener {
 	
 	private static final FalchusLibMinecraftSpigot plugin = FalchusLibMinecraftSpigot.getInstance();
 	
 	public LabyModMessageListener() {
-		plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "labymod3:main", this);
-		plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "labymod3:main");
+		Messenger messenger = plugin.getServer().getMessenger();
+		messenger.registerIncomingPluginChannel(plugin, labymod3Main, this);
+		messenger.registerOutgoingPluginChannel(plugin, labymod3Main);
+		messenger.registerOutgoingPluginChannel(plugin, damageindicator);
 	}
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-		if (!channel.equals("labymod3:main")) return;
-		
-		ByteBuf buf = Unpooled.wrappedBuffer(message);
-		String key = LabyModProtocol.readString(buf, Short.MAX_VALUE);
-		
-		// LabyMod user joins the server
-		if (key.equals("INFO")) {
-			plugin.getClientManager().set(player, Client.LABYMOD);
-			Bukkit.getPluginManager().callEvent(new PlayerClientJoinEvent(player, Client.LABYMOD));
-		}
+		if (!channel.equals(labymod3Main)) return;
+		handle(player.getUniqueId(), message);
 	}
 }

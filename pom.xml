@@ -10,6 +10,7 @@
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	<lombok.version>1.18.48</lombok.version>
   	<cloudnet.version>4.0.0-RC14</cloudnet.version>
+  	<labymod.version>1.0.14</labymod.version>
   </properties>
   
   <distributionManagement>
@@ -31,6 +32,10 @@
   	<repository>
   		<id>elmakers-repo</id>
   		<url>https://maven.elmakers.com/repository/</url>
+  	</repository>
+  	<repository>
+  		<id>labymod</id>
+  		<url>https://dist.labymod.net/api/v1/maven/release/</url>
   	</repository>
   </repositories>
   
@@ -91,6 +96,17 @@
 		<artifactId>wrapper-jvm-api</artifactId>
 		<version>${cloudnet.version}</version>
 		<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>net.labymod.serverapi</groupId>
+		<artifactId>server-bukkit</artifactId>
+		<version>${labymod.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>net.labymod.serverapi</groupId>
+		<artifactId>server-velocity</artifactId>
+		<version>${labymod.version}</version>
 	</dependency>
 	
 	<dependency>
