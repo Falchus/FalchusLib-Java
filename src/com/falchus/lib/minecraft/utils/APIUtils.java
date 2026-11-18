@@ -19,10 +19,10 @@ public class APIUtils {
 	 * @return the player's {@link UUID}
 	 */
     public static Promise<UUID> getUUID(@NonNull String username) {
-    	return HTTPRequest.get("https://api.mojang.com/users/profiles/minecraft/" + username).thenApply(body -> {
-    		if (body == null) return null;
+    	return HTTPRequest.get("https://api.mojang.com/users/profiles/minecraft/" + username).thenApply(response -> {
+    		if (response == null || !response.isOk()) return null;
     		
-    		JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+    		JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
     		String id = json.get("id").getAsString();
     		
             String uuid = id.replaceFirst(
@@ -39,10 +39,10 @@ public class APIUtils {
      * @return the player's username {@link String}
 	 */
     public static Promise<String> getName(@NonNull String uuid) {
-        return HTTPRequest.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", "")).thenApply(body -> {
-	        if (body == null) return null;
+        return HTTPRequest.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.replace("-", "")).thenApply(response -> {
+	        if (response == null || !response.isOk()) return null;
 	
-	    	JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+	    	JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
 	    	return json.get("name").getAsString();
         });
     }

@@ -128,24 +128,33 @@ T deserialize(String content);
   - `com.falchus.lib.storage.serializer.json.JsonObjectSerializer`
 
 #### HTTP
+`com.falchus.lib.utils.http.HTTPResponse`
+```java
+int status();
+String body();
+long latencyMs();
+boolean isSuccess();
+Optional<String> header(String name);
+```
+
 `com.falchus.lib.utils.http.HTTPRequest`
 ```java
-static String get(String url, Map<String, String> headers);
-static String get(String url);
+static Promise<HTTPResponse> get(String url, Map<String, String> headers);
+static Promise<HTTPResponse> get(String url);
 
-static String post(String url, Map<String, String> headers, String body);
-static String post(String url, String body);
+static Promise<HTTPResponse> post(String url, Map<String, String> headers, String body);
+static Promise<HTTPResponse> post(String url, String body);
 
-static String put(String url, Map<String, String> headers, String body);
-static String put(String url, String body);
+static Promise<HTTPResponse> put(String url, Map<String, String> headers, String body);
+static Promise<HTTPResponse> put(String url, String body);
 
-static String delete(String url, Map<String, String> headers);
-static String delete(String url);
+static Promise<HTTPResponse> delete(String url, Map<String, String> headers);
+static Promise<HTTPResponse> delete(String url);
 
-static String head(String url, Map<String, String> headers);
-static String head(String url);
+static Promise<HTTPResponse> head(String url, Map<String, String> headers);
+static Promise<HTTPResponse> head(String url);
 
-static String request(String method, String url, Map<String, String> headers, String body);
+static Promise<HTTPResponse> request(String method, String url, Map<String, String> headers, String body);
 ```
 
 `com.falchus.lib.utils.http.HTTPServer`

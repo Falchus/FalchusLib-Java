@@ -23,10 +23,10 @@ public class VPNApi {
 			url += "?key=" + apiKey;
 		}
 		
-		return HTTPRequest.get(url).thenApply(body -> {
-			if (body == null) return false;
+		return HTTPRequest.get(url).thenApply(response -> {
+			if (response == null || !response.isOk()) return false;
 			
-			JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+			JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
 			return json.has("security") &&
 					json.getAsJsonObject("security").has("vpn") &&
 					json.getAsJsonObject("security").get("vpn").getAsBoolean();

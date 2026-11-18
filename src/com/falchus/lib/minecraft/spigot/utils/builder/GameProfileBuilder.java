@@ -57,10 +57,10 @@ public class GameProfileBuilder {
     	GameProfile hit = cache.getIfPresent(uuid);
     	if (hit != null) return Promise.of(hit);
     	
-        return HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid))).thenApply(json -> {
-        	if (json == null) return null;
+        return HTTPRequest.get(String.format(url, UUIDTypeAdapter.fromUUID(uuid))).thenApply(response -> {
+        	if (response == null || !response.isOk()) return null;
         	
-        	GameProfile profile = gson.fromJson(json, GameProfile.class);
+        	GameProfile profile = gson.fromJson(response.body(), GameProfile.class);
         	if (profile != null) {
         		cache.put(uuid, profile);
         	}
